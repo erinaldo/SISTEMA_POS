@@ -1,0 +1,46 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.21005.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Palatium", "Palatium\Palatium.csproj", "{BF4B3CCB-1343-4318-864E-11ACF99F2CAD}"
+EndProject
+Project("{6141683F-8A12-4E36-9623-2EB02B2C2303}") = "Palatium Restaurante", "Palatium Restaurante\Palatium Restaurante.isproj", "{2BBBF7DB-9890-4382-9DB7-A899F44DB066}"
+	ProjectSection(ProjectDependencies) = postProject
+		{BF4B3CCB-1343-4318-864E-11ACF99F2CAD} = {BF4B3CCB-1343-4318-864E-11ACF99F2CAD}
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		CD_ROM|x86 = CD_ROM|x86
+		Debug|x86 = Debug|x86
+		DVD-5|x86 = DVD-5|x86
+		Release|x86 = Release|x86
+		SingleImage|x86 = SingleImage|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BF4B3CCB-1343-4318-864E-11ACF99F2CAD}.CD_ROM|x86.ActiveCfg = Release|x86
+		{BF4B3CCB-1343-4318-864E-11ACF99F2CAD}.CD_ROM|x86.Build.0 = Release|x86
+		{BF4B3CCB-1343-4318-864E-11ACF99F2CAD}.Debug|x86.ActiveCfg = Debug|x86
+		{BF4B3CCB-1343-4318-864E-11ACF99F2CAD}.Debug|x86.Build.0 = Debug|x86
+		{BF4B3CCB-1343-4318-864E-11ACF99F2CAD}.DVD-5|x86.ActiveCfg = Debug|x86
+		{BF4B3CCB-1343-4318-864E-11ACF99F2CAD}.DVD-5|x86.Build.0 = Debug|x86
+		{BF4B3CCB-1343-4318-864E-11ACF99F2CAD}.Release|x86.ActiveCfg = Release|x86
+		{BF4B3CCB-1343-4318-864E-11ACF99F2CAD}.Release|x86.Build.0 = Release|x86
+		{BF4B3CCB-1343-4318-864E-11ACF99F2CAD}.SingleImage|x86.ActiveCfg = Release|x86
+		{BF4B3CCB-1343-4318-864E-11ACF99F2CAD}.SingleImage|x86.Build.0 = Release|x86
+		{2BBBF7DB-9890-4382-9DB7-A899F44DB066}.CD_ROM|x86.ActiveCfg = CD_ROM
+		{2BBBF7DB-9890-4382-9DB7-A899F44DB066}.CD_ROM|x86.Build.0 = CD_ROM
+		{2BBBF7DB-9890-4382-9DB7-A899F44DB066}.Debug|x86.ActiveCfg = DVD-5
+		{2BBBF7DB-9890-4382-9DB7-A899F44DB066}.Debug|x86.Build.0 = DVD-5
+		{2BBBF7DB-9890-4382-9DB7-A899F44DB066}.DVD-5|x86.ActiveCfg = DVD-5
+		{2BBBF7DB-9890-4382-9DB7-A899F44DB066}.DVD-5|x86.Build.0 = DVD-5
+		{2BBBF7DB-9890-4382-9DB7-A899F44DB066}.Release|x86.ActiveCfg = SingleImage
+		{2BBBF7DB-9890-4382-9DB7-A899F44DB066}.Release|x86.Build.0 = SingleImage
+		{2BBBF7DB-9890-4382-9DB7-A899F44DB066}.SingleImage|x86.ActiveCfg = SingleImage
+		{2BBBF7DB-9890-4382-9DB7-A899F44DB066}.SingleImage|x86.Build.0 = SingleImage
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

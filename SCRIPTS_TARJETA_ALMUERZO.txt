@@ -1,0 +1,136 @@
+if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[pos_tar_cantidad_almuerzo]') and OBJECTPROPERTY(id, N'IsUserTable') = 1)
+drop table [dbo].[pos_tar_cantidad_almuerzo]
+GO
+
+CREATE TABLE [dbo].[pos_tar_cantidad_almuerzo] (
+	[id_pos_tar_cantidad_almuerzo] [numeric](18, 0) IDENTITY (1, 1) NOT NULL PRIMARY KEY,
+	[codigo] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[cantidad_nominal] [numeric] (18) NOT NULL ,
+	[cantidad_real] [numeric] (18) NOT NULL ,
+	[is_active] [smallint] NOT NULL ,
+	[estado] [varchar] (1) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[fecha_ingreso] [datetime] NOT NULL ,
+	[usuario_ingreso] [varchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[terminal_ingreso] [varchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[fecha_anula] [datetime] NULL ,
+	[usuario_anula] [varchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[terminal_anula] [varchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NULL 
+) ON [PRIMARY]
+GO
+
+
+
+
+
+if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[pos_tar_numero_tarjeta]') and OBJECTPROPERTY(id, N'IsUserTable') = 1)
+drop table [dbo].[pos_tar_numero_tarjeta]
+GO
+
+CREATE TABLE [dbo].[pos_tar_numero_tarjeta] (
+	[id_pos_tar_numero_tarjeta] [numeric](18, 0) IDENTITY (1, 1) NOT NULL PRIMARY KEY,
+	[id_pos_tar_tarjeta] [numeric](18, 0) NOT NULL,
+	[numero_tarjeta] [numeric] (18) NOT NULL ,
+	[estado] [varchar] (1) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[fecha_ingreso] [datetime] NOT NULL ,
+	[usuario_ingreso] [varchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[terminal_ingreso] [varchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[fecha_anula] [datetime] NULL ,
+	[usuario_anula] [varchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[terminal_anula] [varchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NULL 
+) ON [PRIMARY]
+GO
+
+
+
+if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[pos_tar_cantidad_tipo_almuerzo]') and OBJECTPROPERTY(id, N'IsUserTable') = 1)
+drop table [dbo].[pos_tar_cantidad_tipo_almuerzo]
+GO
+
+CREATE TABLE [dbo].[pos_tar_cantidad_tipo_almuerzo] (
+	[id_pos_tar_cantidad_tipo_almuerzo] [numeric](18, 0) IDENTITY (1, 1) NOT NULL PRIMARY KEY,
+	[id_pos_tar_cantidad_almuerzo] [numeric](18, 0) NOT NULL,
+	[id_producto_tarjeta] [numeric](18, 0) NOT NULL,
+	[id_producto_descarga] [numeric](18, 0) NOT NULL,
+	[is_active] [smallint] NOT NULL ,
+	[estado] [varchar] (1) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[fecha_ingreso] [datetime] NOT NULL ,
+	[usuario_ingreso] [varchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[terminal_ingreso] [varchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[fecha_anula] [datetime] NULL ,
+	[usuario_anula] [varchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[terminal_anula] [varchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NULL 
+) ON [PRIMARY]
+GO
+
+
+
+
+if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[pos_tar_tarjeta]') and OBJECTPROPERTY(id, N'IsUserTable') = 1)
+drop table [dbo].[pos_tar_tarjeta]
+GO
+
+CREATE TABLE [dbo].[pos_tar_tarjeta] (
+	[id_pos_tar_tarjeta] [numeric](18, 0) IDENTITY (1, 1) NOT NULL PRIMARY KEY,
+	[id_pos_tar_cantidad_tipo_almuerzo] [numeric](18, 0) NOT NULL,
+	[id_persona] [numeric](18, 0) NOT NULL,
+	[id_localidad] [numeric](18, 0) NOT NULL,
+	[id_producto_tarjeta] [numeric](18, 0) NOT NULL,
+	[id_producto_descarga] [numeric](18, 0) NOT NULL,
+        [observacion] [varchar] (100) NULL ,
+        [estado_tarjeta] [varchar] (50) NOT NULL ,
+	[is_active] [smallint] NOT NULL ,
+	[estado] [varchar] (1) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[fecha_ingreso] [datetime] NOT NULL ,
+	[usuario_ingreso] [varchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[terminal_ingreso] [varchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[fecha_anula] [datetime] NULL ,
+	[usuario_anula] [varchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[terminal_anula] [varchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NULL 
+) ON [PRIMARY]
+GO
+
+
+
+if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[pos_tar_cab_movimiento]') and OBJECTPROPERTY(id, N'IsUserTable') = 1)
+drop table [dbo].[pos_tar_cab_movimiento]
+GO
+
+CREATE TABLE [dbo].[pos_tar_cab_movimiento] (
+	[id_pos_tar_cab_movimiento] [numeric](18, 0) IDENTITY (1, 1) NOT NULL PRIMARY KEY,
+	[id_pos_tar_tarjeta] [numeric](18, 0) NOT NULL,
+	[id_pedido] [numeric](18, 0) NOT NULL,
+	[id_localidad] [numeric](18, 0) NOT NULL,
+	[fecha_pedido_tarjeta] [datetime] NOT NULL ,
+	[fecha_hora_pedido_tarjeta] [datetime] NOT NULL ,
+	[estado_pedido_tarjeta] [varchar] (50) NOT NULL ,
+	[tipo_movimiento] [smallint] NOT NULL,
+	[estado] [varchar] (1) NOT NULL ,
+	[fecha_ingreso] [datetime] NOT NULL ,
+	[usuario_ingreso] [varchar] (30) NOT NULL ,
+	[terminal_ingreso] [varchar] (30) NOT NULL ,
+	[fecha_anula] [datetime] NULL ,
+	[usuario_anula] [varchar] (30) NULL ,
+	[terminal_anula] [varchar] (30) NULL 
+) ON [PRIMARY]
+GO
+
+
+
+if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[pos_tar_det_movimiento]') and OBJECTPROPERTY(id, N'IsUserTable') = 1)
+drop table [dbo].[pos_tar_det_movimiento]
+GO
+
+CREATE TABLE [dbo].[pos_tar_det_movimiento] (
+	[id_pos_tar_det_movimiento] [numeric](18, 0) IDENTITY (1, 1) NOT NULL PRIMARY KEY,
+	[id_pos_tar_cab_movimiento] [numeric](18, 0) NOT NULL,
+	[id_producto] [numeric](18, 0) NOT NULL,
+	[cantidad] [numeric](18, 0) NOT NULL,
+	[estado] [varchar] (1) NOT NULL ,
+	[fecha_ingreso] [datetime] NOT NULL ,
+	[usuario_ingreso] [varchar] (30) NOT NULL ,
+	[terminal_ingreso] [varchar] (30) NOT NULL ,
+	[fecha_anula] [datetime] NULL ,
+	[usuario_anula] [varchar] (30) NULL ,
+	[terminal_anula] [varchar] (30) NULL 
+) ON [PRIMARY]
+GO
