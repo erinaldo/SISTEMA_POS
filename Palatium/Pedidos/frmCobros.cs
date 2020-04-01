@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.SqlClient;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -24,6 +25,8 @@ namespace Palatium.Pedidos
         ValidarCedula validarCedula = new ValidarCedula();
         
         Button[,] boton = new Button[5, 2];
+
+        SqlParameter[] parametro;
 
         int iIdCaja;
         int iCgEstadoDctoPorCobrar = 7461;
@@ -109,6 +112,7 @@ namespace Palatium.Pedidos
          int iBanderaInsertarLote;
          int iOperadorTarjeta;
          int iTipoTarjeta;
+         int iBanderaComandaPendiente;
 
          Decimal dTotal;
          Decimal dSubtotal;
@@ -136,65 +140,12 @@ namespace Palatium.Pedidos
          Decimal dbSubtotalParaRetencion;
          Decimal dbSumaIvaParaRetencion;
 
-         public frmCobros(string sIdOrden_P)
+         public frmCobros(string sIdOrden_P, int iBanderaComandaPendiente_P)
          {
-            sIdOrden = sIdOrden_P;
+            this.sIdOrden = sIdOrden_P;
+            this.iBanderaComandaPendiente = iBanderaComandaPendiente_P;
             InitializeComponent();
          }
-
-        #region FUNCIONES PARA INTEGRAR LA CUENTA POR COBRAR
-
-        //FUNCION PARA GUARDAR LA COMANDA COMO UNA CUENTA POR COBRAR
-        private void guardarCuentaCobrar()
-         {
-            try
-            {
-                if (!conexion.GFun_Lo_Maneja_Transaccion(Program.G_INICIA_TRANSACCION))
-                {
-                    ok = new VentanasMensajes.frmMensajeOK();
-                    ok.LblMensaje.Text = "Error al abrir transacción.";
-                    ok.ShowDialog();
-                    return;
-                }
-
-                //ACTUALIZAR EL ESTADO DE LA ORDEN EN CV403_CAB_PEDIDOS
-                sSql = "";
-                sSql += "update cv403_cab_pedidos set" + Environment.NewLine;
-                sSql += "id_persona = " + iIdPersona + "," + Environment.NewLine;
-                sSql += "fecha_cierre_orden = GETDATE()," + Environment.NewLine;
-                sSql += "estado_orden = 'Cerrada'" + Environment.NewLine;
-                sSql += "where id_pedido = " + sIdOrden + Environment.NewLine;
-                sSql += "and estado = 'A'";
-
-                if (!conexion.GFun_Lo_Ejecuta_SQL(sSql))
-                {
-                    catchMensaje = new VentanasMensajes.frmMensajeCatch();
-                    catchMensaje.LblMensaje.Text = "ERROR EN LA INSTRUCCIÓN:" + Environment.NewLine + sSql;
-                    catchMensaje.ShowDialog();
-                    conexion.GFun_Lo_Maneja_Transaccion(Program.G_REVERSA_TRANSACCION); 
-                    return;
-                }
-
-                conexion.GFun_Lo_Maneja_Transaccion(Program.G_TERMINA_TRANSACCION);
-
-
-                Program.sIDPERSONA = null;
-                Program.dbValorPorcentaje = 0;
-                Program.dbDescuento = 0.0;
-
-                this.DialogResult = DialogResult.OK;
-            }
-
-            catch (Exception ex)
-            {
-                conexion.GFun_Lo_Maneja_Transaccion(Program.G_REVERSA_TRANSACCION);
-                catchMensaje = new VentanasMensajes.frmMensajeCatch();
-                catchMensaje.LblMensaje.Text = ex.Message;
-                catchMensaje.ShowDialog();
-            }
-         }
-
-        #endregion
 
         #region FUNCIONES DEL USUARIO
 
@@ -1859,6 +1810,12 @@ namespace Palatium.Pedidos
                  {
                      sSql = "";
                      sSql += "update cv403_cab_pedidos set" + Environment.NewLine;
+
+                     if (iBanderaComandaPendiente == 1)
+                     {
+                         sSql += "id_pos_cierre_cajero_por_cobrar = " + Program.iIdPosCierreCajero + "," + Environment.NewLine;
+                     }
+
                      sSql += "estado_orden = 'Pagada'" + Environment.NewLine;
                      sSql += "where id_pedido = " + Convert.ToInt32(sIdOrden) + Environment.NewLine;
                      sSql += "and estado = 'A'";
@@ -2925,6 +2882,12 @@ namespace Palatium.Pedidos
                  {
                      sSql = "";
                      sSql += "update cv403_cab_pedidos set" + Environment.NewLine;
+
+                     if (iBanderaComandaPendiente == 1)
+                     {
+                         sSql += "id_pos_cierre_cajero_por_cobrar = " + Program.iIdPosCierreCajero + "," + Environment.NewLine;
+                     }
+
                      sSql += "estado_orden = 'Pagada'" + Environment.NewLine;
                      sSql += "where id_pedido = " + Convert.ToInt32(sIdOrden) + Environment.NewLine;
                      sSql += "and estado = 'A'";
@@ -3183,6 +3146,12 @@ namespace Palatium.Pedidos
                      {
                          sSql = "";
                          sSql += "update cv403_cab_pedidos set" + Environment.NewLine;
+
+                         if (iBanderaComandaPendiente == 1)
+                         {
+                             sSql += "id_pos_cierre_cajero_por_cobrar = " + Program.iIdPosCierreCajero + "," + Environment.NewLine;
+                         }
+
                          sSql += "estado_orden = 'Pagada'," + Environment.NewLine;
                          sSql += "id_persona = " + iIdPersona + Environment.NewLine;
                          sSql += "where id_pedido = " + sIdOrden;
@@ -3247,7 +3216,7 @@ namespace Palatium.Pedidos
 
                          if (ok.DialogResult == DialogResult.OK)
                          {
-                             DialogResult = DialogResult.OK;
+                             this.DialogResult = DialogResult.OK;
                              Close();
 
                              //if (Program.iBanderaCerrarVentana == 0)
@@ -3770,6 +3739,12 @@ namespace Palatium.Pedidos
 
                  sSql = "";
                  sSql += "update cv403_cab_pedidos set" + Environment.NewLine;
+
+                 if (iBanderaComandaPendiente == 1)
+                 {
+                     sSql += "id_pos_cierre_cajero_por_cobrar = " + Program.iIdPosCierreCajero + "," + Environment.NewLine;
+                 }
+
                  sSql += "estado_orden = 'Pagada'," + Environment.NewLine;
                  sSql += "id_persona = " + iIdPersona + "," + Environment.NewLine;
                  sSql += "fecha_cierre_orden = GETDATE()," + Environment.NewLine;
@@ -4662,7 +4637,81 @@ namespace Palatium.Pedidos
         
         #endregion
 
-         private void frmCobros_Load(object sender, EventArgs e)
+        #region FUNCIONES DE LA CUENTAS POR COBRAR PENDIENTES
+
+        //FUNCION PARA GENERAR LA CUENTA POR COBRAR
+        private void generarCuentaPorCobrar()
+        {
+            try
+            {
+                //INICIAMOS UNA NUEVA TRANSACCION
+                if (!conexion.GFun_Lo_Maneja_Transaccion(Program.G_INICIA_TRANSACCION))
+                {
+                    ok = new VentanasMensajes.frmMensajeOK();
+                    ok.LblMensaje.Text = "Error al abrir transacción";
+                    ok.ShowDialog();
+                    return;
+                }
+
+                sSql = "";
+                sSql += "update cv403_cab_pedidos set" + Environment.NewLine;
+                sSql += "bandera_cuenta_por_cobrar = @bandera_cuenta_por_cobrar," + Environment.NewLine;
+                sSql += "estado_orden = @estado_orden" + Environment.NewLine;
+                sSql += "where id_pedido = @id_pedido" + Environment.NewLine;
+                sSql += "and estado = @estado";
+
+                parametro = new SqlParameter[4];
+                parametro[0] = new SqlParameter();
+                parametro[0].ParameterName = "@bandera_cuenta_por_cobrar";
+                parametro[0].SqlDbType = SqlDbType.Int;
+                parametro[0].Value = 1;
+
+                parametro[1] = new SqlParameter();
+                parametro[1].ParameterName = "@estado_orden";
+                parametro[1].SqlDbType = SqlDbType.VarChar;
+                parametro[1].Value = "Cerrada";
+
+                parametro[2] = new SqlParameter();
+                parametro[2].ParameterName = "@id_pedido";
+                parametro[2].SqlDbType = SqlDbType.Int;
+                parametro[2].Value = Convert.ToInt32(sIdOrden);
+
+                parametro[3] = new SqlParameter();
+                parametro[3].ParameterName = "@estado";
+                parametro[3].SqlDbType = SqlDbType.VarChar;
+                parametro[3].Value = "A";
+
+                //EJECUTAR LA INSTRUCCION SQL
+                if (!conexion.GFun_Lo_Ejecutar_SQL_Parametros(sSql, parametro))
+                {
+                    conexion.GFun_Lo_Maneja_Transaccion(Program.G_REVERSA_TRANSACCION);
+                    catchMensaje = new VentanasMensajes.frmMensajeCatch();
+                    catchMensaje.LblMensaje.Text = conexion.sMensajeError;
+                    catchMensaje.ShowDialog();
+                    return;
+                }
+
+                conexion.GFun_Lo_Maneja_Transaccion(Program.G_TERMINA_TRANSACCION);
+
+                ok = new VentanasMensajes.frmMensajeOK();
+                ok.LblMensaje.Text = "La cuenta por cobrar se registró con éxito";
+                ok.ShowDialog();
+
+                this.DialogResult = DialogResult.OK;
+            }
+
+            catch (Exception ex)
+            {
+                conexion.GFun_Lo_Maneja_Transaccion(Program.G_REVERSA_TRANSACCION);
+                catchMensaje = new VentanasMensajes.frmMensajeCatch();
+                catchMensaje.LblMensaje.Text = ex.Message;
+                catchMensaje.ShowDialog();
+            }
+        }
+
+        #endregion
+
+        private void frmCobros_Load(object sender, EventArgs e)
          {
              extraerListaMinorista();
              obtenerTotal();
@@ -4766,32 +4815,30 @@ namespace Palatium.Pedidos
 
              if (Program.iDescuentaIva == 1)
              {
-                 btnRemoverIVA.Visible = true;                 
-                 btnPagoCompleto.Visible = true;
-                 //btnDividirPrecio.Visible = false;
+                 btnRemoverIVA.Enabled = true;
+                 btnPagoCompleto.Enabled = true;
              }
 
              else
              {
-                 btnRemoverIVA.Visible = false;                 
-                 btnPagoCompleto.Visible = false;
-                 //btnDividirPrecio.Visible = true;
+                 btnRemoverIVA.Enabled = false;
+                 btnPagoCompleto.Enabled = false;
              }
 
              if (Program.iAplicaRecargoTarjeta == 1)
-             {
-                 btnRecargoTarjeta.Visible = true;
-             }
-
+                 btnRecargoTarjeta.Enabled = true;
              else
-             {
-                 btnRecargoTarjeta.Visible = false;
-             }
+                 btnRecargoTarjeta.Enabled = false;
 
              if (Program.iManejaPropinaSoloTarjetas == 1)
-                 btnPropina.Visible = false;
+                 btnPropina.Enabled = false;
              else
-                 btnPropina.Visible = true;
+                 btnPropina.Enabled = true;
+
+             if (iBanderaComandaPendiente == 1)
+                 btnCuentaPorCobrar.Enabled = false;
+             else
+                 btnCuentaPorCobrar.Enabled = true;
          }
 
          private void btnSiguiente_Click(object sender, EventArgs e)
@@ -5300,7 +5347,7 @@ namespace Palatium.Pedidos
 
          private void btnPagoCompleto_Click(object sender, EventArgs e)
          {
-             frmEfectivoPagoCompleto efectivoPagoCompleto = new frmEfectivoPagoCompleto(sIdOrden, Convert.ToDouble(dTotal));
+             frmEfectivoPagoCompleto efectivoPagoCompleto = new frmEfectivoPagoCompleto(sIdOrden, Convert.ToDouble(dTotal), iBanderaComandaPendiente);
              efectivoPagoCompleto.ShowDialog();
 
              if (efectivoPagoCompleto.DialogResult == DialogResult.OK)
@@ -5330,26 +5377,6 @@ namespace Palatium.Pedidos
              }
          }
 
-         private void btnCuentaCobrar_Click(object sender, EventArgs e)
-         {
-             if (iIdPersona == Program.iIdPersona)
-             {
-                 ok = new VentanasMensajes.frmMensajeOK();
-                 ok.LblMensaje.Text = "La cuenta por cobrar debe ser ingresada con datos del cliente.";
-                 ok.ShowDialog();
-                 return;
-             }
-
-             NuevoSiNo = new VentanasMensajes.frmMensajeNuevoSiNo();
-             NuevoSiNo.lblMensaje.Text = "¿Está seguro que desea guardar la comanda como una cuenta por cobrar?";
-             NuevoSiNo.ShowDialog();
-
-             if (NuevoSiNo.DialogResult == DialogResult.OK)
-             {
-                 guardarCuentaCobrar();
-             }
-         }
-
          private void btnDividirPrecio_Click(object sender, EventArgs e)
          {
              tecladoNumericoDividirPrecio teclado = new tecladoNumericoDividirPrecio(dTotal.ToString());
@@ -5366,6 +5393,26 @@ namespace Palatium.Pedidos
                  Decimal dbPropina_P = propina.dbPropina;
                  dgvDetalleDeuda.Rows[3].Cells[1].Value = dbPropina_P.ToString("N2");
                  propina.Close();
+             }
+         }
+
+         private void btnCuentaPorCobrar_Click(object sender, EventArgs e)
+         {
+             if (iIdPersona == Program.iIdPersona)
+             {
+                 ok = new VentanasMensajes.frmMensajeOK();
+                 ok.LblMensaje.Text = "La cuenta por cobrar debe ser ingresada con datos del cliente.";
+                 ok.ShowDialog();
+                 return;
+             }
+
+             NuevoSiNo = new VentanasMensajes.frmMensajeNuevoSiNo();
+             NuevoSiNo.lblMensaje.Text = "¿Está seguro que desea dejar la cuenta pendiente de cobro?";
+             NuevoSiNo.ShowDialog();
+
+             if (NuevoSiNo.DialogResult == DialogResult.OK)
+             {
+                 generarCuentaPorCobrar();
              }
          }
     }

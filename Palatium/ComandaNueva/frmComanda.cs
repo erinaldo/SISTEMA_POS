@@ -3688,7 +3688,7 @@ namespace Palatium.ComandaNueva
                     {
                         if (iIdGeneraFactura == 1)
                         {
-                            Pedidos.frmCobros t = new Pedidos.frmCobros(iIdPedido.ToString());
+                            Pedidos.frmCobros t = new Pedidos.frmCobros(iIdPedido.ToString(), 0);
                             t.ShowDialog();
 
                             if (t.DialogResult == DialogResult.OK)

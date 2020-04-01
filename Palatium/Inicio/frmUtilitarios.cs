@@ -597,10 +597,10 @@ namespace Palatium.Inicio
             comandas.ShowDialog();
         }
 
-        private void btnListarProductosVendidos_Click(object sender, EventArgs e)
+        private void btnCobrarComandasPendientes_Click(object sender, EventArgs e)
         {
-            Utilitarios.frmListarProductosVendidos vendidos = new Utilitarios.frmListarProductosVendidos();
-            vendidos.ShowDialog();
+            ComandaNueva.frmComandasCuentasPorCobrar cobrar = new ComandaNueva.frmComandasCuentasPorCobrar();
+            cobrar.ShowDialog();
         }
     }
 }

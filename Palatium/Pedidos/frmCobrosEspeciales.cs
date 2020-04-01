@@ -1394,7 +1394,7 @@ namespace Palatium.Pedidos
 
         private void btnCobrar_Click(object sender, EventArgs e)
         {
-            Pedidos.frmCobros t = new Pedidos.frmCobros(sIdOrden);
+            Pedidos.frmCobros t = new Pedidos.frmCobros(sIdOrden, 0);
             this.Hide();
             t.ShowDialog();
 

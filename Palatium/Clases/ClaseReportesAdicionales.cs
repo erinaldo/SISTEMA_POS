@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,7 +10,6 @@ namespace Palatium.Clases
 {
     class ClaseReportesAdicionales
     {
-
         ConexionBD.ConexionBD conexion = new ConexionBD.ConexionBD();
 
         string sSql;
@@ -43,6 +43,8 @@ namespace Palatium.Clases
         Decimal dbSalidasManuales;
         Decimal dbTotalVentas;
         Decimal dbTotalGastos;
+
+        SqlParameter[] parametro;
 
         public string crearReporte(int iIdLocalidad_P, int iIdPosCierreCajero_P)
         {
@@ -1142,5 +1144,6 @@ namespace Palatium.Clases
                 return "ERROR";
             }
         }
+
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -86,6 +87,8 @@ namespace Palatium.Clases
         Decimal dbTotalCobradoTarjetas;
         Decimal dbTotalEntregado = 0;
         Decimal dbTotalPendiente = 0;
+
+        SqlParameter[] parametro;
 
         //FUNCION PARA CREAR EL ENCABEZADO
         public string encabezadoReporte(int iIdLocalidad_P, int iIdPosCierreCajero_P)
@@ -3034,6 +3037,168 @@ namespace Palatium.Clases
                 sTexto += "TOTAL PROPINAS RECAUDADAS:".PadRight(30, ' ') + dbTotal_P.ToString("N2").PadLeft(10, ' ') + Environment.NewLine;
 
                 return sTexto;
+            }
+
+            catch (Exception)
+            {
+                return "ERROR";
+            }
+        }
+
+        //FUNCION PARA CONSULTAR LAS COMANDAS QUE QUEDAN PENDIENTES POR COBRAR
+        public string comandasPorCobrar(int iIdLocalidad_P, int iIdPosCierreCajero_P)
+        {
+            try
+            {
+                string sRetorno = "";
+
+                sSql = "";
+                sSql += "select numero_pedido, id_pos_cierre_cajero, id_pos_cierre_cajero_por_cobrar," + Environment.NewLine;
+                sSql += "ltrim(str(sum(valor), 10, 2)) valor" + Environment.NewLine;
+                sSql += "from pos_vw_comandas_pendientes_cobrar" + Environment.NewLine;
+                sSql += "where id_pos_cierre_cajero = @id_pos_cierre_cajero" + Environment.NewLine;
+                sSql += "and id_localidad = @id_localidad" + Environment.NewLine;
+                sSql += "group by numero_pedido, id_pos_cierre_cajero, id_pos_cierre_cajero_por_cobrar" + Environment.NewLine;
+                sSql += "order by numero_pedido";
+
+                parametro = new SqlParameter[2];
+                parametro[0] = new SqlParameter();
+                parametro[0].ParameterName = "@id_pos_cierre_cajero";
+                parametro[0].SqlDbType = SqlDbType.Int;
+                parametro[0].Value = iIdPosCierreCajero_P;
+
+                parametro[1] = new SqlParameter();
+                parametro[1].ParameterName = "@id_localidad";
+                parametro[1].SqlDbType = SqlDbType.Int;
+                parametro[1].Value = iIdLocalidad_P;
+
+                dtConsulta = new DataTable();
+                dtConsulta.Clear();
+
+                bRespuesta = conexion.GFun_Lo_Busca_Registro_Parametros(dtConsulta, sSql, parametro);
+
+                if (bRespuesta == false)
+                {
+                    return "ERROR";
+                }
+
+                if (dtConsulta.Rows.Count == 0)
+                {
+                    return "SN";
+                }
+
+                string sNumeroPedido_P;
+                Decimal dbValor_P;
+                Decimal dbSumaValor_P = 0;
+                int iIdCierreCajeroOrigen;
+                int iIdCierreCajeroPago;
+                int iSuma = 0;
+
+                sRetorno += "".PadLeft(40, '-') + Environment.NewLine;
+                sRetorno += "COMANDAS POR COBRAR".PadLeft(30, ' ') + Environment.NewLine;
+                sRetorno += "".PadLeft(40, '-') + Environment.NewLine;
+
+                for (int i = 0; i < dtConsulta.Rows.Count; i++)
+                {
+                    iIdCierreCajeroOrigen = Convert.ToInt32(dtConsulta.Rows[i]["id_pos_cierre_cajero"].ToString());
+                    iIdCierreCajeroPago = Convert.ToInt32(dtConsulta.Rows[i]["id_pos_cierre_cajero_por_cobrar"].ToString());
+
+                    if (iIdCierreCajeroOrigen != iIdCierreCajeroPago)
+                    {
+                        sNumeroPedido_P = "COMANDA No. " + dtConsulta.Rows[i]["numero_pedido"].ToString().Trim();
+                        dbValor_P = Convert.ToDecimal(dtConsulta.Rows[i]["valor"].ToString());
+                        dbSumaValor_P += dbValor_P;
+                        sRetorno += sNumeroPedido_P.PadRight(30, ' ') + dbValor_P.ToString("N2").PadLeft(10, ' ') + Environment.NewLine;
+                        iSuma++;
+                    }
+                }
+
+                if (iSuma > 0)
+                {
+                    sRetorno += "".PadLeft(40, '-') + Environment.NewLine;
+                    sRetorno += "TOTAL COMANDAS POR COBRAR:".PadRight(27, ' ') + dbSumaValor_P.ToString("N2").PadLeft(13, ' ') + Environment.NewLine + Environment.NewLine + Environment.NewLine;
+                }
+
+                else
+                    return "SN";
+
+
+                return sRetorno;
+            }
+
+            catch (Exception)
+            {
+                return "ERROR";
+            }
+        }
+
+        //FUNCION PARA CONSULTAR LAS COMANDAS QUE QUEDAN PENDIENTES POR COBRAR
+        public string comandasPendientesCobradas(int iIdLocalidad_P, int iIdPosCierreCajero_P)
+        {
+            try
+            {
+                string sRetorno = "";
+
+                sSql = "";
+                sSql += "select numero_pedido, fecha_pedido," + Environment.NewLine;
+                sSql += "ltrim(str(sum(valor), 10, 2)) valor" + Environment.NewLine;
+                sSql += "from pos_vw_pos_vw_comandas_pendientes_cobradas" + Environment.NewLine;
+                sSql += "where id_pos_cierre_cajero_por_cobrar = @id_pos_cierre_cajero_por_cobrar" + Environment.NewLine;
+                sSql += "and id_localidad = @id_localidad" + Environment.NewLine;
+                sSql += "group by numero_pedido, fecha_pedido" + Environment.NewLine;
+                sSql += "order by fecha_pedido,numero_pedido";
+
+                parametro = new SqlParameter[2];
+                parametro[0] = new SqlParameter();
+                parametro[0].ParameterName = "@id_pos_cierre_cajero_por_cobrar";
+                parametro[0].SqlDbType = SqlDbType.Int;
+                parametro[0].Value = iIdPosCierreCajero_P;
+
+                parametro[1] = new SqlParameter();
+                parametro[1].ParameterName = "@id_localidad";
+                parametro[1].SqlDbType = SqlDbType.Int;
+                parametro[1].Value = iIdLocalidad_P;
+
+                dtConsulta = new DataTable();
+                dtConsulta.Clear();
+
+                bRespuesta = conexion.GFun_Lo_Busca_Registro_Parametros(dtConsulta, sSql, parametro);
+
+                if (bRespuesta == false)
+                {
+                    return "ERROR";
+                }
+
+                if (dtConsulta.Rows.Count == 0)
+                {
+                    return "SN";
+                }
+
+                string sFechaPedido_P;
+                string sNumeroPedido_P;
+                Decimal dbValor_P;
+                Decimal dbSumaValor_P = 0;
+
+                sRetorno += "".PadLeft(40, '-') + Environment.NewLine;
+                sRetorno += "COMANDAS PENDIENTES COBRADAS".PadLeft(34, ' ') + Environment.NewLine;
+                sRetorno += "".PadLeft(40, '-') + Environment.NewLine;
+                sRetorno += "FECHA PEDIDO        PEDIDO         VALOR" + Environment.NewLine;
+                sRetorno += "".PadLeft(40, '-') + Environment.NewLine;
+
+                for (int i = 0; i < dtConsulta.Rows.Count; i++)
+                {
+                    sFechaPedido_P = Convert.ToDateTime(dtConsulta.Rows[i]["fecha_pedido"].ToString()).ToString("dd-MM-yyyy");
+                    sNumeroPedido_P = dtConsulta.Rows[i]["numero_pedido"].ToString().Trim();
+                    dbValor_P = Convert.ToDecimal(dtConsulta.Rows[i]["valor"].ToString());
+                    dbSumaValor_P += dbValor_P;
+                    sRetorno += sFechaPedido_P.PadRight(15, ' ') + sNumeroPedido_P.PadLeft(15, ' ') + dbValor_P.ToString("N2").PadLeft(10, ' ') + Environment.NewLine;
+                }
+
+                sRetorno += "".PadLeft(40, '-') + Environment.NewLine;
+                sRetorno += "TOTAL COMANDAS COBRADAS:".PadRight(27, ' ') + dbSumaValor_P.ToString("N2").PadLeft(13, ' ') + Environment.NewLine + Environment.NewLine + Environment.NewLine;
+
+
+                return sRetorno;
             }
 
             catch (Exception)

@@ -83,7 +83,7 @@
     </Reference>
     <Reference Include="ConexionBD, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\LIBRERIAS\ConexionBD\bin\Debug\ConexionBD.dll</HintPath>
+      <HintPath>..\..\MI_DLL\bin\Debug\ConexionBD.dll</HintPath>
     </Reference>
     <Reference Include="Controles, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -468,6 +468,12 @@
     </Compile>
     <Compile Include="Claves_Administrar\frmMantenimientoClaves.Designer.cs">
       <DependentUpon>frmMantenimientoClaves.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ComandaNueva\frmComandasCuentasPorCobrar.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ComandaNueva\frmComandasCuentasPorCobrar.Designer.cs">
+      <DependentUpon>frmComandasCuentasPorCobrar.cs</DependentUpon>
     </Compile>
     <Compile Include="ComandaNueva\frmCortesiasDescuentos.cs">
       <SubType>Form</SubType>
@@ -2809,6 +2815,9 @@
     <EmbeddedResource Include="Claves_Administrar\frmMantenimientoClaves.resx">
       <DependentUpon>frmMantenimientoClaves.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="ComandaNueva\frmComandasCuentasPorCobrar.resx">
+      <DependentUpon>frmComandasCuentasPorCobrar.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ComandaNueva\frmCortesiasDescuentos.resx">
       <DependentUpon>frmCortesiasDescuentos.cs</DependentUpon>
     </EmbeddedResource>
@@ -4181,6 +4190,8 @@
     <None Include="Resources\icono_copiar_id.png" />
     <None Include="Resources\icono_pegar_id.png" />
     <None Include="Resources\icono_boton_activar_producto.png" />
+    <None Include="Resources\icono_boton_cuenta_por_cobrar.png" />
+    <None Include="Resources\icono_boton_cuenta_por_cobrar_2.png" />
     <Content Include="Resources\icono_sri_2.png" />
     <None Include="Resources\impresoras_menu.png" />
     <None Include="Resources\impresiones_nuevo.png" />

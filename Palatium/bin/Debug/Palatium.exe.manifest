@@ -192,14 +192,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="ConexionBD.dll" size="15360">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="ConexionBD.dll" size="15872">
       <assemblyIdentity name="ConexionBD" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>6nDvUe07W0XyqdNUIxag/Gv5j0eLoQXpqTPuSozKAUQ=</dsig:DigestValue>
+        <dsig:DigestValue>FTRor3bTYTyza2uUvGbuD3iTttz1AXB3UMJMnISTMeM=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
@@ -360,14 +360,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Palatium.exe" size="22932480">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Palatium.exe" size="22959616">
       <assemblyIdentity name="Palatium" version="1.0.0.0" language="neutral" processorArchitecture="x86" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>3y271sE6faqe77n2FRkWs/Q23v0yaM+srs+PLgcdFG4=</dsig:DigestValue>
+        <dsig:DigestValue>qylmX9fnNTxxN7mw/u5Ix9LwocqYxXJuO0twCT+Xv6c=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>

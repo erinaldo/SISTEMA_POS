@@ -34,11 +34,12 @@
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.lblCantidad = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
-            this.txtTotal = new System.Windows.Forms.TextBox();
-            this.label6 = new System.Windows.Forms.Label();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Title title1 = new System.Windows.Forms.DataVisualization.Charting.Title();
             this.dgvDatos = new System.Windows.Forms.DataGridView();
             this.id_pedido = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.numero_pedido = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -61,69 +62,27 @@
             this.label22 = new System.Windows.Forms.Label();
             this.btnBuscar = new System.Windows.Forms.Button();
             this.label9 = new System.Windows.Forms.Label();
-            this.groupBox2.SuspendLayout();
+            this.tabControl = new System.Windows.Forms.TabControl();
+            this.tabComandas = new System.Windows.Forms.TabPage();
+            this.tabHoras = new System.Windows.Forms.TabPage();
+            this.label6 = new System.Windows.Forms.Label();
+            this.txtTotal = new System.Windows.Forms.TextBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.lblCantidad = new System.Windows.Forms.Label();
+            this.dgvHoras = new System.Windows.Forms.DataGridView();
+            this.txtCantidadComandas = new System.Windows.Forms.TextBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.horas = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.cantidad = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.chartHoras = new System.Windows.Forms.DataVisualization.Charting.Chart();
             ((System.ComponentModel.ISupportInitialize)(this.dgvDatos)).BeginInit();
             this.groupBox1.SuspendLayout();
+            this.tabControl.SuspendLayout();
+            this.tabComandas.SuspendLayout();
+            this.tabHoras.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvHoras)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.chartHoras)).BeginInit();
             this.SuspendLayout();
-            // 
-            // groupBox2
-            // 
-            this.groupBox2.Controls.Add(this.lblCantidad);
-            this.groupBox2.Controls.Add(this.label4);
-            this.groupBox2.Controls.Add(this.txtTotal);
-            this.groupBox2.Controls.Add(this.label6);
-            this.groupBox2.Controls.Add(this.dgvDatos);
-            this.groupBox2.Location = new System.Drawing.Point(13, 149);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(804, 346);
-            this.groupBox2.TabIndex = 150;
-            this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Información";
-            // 
-            // lblCantidad
-            // 
-            this.lblCantidad.AutoSize = true;
-            this.lblCantidad.BackColor = System.Drawing.Color.Transparent;
-            this.lblCantidad.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblCantidad.Location = new System.Drawing.Point(242, 315);
-            this.lblCantidad.Name = "lblCantidad";
-            this.lblCantidad.Size = new System.Drawing.Size(17, 18);
-            this.lblCantidad.TabIndex = 155;
-            this.lblCantidad.Text = "0";
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.BackColor = System.Drawing.Color.Transparent;
-            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(12, 315);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(224, 18);
-            this.label4.TabIndex = 154;
-            this.label4.Text = "Total Comandas Generadas:";
-            // 
-            // txtTotal
-            // 
-            this.txtTotal.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.txtTotal.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.txtTotal.Location = new System.Drawing.Point(618, 311);
-            this.txtTotal.Name = "txtTotal";
-            this.txtTotal.ReadOnly = true;
-            this.txtTotal.Size = new System.Drawing.Size(172, 26);
-            this.txtTotal.TabIndex = 153;
-            this.txtTotal.Text = "0.00";
-            this.txtTotal.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.BackColor = System.Drawing.Color.Transparent;
-            this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label6.Location = new System.Drawing.Point(547, 316);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(65, 18);
-            this.label6.TabIndex = 152;
-            this.label6.Text = "TOTAL:";
             // 
             // dgvDatos
             // 
@@ -143,7 +102,7 @@
             this.valor,
             this.estado_orden,
             this.visualizar});
-            this.dgvDatos.Location = new System.Drawing.Point(15, 25);
+            this.dgvDatos.Location = new System.Drawing.Point(11, 16);
             this.dgvDatos.MultiSelect = false;
             this.dgvDatos.Name = "dgvDatos";
             this.dgvDatos.ReadOnly = true;
@@ -376,15 +335,190 @@
             this.label9.TabIndex = 15;
             this.label9.Text = "Fecha Desde:";
             // 
+            // tabControl
+            // 
+            this.tabControl.Controls.Add(this.tabComandas);
+            this.tabControl.Controls.Add(this.tabHoras);
+            this.tabControl.Location = new System.Drawing.Point(13, 146);
+            this.tabControl.Name = "tabControl";
+            this.tabControl.SelectedIndex = 0;
+            this.tabControl.Size = new System.Drawing.Size(803, 379);
+            this.tabControl.TabIndex = 157;
+            // 
+            // tabComandas
+            // 
+            this.tabComandas.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
+            this.tabComandas.Controls.Add(this.lblCantidad);
+            this.tabComandas.Controls.Add(this.dgvDatos);
+            this.tabComandas.Controls.Add(this.label4);
+            this.tabComandas.Controls.Add(this.txtTotal);
+            this.tabComandas.Controls.Add(this.label6);
+            this.tabComandas.Location = new System.Drawing.Point(4, 22);
+            this.tabComandas.Name = "tabComandas";
+            this.tabComandas.Padding = new System.Windows.Forms.Padding(3);
+            this.tabComandas.Size = new System.Drawing.Size(795, 353);
+            this.tabComandas.TabIndex = 0;
+            this.tabComandas.Text = "Comandas por Rango de Fecha y Hora";
+            // 
+            // tabHoras
+            // 
+            this.tabHoras.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
+            this.tabHoras.Controls.Add(this.chartHoras);
+            this.tabHoras.Controls.Add(this.txtCantidadComandas);
+            this.tabHoras.Controls.Add(this.label5);
+            this.tabHoras.Controls.Add(this.dgvHoras);
+            this.tabHoras.Location = new System.Drawing.Point(4, 22);
+            this.tabHoras.Name = "tabHoras";
+            this.tabHoras.Padding = new System.Windows.Forms.Padding(3);
+            this.tabHoras.Size = new System.Drawing.Size(795, 353);
+            this.tabHoras.TabIndex = 1;
+            this.tabHoras.Text = "Estadístiscas por Fecha y Hora";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.BackColor = System.Drawing.Color.Transparent;
+            this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label6.Location = new System.Drawing.Point(543, 313);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(65, 18);
+            this.label6.TabIndex = 152;
+            this.label6.Text = "TOTAL:";
+            // 
+            // txtTotal
+            // 
+            this.txtTotal.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.txtTotal.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
+            this.txtTotal.Location = new System.Drawing.Point(614, 308);
+            this.txtTotal.Name = "txtTotal";
+            this.txtTotal.ReadOnly = true;
+            this.txtTotal.Size = new System.Drawing.Size(172, 26);
+            this.txtTotal.TabIndex = 153;
+            this.txtTotal.Text = "0.00";
+            this.txtTotal.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.BackColor = System.Drawing.Color.Transparent;
+            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label4.Location = new System.Drawing.Point(8, 312);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(224, 18);
+            this.label4.TabIndex = 154;
+            this.label4.Text = "Total Comandas Generadas:";
+            // 
+            // lblCantidad
+            // 
+            this.lblCantidad.AutoSize = true;
+            this.lblCantidad.BackColor = System.Drawing.Color.Transparent;
+            this.lblCantidad.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblCantidad.Location = new System.Drawing.Point(238, 312);
+            this.lblCantidad.Name = "lblCantidad";
+            this.lblCantidad.Size = new System.Drawing.Size(17, 18);
+            this.lblCantidad.TabIndex = 155;
+            this.lblCantidad.Text = "0";
+            // 
+            // dgvHoras
+            // 
+            this.dgvHoras.AllowUserToAddRows = false;
+            this.dgvHoras.AllowUserToDeleteRows = false;
+            this.dgvHoras.AllowUserToResizeColumns = false;
+            this.dgvHoras.AllowUserToResizeRows = false;
+            this.dgvHoras.BackgroundColor = System.Drawing.SystemColors.ControlLightLight;
+            this.dgvHoras.ColumnHeadersHeight = 30;
+            this.dgvHoras.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+            this.dgvHoras.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.horas,
+            this.cantidad});
+            this.dgvHoras.Location = new System.Drawing.Point(11, 16);
+            this.dgvHoras.MultiSelect = false;
+            this.dgvHoras.Name = "dgvHoras";
+            this.dgvHoras.ReadOnly = true;
+            this.dgvHoras.RowHeadersVisible = false;
+            this.dgvHoras.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
+            this.dgvHoras.RowTemplate.Height = 30;
+            this.dgvHoras.Size = new System.Drawing.Size(249, 280);
+            this.dgvHoras.TabIndex = 1;
+            // 
+            // txtCantidadComandas
+            // 
+            this.txtCantidadComandas.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.txtCantidadComandas.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
+            this.txtCantidadComandas.Location = new System.Drawing.Point(146, 308);
+            this.txtCantidadComandas.Name = "txtCantidadComandas";
+            this.txtCantidadComandas.ReadOnly = true;
+            this.txtCantidadComandas.Size = new System.Drawing.Size(100, 26);
+            this.txtCantidadComandas.TabIndex = 155;
+            this.txtCantidadComandas.Text = "0";
+            this.txtCantidadComandas.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.BackColor = System.Drawing.Color.Transparent;
+            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label5.Location = new System.Drawing.Point(8, 312);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(65, 18);
+            this.label5.TabIndex = 154;
+            this.label5.Text = "TOTAL:";
+            // 
+            // horas
+            // 
+            this.horas.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.horas.DefaultCellStyle = dataGridViewCellStyle7;
+            this.horas.HeaderText = "RANGO HORAS";
+            this.horas.Name = "horas";
+            this.horas.ReadOnly = true;
+            // 
+            // cantidad
+            // 
+            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.cantidad.DefaultCellStyle = dataGridViewCellStyle8;
+            this.cantidad.HeaderText = "CANT. COMANDAS";
+            this.cantidad.Name = "cantidad";
+            this.cantidad.ReadOnly = true;
+            this.cantidad.Width = 120;
+            // 
+            // chartHoras
+            // 
+            this.chartHoras.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
+            chartArea1.AxisX.IntervalAutoMode = System.Windows.Forms.DataVisualization.Charting.IntervalAutoMode.VariableCount;
+            chartArea1.Name = "ChartArea1";
+            this.chartHoras.ChartAreas.Add(chartArea1);
+            legend1.Enabled = false;
+            legend1.Name = "Legend1";
+            this.chartHoras.Legends.Add(legend1);
+            this.chartHoras.Location = new System.Drawing.Point(276, 3);
+            this.chartHoras.Name = "chartHoras";
+            this.chartHoras.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.Bright;
+            series1.ChartArea = "ChartArea1";
+            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Bar;
+            series1.Font = new System.Drawing.Font("Maiandra GD", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            series1.IsValueShownAsLabel = true;
+            series1.LabelForeColor = System.Drawing.Color.Crimson;
+            series1.Legend = "Legend1";
+            series1.Name = "SerieHoras";
+            series1.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.SeaGreen;
+            this.chartHoras.Series.Add(series1);
+            this.chartHoras.Size = new System.Drawing.Size(513, 344);
+            this.chartHoras.TabIndex = 156;
+            this.chartHoras.Text = "chart1";
+            title1.Name = "Title1";
+            title1.Text = "Cantidad de Comandas por Rango de Horas";
+            this.chartHoras.Titles.Add(title1);
+            // 
             // frmListarComandasRangoFechaHora
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
-            this.ClientSize = new System.Drawing.Size(829, 507);
+            this.ClientSize = new System.Drawing.Size(830, 536);
+            this.Controls.Add(this.tabControl);
             this.Controls.Add(this.groupBox1);
-            this.Controls.Add(this.groupBox2);
             this.KeyPreview = true;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
@@ -394,23 +528,23 @@
             this.Text = "Listar Comandas por Rango de Fecha y Hora";
             this.Load += new System.EventHandler(this.frmListarComandasRangoFechaHora_Load);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.frmListarComandasRangoFechaHora_KeyDown);
-            this.groupBox2.ResumeLayout(false);
-            this.groupBox2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvDatos)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
+            this.tabControl.ResumeLayout(false);
+            this.tabComandas.ResumeLayout(false);
+            this.tabComandas.PerformLayout();
+            this.tabHoras.ResumeLayout(false);
+            this.tabHoras.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvHoras)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.chartHoras)).EndInit();
             this.ResumeLayout(false);
 
         }
 
         #endregion
 
-        private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.DataGridView dgvDatos;
-        private System.Windows.Forms.Label lblCantidad;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.TextBox txtTotal;
-        private System.Windows.Forms.Label label6;
         private System.Windows.Forms.DataGridViewTextBoxColumn id_pedido;
         private System.Windows.Forms.DataGridViewTextBoxColumn numero_pedido;
         private System.Windows.Forms.DataGridViewTextBoxColumn tipo_comanda;
@@ -432,6 +566,19 @@
         private System.Windows.Forms.Label label22;
         private System.Windows.Forms.Button btnBuscar;
         private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.TabControl tabControl;
+        private System.Windows.Forms.TabPage tabComandas;
+        private System.Windows.Forms.Label lblCantidad;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.TextBox txtTotal;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.TabPage tabHoras;
+        private System.Windows.Forms.TextBox txtCantidadComandas;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.DataGridView dgvHoras;
+        private System.Windows.Forms.DataVisualization.Charting.Chart chartHoras;
+        private System.Windows.Forms.DataGridViewTextBoxColumn horas;
+        private System.Windows.Forms.DataGridViewTextBoxColumn cantidad;
 
     }
 }

@@ -3530,7 +3530,7 @@ namespace Palatium
 
         private void btnPagoCompleto_Click(object sender, EventArgs e)
         {
-            Pedidos.frmEfectivoPagoCompleto efectivo_1 = new Pedidos.frmEfectivoPagoCompleto(sIdOrden, dTotal);
+            Pedidos.frmEfectivoPagoCompleto efectivo_1 = new Pedidos.frmEfectivoPagoCompleto(sIdOrden, dTotal, 0);
             efectivo_1.ShowDialog();
 
             if (efectivo_1.DialogResult == DialogResult.OK)

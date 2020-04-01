@@ -75,15 +75,6 @@
             this.btnRemoverIVA = new System.Windows.Forms.Button();
             this.btnPagoCompleto = new System.Windows.Forms.Button();
             this.dgvPagos = new System.Windows.Forms.DataGridView();
-            this.btnFacturar = new System.Windows.Forms.Button();
-            this.btnSalir = new System.Windows.Forms.Button();
-            this.btnImprimir = new System.Windows.Forms.Button();
-            this.btnGrabarPagos = new System.Windows.Forms.Button();
-            this.btnCrearCliente = new System.Windows.Forms.Button();
-            this.btnRemoverPago = new System.Windows.Forms.Button();
-            this.pnlFormasCobros = new System.Windows.Forms.Panel();
-            this.btnDividirPrecio = new System.Windows.Forms.Button();
-            this.btnPropina = new System.Windows.Forms.Button();
             this.ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.fpago = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.valor = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -94,6 +85,16 @@
             this.numero_lote = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.bandera_insertar_lote = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.propina = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.btnFacturar = new System.Windows.Forms.Button();
+            this.btnSalir = new System.Windows.Forms.Button();
+            this.btnImprimir = new System.Windows.Forms.Button();
+            this.btnGrabarPagos = new System.Windows.Forms.Button();
+            this.btnCrearCliente = new System.Windows.Forms.Button();
+            this.btnRemoverPago = new System.Windows.Forms.Button();
+            this.pnlFormasCobros = new System.Windows.Forms.Panel();
+            this.btnDividirPrecio = new System.Windows.Forms.Button();
+            this.btnPropina = new System.Windows.Forms.Button();
+            this.btnCuentaPorCobrar = new System.Windows.Forms.Button();
             this.grupoEncabezadoFactura.SuspendLayout();
             this.grupoComprobantes.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvDetalleDeuda)).BeginInit();
@@ -611,129 +612,6 @@
             this.dgvPagos.Size = new System.Drawing.Size(390, 280);
             this.dgvPagos.TabIndex = 139;
             // 
-            // btnFacturar
-            // 
-            this.btnFacturar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(192)))));
-            this.btnFacturar.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
-            this.btnFacturar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnFacturar.Font = new System.Drawing.Font("Maiandra GD", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnFacturar.Location = new System.Drawing.Point(760, 563);
-            this.btnFacturar.Name = "btnFacturar";
-            this.btnFacturar.Size = new System.Drawing.Size(185, 71);
-            this.btnFacturar.TabIndex = 137;
-            this.btnFacturar.Text = "FACTURAR\r\nCERRAR CUENTA";
-            this.btnFacturar.UseVisualStyleBackColor = false;
-            this.btnFacturar.Click += new System.EventHandler(this.btnFacturar_Click);
-            // 
-            // btnSalir
-            // 
-            this.btnSalir.BackColor = System.Drawing.Color.OrangeRed;
-            this.btnSalir.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
-            this.btnSalir.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnSalir.Font = new System.Drawing.Font("Maiandra GD", 12F, System.Drawing.FontStyle.Bold);
-            this.btnSalir.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btnSalir.Location = new System.Drawing.Point(948, 563);
-            this.btnSalir.Name = "btnSalir";
-            this.btnSalir.Size = new System.Drawing.Size(185, 71);
-            this.btnSalir.TabIndex = 138;
-            this.btnSalir.Text = "SALIR DE COBROS";
-            this.btnSalir.UseVisualStyleBackColor = false;
-            this.btnSalir.Click += new System.EventHandler(this.btnSalir_Click);
-            // 
-            // btnImprimir
-            // 
-            this.btnImprimir.AccessibleDescription = "";
-            this.btnImprimir.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
-            this.btnImprimir.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
-            this.btnImprimir.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnImprimir.Font = new System.Drawing.Font("Maiandra GD", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnImprimir.Location = new System.Drawing.Point(15, 562);
-            this.btnImprimir.Name = "btnImprimir";
-            this.btnImprimir.Size = new System.Drawing.Size(130, 71);
-            this.btnImprimir.TabIndex = 134;
-            this.btnImprimir.Text = "IMPRIMIR LA PRECUENTA";
-            this.btnImprimir.UseVisualStyleBackColor = false;
-            this.btnImprimir.Click += new System.EventHandler(this.btnImprimir_Click);
-            // 
-            // btnGrabarPagos
-            // 
-            this.btnGrabarPagos.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
-            this.btnGrabarPagos.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
-            this.btnGrabarPagos.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnGrabarPagos.Font = new System.Drawing.Font("Maiandra GD", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnGrabarPagos.Location = new System.Drawing.Point(191, 562);
-            this.btnGrabarPagos.Name = "btnGrabarPagos";
-            this.btnGrabarPagos.Size = new System.Drawing.Size(130, 71);
-            this.btnGrabarPagos.TabIndex = 136;
-            this.btnGrabarPagos.Text = "GRABAR LAS FORMAS DE PAGO";
-            this.btnGrabarPagos.UseVisualStyleBackColor = false;
-            this.btnGrabarPagos.Click += new System.EventHandler(this.btnGrabarPagos_Click);
-            // 
-            // btnCrearCliente
-            // 
-            this.btnCrearCliente.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
-            this.btnCrearCliente.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
-            this.btnCrearCliente.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnCrearCliente.Font = new System.Drawing.Font("Maiandra GD", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnCrearCliente.Location = new System.Drawing.Point(333, 563);
-            this.btnCrearCliente.Name = "btnCrearCliente";
-            this.btnCrearCliente.Size = new System.Drawing.Size(130, 71);
-            this.btnCrearCliente.TabIndex = 135;
-            this.btnCrearCliente.Text = "CREAR CLIENTE";
-            this.btnCrearCliente.UseVisualStyleBackColor = false;
-            this.btnCrearCliente.Click += new System.EventHandler(this.btnCrearCliente_Click);
-            // 
-            // btnRemoverPago
-            // 
-            this.btnRemoverPago.AccessibleDescription = "";
-            this.btnRemoverPago.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
-            this.btnRemoverPago.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
-            this.btnRemoverPago.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnRemoverPago.Font = new System.Drawing.Font("Maiandra GD", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnRemoverPago.Location = new System.Drawing.Point(333, 481);
-            this.btnRemoverPago.Name = "btnRemoverPago";
-            this.btnRemoverPago.Size = new System.Drawing.Size(130, 71);
-            this.btnRemoverPago.TabIndex = 140;
-            this.btnRemoverPago.Text = "REMOVER EL PAGO";
-            this.btnRemoverPago.UseVisualStyleBackColor = false;
-            this.btnRemoverPago.Click += new System.EventHandler(this.btnRemoverPago_Click);
-            // 
-            // pnlFormasCobros
-            // 
-            this.pnlFormasCobros.Location = new System.Drawing.Point(8, 107);
-            this.pnlFormasCobros.Name = "pnlFormasCobros";
-            this.pnlFormasCobros.Size = new System.Drawing.Size(307, 359);
-            this.pnlFormasCobros.TabIndex = 131;
-            // 
-            // btnDividirPrecio
-            // 
-            this.btnDividirPrecio.BackColor = System.Drawing.Color.Silver;
-            this.btnDividirPrecio.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
-            this.btnDividirPrecio.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnDividirPrecio.Font = new System.Drawing.Font("Maiandra GD", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnDividirPrecio.Location = new System.Drawing.Point(574, 298);
-            this.btnDividirPrecio.Name = "btnDividirPrecio";
-            this.btnDividirPrecio.Size = new System.Drawing.Size(130, 71);
-            this.btnDividirPrecio.TabIndex = 149;
-            this.btnDividirPrecio.Text = "DIVIDIR PRECIO";
-            this.btnDividirPrecio.UseVisualStyleBackColor = false;
-            this.btnDividirPrecio.Visible = false;
-            this.btnDividirPrecio.Click += new System.EventHandler(this.btnDividirPrecio_Click);
-            // 
-            // btnPropina
-            // 
-            this.btnPropina.BackColor = System.Drawing.Color.Silver;
-            this.btnPropina.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
-            this.btnPropina.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnPropina.Font = new System.Drawing.Font("Maiandra GD", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnPropina.Location = new System.Drawing.Point(593, 481);
-            this.btnPropina.Name = "btnPropina";
-            this.btnPropina.Size = new System.Drawing.Size(130, 71);
-            this.btnPropina.TabIndex = 150;
-            this.btnPropina.Text = "PROPINA";
-            this.btnPropina.UseVisualStyleBackColor = false;
-            this.btnPropina.Click += new System.EventHandler(this.btnPropina_Click);
-            // 
             // ID
             // 
             dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
@@ -816,6 +694,144 @@
             this.propina.ReadOnly = true;
             this.propina.Visible = false;
             // 
+            // btnFacturar
+            // 
+            this.btnFacturar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(192)))));
+            this.btnFacturar.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
+            this.btnFacturar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnFacturar.Font = new System.Drawing.Font("Maiandra GD", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnFacturar.Location = new System.Drawing.Point(735, 563);
+            this.btnFacturar.Name = "btnFacturar";
+            this.btnFacturar.Size = new System.Drawing.Size(185, 71);
+            this.btnFacturar.TabIndex = 137;
+            this.btnFacturar.Text = "FACTURAR\r\nCERRAR CUENTA";
+            this.btnFacturar.UseVisualStyleBackColor = false;
+            this.btnFacturar.Click += new System.EventHandler(this.btnFacturar_Click);
+            // 
+            // btnSalir
+            // 
+            this.btnSalir.BackColor = System.Drawing.Color.OrangeRed;
+            this.btnSalir.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
+            this.btnSalir.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnSalir.Font = new System.Drawing.Font("Maiandra GD", 12F, System.Drawing.FontStyle.Bold);
+            this.btnSalir.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.btnSalir.Location = new System.Drawing.Point(970, 563);
+            this.btnSalir.Name = "btnSalir";
+            this.btnSalir.Size = new System.Drawing.Size(185, 71);
+            this.btnSalir.TabIndex = 138;
+            this.btnSalir.Text = "SALIR DE COBROS";
+            this.btnSalir.UseVisualStyleBackColor = false;
+            this.btnSalir.Click += new System.EventHandler(this.btnSalir_Click);
+            // 
+            // btnImprimir
+            // 
+            this.btnImprimir.AccessibleDescription = "";
+            this.btnImprimir.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
+            this.btnImprimir.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
+            this.btnImprimir.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnImprimir.Font = new System.Drawing.Font("Maiandra GD", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnImprimir.Location = new System.Drawing.Point(15, 562);
+            this.btnImprimir.Name = "btnImprimir";
+            this.btnImprimir.Size = new System.Drawing.Size(130, 71);
+            this.btnImprimir.TabIndex = 134;
+            this.btnImprimir.Text = "IMPRIMIR LA PRECUENTA";
+            this.btnImprimir.UseVisualStyleBackColor = false;
+            this.btnImprimir.Click += new System.EventHandler(this.btnImprimir_Click);
+            // 
+            // btnGrabarPagos
+            // 
+            this.btnGrabarPagos.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
+            this.btnGrabarPagos.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
+            this.btnGrabarPagos.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnGrabarPagos.Font = new System.Drawing.Font("Maiandra GD", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnGrabarPagos.Location = new System.Drawing.Point(191, 562);
+            this.btnGrabarPagos.Name = "btnGrabarPagos";
+            this.btnGrabarPagos.Size = new System.Drawing.Size(130, 71);
+            this.btnGrabarPagos.TabIndex = 136;
+            this.btnGrabarPagos.Text = "GRABAR LAS FORMAS DE PAGO";
+            this.btnGrabarPagos.UseVisualStyleBackColor = false;
+            this.btnGrabarPagos.Click += new System.EventHandler(this.btnGrabarPagos_Click);
+            // 
+            // btnCrearCliente
+            // 
+            this.btnCrearCliente.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
+            this.btnCrearCliente.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
+            this.btnCrearCliente.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnCrearCliente.Font = new System.Drawing.Font("Maiandra GD", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnCrearCliente.Location = new System.Drawing.Point(438, 298);
+            this.btnCrearCliente.Name = "btnCrearCliente";
+            this.btnCrearCliente.Size = new System.Drawing.Size(130, 71);
+            this.btnCrearCliente.TabIndex = 135;
+            this.btnCrearCliente.Text = "CREAR CLIENTE";
+            this.btnCrearCliente.UseVisualStyleBackColor = false;
+            this.btnCrearCliente.Visible = false;
+            this.btnCrearCliente.Click += new System.EventHandler(this.btnCrearCliente_Click);
+            // 
+            // btnRemoverPago
+            // 
+            this.btnRemoverPago.AccessibleDescription = "";
+            this.btnRemoverPago.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
+            this.btnRemoverPago.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
+            this.btnRemoverPago.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnRemoverPago.Font = new System.Drawing.Font("Maiandra GD", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnRemoverPago.Location = new System.Drawing.Point(333, 481);
+            this.btnRemoverPago.Name = "btnRemoverPago";
+            this.btnRemoverPago.Size = new System.Drawing.Size(130, 71);
+            this.btnRemoverPago.TabIndex = 140;
+            this.btnRemoverPago.Text = "REMOVER EL PAGO";
+            this.btnRemoverPago.UseVisualStyleBackColor = false;
+            this.btnRemoverPago.Click += new System.EventHandler(this.btnRemoverPago_Click);
+            // 
+            // pnlFormasCobros
+            // 
+            this.pnlFormasCobros.Location = new System.Drawing.Point(8, 107);
+            this.pnlFormasCobros.Name = "pnlFormasCobros";
+            this.pnlFormasCobros.Size = new System.Drawing.Size(307, 359);
+            this.pnlFormasCobros.TabIndex = 131;
+            // 
+            // btnDividirPrecio
+            // 
+            this.btnDividirPrecio.BackColor = System.Drawing.Color.Silver;
+            this.btnDividirPrecio.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
+            this.btnDividirPrecio.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnDividirPrecio.Font = new System.Drawing.Font("Maiandra GD", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnDividirPrecio.Location = new System.Drawing.Point(574, 298);
+            this.btnDividirPrecio.Name = "btnDividirPrecio";
+            this.btnDividirPrecio.Size = new System.Drawing.Size(130, 71);
+            this.btnDividirPrecio.TabIndex = 149;
+            this.btnDividirPrecio.Text = "DIVIDIR PRECIO";
+            this.btnDividirPrecio.UseVisualStyleBackColor = false;
+            this.btnDividirPrecio.Visible = false;
+            this.btnDividirPrecio.Click += new System.EventHandler(this.btnDividirPrecio_Click);
+            // 
+            // btnPropina
+            // 
+            this.btnPropina.BackColor = System.Drawing.Color.Silver;
+            this.btnPropina.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
+            this.btnPropina.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnPropina.Font = new System.Drawing.Font("Maiandra GD", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnPropina.Location = new System.Drawing.Point(333, 563);
+            this.btnPropina.Name = "btnPropina";
+            this.btnPropina.Size = new System.Drawing.Size(130, 71);
+            this.btnPropina.TabIndex = 150;
+            this.btnPropina.Text = "PROPINA";
+            this.btnPropina.UseVisualStyleBackColor = false;
+            this.btnPropina.Click += new System.EventHandler(this.btnPropina_Click);
+            // 
+            // btnCuentaPorCobrar
+            // 
+            this.btnCuentaPorCobrar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
+            this.btnCuentaPorCobrar.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
+            this.btnCuentaPorCobrar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnCuentaPorCobrar.Font = new System.Drawing.Font("Maiandra GD", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnCuentaPorCobrar.Location = new System.Drawing.Point(593, 481);
+            this.btnCuentaPorCobrar.Name = "btnCuentaPorCobrar";
+            this.btnCuentaPorCobrar.Size = new System.Drawing.Size(130, 71);
+            this.btnCuentaPorCobrar.TabIndex = 151;
+            this.btnCuentaPorCobrar.Text = "GENERAR CUENTA POR COBRAR";
+            this.btnCuentaPorCobrar.UseVisualStyleBackColor = false;
+            this.btnCuentaPorCobrar.Click += new System.EventHandler(this.btnCuentaPorCobrar_Click);
+            // 
             // frmCobros
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -823,6 +839,8 @@
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackColor = System.Drawing.Color.SkyBlue;
             this.ClientSize = new System.Drawing.Size(1164, 661);
+            this.Controls.Add(this.btnCuentaPorCobrar);
+            this.Controls.Add(this.btnCrearCliente);
             this.Controls.Add(this.btnPropina);
             this.Controls.Add(this.btnDividirPrecio);
             this.Controls.Add(this.grupoEncabezadoFactura);
@@ -839,7 +857,6 @@
             this.Controls.Add(this.btnSalir);
             this.Controls.Add(this.btnImprimir);
             this.Controls.Add(this.btnGrabarPagos);
-            this.Controls.Add(this.btnCrearCliente);
             this.Controls.Add(this.btnRemoverPago);
             this.Controls.Add(this.pnlFormasCobros);
             this.KeyPreview = true;
@@ -921,5 +938,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn numero_lote;
         private System.Windows.Forms.DataGridViewTextBoxColumn bandera_insertar_lote;
         private System.Windows.Forms.DataGridViewTextBoxColumn propina;
+        private System.Windows.Forms.Button btnCuentaPorCobrar;
     }
 }

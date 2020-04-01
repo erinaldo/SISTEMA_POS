@@ -27,6 +27,8 @@ namespace Palatium.Utilitarios
 
         bool bRespuesta;
 
+        SqlParameter[] Parametros;
+
         public frmListarComandasRangoFechaHora()
         {
             InitializeComponent();
@@ -122,6 +124,8 @@ namespace Palatium.Utilitarios
             dgvDatos.Rows.Clear();
             lblCantidad.Text = "0";
             txtTotal.Text = "0.00";
+
+            llenarGridHoras();
         }
 
         //FUNCION PARA LLENAR EL DATAGRID
@@ -138,7 +142,7 @@ namespace Palatium.Utilitarios
                 sSql += "and convert(varchar(10), fecha_apertura_orden, 108) <= @hora_final)" + Environment.NewLine;
                 sSql += "and id_localidad = @id_localidad";
 
-                SqlParameter[] Parametros = new SqlParameter[5];
+                Parametros = new SqlParameter[5];
                 Parametros[0] = new SqlParameter();
                 Parametros[0].ParameterName = "@fecha_inicio";
                 Parametros[0].SqlDbType = SqlDbType.DateTime;
@@ -172,7 +176,7 @@ namespace Palatium.Utilitarios
                 if (bRespuesta == false)
                 {
                     catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
-                    catchMensaje.lblMensaje.Text = "ERROR EN LA INSTRUCCION:" + Environment.NewLine + sSql;
+                    catchMensaje.lblMensaje.Text = conexion.sMensajeError; ;
                     catchMensaje.ShowDialog();
                     return;
                 }
@@ -197,14 +201,105 @@ namespace Palatium.Utilitarios
                 txtTotal.Text = dbSuma_R.ToString("N2");
                 lblCantidad.Text = dtConsulta.Rows.Count.ToString();
 
-                if (dtConsulta.Rows.Count == 0)
+                if (tabControl.SelectedTab.Name == "tabComandas")
                 {
-                    ok = new VentanasMensajes.frmMensajeNuevoOk();
-                    ok.lblMensaje.Text = "No se encuentran registros con los parámetros ingresados.";
-                    ok.ShowDialog();
+                    if (dtConsulta.Rows.Count == 0)
+                    {
+                        ok = new VentanasMensajes.frmMensajeNuevoOk();
+                        ok.lblMensaje.Text = "No se encuentran registros con los parámetros ingresados.";
+                        ok.ShowDialog();
+                    }
                 }
 
                 dgvDatos.ClearSelection();
+            }
+
+            catch (Exception ex)
+            {
+                catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
+                catchMensaje.lblMensaje.Text = ex.Message;
+                catchMensaje.ShowDialog();
+            }
+        }
+
+        //FUNCION PARA LLENAR EL GRID DE HORAS
+        private void llenarGridHoras()
+        {
+            try
+            {
+                dgvHoras.Rows.Clear();
+
+                sSql = "";
+                sSql += "select H.codigo, H.descripcion, count(CP.fecha_apertura_orden) cantidad " + Environment.NewLine;
+                sSql += "from cv403_cab_pedidos CP RIGHT JOIN" + Environment.NewLine;
+                sSql += "pos_hora24 H ON substring(convert(varchar, CP.fecha_apertura_orden, 108), 1, 2) = H.codigo " + Environment.NewLine;
+                sSql += "and CP.estado = 'A'" + Environment.NewLine;
+                sSql += "and CP.fecha_pedido between @fecha_inicio" + Environment.NewLine;
+                sSql += "and @fecha_final" + Environment.NewLine;
+                sSql += "and id_localidad = @id_localidad" + Environment.NewLine;
+                sSql += "group by H.codigo, H.descripcion" + Environment.NewLine;
+                sSql += "order by H.codigo";
+
+                Parametros = new SqlParameter[3];
+                Parametros[0] = new SqlParameter();
+                Parametros[0].ParameterName = "@fecha_inicio";
+                Parametros[0].SqlDbType = SqlDbType.DateTime;
+                Parametros[0].Value = Convert.ToDateTime(dtFechaDesde.Text);
+
+                Parametros[1] = new SqlParameter();
+                Parametros[1].ParameterName = "@fecha_final";
+                Parametros[1].SqlDbType = SqlDbType.DateTime;
+                Parametros[1].Value = Convert.ToDateTime(dtFechaHasta.Text);
+
+                Parametros[2] = new SqlParameter();
+                Parametros[2].ParameterName = "@id_localidad";
+                Parametros[2].SqlDbType = SqlDbType.Int;
+                Parametros[2].Value = Convert.ToInt32(cmbLocalidades.SelectedValue);
+
+                dtConsulta = new DataTable();
+                dtConsulta.Clear();
+
+                bRespuesta = conexion.GFun_Lo_Busca_Registro_Parametros(dtConsulta, sSql, Parametros);
+
+                if (bRespuesta == false)
+                {
+                    catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
+                    catchMensaje.lblMensaje.Text = conexion.sMensajeError; ;
+                    catchMensaje.ShowDialog();
+                    return;
+                }
+
+                Decimal dbSuma_R = 0;
+
+                for (int i = 0; i < dtConsulta.Rows.Count; i++)
+                {
+                    dgvHoras.Rows.Add(
+                                        dtConsulta.Rows[i]["descripcion"].ToString(),
+                                        dtConsulta.Rows[i]["cantidad"].ToString()
+                                     );
+
+                    dbSuma_R += Convert.ToDecimal(dtConsulta.Rows[i]["cantidad"].ToString());
+                }
+
+                txtCantidadComandas.Text = dbSuma_R.ToString("N0");
+                dgvHoras.ClearSelection();
+
+                DataTable dtAyuda = new DataTable();
+                dtAyuda = dtConsulta;
+
+                for (int i = dtAyuda.Rows.Count - 1; i >= 0; i--)
+                {
+                    if (Convert.ToInt32(dtAyuda.Rows[i]["cantidad"].ToString()) == 0)
+                    {
+                        dtAyuda.Rows.RemoveAt(i);
+                    }
+                }
+
+                chartHoras.DataSource = dtAyuda;
+                chartHoras.Series["SerieHoras"].XValueMember = "descripcion";
+                chartHoras.Series["SerieHoras"].XValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.String;
+                chartHoras.Series["SerieHoras"].YValueMembers = "cantidad";
+                chartHoras.Series["SerieHoras"].YValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.Int32;
             }
 
             catch (Exception ex)
@@ -243,6 +338,7 @@ namespace Palatium.Utilitarios
             }
 
             llenarGrid();
+            llenarGridHoras();
         }
 
         private void btnLimpiar_Click(object sender, EventArgs e)

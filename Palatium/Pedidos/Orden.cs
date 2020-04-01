@@ -4250,7 +4250,7 @@ namespace Palatium
                 //    this.Close();
                 //}
 
-                Pedidos.frmCobros t = new Pedidos.frmCobros(iIdPedido.ToString());
+                Pedidos.frmCobros t = new Pedidos.frmCobros(iIdPedido.ToString(), 0);
                 AddOwnedForm(t);
                 t.ShowDialog();
 

@@ -47,6 +47,7 @@ namespace Palatium.Pedidos
         int iIdLocalidadImpresora;
         int iIdPosMovimientoCaja;
         int iIdCaja;
+        int iBanderaComandaPendiente;
 
         long iMaximo;
 
@@ -55,7 +56,7 @@ namespace Palatium.Pedidos
         double dbCambio;
         double dbServicio;
 
-        public bool insertarPagoCompleto(int iIdOrden_P, double dbTotal_P, double dbRecibido_P, double dbCambio_P)
+        public bool insertarPagoCompleto(int iIdOrden_P, double dbTotal_P, double dbRecibido_P, double dbCambio_P, int iBanderaComandaPendiente_P)
         {
             try
             {
@@ -63,6 +64,7 @@ namespace Palatium.Pedidos
                 this.dbTotal = dbTotal_P;
                 this.dbRecibido = dbRecibido_P;
                 this.dbCambio = dbCambio_P;
+                this.iBanderaComandaPendiente = iBanderaComandaPendiente_P;
 
                 //EXTRAER LA FECHA DEL SISTEMA
                 sSql = "";

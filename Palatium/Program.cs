@@ -502,8 +502,6 @@ namespace Palatium
         public static string sMotivoCortesia;
         public static int iOrigenOrden;
 
-        public static int iIdPosCierreCaja;
-
         //Arreglos para guardar nombre de productos
         public static int iCuenta = 0;
         public static string[] sNombreProductos;

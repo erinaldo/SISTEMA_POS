@@ -1753,6 +1753,26 @@ namespace Palatium.Properties {
         /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap icono_boton_cuenta_por_cobrar {
+            get {
+                object obj = ResourceManager.GetObject("icono_boton_cuenta_por_cobrar", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap icono_boton_cuenta_por_cobrar_2 {
+            get {
+                object obj = ResourceManager.GetObject("icono_boton_cuenta_por_cobrar_2", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap icono_boton_editar_datos_factura {
             get {
                 object obj = ResourceManager.GetObject("icono_boton_editar_datos_factura", resourceCulture);

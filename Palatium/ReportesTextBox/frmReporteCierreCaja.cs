@@ -429,6 +429,26 @@ namespace Palatium.ReportesTextBox
                     }
                 }
 
+                else if (sCodigo_P == "23")
+                {
+                    string sAyuda = reporte.comandasPorCobrar(iIdLocalidad, iIdPosCierreCajero);
+
+                    if (sAyuda != "SN")
+                    {
+                        sTexto = sAyuda;
+                    }
+                }
+
+                else if (sCodigo_P == "24")
+                {
+                    string sAyuda = reporte.comandasPendientesCobradas(iIdLocalidad, iIdPosCierreCajero);
+
+                    if (sAyuda != "SN")
+                    {
+                        sTexto = sAyuda;
+                    }
+                }
+
                 return sTexto;
             }
 

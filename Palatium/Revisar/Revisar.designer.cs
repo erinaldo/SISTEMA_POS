@@ -60,10 +60,10 @@
             this.btnCanceladas = new DevComponents.DotNetBar.ButtonX();
             this.btnLlevar = new DevComponents.DotNetBar.ButtonX();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.cmbLocalidades = new System.Windows.Forms.ComboBox();
             this.btnBajarComandas = new DevComponents.DotNetBar.ButtonX();
             this.btnSubirComandas = new DevComponents.DotNetBar.ButtonX();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.cmbLocalidades = new System.Windows.Forms.ComboBox();
             this.groupBox2.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -477,29 +477,6 @@
             this.groupBox1.TabIndex = 62;
             this.groupBox1.TabStop = false;
             // 
-            // groupBox3
-            // 
-            this.groupBox3.Controls.Add(this.cmbLocalidades);
-            this.groupBox3.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
-            this.groupBox3.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.groupBox3.Location = new System.Drawing.Point(865, 25);
-            this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(292, 84);
-            this.groupBox3.TabIndex = 63;
-            this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "Localidades";
-            // 
-            // cmbLocalidades
-            // 
-            this.cmbLocalidades.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbLocalidades.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cmbLocalidades.FormattingEnabled = true;
-            this.cmbLocalidades.Location = new System.Drawing.Point(19, 34);
-            this.cmbLocalidades.Name = "cmbLocalidades";
-            this.cmbLocalidades.Size = new System.Drawing.Size(257, 28);
-            this.cmbLocalidades.TabIndex = 0;
-            this.cmbLocalidades.SelectedIndexChanged += new System.EventHandler(this.cmbLocalidades_SelectedIndexChanged);
-            // 
             // btnBajarComandas
             // 
             this.btnBajarComandas.AccessibleRole = System.Windows.Forms.AccessibleRole.PushButton;
@@ -525,6 +502,29 @@
             this.btnSubirComandas.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
             this.btnSubirComandas.TabIndex = 64;
             this.btnSubirComandas.Click += new System.EventHandler(this.btnSubirComandas_Click);
+            // 
+            // groupBox3
+            // 
+            this.groupBox3.Controls.Add(this.cmbLocalidades);
+            this.groupBox3.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
+            this.groupBox3.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.groupBox3.Location = new System.Drawing.Point(865, 25);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(292, 84);
+            this.groupBox3.TabIndex = 63;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "Localidades";
+            // 
+            // cmbLocalidades
+            // 
+            this.cmbLocalidades.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbLocalidades.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cmbLocalidades.FormattingEnabled = true;
+            this.cmbLocalidades.Location = new System.Drawing.Point(19, 34);
+            this.cmbLocalidades.Name = "cmbLocalidades";
+            this.cmbLocalidades.Size = new System.Drawing.Size(257, 28);
+            this.cmbLocalidades.TabIndex = 0;
+            this.cmbLocalidades.SelectedIndexChanged += new System.EventHandler(this.cmbLocalidades_SelectedIndexChanged);
             // 
             // Revisar
             // 

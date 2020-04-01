@@ -43,7 +43,7 @@
             this.btnEliminarPedido = new System.Windows.Forms.Button();
             this.btnDashboard = new System.Windows.Forms.Button();
             this.btnListarComandas = new System.Windows.Forms.Button();
-            this.btnListarProductosVendidos = new System.Windows.Forms.Button();
+            this.btnCobrarComandasPendientes = new System.Windows.Forms.Button();
             this.lblVersionDemo = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.logo)).BeginInit();
             this.SuspendLayout();
@@ -346,25 +346,25 @@
             this.btnListarComandas.UseVisualStyleBackColor = false;
             this.btnListarComandas.Click += new System.EventHandler(this.btnListarComandas_Click);
             // 
-            // btnListarProductosVendidos
+            // btnCobrarComandasPendientes
             // 
-            this.btnListarProductosVendidos.BackColor = System.Drawing.Color.Navy;
-            this.btnListarProductosVendidos.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.btnListarProductosVendidos.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnListarProductosVendidos.FlatAppearance.BorderSize = 2;
-            this.btnListarProductosVendidos.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnListarProductosVendidos.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnListarProductosVendidos.ForeColor = System.Drawing.Color.White;
-            this.btnListarProductosVendidos.Image = global::Palatium.Properties.Resources.icono_oficina;
-            this.btnListarProductosVendidos.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.btnListarProductosVendidos.Location = new System.Drawing.Point(1126, 439);
-            this.btnListarProductosVendidos.Name = "btnListarProductosVendidos";
-            this.btnListarProductosVendidos.Size = new System.Drawing.Size(192, 138);
-            this.btnListarProductosVendidos.TabIndex = 85;
-            this.btnListarProductosVendidos.Text = "Oficina\r\nAdministración";
-            this.btnListarProductosVendidos.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.btnListarProductosVendidos.UseVisualStyleBackColor = false;
-            this.btnListarProductosVendidos.Click += new System.EventHandler(this.btnListarProductosVendidos_Click);
+            this.btnCobrarComandasPendientes.BackColor = System.Drawing.Color.Navy;
+            this.btnCobrarComandasPendientes.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.btnCobrarComandasPendientes.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnCobrarComandasPendientes.FlatAppearance.BorderSize = 2;
+            this.btnCobrarComandasPendientes.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnCobrarComandasPendientes.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnCobrarComandasPendientes.ForeColor = System.Drawing.Color.White;
+            this.btnCobrarComandasPendientes.Image = global::Palatium.Properties.Resources.icono_boton_cuenta_por_cobrar_2;
+            this.btnCobrarComandasPendientes.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.btnCobrarComandasPendientes.Location = new System.Drawing.Point(1126, 439);
+            this.btnCobrarComandasPendientes.Name = "btnCobrarComandasPendientes";
+            this.btnCobrarComandasPendientes.Size = new System.Drawing.Size(192, 138);
+            this.btnCobrarComandasPendientes.TabIndex = 85;
+            this.btnCobrarComandasPendientes.Text = "Cobrar Comandas\r\nPendientes";
+            this.btnCobrarComandasPendientes.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.btnCobrarComandasPendientes.UseVisualStyleBackColor = false;
+            this.btnCobrarComandasPendientes.Click += new System.EventHandler(this.btnCobrarComandasPendientes_Click);
             // 
             // lblVersionDemo
             // 
@@ -386,7 +386,7 @@
             this.ClientSize = new System.Drawing.Size(1360, 694);
             this.Controls.Add(this.lblVersionDemo);
             this.Controls.Add(this.btnListarComandas);
-            this.Controls.Add(this.btnListarProductosVendidos);
+            this.Controls.Add(this.btnCobrarComandasPendientes);
             this.Controls.Add(this.btnDashboard);
             this.Controls.Add(this.btnEliminarPedido);
             this.Controls.Add(this.btnListarVentas);
@@ -428,7 +428,7 @@
         private System.Windows.Forms.Button btnEliminarPedido;
         private System.Windows.Forms.Button btnDashboard;
         private System.Windows.Forms.Button btnListarComandas;
-        private System.Windows.Forms.Button btnListarProductosVendidos;
+        private System.Windows.Forms.Button btnCobrarComandasPendientes;
         private System.Windows.Forms.Label lblVersionDemo;
     }
 }
