@@ -1,4 +1,4 @@
-﻿namespace Palatium
+﻿namespace Palatium.Pedidos
 {
     partial class Extras
     {

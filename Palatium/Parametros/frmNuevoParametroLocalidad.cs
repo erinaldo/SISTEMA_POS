@@ -72,6 +72,9 @@ namespace Palatium.Parametros
         int iManejaAlmuerzos;
         int iUsoDecimales;
 
+        int iUsarLectorHuellas;
+        int iUsarPantallaEspere;
+
         Decimal dValor;
 
         public frmNuevoParametroLocalidad()
@@ -166,6 +169,9 @@ namespace Palatium.Parametros
 
             if (iBanderaTab == 5)
                 cargarTabParametrosAdicionales();
+
+            if (iBanderaTab == 6)
+                cargarTabParametrosAlmuerzos();
         }
 
         //FUNCION PARA VALIDAR LOS DATOS ANTES DE ENVIAR A LA BASE DE DATOS
@@ -546,6 +552,21 @@ namespace Palatium.Parametros
                         iUsoDecimales = 0;
 
                     actualizarParametrosAdicionales();
+                }
+
+                else if (iBanderaTab == 6)
+                {
+                    if (chkLectorHuellas.Checked == true)
+                        iUsarLectorHuellas = 1;
+                    else
+                        iUsarLectorHuellas = 0;
+
+                    if (chkPantallaEsperaAlmuerzos.Checked == true)
+                        iUsarPantallaEspere = 1;
+                    else
+                        iUsarPantallaEspere = 0;
+
+                    actualizarParametrosAlmuerzos();
                 }
             }
         }
@@ -1588,6 +1609,137 @@ namespace Palatium.Parametros
 
         #endregion
 
+        #region FUNCIONES DEL TAB PARA CONFIGURAR LOS ALMUERZOS
+
+        //FUNCION  PARA CARGAR LOS CONTROLES DB AYUDA
+        private void cargarDbAyudaAlmuerzos()
+        {
+            try
+            {
+                //DBAYUDA PRODUCTO ANULADO
+                sSql = "";
+                sSql += "select P.id_producto, P.codigo, NP.nombre, PP.valor" + Environment.NewLine;
+                sSql += "from cv401_productos P, cv401_nombre_productos NP, cv403_precios_productos PP" + Environment.NewLine;
+                sSql += "where NP.id_producto = P.id_producto" + Environment.NewLine;
+                sSql += "and PP.id_producto = P.id_producto" + Environment.NewLine;
+                sSql += "and P.estado = 'A'" + Environment.NewLine;
+                sSql += "and NP.estado = 'A'" + Environment.NewLine;
+                sSql += "and PP.estado = 'A'" + Environment.NewLine;
+                sSql += "and P.nivel = 3" + Environment.NewLine;
+                sSql += "and PP.id_lista_precio = 4" + Environment.NewLine;
+                sSql += "order by NP.nombre";
+                dbAyudaItemAlmuerzo.Ver(sSql, "NP.nombre", 0, 1, 2);
+            }
+
+            catch (Exception ex)
+            {
+                catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
+                catchMensaje.lblMensaje.Text = ex.Message;
+                catchMensaje.ShowDialog();
+            }
+        }
+
+        //FUNCION PARA CARGAR LOS PARAMETROS DEL TAB
+        private void cargarTabParametrosAlmuerzos()
+        {
+            try
+            {
+                if (dtConsulta.Rows.Count == 0)
+                {
+                    iIdLocalidad = 0;
+                    iIdPosParametroLocalidad = 0;
+                    chkLectorHuellas.Checked = false;
+                    chkPantallaEsperaAlmuerzos.Checked = false;
+                    dbAyudaItemAlmuerzo.limpiar();
+                }
+
+                else
+                {
+                    iIdLocalidad = Convert.ToInt32(dtConsulta.Rows[0]["id_localidad"].ToString());
+                    iIdPosParametroLocalidad = Convert.ToInt32(dtConsulta.Rows[0]["id_pos_parametro_localidad"].ToString());
+
+                    if (Convert.ToInt32(dtConsulta.Rows[0]["usar_lector_huellas_dactilares"].ToString()) == 1)
+                        chkLectorHuellas.Checked = true;
+                    else
+                        chkLectorHuellas.Checked = false;
+
+                    if (Convert.ToInt32(dtConsulta.Rows[0]["usar_pantalla_espera_almuerzos"].ToString()) == 1)
+                        chkPantallaEsperaAlmuerzos.Checked = true;
+                    else
+                        chkPantallaEsperaAlmuerzos.Checked = false;
+
+                    dbAyudaItemAlmuerzo.iId = Convert.ToInt32(dtConsulta.Rows[0]["id_producto_almuerzo_default"].ToString());
+                    dbAyudaItemAlmuerzo.txtDatos.Text = dtConsulta.Rows[0]["nombre_producto_almuerzo"].ToString().Trim().ToUpper();
+                    dbAyudaItemAlmuerzo.txtIdentificacion.Text = dtConsulta.Rows[0]["codigo_producto_almuerzo"].ToString().Trim().ToUpper();
+                    dbAyudaItemAlmuerzo.sNombre = dtConsulta.Rows[0]["nombre_producto_almuerzo"].ToString();
+                    dbAyudaItemAlmuerzo.sCodigo = dtConsulta.Rows[0]["codigo_producto_almuerzo"].ToString();
+                }
+            }
+
+            catch (Exception ex)
+            {
+                catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
+                catchMensaje.lblMensaje.Text = ex.Message;
+                catchMensaje.ShowDialog();
+            }
+        }
+
+        //FUNCION PARA ACTUALIZAR EL REGISTRO
+        private void actualizarParametrosAlmuerzos()
+        {
+            try
+            {
+                //SE INICIA UNA TRANSACCION
+                if (!conexion.GFun_Lo_Maneja_Transaccion(Program.G_INICIA_TRANSACCION))
+                {
+                    ok = new VentanasMensajes.frmMensajeNuevoOk();
+                    ok.lblMensaje.Text = "Error al abrir transacción.";
+                    ok.ShowDialog();
+                    enviarParametro();
+                    return;
+                }
+
+                sSql = "";
+                sSql += "update pos_parametro_localidad set" + Environment.NewLine;
+                sSql += "usar_lector_huellas_dactilares = " + iUsarLectorHuellas + "," + Environment.NewLine;
+                sSql += "usar_pantalla_espera_almuerzos = " + iUsarPantallaEspere + "," + Environment.NewLine;
+                sSql += "id_producto_almuerzo_default = " + dbAyudaItemAlmuerzo.iId + Environment.NewLine;
+                sSql += "where id_localidad = " + iIdLocalidad + Environment.NewLine;
+                sSql += "and estado = 'A'";
+
+                //EJECUTAR LA INSTRUCCIÓN SQL
+                if (!conexion.GFun_Lo_Ejecuta_SQL(sSql))
+                {
+                    conexion.GFun_Lo_Maneja_Transaccion(Program.G_REVERSA_TRANSACCION);
+                    catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
+                    catchMensaje.lblMensaje.Text = conexion.sMensajeError;
+                    catchMensaje.ShowDialog();
+                    return;
+                }
+
+                //SI SE EJECUTA TODO REALIZA EL COMMIT
+                conexion.GFun_Lo_Maneja_Transaccion(Program.G_TERMINA_TRANSACCION);
+
+                ok = new VentanasMensajes.frmMensajeNuevoOk();
+                ok.lblMensaje.Text = "Registro actualizado éxitosamente. Los cambios se aplicarán al reiniciar el programa.";
+                ok.ShowDialog();
+                parametros.cargarParametrosPredeterminados();
+                cargarParametros();
+                enviarParametro();
+                return;
+            }
+
+            catch (Exception ex)
+            {
+                conexion.GFun_Lo_Maneja_Transaccion(Program.G_REVERSA_TRANSACCION);
+                catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
+                catchMensaje.lblMensaje.Text = ex.Message;
+                catchMensaje.ShowDialog();
+            }
+        }
+
+        #endregion
+
         private void frmNuevoParametroLocalidad_Load(object sender, EventArgs e)
         {
             cmbLocalidad.SelectedIndexChanged -= new EventHandler(cmbLocalidad_SelectedIndexChanged);
@@ -1632,6 +1784,14 @@ namespace Palatium.Parametros
             if (tbControl.SelectedTab == tbControl.TabPages["tabParametrosAdicionales"])
             {
                 iBanderaTab = 5;
+                enviarParametro();
+                return;
+            }
+
+            if (tbControl.SelectedTab == tbControl.TabPages["tabAlmuerzos"])
+            {
+                iBanderaTab = 6;
+                cargarDbAyudaAlmuerzos();
                 enviarParametro();
                 return;
             }

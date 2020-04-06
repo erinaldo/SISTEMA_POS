@@ -314,7 +314,7 @@ namespace Palatium.Clases_Factura_Electronica
 
                     if (dbPorcentajeServicio != 0)
                     {
-                        sTexto = sTexto + "".PadLeft(19, ' ') + (dbPorcentajeServicio.ToString("N0") + "% Servicio:").PadRight(13, ' ') + servicio.ToString("N2").PadLeft(8, ' ') + Environment.NewLine;
+                        sTexto = sTexto + "".PadLeft(19, ' ') + (dbPorcentajeServicio.ToString("N0") + "% Serv.:").PadRight(13, ' ') + servicio.ToString("N2").PadLeft(8, ' ') + Environment.NewLine;
                     }
                     
                     sTexto = sTexto + "".PadLeft(19, ' ') + "".PadLeft(21, '-') + Environment.NewLine;

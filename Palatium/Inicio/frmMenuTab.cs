@@ -358,7 +358,7 @@ namespace Palatium.Inicio
 
         private void btnActivarProducto_Click(object sender, EventArgs e)
         {
-            Licencia.frmDialogoLicencia verificador = new Licencia.frmDialogoLicencia(Program.iCantidadPermitida - Program.iCantidadUsada, 0, 0);
+            Licencia.frmDialogoLicencia verificador = new Licencia.frmDialogoLicencia(Program.iCantidadPermitida - Program.iCantidadUsada, 0, 0, Program.sNombreEquipo);
             verificador.ShowInTaskbar = false;
             verificador.ShowDialog();
 

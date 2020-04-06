@@ -42,8 +42,10 @@
             this.btnGenerarFactura = new System.Windows.Forms.Button();
             this.btnDetalleClienteEmpresarial = new System.Windows.Forms.Button();
             this.btnConsumoInterno = new System.Windows.Forms.Button();
-            this.btnBusquedaDactilar = new System.Windows.Forms.Button();
+            this.btnBusquedaPorIdentificacion = new System.Windows.Forms.Button();
             this.lblVersionDemo = new System.Windows.Forms.Label();
+            this.lblNombreEquipo = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.logo)).BeginInit();
             this.SuspendLayout();
             // 
@@ -70,7 +72,7 @@
             this.btnVentaExpress.ForeColor = System.Drawing.Color.White;
             this.btnVentaExpress.Image = global::Palatium.Properties.Resources.icono_comida_rapida;
             this.btnVentaExpress.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.btnVentaExpress.Location = new System.Drawing.Point(730, 76);
+            this.btnVentaExpress.Location = new System.Drawing.Point(928, 76);
             this.btnVentaExpress.Name = "btnVentaExpress";
             this.btnVentaExpress.Size = new System.Drawing.Size(192, 138);
             this.btnVentaExpress.TabIndex = 76;
@@ -322,27 +324,27 @@
             this.btnConsumoInterno.MouseEnter += new System.EventHandler(this.btnMesas_MouseEnter);
             this.btnConsumoInterno.MouseLeave += new System.EventHandler(this.btnMesas_MouseLeave);
             // 
-            // btnBusquedaDactilar
+            // btnBusquedaPorIdentificacion
             // 
-            this.btnBusquedaDactilar.BackColor = System.Drawing.Color.Navy;
-            this.btnBusquedaDactilar.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.btnBusquedaDactilar.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnBusquedaDactilar.FlatAppearance.BorderSize = 2;
-            this.btnBusquedaDactilar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnBusquedaDactilar.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnBusquedaDactilar.ForeColor = System.Drawing.Color.White;
-            this.btnBusquedaDactilar.Image = global::Palatium.Properties.Resources.icono_boton_lector_biometrico;
-            this.btnBusquedaDactilar.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.btnBusquedaDactilar.Location = new System.Drawing.Point(928, 76);
-            this.btnBusquedaDactilar.Name = "btnBusquedaDactilar";
-            this.btnBusquedaDactilar.Size = new System.Drawing.Size(192, 138);
-            this.btnBusquedaDactilar.TabIndex = 87;
-            this.btnBusquedaDactilar.Text = "Cliente Empresarial\r\nBúsqueda Dactilar";
-            this.btnBusquedaDactilar.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.btnBusquedaDactilar.UseVisualStyleBackColor = false;
-            this.btnBusquedaDactilar.Click += new System.EventHandler(this.btnBusquedaDactilar_Click);
-            this.btnBusquedaDactilar.MouseEnter += new System.EventHandler(this.btnBusquedaDactilar_MouseEnter);
-            this.btnBusquedaDactilar.MouseLeave += new System.EventHandler(this.btnBusquedaDactilar_MouseLeave);
+            this.btnBusquedaPorIdentificacion.BackColor = System.Drawing.Color.Navy;
+            this.btnBusquedaPorIdentificacion.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.btnBusquedaPorIdentificacion.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnBusquedaPorIdentificacion.FlatAppearance.BorderSize = 2;
+            this.btnBusquedaPorIdentificacion.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnBusquedaPorIdentificacion.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnBusquedaPorIdentificacion.ForeColor = System.Drawing.Color.White;
+            this.btnBusquedaPorIdentificacion.Image = global::Palatium.Properties.Resources.icono_boton_lector_biometrico;
+            this.btnBusquedaPorIdentificacion.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.btnBusquedaPorIdentificacion.Location = new System.Drawing.Point(730, 76);
+            this.btnBusquedaPorIdentificacion.Name = "btnBusquedaPorIdentificacion";
+            this.btnBusquedaPorIdentificacion.Size = new System.Drawing.Size(192, 138);
+            this.btnBusquedaPorIdentificacion.TabIndex = 87;
+            this.btnBusquedaPorIdentificacion.Text = "Cliente Empresarial\r\npor Identificación";
+            this.btnBusquedaPorIdentificacion.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.btnBusquedaPorIdentificacion.UseVisualStyleBackColor = false;
+            this.btnBusquedaPorIdentificacion.Click += new System.EventHandler(this.btnBusquedaPorIdentificacion_Click);
+            this.btnBusquedaPorIdentificacion.MouseEnter += new System.EventHandler(this.btnBusquedaPorIdentificacion_MouseEnter);
+            this.btnBusquedaPorIdentificacion.MouseLeave += new System.EventHandler(this.btnBusquedaPorIdentificacion_MouseLeave);
             // 
             // lblVersionDemo
             // 
@@ -355,6 +357,26 @@
             this.lblVersionDemo.TabIndex = 88;
             this.lblVersionDemo.Text = "Versión Demo";
             // 
+            // lblNombreEquipo
+            // 
+            this.lblNombreEquipo.AutoSize = true;
+            this.lblNombreEquipo.Font = new System.Drawing.Font("Maiandra GD", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblNombreEquipo.Location = new System.Drawing.Point(197, 591);
+            this.lblNombreEquipo.Name = "lblNombreEquipo";
+            this.lblNombreEquipo.Size = new System.Drawing.Size(209, 22);
+            this.lblNombreEquipo.TabIndex = 90;
+            this.lblNombreEquipo.Text = "NOMBRE DEL EQUIPO";
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Font = new System.Drawing.Font("Maiandra GD", 14.25F);
+            this.label7.Location = new System.Drawing.Point(42, 591);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(149, 22);
+            this.label7.TabIndex = 89;
+            this.label7.Text = "Nombre Equipo:";
+            // 
             // frmInicioComedores
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -362,8 +384,10 @@
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
             this.ClientSize = new System.Drawing.Size(1360, 694);
+            this.Controls.Add(this.lblNombreEquipo);
+            this.Controls.Add(this.label7);
             this.Controls.Add(this.lblVersionDemo);
-            this.Controls.Add(this.btnBusquedaDactilar);
+            this.Controls.Add(this.btnBusquedaPorIdentificacion);
             this.Controls.Add(this.btnConsumoInterno);
             this.Controls.Add(this.btnDetalleClienteEmpresarial);
             this.Controls.Add(this.btnGenerarFactura);
@@ -404,7 +428,9 @@
         private System.Windows.Forms.Button btnGenerarFactura;
         private System.Windows.Forms.Button btnDetalleClienteEmpresarial;
         private System.Windows.Forms.Button btnConsumoInterno;
-        private System.Windows.Forms.Button btnBusquedaDactilar;
+        private System.Windows.Forms.Button btnBusquedaPorIdentificacion;
         private System.Windows.Forms.Label lblVersionDemo;
+        private System.Windows.Forms.Label lblNombreEquipo;
+        private System.Windows.Forms.Label label7;
     }
 }

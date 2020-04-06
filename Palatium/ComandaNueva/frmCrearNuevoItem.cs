@@ -22,7 +22,7 @@ namespace Palatium.ComandaNueva
         public decimal dCantidad;
         public decimal dValorUnitario;
         decimal dValorTotal;
-        decimal dIva;
+        decimal dImpuestos;
 
         public frmCrearNuevoItem()
         {
@@ -86,14 +86,14 @@ namespace Palatium.ComandaNueva
                 }
 
                 dValorUnitario = 0;
-                dIva = Convert.ToDecimal(Program.iva) + 1;
+                dImpuestos = Convert.ToDecimal(Program.iva) + Convert.ToDecimal(Program.servicio) + 1;
 
                 dCantidad = Convert.ToDecimal(txtCantidad.Text.Trim());
                 dValorTotal = Convert.ToDecimal(txtPrecioProducto.Text.Trim());
 
                 dValorUnitario = dValorTotal / dCantidad;
 
-                dValorUnitario = dValorUnitario / dIva;
+                dValorUnitario = dValorUnitario / dImpuestos;
 
                 //if (Program.iManejaServicio == 0)
                 //{

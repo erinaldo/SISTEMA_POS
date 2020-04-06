@@ -28,6 +28,7 @@ namespace Palatium.Licencia
         string sVerificarSerial;
         string sTabla;
         string sCampo;
+        string sNombreEquipo;
         string []sDatosMaximo = new string[5];
 
         DataTable dtConsulta;
@@ -39,20 +40,22 @@ namespace Palatium.Licencia
         int iInsertar;
         int iCodigo;
         int iVer;
+        int iBanderaInsertarNombre;
 
         long iMaximo;
 
         SqlParameter[] parametro;
 
-        public frmDialogoLicencia(int iCantidadDisponible_P, int iInsertar_P, int iVer_P)
+        public frmDialogoLicencia(int iCantidadDisponible_P, int iInsertar_P, int iVer_P, string sNombreEquipo_P)
         {
             this.iCantidadDisponible = iCantidadDisponible_P;
             this.iInsertar = iInsertar_P;
             this.iVer = iVer_P;
+            this.sNombreEquipo = sNombreEquipo_P;
             InitializeComponent();
         }
 
-        #region funciones
+        #region FUNCIONES DEL USUARIO
 
         //FUNCION PARA CONSULTAR LA LICENCIA
         private void verificar()
@@ -99,23 +102,6 @@ namespace Palatium.Licencia
                 //    i += 5;
                 //    txtPass_5.Text = sPass_P.Substring(i, 5);
                 //}
-            }
-
-            catch (Exception ex)
-            {
-                catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
-                catchMensaje.lblMensaje.Text = ex.Message;
-                catchMensaje.ShowDialog();
-            }
-        }
-
-        //CONSULTAR EN LA BASE DE DATOS, EL ID OBTENIDO
-        private void consultarID()
-        {
-            try
-            {
-                sSql = "";
-                sSql += "" + Environment.NewLine;
             }
 
             catch (Exception ex)
@@ -248,6 +234,15 @@ namespace Palatium.Licencia
         {
             try
             {
+                if (txtNombreEquipo.Text.Trim() == "")
+                {
+                    ok = new VentanasMensajes.frmMensajeNuevoOk();
+                    ok.lblMensaje.Text = "Favor ingrese el nombre del equipo.";
+                    ok.ShowDialog();
+                    txtNombreEquipo.Focus();
+                    return;
+                }
+
                 int iCantDisp_P = 0;
                 int iCantPerm_P = 0;
 
@@ -286,7 +281,7 @@ namespace Palatium.Licencia
                 parametro[i] = new SqlParameter();
                 parametro[i].ParameterName = "@descripcion";
                 parametro[i].SqlDbType = SqlDbType.VarChar;
-                parametro[i].Value = "EQUIPO_" + iCodigo.ToString();
+                parametro[i].Value = txtNombreEquipo.Text.Trim().ToUpper();
                 i++;
 
                 parametro[i] = new SqlParameter();
@@ -423,8 +418,17 @@ namespace Palatium.Licencia
                     return;
                 }
 
+                int iCantidadParametros_P = 7;
+
                 sSql = "";
                 sSql += "update pos_terminal set" + Environment.NewLine;
+
+                if (iBanderaInsertarNombre == 1)
+                {
+                    iCantidadParametros_P++;
+                    sSql += "descripcion = @descripcion," + Environment.NewLine;
+                }
+
                 sSql += "id_registro = @id_registro," + Environment.NewLine;
                 sSql += "serial_registro = @serial_registro," + Environment.NewLine;
                 sSql += "demo = @demo," + Environment.NewLine;
@@ -434,12 +438,21 @@ namespace Palatium.Licencia
                 sSql += "and estado = @estado";
 
                 int i = 0;
-                parametro = new SqlParameter[7];
+                parametro = new SqlParameter[iCantidadParametros_P];
                 parametro[i] = new SqlParameter();
                 parametro[i].ParameterName = "@id_registro";
                 parametro[i].SqlDbType = SqlDbType.VarChar;
                 parametro[i].Value = sId_P;
                 i++;
+
+                if (iBanderaInsertarNombre == 1)
+                {
+                    parametro[i] = new SqlParameter();
+                    parametro[i].ParameterName = "@descripcion";
+                    parametro[i].SqlDbType = SqlDbType.VarChar;
+                    parametro[i].Value = txtNombreEquipo.Text.Trim().ToUpper();
+                    i++;
+                }
 
                 parametro[i] = new SqlParameter();
                 parametro[i].ParameterName = "@serial_registro";
@@ -522,6 +535,20 @@ namespace Palatium.Licencia
                 btnEjecutarDemo.Visible = true;
             else
                 btnEjecutarDemo.Visible = false;
+
+            if (sNombreEquipo.Trim() == "")
+            {
+                iBanderaInsertarNombre = 1;
+                txtNombreEquipo.Clear();
+                txtNombreEquipo.Enabled = true;
+            }
+
+            else
+            {
+                iBanderaInsertarNombre = 0;
+                txtNombreEquipo.Text = sNombreEquipo.Trim();
+                txtNombreEquipo.Enabled = false;
+            }
         }
 
         private void btnCopiar_Click(object sender, EventArgs e)

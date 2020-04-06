@@ -276,6 +276,8 @@ namespace Palatium.Inicio
                 lblVersionDemo.Visible = true;
             else
                 lblVersionDemo.Visible = false;
+
+            lblNombreEquipo.Text = Program.sNombreEquipo;
         }
 
         private void btnReenviarFacturaIndividual_Click(object sender, EventArgs e)

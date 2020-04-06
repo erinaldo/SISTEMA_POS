@@ -35,8 +35,8 @@
             this.label1 = new System.Windows.Forms.Label();
             this.btnBuscar = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.label2 = new System.Windows.Forms.Label();
             this.txtBusqueda = new System.Windows.Forms.TextBox();
+            this.label2 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -139,6 +139,14 @@
             this.groupBox1.TabIndex = 26;
             this.groupBox1.TabStop = false;
             // 
+            // txtBusqueda
+            // 
+            this.txtBusqueda.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F);
+            this.txtBusqueda.Location = new System.Drawing.Point(21, 76);
+            this.txtBusqueda.Name = "txtBusqueda";
+            this.txtBusqueda.Size = new System.Drawing.Size(341, 24);
+            this.txtBusqueda.TabIndex = 25;
+            // 
             // label2
             // 
             this.label2.AutoSize = true;
@@ -149,14 +157,6 @@
             this.label2.Size = new System.Drawing.Size(124, 25);
             this.label2.TabIndex = 24;
             this.label2.Text = "Búsqueda:";
-            // 
-            // txtBusqueda
-            // 
-            this.txtBusqueda.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F);
-            this.txtBusqueda.Location = new System.Drawing.Point(21, 76);
-            this.txtBusqueda.Name = "txtBusqueda";
-            this.txtBusqueda.Size = new System.Drawing.Size(341, 24);
-            this.txtBusqueda.TabIndex = 25;
             // 
             // frmComandasCuentasPorCobrar
             // 
@@ -175,6 +175,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Módulo de Comandas Pendientes de Cobro";
             this.Load += new System.EventHandler(this.frmComandasCuentasPorCobrar_Load);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.frmComandasCuentasPorCobrar_KeyDown);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.ResumeLayout(false);

@@ -374,7 +374,7 @@ namespace Palatium.Parametros
                 ok = new VentanasMensajes.frmMensajeNuevoOk();
                 ok.lblMensaje.Text = "Registro actualizado éxitosamente. Los cambios se aplicarán al reiniciar el programa.";
                 ok.ShowDialog();
-                parametros.cargarParametrosPredeterminados();
+                parametros.cargarParametros();
                 cargarParametros();
                 enviarParametro();
                 return;
@@ -523,7 +523,7 @@ namespace Palatium.Parametros
                 ok = new VentanasMensajes.frmMensajeNuevoOk();
                 ok.lblMensaje.Text = "Registro actualizado éxitosamente. Los cambios se aplicarán al reiniciar el programa.";
                 ok.ShowDialog();
-                parametros.cargarParametrosPredeterminados();
+                parametros.cargarParametros();
                 cargarParametros();
                 enviarParametro();
                 return;
@@ -645,7 +645,7 @@ namespace Palatium.Parametros
                 ok = new VentanasMensajes.frmMensajeNuevoOk();
                 ok.lblMensaje.Text = "Registro actualizado éxitosamente. Los cambios se aplicarán al reiniciar el programa.";
                 ok.ShowDialog();
-                parametros.cargarParametrosPredeterminados();
+                parametros.cargarParametros();
                 cargarParametros();
                 enviarParametro();
                 return;
@@ -671,7 +671,7 @@ namespace Palatium.Parametros
 
         private void tbControl_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (tbControl.SelectedTab == tbControl.TabPages["tabComandas"])
+            if (tbControl.SelectedTab == tbControl.TabPages["tabPorcentajes"])
             {
                 iBanderaTab = 1;
                 enviarParametro();

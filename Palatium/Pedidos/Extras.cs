@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace Palatium
+namespace Palatium.Pedidos
 {
     public partial class Extras : Form
     {
@@ -239,6 +239,11 @@ namespace Palatium
          {
              this.DialogResult = DialogResult.OK;
              this.Close();
+         }
+
+         private void Extras_Load(object sender, EventArgs e)
+         {
+
          }
     }
 }

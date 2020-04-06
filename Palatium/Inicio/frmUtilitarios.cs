@@ -461,6 +461,8 @@ namespace Palatium.Inicio
                 lblVersionDemo.Visible = true;
             else
                 lblVersionDemo.Visible = false;
+
+            lblNombreEquipo.Text = Program.sNombreEquipo;
         }
 
         private void btnSalidaCajero_MouseEnter(object sender, EventArgs e)

@@ -44,6 +44,7 @@ namespace Palatium.Tarjeta_Almuerzo
 
         int iIdPersona;
         int iPagaIva;
+        int iPagaServicio;
         int iIdPosOrigenOrden;
         int iIdPosTarjeta;
         int iIdProductoTarjeta;
@@ -80,6 +81,7 @@ namespace Palatium.Tarjeta_Almuerzo
 
         Decimal dbPrecioUnitario;
         Decimal dbValorIva;
+        Decimal dbValorServicio;
         Decimal dbTotalDebido;
 
         Button[,] botonDisponible;
@@ -344,7 +346,7 @@ namespace Palatium.Tarjeta_Almuerzo
             try
             {
                 sSql = "";
-                sSql += "select P.paga_iva, PP.id_lista_precio, PP.valor" + Environment.NewLine;
+                sSql += "select P.paga_iva, PP.id_lista_precio, PP.valor, P.paga_servicio" + Environment.NewLine;
                 sSql += "from cv401_productos P INNER JOIN" + Environment.NewLine;
                 sSql += "cv403_precios_productos PP ON P.id_producto = PP.id_producto" + Environment.NewLine;
                 sSql += "and P.estado = @P_Estado" + Environment.NewLine;
@@ -397,12 +399,18 @@ namespace Palatium.Tarjeta_Almuerzo
 
                 btnGenerar.Enabled = true;
                 iPagaIva = Convert.ToInt32(dtConsulta.Rows[0]["paga_iva"].ToString());
+                iPagaServicio = Convert.ToInt32(dtConsulta.Rows[0]["paga_servicio"].ToString());
                 dbPrecioUnitario = Convert.ToDecimal(dtConsulta.Rows[0]["valor"].ToString());
 
                 if (iPagaIva == 1)
                     dbValorIva = dbPrecioUnitario * Convert.ToDecimal(Program.iva);
                 else
                     dbValorIva = 0;
+
+                if (iPagaServicio == 1)
+                    dbValorServicio = dbPrecioUnitario * Convert.ToDecimal(Program.servicio);
+                else
+                    dbValorServicio = 0;
             }
 
             catch (Exception ex)
@@ -536,7 +544,7 @@ namespace Palatium.Tarjeta_Almuerzo
                 }
 
                 iCantidadEmitir = Convert.ToInt32(txtCantidadSolicitada.Text);
-                dbTotalDebido = iCantidadEmitir * (dbPrecioUnitario + dbValorIva);
+                dbTotalDebido = iCantidadEmitir * (dbPrecioUnitario + dbValorIva + dbValorServicio);
 
                 if (insertarPedido() == false)
                 {
@@ -993,7 +1001,7 @@ namespace Palatium.Tarjeta_Almuerzo
                 sSql += "numero_control_replica)" + Environment.NewLine;
                 sSql += "values(" + Environment.NewLine;
                 sSql += iIdPedido + ", " + iIdProductoDescarga + ", 546, " + dbPrecioUnitario + ", " + Environment.NewLine;
-                sSql += iCantidadEmitir + ", 0, 0, " + dbValorIva + ", 0, " + Environment.NewLine;
+                sSql += iCantidadEmitir + ", 0, 0, " + dbValorIva + ", " + dbValorServicio + ", " + Environment.NewLine;
                 sSql += "null, null, GETDATE(), '" + Program.sDatosMaximo[0] + "'," + Environment.NewLine;
                 sSql += "'" + Program.sDatosMaximo[1] + "', 0, 1, null, 'A', 0, 0)";
 

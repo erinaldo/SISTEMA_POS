@@ -48,6 +48,7 @@ namespace Palatium.ComandaNueva
         bool bRespuesta;
 
         Button[,] boton = new Button[2, 4];
+        Button[,] botonModificador = new Button[2, 5];
         Button[,] botonProductos = new Button[5, 5];
         Button botonSeleccionadoCategoria;
         Button botonSeleccionadoProducto;
@@ -59,12 +60,18 @@ namespace Palatium.ComandaNueva
         int iConsumoAlimentos;
         int iIdMesa;
         int iPagaIva_P;
+        int iPagaServicio_P;
         int iBanderaCortesia_P;
         int iBanderaDescuento_P;
         int iBanderaComentario_P;
         int iIdOrdenamiento;
         int iBanderaAbrirPagos;
         int iIdGeneraFactura;
+
+        int iBanderaCategorias;
+        int iBanderaSubCategorias;
+        int iBanderaModificadores;
+        int iIdProductoPadreModificador;
         
         decimal dbCantidadProductoFactor = 1;
         decimal dbCantidadClic = 1;
@@ -1227,7 +1234,8 @@ namespace Palatium.ComandaNueva
                                        dtConsulta.Rows[i]["ordenamiento"].ToString().Trim(),
                                        dtConsulta.Rows[i]["porcentaje_descuento_info"].ToString().Trim(),
                                        dtConsulta.Rows[i]["bandera_comentario"].ToString().Trim(),
-                                       dtConsulta.Rows[i]["valor_dscto"].ToString().Trim()
+                                       dtConsulta.Rows[i]["valor_dscto"].ToString().Trim(),
+                                       dtConsulta.Rows[i]["paga_servicio"].ToString().Trim()
                                        );
 
                     //LLENAR LA MATRIZ DE DETALLE ITEMS CON LOS DATOS INGRESADOS EN LOS DETALLES EN CASO DE QUE SI HAYA
@@ -1405,6 +1413,7 @@ namespace Palatium.ComandaNueva
                 dtCortesiaDescuento.Columns.Add("porcentaje_descuento");
                 dtCortesiaDescuento.Columns.Add("bandera_comentario");
                 dtCortesiaDescuento.Columns.Add("valor_descuento");
+                dtCortesiaDescuento.Columns.Add("paga_servicio");
             }
 
             catch (Exception ex)
@@ -1542,6 +1551,10 @@ namespace Palatium.ComandaNueva
         {
             try
             {
+                iBanderaCategorias = 1;
+                iBanderaSubCategorias = 0;
+                iBanderaModificadores = 0;
+
                 sSql = "";
                 sSql += "select P.id_Producto, NP.nombre as Nombre, P.paga_iva," + Environment.NewLine;
                 sSql += "P.subcategoria, isnull(P.categoria_delivery, 0) categoria_delivery" + Environment.NewLine;
@@ -1585,11 +1598,15 @@ namespace Palatium.ComandaNueva
                     if (dtCategorias.Rows.Count > 8)
                     {
                         btnSiguiente.Enabled = true;
+                        btnAnterior.Visible = true;
+                        btnSiguiente.Visible = true;
                     }
 
                     else
                     {
                         btnSiguiente.Enabled = false;
+                        btnAnterior.Visible = false;
+                        btnSiguiente.Visible = false;
                     }
 
                     if (crearBotonesCategorias() == false)
@@ -1720,7 +1737,7 @@ namespace Palatium.ComandaNueva
             try
             {
                 sSql = "";
-                sSql += "select P.id_Producto, NP.nombre as Nombre, P.paga_iva, PP.valor, CP.codigo" + Environment.NewLine;
+                sSql += "select P.id_Producto, NP.nombre as Nombre, P.paga_iva, PP.valor, CP.codigo, P.paga_servicio" + Environment.NewLine;
                 sSql += "from cv401_productos P INNER JOIN" + Environment.NewLine;
                 sSql += "cv401_nombre_productos NP ON P.id_Producto = NP.id_Producto" + Environment.NewLine;
                 sSql += "and P.estado ='A'" + Environment.NewLine;
@@ -1867,6 +1884,7 @@ namespace Palatium.ComandaNueva
                 int iBanderaCortesiaGrid;
                 int iBanderaDescuentoGrid;
                 int iVersionImpresionGrid;
+                int iPagaServicio;
                 Double dbCantidadGrid;
                 Decimal dbPrecioProductoGrid;
 
@@ -1901,6 +1919,22 @@ namespace Palatium.ComandaNueva
                     }
                 }
 
+                //BUSCAR SI PAGA SERVICIO
+                //-------------------------------------------------------------------------------------------------------------
+                iIdProductoGrid = Convert.ToInt32(botonSeleccionadoProducto.Name.ToString());
+                DataRow[] fila = dtProductos.Select("id_producto = " + iIdProductoGrid);
+
+                if (fila.Length != 0)
+                    iPagaServicio = Convert.ToInt32(fila[0][5].ToString());
+                else
+                {
+                    ok = new VentanasMensajes.frmMensajeNuevoOk();
+                    ok.lblMensaje.Text = "Se encontró un error al buscar el parámetro de servicio en el producto.";
+                    ok.ShowDialog();
+                    return;
+                }
+                //-------------------------------------------------------------------------------------------------------------
+
                 if (sCodigoOrigenOrden == "06")
                 {
                     Double dbAuxiliarDesc = Convert.ToDouble(dbPrecioProductoGrid) * Program.descuento_empleados;
@@ -1913,7 +1947,8 @@ namespace Palatium.ComandaNueva
                                         botonSeleccionadoProducto.Tag.ToString(),
                                         botonSeleccionadoProducto.AccessibleDescription,
                                         iVersionImpresionComanda.ToString(),
-                                        "0", "", "0", "", "0", "0", "0", Program.descuento_empleados * 100, "0", dbAuxiliarDesc);
+                                        "0", "", "0", "", "0", "0", "0", Program.descuento_empleados * 100,
+                                        "0", dbAuxiliarDesc, iPagaServicio);
                 }
 
                 else
@@ -1926,7 +1961,7 @@ namespace Palatium.ComandaNueva
                                         botonSeleccionadoProducto.Tag.ToString(),
                                         botonSeleccionadoProducto.AccessibleDescription,
                                         iVersionImpresionComanda.ToString(),
-                                        "0", "", "0", "", "0", "0", "0", "0", "0", "0");
+                                        "0", "", "0", "", "0", "0", "0", "0", "0", "0", iPagaServicio);
                 }
 
                 pintarDataGridView();
@@ -1978,11 +2013,13 @@ namespace Palatium.ComandaNueva
             try
             {
                 int iPagaIva_REC;
+                int iPagaServicio_REC;
 
                 Decimal dbCantidad_REC;
                 Decimal dbPrecioUnitario_REC;
                 Decimal dbValorDescuento_REC;
                 Decimal dbValorIva_REC;
+                Decimal dbValorServicio_REC;
 
                 Decimal dbSumaSubtotalConIva_REC = 0;
                 Decimal dbSumaSubtotalSinIva_REC = 0;
@@ -1999,6 +2036,7 @@ namespace Palatium.ComandaNueva
                 for (int i = 0; i < dgvPedido.Rows.Count; i++)
                 {
                     iPagaIva_REC = Convert.ToInt32(dgvPedido.Rows[i].Cells["paga_iva"].Value);
+                    iPagaServicio_REC = Convert.ToInt32(dgvPedido.Rows[i].Cells["paga_servicio"].Value);
 
                     dbCantidad_REC = Convert.ToDecimal(dgvPedido.Rows[i].Cells["cantidad"].Value);
                     dbPrecioUnitario_REC = Convert.ToDecimal(dgvPedido.Rows[i].Cells["valor_unitario"].Value);
@@ -2016,18 +2054,24 @@ namespace Palatium.ComandaNueva
                         dbSumaDescuentoConIva_REC += dbCantidad_REC * dbValorDescuento_REC;
                         dbValorIva_REC = (dbPrecioUnitario_REC - dbValorDescuento_REC) * Convert.ToDecimal(Program.iva);
                         dbSumaIva_REC += dbCantidad_REC * dbValorIva_REC;
-                    }                    
+                    }
+
+                    if (iPagaServicio_REC == 1)
+                    {
+                        dbValorServicio_REC = (dbPrecioUnitario_REC - dbValorDescuento_REC) * Convert.ToDecimal(Program.servicio);
+                        dbSumaServicio_REC += dbCantidad_REC * dbValorServicio_REC;
+                    }
                 }
 
                 dbSumaSubtotales_REC = dbSumaSubtotalConIva_REC + dbSumaSubtotalSinIva_REC;
                 dbSumaDescuentos_REC = dbSumaDescuentoConIva_REC + dbSumaDescuentoSinIva_REC;
 
                 dbSubtotalNeto_REC = dbSumaSubtotalConIva_REC + dbSumaSubtotalSinIva_REC - dbSumaDescuentoConIva_REC - dbSumaDescuentoSinIva_REC;
-                dbTotalDebido_REC = dbSubtotalNeto_REC + dbSumaIva_REC;
+                dbTotalDebido_REC = dbSubtotalNeto_REC + dbSumaIva_REC + dbSumaServicio_REC;
 
                 lblSubtotal.Text = "$ " + dbSumaSubtotales_REC.ToString("N2");
                 lblDescuento.Text = "$ " + dbSumaDescuentos_REC.ToString("N2");
-                lblImpuestos.Text = "$ " + dbSumaIva_REC.ToString("N2");
+                lblImpuestos.Text = "$ " + (dbSumaIva_REC + dbSumaServicio_REC).ToString("N2");
                 lblTotal.Text = "$ " + dbTotalDebido_REC.ToString("N2");
 
                 //FUNCION PARA OBTENER EL PORCENTAJE DE DESCUENTO
@@ -2696,43 +2740,22 @@ namespace Palatium.ComandaNueva
                     sCodigoProducto_P = dgvPedido.Rows[i].Cells["codigo_producto"].Value.ToString();
                     sNombreProducto_P = dgvPedido.Rows[i].Cells["nombre_producto"].Value.ToString();
                     dbPorcentajePorLinea_P = Convert.ToDouble(dgvPedido.Rows[i].Cells["porcentaje_descuento"].Value);
+                    iPagaServicio_P = Convert.ToInt32(dgvPedido.Rows[i].Cells["paga_servicio"].Value.ToString());
 
                     if (iBanderaComentario_P == 1)
-                    {
                         sGuardarComentario = dgvPedido.Rows[i].Cells["nombre_producto"].Value.ToString();
-                    }
-
                     else
-                    {
                         sGuardarComentario = "";
-                    }
 
-                    //ACTUALIZACION DE CODIGO PARA RECALCULAR EL PORCENTAJE DE SERVICIO
-                    if (Program.iManejaServicio == 1)
-                    {
-                        //dServicio = (dPrecioUnitario_P - dValorDescuento) * Program.servicio;
-
-                        if (dCantidad_P < 1)
-                        {
-                            dServicio = ((dPrecioUnitario_P * dCantidad_P) - dValorDescuento) * Program.servicio;
-                        }
-
-                        else
-                        {
-                            //dServicio = (dPrecioUnitario_P - dValorDescuento) * Program.servicio;
-                            dServicio = (((dPrecioUnitario_P * dCantidad_P) - dValorDescuento) / dCantidad_P) * Program.servicio;
-                        }
-                    }
+                    if (iPagaServicio_P == 1)
+                        dServicio = (dPrecioUnitario_P - dValorDescuento) * Program.servicio;
+                    else
+                        dServicio = 0;
 
                     if (iPagaIva_P == 1)
-                    {
                         dIVA_P = (dPrecioUnitario_P - dDescuento_P) * Program.iva;
-                    }
-
                     else
-                    {
                         dIVA_P = 0;
-                    }
 
                     //INSTRUCCION SQL PARA GUARDAR EN LA BASE DE DATOS
                     sSql = "";
@@ -2959,6 +2982,318 @@ namespace Palatium.ComandaNueva
 
         #endregion
 
+        #region FUNCIONES DE LOS MODIFICADORES
+
+        //FUNCION PARA OBTENER EL IDENTIFICADOR DE MODIFICADORES
+        private int obtenerIdModificadorPadre()
+        {
+            try
+            {
+                sSql = "";
+                sSql += "select id_producto" + Environment.NewLine;
+                sSql += "from cv401_productos" + Environment.NewLine;
+                sSql += "where estado = 'A'" + Environment.NewLine;
+                sSql += "and modificador = 1" + Environment.NewLine;
+                sSql += "and nivel = 2";
+
+                dtConsulta = new DataTable();
+                dtConsulta.Clear();
+
+                bRespuesta = conexion.GFun_Lo_Busca_Registro(dtConsulta, sSql);
+
+                if (bRespuesta == false)
+                {
+                    catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
+                    catchMensaje.lblMensaje.Text = conexion.sMensajeError;
+                    catchMensaje.ShowDialog();
+                    return -1;
+                }
+
+                if (dtConsulta.Rows.Count == 0)
+                    return 0;
+                else
+                {
+                    iIdProductoPadreModificador = Convert.ToInt32(dtConsulta.Rows[0]["id_producto"].ToString());
+                    return 1;
+                }
+            }
+
+            catch (Exception ex)
+            {
+                catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
+                catchMensaje.lblMensaje.Text = ex.Message;
+                catchMensaje.ShowDialog();
+                return -1;
+            }
+        }
+
+        //FUNCION PARA CONSULTAR LAS INICIALES DE LOS MODIFICADORES
+        private void cargarModificadores()
+        {
+            try
+            {
+                int iRespuesta_P = obtenerIdModificadorPadre();
+
+                if (iRespuesta_P == -1)
+                    return;
+
+                if (iRespuesta_P == 0)
+                {
+                    ok = new VentanasMensajes.frmMensajeNuevoOk();
+                    ok.lblMensaje.Text = "No se encuentra configurador el módulo de modificadores.";
+                    ok.ShowDialog();
+                    return;
+                }
+
+                sSql = "";
+                sSql += "select * from art_vw_letrainicialModificador" + Environment.NewLine;
+                sSql += "order by letra";
+
+                dtConsulta = new DataTable();
+                dtConsulta.Clear();
+
+                bRespuesta = conexion.GFun_Lo_Busca_Registro(dtConsulta, sSql);
+
+                if (bRespuesta == false)
+                {
+                    catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
+                    catchMensaje.lblMensaje.Text = conexion.sMensajeError;
+                    catchMensaje.ShowDialog();
+                    return;
+                }
+
+                if (dtConsulta.Rows.Count == 0)
+                {
+                    ok = new VentanasMensajes.frmMensajeNuevoOk();
+                    ok.lblMensaje.Text = "No se encuentra ítems para el módulo de modificadores.";
+                    ok.ShowDialog();
+                    return;
+                }
+
+                iBanderaCategorias = 0;
+                iBanderaSubCategorias = 0;
+                iBanderaModificadores = 1;
+
+                btnModificadores.BackColor = Color.FromArgb(255, 128, 128);
+                lblProductos.Text = "MODIFICADORES";
+                pnlProductos.Controls.Clear();
+
+                dtCategorias = new DataTable();
+                dtCategorias = dtConsulta.Clone();
+
+                foreach (DataRow dr in dtConsulta.Rows)
+                {
+                    dtCategorias.ImportRow(dr);
+                }
+
+                iCuentaCategorias = 0;
+
+                if (dtCategorias.Rows.Count > 0)
+                {
+                    if (dtCategorias.Rows.Count > 10)
+                    {
+                        btnSiguiente.Enabled = true;
+                        btnAnterior.Visible = true;
+                        btnSiguiente.Visible = true;
+                    }
+
+                    else
+                    {
+                        btnSiguiente.Enabled = false;
+                        btnAnterior.Visible = false;
+                        btnSiguiente.Visible = false;
+                    }
+
+                    if (crearBotonesModificadores() == false)
+                    {
+
+                    }
+                }
+
+                else
+                {
+                    ok = new VentanasMensajes.frmMensajeNuevoOk();
+                    ok.lblMensaje.Text = "No se encuentras ítems de categorías en el sistema.";
+                    ok.ShowDialog();
+                    return;
+                }
+            }
+
+            catch (Exception ex)
+            {
+                catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
+                catchMensaje.lblMensaje.Text = ex.Message;
+                catchMensaje.ShowDialog();
+            }
+        }
+
+        //FUNCION PARA CREAR LOS BOTONES DE MODIFICADORES
+        private bool crearBotonesModificadores()
+        {
+            try
+            {
+                pnlCategorias.Controls.Clear();
+                iPosXCategorias = 0;
+                iPosYCategorias = 0;
+                iCuentaAyudaCategorias = 0;
+
+                for (int i = 0; i < 2; i++)
+                {
+                    for (int j = 0; j < 5; j++)
+                    {
+                        botonModificador[i, j] = new Button();
+                        botonModificador[i, j].Cursor = Cursors.Hand;
+                        botonModificador[i, j].Click += boton_clic_modificadores;
+                        botonModificador[i, j].Size = new Size(92, 71);
+                        botonModificador[i, j].Location = new Point(iPosXCategorias, iPosYCategorias);
+                        botonModificador[i, j].BackColor = Color.Lime;
+                        botonModificador[i, j].Font = new Font("Maiandra GD", 16, FontStyle.Bold);
+                       //botonModificador[i, j].Tag = dtCategorias.Rows[iCuentaCategorias]["id_producto"].ToString();
+                        botonModificador[i, j].Text = dtCategorias.Rows[iCuentaCategorias]["letra"].ToString();
+                        //botonModificador[i, j].AccessibleDescription = dtCategorias.Rows[iCuentaCategorias]["subcategoria"].ToString();
+                        botonModificador[i, j].FlatStyle = FlatStyle.Flat;
+                        botonModificador[i, j].FlatAppearance.BorderSize = 1;
+                        botonModificador[i, j].FlatAppearance.MouseOverBackColor = Color.FromArgb(255, 128, 255);
+
+                        pnlCategorias.Controls.Add(botonModificador[i, j]);
+                        iCuentaCategorias++;
+                        iCuentaAyudaCategorias++;
+
+                        if (j + 1 == 5)
+                        {
+                            iPosXCategorias = 0;
+                            iPosYCategorias += 71;
+                        }
+
+                        else
+                        {
+                            iPosXCategorias += 92;
+                        }
+
+                        if (dtCategorias.Rows.Count == iCuentaCategorias)
+                        {
+                            btnSiguiente.Enabled = false;
+                            break;
+                        }
+                    }
+
+                    if (dtCategorias.Rows.Count == iCuentaCategorias)
+                    {
+                        btnSiguiente.Enabled = false;
+                        break;
+                    }
+                }
+
+                return true;
+            }
+
+            catch (Exception ex)
+            {
+                catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
+                catchMensaje.lblMensaje.Text = ex.Message;
+                catchMensaje.ShowDialog();
+                return false;
+            }
+        }
+
+        //EVENTO CLIC DE LOS BOTONES DE LAS CATEGORÍAS
+        private void boton_clic_modificadores(object sender, EventArgs e)
+        {
+            try
+            {
+                this.Cursor = Cursors.WaitCursor;
+
+                botonSeleccionadoCategoria = sender as Button;
+
+                cargarProductosModificadores(botonSeleccionadoCategoria.Text);
+                
+                this.Cursor = Cursors.Default;
+            }
+
+            catch (Exception ex)
+            {
+                catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
+                catchMensaje.lblMensaje.Text = ex.Message;
+                catchMensaje.ShowDialog();
+                return;
+            }
+        }
+
+        //FUNCION PARA CARGAR LOS BOTONES DE PRODUCTOS
+        private void cargarProductosModificadores(string sLetraInicial_P)
+        {
+            try
+            {
+                sSql = "";
+                sSql += "select P.id_Producto, NP.nombre as Nombre, P.paga_iva, PP.valor, CP.codigo" + Environment.NewLine;
+                sSql += "from cv401_productos P INNER JOIN" + Environment.NewLine;
+                sSql += "cv401_nombre_productos NP ON P.id_Producto = NP.id_Producto" + Environment.NewLine;
+                sSql += "and P.estado ='A'" + Environment.NewLine;
+                sSql += "and NP.estado = 'A' INNER JOIN" + Environment.NewLine;
+                sSql += "cv403_precios_productos PP ON P.id_producto = PP.id_producto" + Environment.NewLine;
+                sSql += "and PP.estado = 'A' INNER JOIN" + Environment.NewLine;
+                sSql += "pos_clase_producto CP ON CP.id_pos_clase_producto = P.id_pos_clase_producto" + Environment.NewLine;
+                sSql += "and CP.estado = 'A'" + Environment.NewLine;
+                sSql += "where P.nivel = 3" + Environment.NewLine;
+                sSql += "and P.is_active = 1" + Environment.NewLine;
+                sSql += "and P.subcategoria = 0" + Environment.NewLine;
+                sSql += "and PP.id_lista_precio = 4" + Environment.NewLine;
+                sSql += "and P.modificador = 1" + Environment.NewLine;
+                sSql += "and P.codigo like '" + sLetraInicial_P + "%'" + Environment.NewLine;
+                sSql += "order by P.secuencia";
+
+                dtProductos = new DataTable();
+                dtProductos.Clear();
+
+                bRespuesta = conexion.GFun_Lo_Busca_Registro(dtProductos, sSql);
+
+                if (bRespuesta == false)
+                {
+                    catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
+                    catchMensaje.lblMensaje.Text = "ERROR EN LA INSTRUCCIÓN SQL:" + Environment.NewLine + sSql;
+                    catchMensaje.ShowDialog();
+                    return;
+                }
+
+                iCuentaProductos = 0;
+
+                if (dtProductos.Rows.Count > 0)
+                {
+                    if (dtProductos.Rows.Count > 20)
+                    {
+                        btnSiguienteProducto.Enabled = true;
+                    }
+
+                    else
+                    {
+                        btnSiguienteProducto.Enabled = false;
+                    }
+
+                    if (crearBotonesProductos() == false)
+                    {
+
+                    }
+                }
+
+                else
+                {
+                    ok = new VentanasMensajes.frmMensajeNuevoOk();
+                    ok.lblMensaje.Text = "No se encuentras ítems de categorías en el sistema.";
+                    ok.ShowDialog();
+                    return;
+                }
+            }
+
+            catch (Exception ex)
+            {
+                catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
+                catchMensaje.lblMensaje.Text = ex.Message;
+                catchMensaje.ShowDialog();
+            }
+        }
+
+        #endregion
+
         private void frmComanda_Load(object sender, EventArgs e)
         {
             //this.Text = Program.sEtiqueta;
@@ -3013,23 +3348,60 @@ namespace Palatium.ComandaNueva
 
         private void btnSiguiente_Click(object sender, EventArgs e)
         {
-            btnAnterior.Enabled = true;
-            crearBotonesCategorias();
+            if (iBanderaCategorias == 1)
+            {
+                btnAnterior.Enabled = true;
+                crearBotonesCategorias();
+            }
+
+            else if (iBanderaSubCategorias == 1)
+            {
+
+            }
+
+            else if (iBanderaModificadores == 1)
+            {
+                btnAnterior.Enabled = true;
+                crearBotonesModificadores();
+            }
         }
 
         private void btnAnterior_Click(object sender, EventArgs e)
         {
-            iCuentaCategorias -= iCuentaAyudaCategorias;
-
-            if (iCuentaCategorias <= 8)
+            if (iBanderaCategorias == 1)
             {
-                btnAnterior.Enabled = false;
+                iCuentaCategorias -= iCuentaAyudaCategorias;
+
+                if (iCuentaCategorias <= 8)
+                {
+                    btnAnterior.Enabled = false;
+                }
+
+                btnSiguiente.Enabled = true;
+                iCuentaCategorias -= 8;
+
+                crearBotonesCategorias();
             }
 
-            btnSiguiente.Enabled = true;
-            iCuentaCategorias -= 8;
+            else if (iBanderaSubCategorias == 1)
+            {
 
-            crearBotonesCategorias();
+            }
+
+            else if (iBanderaModificadores == 1)
+            {
+                iCuentaCategorias -= iCuentaAyudaCategorias;
+
+                if (iCuentaCategorias <= 10)
+                {
+                    btnAnterior.Enabled = false;
+                }
+
+                btnSiguiente.Enabled = true;
+                iCuentaCategorias -= 10;
+
+                crearBotonesModificadores();
+            }
         }
 
         private void btnAnteriorProducto_Click(object sender, EventArgs e)
@@ -3189,9 +3561,22 @@ namespace Palatium.ComandaNueva
 
         private void btnModificadores_Click(object sender, EventArgs e)
         {
-            ok = new VentanasMensajes.frmMensajeNuevoOk();
-            ok.lblMensaje.Text = "Módulo en desarrollo.";
-            ok.ShowDialog();
+            if (iBanderaModificadores == 0)
+            {
+                cargarModificadores();
+
+                if (iBanderaModificadores == 1)
+                    btnRegresar.Visible = true;
+            }
+
+            else
+            {
+                btnRegresar.Visible = false;
+                lblProductos.Text = "PRODUCTOS";
+                btnModificadores.BackColor = Color.FromArgb(192, 255, 192);
+                pnlProductos.Controls.Clear();
+                cargarCategorias();
+            }
         }
 
         private void btnCortesias_Click(object sender, EventArgs e)
@@ -3254,10 +3639,16 @@ namespace Palatium.ComandaNueva
 
                 if (item.DialogResult == DialogResult.OK)
                 {
+                    int iPagaServicio_A;
                     Decimal dbCantidad_I = item.dCantidad;
                     Decimal dbPrecioUnitario_I = item.dValorUnitario;
                     string sNombreItem_I = item.sNombreProducto;
                     item.Close();
+
+                    if (Program.iManejaServicio == 1)
+                        iPagaServicio_A = 1;
+                    else
+                        iPagaServicio_A = 0;
 
                     dgvPedido.Rows.Add(dbCantidad_I,
                                     sNombreItem_I,
@@ -3266,7 +3657,7 @@ namespace Palatium.ComandaNueva
                                     Program.iIdProductoNuevoItem,
                                     "1", "00",
                                     iVersionImpresionComanda.ToString(), 
-                                    "0", "", "0", "", "0", "0", "0", "0", "1", "0");
+                                    "0", "", "0", "", "0", "0", "0", "0", "1", "0", iPagaServicio_A);
 
                     recalcularValores();
                     pintarDataGridView();
@@ -3544,6 +3935,7 @@ namespace Palatium.ComandaNueva
                             row["porcentaje_descuento"] = dgvPedido.Rows[i].Cells["porcentaje_descuento"].Value.ToString();
                             row["bandera_comentario"] = dgvPedido.Rows[i].Cells["bandera_comentario"].Value.ToString();
                             row["valor_descuento"] = dgvPedido.Rows[i].Cells["valor_descuento"].Value.ToString();
+                            row["paga_servicio"] = dgvPedido.Rows[i].Cells["paga_servicio"].Value.ToString();
 
                             dtCortesiaDescuento.Rows.Add(row);
 
@@ -3841,6 +4233,15 @@ namespace Palatium.ComandaNueva
                     }
                 }
             }
+        }
+
+        private void btnRegresar_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            btnRegresar.Visible = false;
+            lblProductos.Text = "PRODUCTOS";
+            btnModificadores.BackColor = Color.FromArgb(192, 255, 192);
+            pnlProductos.Controls.Clear();
+            cargarCategorias();
         }
     }
 }

@@ -57,6 +57,43 @@ namespace Palatium.Productos
 
         #region FUNCIONES DEL USUARIO
 
+        //FUNCION PARA CONSULTAR EL ID DE MODIFICADORES
+        private int contarRegistroModificador()
+        {
+            try
+            {
+                sSql = "";
+                sSql += "select count(*) cuenta" + Environment.NewLine;
+                sSql += "from cv401_productos" + Environment.NewLine;
+                sSql += "where estado = 'A'" + Environment.NewLine;
+                sSql += "and modificador = 1" + Environment.NewLine;
+                sSql += "and nivel = 2" + Environment.NewLine;
+
+                dtConsulta = new DataTable();
+                dtConsulta.Clear();
+
+                bRespuesta = conexion.GFun_Lo_Busca_Registro(dtConsulta, sSql);
+
+                if (bRespuesta == false)
+                {
+                    catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
+                    catchMensaje.lblMensaje.Text = conexion.sMensajeError;
+                    catchMensaje.ShowDialog();
+                    return -1;
+                }
+
+                return Convert.ToInt32(dtConsulta.Rows[0][0].ToString());
+            }
+
+            catch (Exception ex)
+            {
+                catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
+                catchMensaje.lblMensaje.Text = ex.Message;
+                catchMensaje.ShowDialog();
+                return -1;
+            }
+        }
+
         //FUNCION PARA MOSTRAR U OCULTAR COLUMNAS
         private void columnasGrid(bool ok)
         {
@@ -1066,6 +1103,22 @@ namespace Palatium.Productos
                         iCategoriaDelivery = 1;
                     else
                         iCategoriaDelivery = 0;
+
+                    if (chkTieneModifcador.Checked == true)
+                    {
+                        int iCantidadModificador = contarRegistroModificador();
+
+                        if (iCantidadModificador == -1)
+                            return;
+
+                        if (iCantidadModificador > 0)
+                        {
+                            ok = new VentanasMensajes.frmMensajeNuevoOk();
+                            ok.lblMensaje.Text = "Ya existe un registro para modificadores.";
+                            ok.ShowDialog();
+                            return;
+                        }
+                    }
 
                     if (cmbEstado.Text == "ACTIVO")
                     {

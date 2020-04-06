@@ -23,7 +23,6 @@ namespace Palatium.Comida_Rapida
         ValidarCedula validarCedula = new ValidarCedula();
 
         string sSql;
-        string sPagaIva_P;
         string sNombreProducto_P;
         string sFecha;
         string sTabla;
@@ -110,6 +109,8 @@ namespace Palatium.Comida_Rapida
         int iIdCabeceraMovimiento;
         int iIdLocalidadBodega;
         int iValorActualMovimiento;
+        int iPagaIva_P;
+        int iPagaServicio_P;
 
         int idTipoIdentificacion;
         int idTipoPersona;
@@ -118,6 +119,7 @@ namespace Palatium.Comida_Rapida
         int iIdTipoEmision = 0;
 
         Decimal dIVA_P;
+        Decimal dServicio_P;
         Decimal dPrecioUnitario_P;
         Decimal dCantidad_P;
         Decimal dTotalDebido;
@@ -1201,7 +1203,7 @@ namespace Palatium.Comida_Rapida
             try
             {
                 sSql = "";
-                sSql += "select P.id_Producto, NP.nombre as Nombre, P.paga_iva, PP.valor, CP.codigo" + Environment.NewLine;
+                sSql += "select P.id_Producto, NP.nombre as Nombre, P.paga_iva, PP.valor, CP.codigo, P.paga_servicio" + Environment.NewLine;
                 sSql += "from cv401_productos P INNER JOIN" + Environment.NewLine;
                 sSql += "cv401_nombre_productos NP ON P.id_Producto = NP.id_Producto" + Environment.NewLine;
                 sSql += "and P.estado ='A'" + Environment.NewLine;
@@ -1342,29 +1344,42 @@ namespace Palatium.Comida_Rapida
                 botonSeleccionadoProducto = sender as Button;
 
                 int iExiste_R = 0;
-
-                Decimal num2 = 0;
-                Decimal num3;
+                int iPagaIva_R;
+                int iPagaServicio_R;
+                int iIdProductoGrid;
 
                 Decimal dbCantidad_R;
                 Decimal dbValorUnitario_R;
                 Decimal dbSubtotal_R;
                 Decimal dbValorIVA_R;
+                Decimal dbValorServicio_R;
                 Decimal dbTotal_R;
-
 
                 for (int i = 0; i < dgvPedido.Rows.Count; ++i)
                 {
                     if (dgvPedido.Rows[i].Cells["idProducto"].Value.ToString() == botonSeleccionadoProducto.Name.ToString())
                     {
+                        iPagaIva_R = Convert.ToInt32(dgvPedido.Rows[i].Cells["pagaIva"].Value);
+                        iPagaServicio_R = Convert.ToInt32(dgvPedido.Rows[i].Cells["paga_servicio"].Value);
+
                         dbCantidad_R = Convert.ToDecimal(dgvPedido.Rows[i].Cells["cantidad"].Value);
                         dbCantidad_R += 1;
                         dgvPedido.Rows[i].Cells["cantidad"].Value = dbCantidad_R;
                         dbValorUnitario_R = Convert.ToDecimal(dgvPedido.Rows[i].Cells["valuni"].Value);
                         dbSubtotal_R = dbCantidad_R * dbValorUnitario_R;
                         dgvPedido.Rows[i].Cells["subtotal"].Value = dbSubtotal_R.ToString("N2");
-                        dbValorIVA_R = dbSubtotal_R * Convert.ToDecimal(Program.iva);
-                        dbTotal_R = dbSubtotal_R + dbValorIVA_R;
+                        
+                        if (iPagaIva_R == 1)
+                            dbValorIVA_R = dbSubtotal_R * Convert.ToDecimal(Program.iva);
+                        else
+                            dbValorIVA_R = 0;
+
+                        if (iPagaServicio_R == 1)
+                            dbValorServicio_R = dbSubtotal_R * Convert.ToDecimal(Program.servicio);
+                        else
+                            dbValorServicio_R = 0;
+
+                        dbTotal_R = dbSubtotal_R + dbValorIVA_R + dbValorServicio_R;
                         dgvPedido.Rows[i].Cells["valor"].Value = dbTotal_R.ToString("N2");
                         iExiste_R = 1;
                     }
@@ -1372,17 +1387,36 @@ namespace Palatium.Comida_Rapida
 
                 if (iExiste_R == 0)
                 {
+                    //BUSCAR SI PAGA SERVICIO
+                    //-------------------------------------------------------------------------------------------------------------
+                    iIdProductoGrid = Convert.ToInt32(botonSeleccionadoProducto.Name.ToString());
+                    DataRow[] fila = dtProductos.Select("id_producto = " + iIdProductoGrid);
+
+                    if (fila.Length != 0)
+                        iPagaServicio_R = Convert.ToInt32(fila[0][5].ToString());
+                    else
+                    {
+                        ok = new VentanasMensajes.frmMensajeOK();
+                        ok.LblMensaje.Text = "Se encontró un error al buscar el parámetro de servicio en el producto.";
+                        ok.ShowDialog();
+                        return;
+                    }
+                    //-------------------------------------------------------------------------------------------------------------
+
+                    iPagaIva_R = Convert.ToInt32(botonSeleccionadoProducto.Tag);
+
                     int i = dgvPedido.Rows.Add();
 
                     dgvPedido.Rows[i].Cells["cantidad"].Value = "1";
                     dgvPedido.Rows[i].Cells["producto"].Value = botonSeleccionadoProducto.Text.ToString().Trim();
                     sNombreProducto_P = botonSeleccionadoProducto.Text.ToString().Trim();
                     dgvPedido.Rows[i].Cells["idProducto"].Value = botonSeleccionadoProducto.Name;
-                    sPagaIva_P = botonSeleccionadoProducto.Tag.ToString().Trim();
-                    dgvPedido.Rows[i].Cells["pagaIva"].Value = sPagaIva_P;
+                    iPagaIva_P = Convert.ToInt32(botonSeleccionadoProducto.Tag.ToString());
+                    dgvPedido.Rows[i].Cells["pagaIva"].Value = iPagaIva_P;
                     dgvPedido.Rows[i].Cells["tipoProducto"].Value = botonSeleccionadoProducto.AccessibleDescription;
+                    dgvPedido.Rows[i].Cells["paga_servicio"].Value = iPagaServicio_R;
 
-                    if (sPagaIva_P == "1")
+                    if (iPagaIva_P == 1)
                     {
                         dgvPedido.Rows[i].DefaultCellStyle.ForeColor = Color.Blue;
                         dgvPedido.Rows[i].Cells["cantidad"].ToolTipText = sNombreProducto_P.Trim().ToUpper() + " PAGA IVA";
@@ -1402,8 +1436,18 @@ namespace Palatium.Comida_Rapida
                     dbValorUnitario_R = Convert.ToDecimal(botonSeleccionadoProducto.AccessibleName);
                     dbSubtotal_R = dbCantidad_R * dbValorUnitario_R;
                     dgvPedido.Rows[i].Cells["subtotal"].Value = dbSubtotal_R.ToString("N2");
-                    dbValorIVA_R = dbSubtotal_R * Convert.ToDecimal(Program.iva);
-                    dbTotal_R = dbSubtotal_R + dbValorIVA_R;
+
+                    if (iPagaIva_R == 1)
+                        dbValorIVA_R = dbSubtotal_R * Convert.ToDecimal(Program.iva);
+                    else
+                        dbValorIVA_R = 0;
+
+                    if (iPagaServicio_R == 1)
+                        dbValorServicio_R = dbSubtotal_R * Convert.ToDecimal(Program.servicio);
+                    else
+                        dbValorServicio_R = 0;
+
+                    dbTotal_R = dbSubtotal_R + dbValorIVA_R + dbValorServicio_R;
                     dgvPedido.Rows[i].Cells["valor"].Value = dbTotal_R.ToString("N2");
                 }
 
@@ -1424,18 +1468,24 @@ namespace Palatium.Comida_Rapida
         //FUNCION PARA CALCULAR TOTALES
         public void calcularTotales()
         {
+            int iPagaIva;
+            int iPagaServicio;
+
             Decimal dSubtotalConIva = 0;
             Decimal dSubtotalCero = 0;
             Decimal dbValorIva;
+            Decimal dbValorServicio;
             Decimal dbSumaIva = 0;
+            Decimal dbSumaServicio = 0;
             dTotalDebido = 0;
 
             for (int i = 0; i < dgvPedido.Rows.Count; ++i)
             {
+                iPagaIva = Convert.ToInt32(dgvPedido.Rows[i].Cells["pagaIva"].Value);
+                iPagaServicio = Convert.ToInt32(dgvPedido.Rows[i].Cells["paga_servicio"].Value);
+
                 if (dgvPedido.Rows[i].Cells["pagaIva"].Value.ToString() == "0")
-                {
                     dSubtotalCero += Convert.ToDecimal(dgvPedido.Rows[i].Cells["cantidad"].Value.ToString()) * Convert.ToDecimal(dgvPedido.Rows[i].Cells["valuni"].Value.ToString());
-                }
 
                 else
                 {
@@ -1443,10 +1493,16 @@ namespace Palatium.Comida_Rapida
                     dbValorIva = Convert.ToDecimal(dgvPedido.Rows[i].Cells["cantidad"].Value.ToString()) * Convert.ToDecimal(dgvPedido.Rows[i].Cells["valuni"].Value.ToString()) * Convert.ToDecimal(Program.iva);
                     dbSumaIva += dbValorIva;
                 }
+
+                if (iPagaServicio == 1)
+                {
+                    dbValorServicio = Convert.ToDecimal(dgvPedido.Rows[i].Cells["cantidad"].Value) * Convert.ToDecimal(dgvPedido.Rows[i].Cells["valuni"].Value) * Convert.ToDecimal(Program.servicio);
+                    dbSumaServicio += dbValorServicio;
+                }
             }
 
             //dTotalDebido = num1 + num2 - num3 - num4 + (num1 - num3) * Convert.ToDecimal(Program.iva) + num7;
-            dTotalDebido = dSubtotalConIva + dSubtotalCero + dbSumaIva;
+            dTotalDebido = dSubtotalConIva + dSubtotalCero + dbSumaIva + dbSumaServicio;
             lblTotal.Text = "$ " + dTotalDebido.ToString("N2");
         }
 
@@ -1877,19 +1933,20 @@ namespace Palatium.Comida_Rapida
                         iIdProducto_P = Convert.ToInt32(dgvPedido.Rows[i].Cells["idProducto"].Value);
                         dPrecioUnitario_P = Convert.ToDecimal(dgvPedido.Rows[i].Cells["valuni"].Value);
                         dCantidad_P = Convert.ToDecimal(dgvPedido.Rows[i].Cells["cantidad"].Value);
-                        sPagaIva_P = dgvPedido.Rows[i].Cells["pagaIva"].Value.ToString();
+                        iPagaIva_P = Convert.ToInt32(dgvPedido.Rows[i].Cells["pagaIva"].Value);
                         sCodigoClaseProducto = dgvPedido.Rows[i].Cells["tipoProducto"].Value.ToString();
                         sNombreProducto_P = dgvPedido.Rows[i].Cells["producto"].Value.ToString();
+                        iPagaServicio_P = Convert.ToInt32(dgvPedido.Rows[i].Cells["paga_servicio"].Value);
 
-                        if (sPagaIva_P == "1")
-                        {
+                        if (iPagaIva_P == 1)
                             dIVA_P = dPrecioUnitario_P * Convert.ToDecimal(Program.iva);
-                        }
-
                         else
-                        {
                             dIVA_P = 0;
-                        }
+
+                        if (iPagaServicio_P == 1)
+                            dServicio_P = dPrecioUnitario_P * Convert.ToDecimal(Program.servicio);
+                        else
+                            dServicio_P = 0;
 
                         sSql = "";
                         sSql += "Insert Into cv403_det_pedidos(" + Environment.NewLine;
@@ -1901,7 +1958,7 @@ namespace Palatium.Comida_Rapida
                         sSql += "numero_control_replica, id_empleado_cliente_empresarial)" + Environment.NewLine;
                         sSql += "values(" + Environment.NewLine;
                         sSql += iIdPedido + ", " + iIdProducto_P + ", 546, " + dPrecioUnitario_P + ", " + Environment.NewLine;
-                        sSql += dCantidad_P + ", 0, 0, " + dIVA_P + ", 0, " + Environment.NewLine;
+                        sSql += dCantidad_P + ", 0, 0, " + dIVA_P + ", " + dServicio_P + ", " + Environment.NewLine;
                         sSql += "null, null, GETDATE(), '" + Program.sDatosMaximo[0] + "'," + Environment.NewLine;
                         sSql += "'" + Program.sDatosMaximo[1] + "', 0, 1, null, 'A', 0, 0, " + iIdPersona + ")";
 
@@ -1969,17 +2026,19 @@ namespace Palatium.Comida_Rapida
                         iIdProducto_P = Convert.ToInt32(dtRecargos.Rows[i]["id_producto"].ToString());
                         dPrecioUnitario_P = Convert.ToDecimal(dtRecargos.Rows[i]["valor_recargo"].ToString());
                         dCantidad_P = Convert.ToDecimal(dtRecargos.Rows[i]["cantidad"].ToString());
-                        sPagaIva_P = dtRecargos.Rows[i]["paga_iva"].ToString();
+                        iPagaIva_P = Convert.ToInt32(dtRecargos.Rows[i]["paga_iva"].ToString());
+                        iPagaServicio_P = Convert.ToInt32(dtRecargos.Rows[i]["paga_servicio"].ToString());
 
-                        if (sPagaIva_P == "1")
-                        {
-                            dIVA_P = Convert.ToDecimal(dtRecargos.Rows[i]["valor_iva"].ToString());
-                        }
-
+                        if (iPagaIva_P == 1)
+                            //dIVA_P = Convert.ToDecimal(dtRecargos.Rows[i]["valor_iva"].ToString());
+                            dIVA_P = dPrecioUnitario_P * Convert.ToDecimal(Program.iva);
                         else
-                        {
                             dIVA_P = 0;
-                        }
+
+                        if (iPagaServicio_P == 1)
+                            dServicio_P = dPrecioUnitario_P * Convert.ToDecimal(Program.servicio);
+                        else
+                            dServicio_P = 0;
 
                         sSql = "";
                         sSql += "Insert Into cv403_det_pedidos(" + Environment.NewLine;
@@ -1991,7 +2050,7 @@ namespace Palatium.Comida_Rapida
                         sSql += "numero_control_replica, id_empleado_cliente_empresarial)" + Environment.NewLine;
                         sSql += "values(" + Environment.NewLine;
                         sSql += iIdPedido + ", " + iIdProducto_P + ", 546, " + dPrecioUnitario_P + ", " + Environment.NewLine;
-                        sSql += dCantidad_P + ", 0, 0, " + dIVA_P + ", 0, " + Environment.NewLine;
+                        sSql += dCantidad_P + ", 0, 0, " + dIVA_P + ", " + dServicio_P + ", " + Environment.NewLine;
                         sSql += "null, null, GETDATE(), '" + Program.sDatosMaximo[0] + "'," + Environment.NewLine;
                         sSql += "'" + Program.sDatosMaximo[1] + "', 0, 1, null, 'A', 0, 0, " + iIdPersona + ")";
 
@@ -3416,6 +3475,8 @@ namespace Palatium.Comida_Rapida
                 dtItems.Columns.Add("total");
                 dtItems.Columns.Add("id_producto");
                 dtItems.Columns.Add("paga_iva");
+                dtItems.Columns.Add("paga_servicio");
+                dtItems.Columns.Add("valor_servicio");
 
                 for (int i = 0; i < dgvPedido.Rows.Count; i++)
                 {
@@ -3427,6 +3488,8 @@ namespace Palatium.Comida_Rapida
                     row["total"] = "0";
                     row["id_producto"] = dgvPedido.Rows[i].Cells[6].Value.ToString();
                     row["paga_iva"] = dgvPedido.Rows[i].Cells[5].Value.ToString();
+                    row["paga_servicio"] = dgvPedido.Rows[i].Cells["paga_servicio"].Value.ToString();
+                    row["valor_servicio"] = "0";
                     dtItems.Rows.Add(row);
                 }
 

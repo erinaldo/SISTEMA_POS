@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle14 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle15 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
@@ -83,6 +84,8 @@
             this.btnEditarItems = new System.Windows.Forms.Button();
             this.chkImprimirCocina = new System.Windows.Forms.CheckBox();
             this.lblCliente = new System.Windows.Forms.Label();
+            this.btnRegresar = new System.Windows.Forms.LinkLabel();
+            this.ttMensaje = new System.Windows.Forms.ToolTip(this.components);
             this.cantidad = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.nombre_producto = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.valor_unitario = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -101,6 +104,7 @@
             this.porcentaje_descuento = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.bandera_comentario = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.valor_descuento = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.paga_servicio = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvPedido)).BeginInit();
             this.SuspendLayout();
@@ -460,7 +464,8 @@
             this.ordenamiento,
             this.porcentaje_descuento,
             this.bandera_comentario,
-            this.valor_descuento});
+            this.valor_descuento,
+            this.paga_servicio});
             dataGridViewCellStyle14.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle14.BackColor = System.Drawing.SystemColors.Window;
             dataGridViewCellStyle14.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -685,6 +690,20 @@
             this.lblCliente.TabIndex = 119;
             this.lblCliente.Text = "CONSUMIDOR FINAL";
             // 
+            // btnRegresar
+            // 
+            this.btnRegresar.AutoSize = true;
+            this.btnRegresar.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
+            this.btnRegresar.LinkColor = System.Drawing.Color.Red;
+            this.btnRegresar.Location = new System.Drawing.Point(469, 166);
+            this.btnRegresar.Name = "btnRegresar";
+            this.btnRegresar.Size = new System.Drawing.Size(110, 20);
+            this.btnRegresar.TabIndex = 120;
+            this.btnRegresar.TabStop = true;
+            this.btnRegresar.Text = "REGRESAR";
+            this.ttMensaje.SetToolTip(this.btnRegresar, "Clic aquí para cargar las categorías");
+            this.btnRegresar.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.btnRegresar_LinkClicked);
+            // 
             // cantidad
             // 
             dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
@@ -842,6 +861,13 @@
             this.valor_descuento.ReadOnly = true;
             this.valor_descuento.Visible = false;
             // 
+            // paga_servicio
+            // 
+            this.paga_servicio.HeaderText = "PAGA_SERVICIO";
+            this.paga_servicio.Name = "paga_servicio";
+            this.paga_servicio.ReadOnly = true;
+            this.paga_servicio.Visible = false;
+            // 
             // frmComanda
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -849,6 +875,7 @@
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
             this.ClientSize = new System.Drawing.Size(1164, 661);
+            this.Controls.Add(this.btnRegresar);
             this.Controls.Add(this.btnSiguiente);
             this.Controls.Add(this.lblCliente);
             this.Controls.Add(this.btnAnterior);
@@ -939,6 +966,8 @@
         public System.Windows.Forms.Label lblPorcentajeDescuento;
         private System.Windows.Forms.CheckBox chkImprimirCocina;
         private System.Windows.Forms.Label lblCliente;
+        private System.Windows.Forms.LinkLabel btnRegresar;
+        private System.Windows.Forms.ToolTip ttMensaje;
         private System.Windows.Forms.DataGridViewTextBoxColumn cantidad;
         private System.Windows.Forms.DataGridViewTextBoxColumn nombre_producto;
         private System.Windows.Forms.DataGridViewTextBoxColumn valor_unitario;
@@ -957,5 +986,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn porcentaje_descuento;
         private System.Windows.Forms.DataGridViewTextBoxColumn bandera_comentario;
         private System.Windows.Forms.DataGridViewTextBoxColumn valor_descuento;
+        private System.Windows.Forms.DataGridViewTextBoxColumn paga_servicio;
     }
 }

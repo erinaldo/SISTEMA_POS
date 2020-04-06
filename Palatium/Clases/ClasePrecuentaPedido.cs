@@ -13,6 +13,7 @@ namespace Palatium.Clases
 
         private int iIdPedido;
         private int iPagaIva;
+        private int iPagaServicio;
 
         private string sTexto;
         private string sSql;
@@ -89,24 +90,25 @@ namespace Palatium.Clases
                     dbIva = Convert.ToDecimal(dtConsulta.Rows[i]["valor_iva"].ToString());
                     dbServicio = Convert.ToDecimal(dtConsulta.Rows[i]["valor_otro"].ToString());
                     sNombreProducto = dtConsulta.Rows[i]["nombre"].ToString();
-                    dbPrecioUnitario += dbIva;
+                    
                     iPagaIva = Convert.ToInt32(dtConsulta.Rows[i]["paga_iva"].ToString());
+                    iPagaServicio = Convert.ToInt32(dtConsulta.Rows[i]["paga_servicio"].ToString());
+
+                    if (iPagaServicio == 1)
+                        dbPrecioUnitario += dbIva + dbServicio - dbValorDescuento;
+                    else
+                        dbPrecioUnitario += dbIva - dbValorDescuento;
 
                     if (dbValorDescuento != 0)
-                    {
                         dbSumaDescuento += dbCantidad * dbValorDescuento;
-                    }
 
                     if (iPagaIva == 0)
-                    {
                         dbSumaSubtotalSinIva += dbCantidad * dbPrecioUnitario;
-                    }
-
                     else
                     {
                         dbSumaSubtotalConIva += dbCantidad * dbPrecioUnitario;
                         dbSumaIVA += dbCantidad * dbIva;
-                    }
+                    }                    
 
                     dbSumaPrecio = dbCantidad * dbPrecioUnitario;
                     sCantidadProducto = dbCantidad.ToString("N0");
@@ -122,7 +124,7 @@ namespace Palatium.Clases
                     }
                 }
 
-                dbSumaSubtotalNeto = dbSumaSubtotalConIva + dbSumaSubtotalSinIva - dbSumaDescuento;
+                dbSumaSubtotalNeto = dbSumaSubtotalConIva + dbSumaSubtotalSinIva - dbSumaDescuento + dbSumaServicio;
                 dbTotal = dbSumaSubtotalNeto;
 
                 sTexto += "".PadLeft(40, '=') + Environment.NewLine;

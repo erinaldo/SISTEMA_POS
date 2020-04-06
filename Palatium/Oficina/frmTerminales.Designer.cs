@@ -38,6 +38,8 @@
             this.btnEliminar = new System.Windows.Forms.Button();
             this.btnNuevo = new System.Windows.Forms.Button();
             this.grupoDatos = new System.Windows.Forms.GroupBox();
+            this.rdbPantallaEmpresa = new System.Windows.Forms.RadioButton();
+            this.rdbVistaComandera = new System.Windows.Forms.RadioButton();
             this.btnExtraerIpAsignada = new System.Windows.Forms.Button();
             this.btnExtraerNombreEquipo = new System.Windows.Forms.Button();
             this.cmbLocalidad = new MisControles.ComboDatos();
@@ -47,13 +49,12 @@
             this.TxtIPAsignada = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.txtNombreEquipo = new System.Windows.Forms.TextBox();
-            this.cmbEstado = new System.Windows.Forms.ComboBox();
-            this.lblEstaCajero = new System.Windows.Forms.Label();
             this.lbldescrCajero = new System.Windows.Forms.Label();
             this.txtDescripcion = new System.Windows.Forms.TextBox();
             this.lblcodigoCajero = new System.Windows.Forms.Label();
             this.txtCodigo = new System.Windows.Forms.TextBox();
             this.ttMensaje = new System.Windows.Forms.ToolTip(this.components);
+            this.chkHabilitado = new System.Windows.Forms.CheckBox();
             this.Grb_listReCanImpre.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvDatos)).BeginInit();
             this.Grb_opcioCanImpre.SuspendLayout();
@@ -68,7 +69,7 @@
             this.Grb_listReCanImpre.Controls.Add(this.dgvDatos);
             this.Grb_listReCanImpre.Location = new System.Drawing.Point(387, 77);
             this.Grb_listReCanImpre.Name = "Grb_listReCanImpre";
-            this.Grb_listReCanImpre.Size = new System.Drawing.Size(627, 286);
+            this.Grb_listReCanImpre.Size = new System.Drawing.Size(627, 327);
             this.Grb_listReCanImpre.TabIndex = 8;
             this.Grb_listReCanImpre.TabStop = false;
             this.Grb_listReCanImpre.Text = "Lista de Registros";
@@ -98,12 +99,13 @@
             // 
             this.dgvDatos.AllowUserToAddRows = false;
             this.dgvDatos.AllowUserToDeleteRows = false;
+            this.dgvDatos.BackgroundColor = System.Drawing.SystemColors.ControlLightLight;
             this.dgvDatos.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvDatos.Location = new System.Drawing.Point(13, 61);
             this.dgvDatos.Name = "dgvDatos";
             this.dgvDatos.ReadOnly = true;
             this.dgvDatos.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvDatos.Size = new System.Drawing.Size(598, 210);
+            this.dgvDatos.Size = new System.Drawing.Size(598, 251);
             this.dgvDatos.TabIndex = 0;
             this.dgvDatos.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvDatos_CellClick);
             this.dgvDatos.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvDatos_CellDoubleClick);
@@ -114,7 +116,7 @@
             this.Grb_opcioCanImpre.Controls.Add(this.btnLimpiar);
             this.Grb_opcioCanImpre.Controls.Add(this.btnEliminar);
             this.Grb_opcioCanImpre.Controls.Add(this.btnNuevo);
-            this.Grb_opcioCanImpre.Location = new System.Drawing.Point(12, 288);
+            this.Grb_opcioCanImpre.Location = new System.Drawing.Point(12, 329);
             this.Grb_opcioCanImpre.Name = "Grb_opcioCanImpre";
             this.Grb_opcioCanImpre.Size = new System.Drawing.Size(360, 75);
             this.Grb_opcioCanImpre.TabIndex = 7;
@@ -161,6 +163,9 @@
             // grupoDatos
             // 
             this.grupoDatos.BackColor = System.Drawing.Color.Transparent;
+            this.grupoDatos.Controls.Add(this.chkHabilitado);
+            this.grupoDatos.Controls.Add(this.rdbPantallaEmpresa);
+            this.grupoDatos.Controls.Add(this.rdbVistaComandera);
             this.grupoDatos.Controls.Add(this.btnExtraerIpAsignada);
             this.grupoDatos.Controls.Add(this.btnExtraerNombreEquipo);
             this.grupoDatos.Controls.Add(this.cmbLocalidad);
@@ -170,8 +175,6 @@
             this.grupoDatos.Controls.Add(this.TxtIPAsignada);
             this.grupoDatos.Controls.Add(this.label1);
             this.grupoDatos.Controls.Add(this.txtNombreEquipo);
-            this.grupoDatos.Controls.Add(this.cmbEstado);
-            this.grupoDatos.Controls.Add(this.lblEstaCajero);
             this.grupoDatos.Controls.Add(this.lbldescrCajero);
             this.grupoDatos.Controls.Add(this.txtDescripcion);
             this.grupoDatos.Controls.Add(this.lblcodigoCajero);
@@ -179,10 +182,32 @@
             this.grupoDatos.Enabled = false;
             this.grupoDatos.Location = new System.Drawing.Point(12, 77);
             this.grupoDatos.Name = "grupoDatos";
-            this.grupoDatos.Size = new System.Drawing.Size(360, 205);
+            this.grupoDatos.Size = new System.Drawing.Size(360, 246);
             this.grupoDatos.TabIndex = 6;
             this.grupoDatos.TabStop = false;
             this.grupoDatos.Text = "Datos del Registro";
+            // 
+            // rdbPantallaEmpresa
+            // 
+            this.rdbPantallaEmpresa.AutoSize = true;
+            this.rdbPantallaEmpresa.Location = new System.Drawing.Point(187, 178);
+            this.rdbPantallaEmpresa.Name = "rdbPantallaEmpresa";
+            this.rdbPantallaEmpresa.Size = new System.Drawing.Size(155, 17);
+            this.rdbPantallaEmpresa.TabIndex = 27;
+            this.rdbPantallaEmpresa.Text = "Pantalla Cliente Empresarial";
+            this.rdbPantallaEmpresa.UseVisualStyleBackColor = true;
+            // 
+            // rdbVistaComandera
+            // 
+            this.rdbVistaComandera.AutoSize = true;
+            this.rdbVistaComandera.Checked = true;
+            this.rdbVistaComandera.Location = new System.Drawing.Point(14, 178);
+            this.rdbVistaComandera.Name = "rdbVistaComandera";
+            this.rdbVistaComandera.Size = new System.Drawing.Size(105, 17);
+            this.rdbVistaComandera.TabIndex = 26;
+            this.rdbVistaComandera.TabStop = true;
+            this.rdbVistaComandera.Text = "Vista Comandera";
+            this.rdbVistaComandera.UseVisualStyleBackColor = true;
             // 
             // btnExtraerIpAsignada
             // 
@@ -281,31 +306,6 @@
             this.txtNombreEquipo.Size = new System.Drawing.Size(195, 20);
             this.txtNombreEquipo.TabIndex = 6;
             // 
-            // cmbEstado
-            // 
-            this.cmbEstado.Enabled = false;
-            this.cmbEstado.FormattingEnabled = true;
-            this.cmbEstado.Items.AddRange(new object[] {
-            "ACTIVO",
-            "ELIMINADO"});
-            this.cmbEstado.Location = new System.Drawing.Point(118, 167);
-            this.cmbEstado.Name = "cmbEstado";
-            this.cmbEstado.Size = new System.Drawing.Size(107, 21);
-            this.cmbEstado.TabIndex = 10;
-            this.cmbEstado.SelectedIndexChanged += new System.EventHandler(this.cmbEstado_SelectedIndexChanged);
-            // 
-            // lblEstaCajero
-            // 
-            this.lblEstaCajero.AutoSize = true;
-            this.lblEstaCajero.BackColor = System.Drawing.Color.Transparent;
-            this.lblEstaCajero.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblEstaCajero.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.lblEstaCajero.Location = new System.Drawing.Point(11, 168);
-            this.lblEstaCajero.Name = "lblEstaCajero";
-            this.lblEstaCajero.Size = new System.Drawing.Size(48, 15);
-            this.lblEstaCajero.TabIndex = 7;
-            this.lblEstaCajero.Text = "Estado:";
-            // 
             // lbldescrCajero
             // 
             this.lbldescrCajero.AutoSize = true;
@@ -346,13 +346,28 @@
             this.txtCodigo.Size = new System.Drawing.Size(195, 20);
             this.txtCodigo.TabIndex = 4;
             // 
+            // chkHabilitado
+            // 
+            this.chkHabilitado.AutoSize = true;
+            this.chkHabilitado.Checked = true;
+            this.chkHabilitado.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkHabilitado.Enabled = false;
+            this.chkHabilitado.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.chkHabilitado.ForeColor = System.Drawing.Color.Red;
+            this.chkHabilitado.Location = new System.Drawing.Point(14, 210);
+            this.chkHabilitado.Name = "chkHabilitado";
+            this.chkHabilitado.Size = new System.Drawing.Size(83, 17);
+            this.chkHabilitado.TabIndex = 61;
+            this.chkHabilitado.Text = "Habilitado";
+            this.chkHabilitado.UseVisualStyleBackColor = true;
+            // 
             // frmTerminales
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackColor = System.Drawing.Color.Silver;
-            this.ClientSize = new System.Drawing.Size(1023, 380);
+            this.ClientSize = new System.Drawing.Size(1023, 416);
             this.Controls.Add(this.Grb_listReCanImpre);
             this.Controls.Add(this.Grb_opcioCanImpre);
             this.Controls.Add(this.grupoDatos);
@@ -390,8 +405,6 @@
         private System.Windows.Forms.TextBox TxtIPAsignada;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox txtNombreEquipo;
-        private System.Windows.Forms.ComboBox cmbEstado;
-        private System.Windows.Forms.Label lblEstaCajero;
         private System.Windows.Forms.Label lbldescrCajero;
         private System.Windows.Forms.TextBox txtDescripcion;
         private System.Windows.Forms.Label lblcodigoCajero;
@@ -399,5 +412,8 @@
         private System.Windows.Forms.Button btnExtraerIpAsignada;
         private System.Windows.Forms.Button btnExtraerNombreEquipo;
         private System.Windows.Forms.ToolTip ttMensaje;
+        private System.Windows.Forms.RadioButton rdbPantallaEmpresa;
+        private System.Windows.Forms.RadioButton rdbVistaComandera;
+        private System.Windows.Forms.CheckBox chkHabilitado;
     }
 }

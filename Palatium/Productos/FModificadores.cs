@@ -20,9 +20,9 @@ namespace Palatium.Productos
     {
         //VARIABLES, INSTANCIAS
         ConexionBD.ConexionBD conexion = new ConexionBD.ConexionBD();
-        VentanasMensajes.frmMensajeCatch catchMensaje = new VentanasMensajes.frmMensajeCatch();
-        VentanasMensajes.frmMensajeOK ok = new VentanasMensajes.frmMensajeOK();
-        VentanasMensajes.frmMensajeSiNo SiNo = new VentanasMensajes.frmMensajeSiNo();
+        VentanasMensajes.frmMensajeNuevoCatch catchMensaje;
+        VentanasMensajes.frmMensajeNuevoOk ok;
+        VentanasMensajes.frmMensajeNuevoSiNo SiNo;
 
         Clases.ClaseValidarCaracteres caracteres = new Clases.ClaseValidarCaracteres();
         
@@ -38,6 +38,7 @@ namespace Palatium.Productos
         int iUnidadCompra;
         int iUnidadConsumo;
         int iCuenta;
+        int iHabilitado;
 
         double dSubtotal;
 
@@ -70,10 +71,12 @@ namespace Palatium.Productos
             llenarComboTipoProducto();
             llenarDestinoImpresion();
             datosListas();
+            chkHabilitado.Checked = true;
+            chkHabilitado.Enabled = false;
 
             if (identificadorModificador() == true)
             {
-                llenarGrid(0);
+                llenarGrid();
             }
         }
 
@@ -113,14 +116,16 @@ namespace Palatium.Productos
 
                 else
                 {
-                    catchMensaje.LblMensaje.Text = sSql;
+                    catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
+                    catchMensaje.lblMensaje.Text = conexion.sMensajeError; ;
                     catchMensaje.ShowDialog();
                 }
             }
 
             catch (Exception ex)
             {
-                catchMensaje.LblMensaje.Text = ex.Message;
+                catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
+                catchMensaje.lblMensaje.Text = ex.Message;
                 catchMensaje.ShowDialog();
             }
         }
@@ -145,6 +150,8 @@ namespace Palatium.Productos
             chkModificable.Checked = false;
             chkPrecioModificable.Checked = false;
             chkPagaIva.Checked = false;
+            chkHabilitado.Checked = true;
+            chkHabilitado.Enabled = false;
 
             grupoDatos.Enabled = false;
             grupoPrecio.Enabled = false;
@@ -152,12 +159,9 @@ namespace Palatium.Productos
             grupoImpresion.Enabled = false;
 
             btnNuevo.Text = "Nuevo";
-
             btnAnular.Enabled = false;
 
-            cmbEstado.Text = "ACTIVO";
-
-            llenarGrid(0);
+            llenarGrid();
 
             txtBuscar.Focus();
         }
@@ -173,6 +177,8 @@ namespace Palatium.Productos
                 sSql += "where UP.id_producto = P.id_producto" + Environment.NewLine;
                 sSql += "and P.estado = 'A'" + Environment.NewLine;
                 sSql += "and UP.estado = 'A'" + Environment.NewLine;
+                sSql += "and P.modificador = 1";
+                sSql += "and P.nivel = 2";
                 //sSql += "and P.codigo = '" + Program.sCodigoModificador + "'";
 
                 dtConsulta = new DataTable();
@@ -212,14 +218,16 @@ namespace Palatium.Productos
 
                 else
                 {
-                    catchMensaje.LblMensaje.Text = sSql;
+                    catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
+                    catchMensaje.lblMensaje.Text = conexion.sMensajeError;
                     catchMensaje.ShowDialog();
                     return false;
                 }
             }
             catch (Exception exc)
             {
-                catchMensaje.LblMensaje.Text = exc.ToString();
+                catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
+                catchMensaje.lblMensaje.Text = exc.ToString();
                 catchMensaje.ShowDialog();
                 return false;
             }
@@ -231,10 +239,10 @@ namespace Palatium.Productos
             try
             {
                 sSql = "";
-                sSql = sSql + "select id_pos_impresion_comanda, descripcion" + Environment.NewLine;
-                sSql = sSql + "from pos_impresion_comanda" + Environment.NewLine;
-                sSql = sSql + "where estado = 'A'" + Environment.NewLine;
-                sSql = sSql + "order by id_pos_impresion_comanda";
+                sSql += "select id_pos_impresion_comanda, descripcion" + Environment.NewLine;
+                sSql += "from pos_impresion_comanda" + Environment.NewLine;
+                sSql += "where estado = 'A'" + Environment.NewLine;
+                sSql += "order by id_pos_impresion_comanda";
 
                 dtConsulta = new DataTable();
                 dtConsulta.Clear();
@@ -248,7 +256,8 @@ namespace Palatium.Productos
             }
             catch (Exception ex)
             {
-                catchMensaje.LblMensaje.Text = ex.Message;
+                catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
+                catchMensaje.lblMensaje.Text = ex.Message;
                 catchMensaje.ShowDialog();
             }
         }
@@ -259,9 +268,9 @@ namespace Palatium.Productos
             try
             {
                 sSql = "";
-                sSql = sSql + "select id_pos_clase_producto, descripcion" + Environment.NewLine;
-                sSql = sSql + "from pos_clase_producto" + Environment.NewLine;
-                sSql = sSql + "where estado = 'A'";
+                sSql += "select id_pos_clase_producto, descripcion" + Environment.NewLine;
+                sSql += "from pos_clase_producto" + Environment.NewLine;
+                sSql += "where estado = 'A'";
 
                 dtConsulta = new DataTable();
                 dtConsulta.Clear();
@@ -275,7 +284,8 @@ namespace Palatium.Productos
             }
             catch (Exception exc)
             {
-                catchMensaje.LblMensaje.Text = exc.ToString();
+                catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
+                catchMensaje.lblMensaje.Text = exc.ToString();
                 catchMensaje.ShowDialog();
             }
         }
@@ -286,9 +296,9 @@ namespace Palatium.Productos
             try
             {
                 sSql = "";
-                sSql = sSql + "select id_pos_tipo_producto, descripcion" + Environment.NewLine;
-                sSql = sSql + "from pos_tipo_producto" + Environment.NewLine;
-                sSql = sSql + "where estado = 'A'";
+                sSql += "select id_pos_tipo_producto, descripcion" + Environment.NewLine;
+                sSql += "from pos_tipo_producto" + Environment.NewLine;
+                sSql += "where estado = 'A'";
 
                 dtConsulta = new DataTable();
                 dtConsulta.Clear();
@@ -303,8 +313,8 @@ namespace Palatium.Productos
 
             catch (Exception exc)
             {
-                catchMensaje.LblMensaje.Text = exc.ToString();
-                catchMensaje.ShowInTaskbar = false;
+                catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
+                catchMensaje.lblMensaje.Text = exc.ToString();
                 catchMensaje.ShowDialog();
             }
         }
@@ -315,14 +325,14 @@ namespace Palatium.Productos
             try
             {
                 sSql = "";
-                sSql = sSql + "Select PRD.codigo, '['+PRD.codigo+'] '+ NOM.nombre nombre" + Environment.NewLine;
-                sSql = sSql + "from cv401_productos PRD, cv401_nombre_productos NOM" + Environment.NewLine;
-                sSql = sSql + "where PRD.nivel = 1" + Environment.NewLine;
-                sSql = sSql + "and PRD.ESTADO = 'A'" + Environment.NewLine;
-                sSql = sSql + "and NOM.ESTADO = 'A'" + Environment.NewLine;
-                sSql = sSql + "and PRD.id_producto = NOM.id_producto" + Environment.NewLine;
-                sSql = sSql + "and NOM.nombre_interno = 1" + Environment.NewLine;
-                sSql = sSql + "order by PRD.codigo ";
+                sSql += "Select PRD.codigo, '['+PRD.codigo+'] '+ NOM.nombre nombre" + Environment.NewLine;
+                sSql += "from cv401_productos PRD, cv401_nombre_productos NOM" + Environment.NewLine;
+                sSql += "where PRD.nivel = 1" + Environment.NewLine;
+                sSql += "and PRD.ESTADO = 'A'" + Environment.NewLine;
+                sSql += "and NOM.ESTADO = 'A'" + Environment.NewLine;
+                sSql += "and PRD.id_producto = NOM.id_producto" + Environment.NewLine;
+                sSql += "and NOM.nombre_interno = 1" + Environment.NewLine;
+                sSql += "order by PRD.codigo ";
 
                 dtConsulta = new DataTable();
                 dtConsulta.Clear();
@@ -339,7 +349,8 @@ namespace Palatium.Productos
 
             catch (Exception ex)
             {
-                catchMensaje.LblMensaje.Text = ex.Message;
+                catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
+                catchMensaje.lblMensaje.Text = ex.Message;
                 catchMensaje.ShowDialog();
             }
         }
@@ -369,73 +380,57 @@ namespace Palatium.Productos
 
             catch (Exception ex)
             {
-                catchMensaje.LblMensaje.Text = ex.Message;
+                catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
+                catchMensaje.lblMensaje.Text = ex.Message;
                 catchMensaje.ShowDialog();
             }
         }
 
         //FUNCION PARA LLENAR EL GRID
-        private void llenarGrid(int iOp)
+        private void llenarGrid()
         {
             try
             {
                 sSql = "";
-                sSql += "select P.id_producto, P.codigo as CODIGO, NP.nombre as MODIFICADOR, P.modificable as Modificable," + Environment.NewLine;
-                sSql += "P.precio_modificable as Prec_Modificable, P.paga_iva as Paga_Iva, P.secuencia as SECUENCIA," + Environment.NewLine;
-                sSql += "P.id_pos_clase_producto, P.id_pos_tipo_producto," + Environment.NewLine;
-                sSql += "case P.estado when 'A' then 'ACTIVO' else 'INACTIVO' end as ESTADO," + Environment.NewLine;
-                sSql += "0.00 as precio_compra, 0.00 as precio_minorista," + Environment.NewLine;
-                sSql += conexion.GFun_St_esnulo() + "(P.id_pos_impresion_comanda, 0) id_pos_impresion_comanda" + Environment.NewLine;
-                sSql += "from cv401_productos P, cv401_nombre_productos NP" + Environment.NewLine;
-                sSql += "where P.id_producto = NP.id_producto" + Environment.NewLine;
-                sSql += "and P.estado = 'A'" + Environment.NewLine;
-                sSql += "and NP.estado = 'A'" + Environment.NewLine;
-                sSql += "and id_producto_padre in (" + Environment.NewLine;
-                sSql += "select id_producto from cv401_productos" + Environment.NewLine;
-                //sSql += "where codigo ='" + Program.sCodigoModificador + "') " + Environment.NewLine;
-                sSql += "and P.nivel = 3" + Environment.NewLine;
-                sSql += "and modificador = 1" + Environment.NewLine;
-                sSql += "and P.subcategoria = 0" + Environment.NewLine;
-                sSql += "and P.ultimo_nivel = 1" + Environment.NewLine;
+                sSql += "select * from pos_vw_lista_modificadores" + Environment.NewLine;
 
-                if (iOp == 1)
-                {
-                    sSql += "and NP.nombre LIKE '%" + txtBuscar.Text.Trim() + "%'" + Environment.NewLine;
-                }
+                if (txtBuscar.Text.Trim() != "")
+                    sSql += "where modificador like '%" + txtBuscar.Text.Trim() + "%'" + Environment.NewLine;
 
-                sSql += "order by P.codigo";
+                sSql += "order by codigo";
 
                 dtConsulta = new DataTable();
                 dtConsulta.Clear();
 
                 bRespuesta = conexion.GFun_Lo_Busca_Registro(dtConsulta, sSql);
 
-                if (bRespuesta == true)
+                if (bRespuesta == false)
                 {
-                    if (dtConsulta.Rows.Count > 0)
-                    {
-                        dgvDatos.DataSource = dtConsulta;
-                        completarGrid();
-                    }
+                    catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
+                    catchMensaje.lblMensaje.Text = conexion.sMensajeError;
+                    catchMensaje.ShowDialog();
+                    return;
+                }
 
-                    else
-                    {
-                        dtConsulta = new DataTable();
-                        dtConsulta.Clear();
-                        dgvDatos.DataSource = dtConsulta;
-                    }
+                if (dtConsulta.Rows.Count > 0)
+                {
+                    dgvDatos.DataSource = dtConsulta;
+                    completarGrid();
+                    dgvDatos.ClearSelection();
                 }
 
                 else
                 {
-                    catchMensaje.LblMensaje.Text = sSql;
-                    catchMensaje.ShowDialog();
-                }
+                    dtConsulta = new DataTable();
+                    dtConsulta.Clear();
+                    dgvDatos.DataSource = dtConsulta;
+                }                
             }
 
             catch (Exception ex)
             {
-                catchMensaje.LblMensaje.Text = ex.Message;
+                catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
+                catchMensaje.lblMensaje.Text = ex.Message;
                 catchMensaje.ShowDialog();
             }
         }
@@ -451,12 +446,12 @@ namespace Palatium.Productos
 
                     //INSTRUCCION PARA REEMPLAZAR EL VALOR DE LA COLUMNA LISTA BASE
                     sSql = "";
-                    sSql = sSql + "select PR.valor" + Environment.NewLine;
-                    sSql = sSql + "from cv403_precios_productos PR inner join" + Environment.NewLine;
-                    sSql = sSql + "cv401_productos P on PR.id_producto = P.id_producto" + Environment.NewLine;
-                    sSql = sSql + "where id_lista_precio in (" + iIdListaBase + ", " + iIdListaMinorista + ")" + Environment.NewLine;
-                    sSql = sSql + "and P.id_producto = " + iIdProducto + Environment.NewLine;
-                    sSql = sSql + "and PR.estado = 'A'";
+                    sSql += "select PR.valor" + Environment.NewLine;
+                    sSql += "from cv403_precios_productos PR inner join" + Environment.NewLine;
+                    sSql += "cv401_productos P on PR.id_producto = P.id_producto" + Environment.NewLine;
+                    sSql += "where id_lista_precio in (" + iIdListaBase + ", " + iIdListaMinorista + ")" + Environment.NewLine;
+                    sSql += "and P.id_producto = " + iIdProducto + Environment.NewLine;
+                    sSql += "and PR.estado = 'A'";
 
                     dtConsulta = new DataTable();
                     dtConsulta.Clear();
@@ -473,24 +468,28 @@ namespace Palatium.Productos
 
                         else
                         {
-                            catchMensaje.LblMensaje.Text = sSql;
+                            catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
+                            catchMensaje.lblMensaje.Text = conexion.sMensajeError;
                             catchMensaje.ShowDialog();
-                            goto fin;
+                            return;
                         }
                     }
 
                     else
                     {
-                        catchMensaje.LblMensaje.Text = sSql;
+                        catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
+                        catchMensaje.lblMensaje.Text = conexion.sMensajeError;
                         catchMensaje.ShowDialog();
-                        goto fin;
+                        return;
                     }                    
                 }
 
                 //OCULTAR COLUMAS Y PONER TAMAÑOS AL DATAGRID VIEW
                 dgvDatos.Columns[1].Width = 80;
-                dgvDatos.Columns[2].Width = 190;
+                //dgvDatos.Columns[2].Width = 250;
                 dgvDatos.Columns[6].Width = 80;
+                dgvDatos.Columns[9].Width = 80;
+                dgvDatos.Columns[11].Width = 80;
 
                 dgvDatos.Columns[0].Visible = false;
                 dgvDatos.Columns[3].Visible = false;
@@ -499,25 +498,24 @@ namespace Palatium.Productos
                 dgvDatos.Columns[7].Visible = false;
                 dgvDatos.Columns[8].Visible = false;
                 dgvDatos.Columns[10].Visible = false;                
-                dgvDatos.Columns[11].Visible = false;
                 dgvDatos.Columns[12].Visible = false;
+                dgvDatos.Columns[13].Visible = false;
 
+                dgvDatos.Columns[2].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
                 dgvDatos.Columns[1].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
                 dgvDatos.Columns[6].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
                 dgvDatos.Columns[9].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+                dgvDatos.Columns[11].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
 
-                goto fin;
+                return;
             }
 
             catch (Exception ex)
             {
-                catchMensaje.LblMensaje.Text = ex.Message;
+                catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
+                catchMensaje.lblMensaje.Text = ex.Message;
                 catchMensaje.ShowDialog();
-                goto fin;
             }
-
-        fin:
-            { }
         }
 
         //FUNCION PARA CONTAR REGISTROS
@@ -543,7 +541,8 @@ namespace Palatium.Productos
 
                 else
                 {
-                    catchMensaje.LblMensaje.Text = sSql;
+                    catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
+                    catchMensaje.lblMensaje.Text = conexion.sMensajeError;
                     catchMensaje.ShowDialog();
                     return -1;
                 }
@@ -551,7 +550,8 @@ namespace Palatium.Productos
 
             catch(Exception ex)
             {
-                catchMensaje.LblMensaje.Text = ex.Message;
+                catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
+                catchMensaje.lblMensaje.Text = ex.Message;
                 catchMensaje.ShowDialog();
                 return -1;
             }
@@ -581,7 +581,8 @@ namespace Palatium.Productos
 
                 else
                 {
-                    catchMensaje.LblMensaje.Text = sSql;
+                    catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
+                    catchMensaje.lblMensaje.Text = conexion.sMensajeError;
                     catchMensaje.ShowDialog();
                     return -1;
                 }
@@ -589,7 +590,8 @@ namespace Palatium.Productos
 
             catch (Exception ex)
             {
-                catchMensaje.LblMensaje.Text = ex.Message;
+                catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
+                catchMensaje.lblMensaje.Text = ex.Message;
                 catchMensaje.ShowDialog();
                 return -1;
             }
@@ -607,54 +609,54 @@ namespace Palatium.Productos
 
                 if (iCuenta == -1)
                 {
-                    goto fin;
+                    return;
                 }
 
                 else if (iCuenta > 0)
                 {
-                    ok.LblMensaje.Text = "El código ingresado ya se encuentra registrado en el sistema.";
+                    ok = new VentanasMensajes.frmMensajeNuevoOk();
+                    ok.lblMensaje.Text = "El código ingresado ya se encuentra registrado en el sistema.";
                     ok.ShowDialog();
-                    goto fin;
+                    return;
                 }
 
                 //AQUI INICIA PROCESO DE ACTUALIZACION
                 if (!conexion.GFun_Lo_Maneja_Transaccion(Program.G_INICIA_TRANSACCION))
                 {
-                    ok.LblMensaje.Text = "Error al abrir transacción.";
+                    ok = new VentanasMensajes.frmMensajeNuevoOk();
+                    ok.lblMensaje.Text = "Error al abrir transacción.";
                     ok.ShowDialog();
                     limpiarTodo();
-                    goto fin;
+                    return;
                 }
 
                 //INSTRUCCION SQL PARA INSERTAR EN LA TABLA CV401_PRODUCTOS
                 sSql = "";
-                sSql = sSql + "insert into cv401_productos (" + Environment.NewLine;
-                sSql = sSql + "idempresa, codigo, id_Producto_padre, estado, Nivel," + Environment.NewLine;
-                sSql = sSql + "modificable, precio_modificable, paga_iva, secuencia," + Environment.NewLine;
-                sSql = sSql + "modificador, subcategoria, ultimo_nivel," + Environment.NewLine;
-                sSql = sSql + "stock_min, stock_max, Expira, fecha_ingreso, usuario_ingreso," + Environment.NewLine;
-                sSql = sSql + "terminal_ingreso, id_pos_tipo_producto, id_pos_clase_producto," + Environment.NewLine;
-                sSql = sSql + "id_pos_impresion_comanda)" + Environment.NewLine;
-                sSql = sSql + "values(" + Environment.NewLine;
-                sSql = sSql + Program.iIdEmpresa + ", '" + sCodigoValidar + "', " + iIdPadre + "," + Environment.NewLine;
-                sSql = sSql + "'A', 3, " + iModificable + ", " + iPrecioModificable + ", " + iPagaIva + "," + Environment.NewLine;
-                sSql = sSql + Convert.ToInt32(txtSecuencia.Text.ToString().Trim()) + ", 1, 0, 1, 0, 0, 1, " + Environment.NewLine;
-                sSql = sSql + "GETDATE(), '" + Program.sDatosMaximo[0] + "', '" + Program.sDatosMaximo[1] + "'," + Environment.NewLine;
-                sSql = sSql + Convert.ToInt32(cmbTipoProducto.SelectedValue) + ", " + Convert.ToInt32(cmbClaseProducto.SelectedValue) + "," + Environment.NewLine;
-                sSql = sSql + Convert.ToInt32(cmbDestinoImpresion.SelectedValue) + " )";
+                sSql += "insert into cv401_productos (" + Environment.NewLine;
+                sSql += "idempresa, codigo, id_Producto_padre, estado, Nivel," + Environment.NewLine;
+                sSql += "modificable, precio_modificable, paga_iva, secuencia," + Environment.NewLine;
+                sSql += "modificador, subcategoria, ultimo_nivel," + Environment.NewLine;
+                sSql += "stock_min, stock_max, Expira, fecha_ingreso, usuario_ingreso," + Environment.NewLine;
+                sSql += "terminal_ingreso, id_pos_tipo_producto, id_pos_clase_producto," + Environment.NewLine;
+                sSql += "id_pos_impresion_comanda, is_active)" + Environment.NewLine;
+                sSql += "values(" + Environment.NewLine;
+                sSql += Program.iIdEmpresa + ", '" + sCodigoValidar + "', " + iIdPadre + "," + Environment.NewLine;
+                sSql += "'A', 3, " + iModificable + ", " + iPrecioModificable + ", " + iPagaIva + "," + Environment.NewLine;
+                sSql += Convert.ToInt32(txtSecuencia.Text.ToString().Trim()) + ", 1, 0, 1, 0, 0, 1, " + Environment.NewLine;
+                sSql += "GETDATE(), '" + Program.sDatosMaximo[0] + "', '" + Program.sDatosMaximo[1] + "'," + Environment.NewLine;
+                sSql += Convert.ToInt32(cmbTipoProducto.SelectedValue) + ", " + Convert.ToInt32(cmbClaseProducto.SelectedValue) + "," + Environment.NewLine;
+                sSql += Convert.ToInt32(cmbDestinoImpresion.SelectedValue) + ", 1)";
 
                 //EJECUTAR LA INSTRUCCIÓN SQL
                 if (!conexion.GFun_Lo_Ejecuta_SQL(sSql))
                 {
-                    catchMensaje.LblMensaje.Text = sSql;
+                    catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
+                    catchMensaje.lblMensaje.Text = conexion.sMensajeError;
                     catchMensaje.ShowDialog();
                     goto reversa;
                 }
 
                 //PROCEDIMINTO PARA EXTRAER EL ID DEL PRODUCTO REGISTRADO
-                dtConsulta = new DataTable();
-                dtConsulta.Clear();
-
                 string sTabla = "cv401_productos";
                 string sCampo = "id_Producto"; ;
 
@@ -662,7 +664,8 @@ namespace Palatium.Productos
 
                 if (iMaximo == -1)
                 {
-                    ok.LblMensaje.Text = "No se pudo obtener el codigo de productos.";
+                    ok = new VentanasMensajes.frmMensajeNuevoOk();
+                    ok.lblMensaje.Text = "No se pudo obtener el codigo de productos.";
                     ok.ShowDialog();
                     goto reversa;
                 }
@@ -674,18 +677,19 @@ namespace Palatium.Productos
 
                 //INSTRUCCION PARA INSERTAR EN LA TABLA CV401_NOMBRE_PRODUCTOS
                 sSql = "";
-                sSql = sSql + "insert into cv401_nombre_productos (" + Environment.NewLine;
-                sSql = sSql + "id_Producto, cg_tipo_nombre, nombre, nombre_interno," + Environment.NewLine;
-                sSql = sSql + "estado, numero_replica_trigger, numero_control_replica," + Environment.NewLine;
-                sSql = sSql + "fecha_ingreso, usuario_ingreso, terminal_ingreso)" + Environment.NewLine;
-                sSql = sSql + "values(" + Environment.NewLine;
-                sSql = sSql + iIdProducto + ", 5076, 'EXTRA " + txtDescripcion.Text.Trim().ToUpper() + "'," + Environment.NewLine;
-                sSql = sSql + "1, 'A', 1, 1, GETDATE(), '" + Program.sDatosMaximo[0] + "', '" + Program.sDatosMaximo[1] + "')";
+                sSql += "insert into cv401_nombre_productos (" + Environment.NewLine;
+                sSql += "id_Producto, cg_tipo_nombre, nombre, nombre_interno," + Environment.NewLine;
+                sSql += "estado, numero_replica_trigger, numero_control_replica," + Environment.NewLine;
+                sSql += "fecha_ingreso, usuario_ingreso, terminal_ingreso)" + Environment.NewLine;
+                sSql += "values(" + Environment.NewLine;
+                sSql += iIdProducto + ", 5076, 'EXTRA " + txtDescripcion.Text.Trim().ToUpper() + "'," + Environment.NewLine;
+                sSql += "1, 'A', 1, 1, GETDATE(), '" + Program.sDatosMaximo[0] + "', '" + Program.sDatosMaximo[1] + "')";
 
                 //EJECUTAR LA INSTRUCCIÓN SQL
                 if (!conexion.GFun_Lo_Ejecuta_SQL(sSql))
                 {
-                    catchMensaje.LblMensaje.Text = sSql;
+                    catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
+                    catchMensaje.lblMensaje.Text = conexion.sMensajeError;
                     catchMensaje.ShowDialog();
                     goto reversa;
                 }
@@ -694,20 +698,21 @@ namespace Palatium.Productos
                 dSubtotal = Convert.ToDouble(txtPrecioCompra.Text) / (1 + (Program.iva + Program.servicio));
 
                 sSql = "";
-                sSql = sSql + "insert into cv403_precios_productos (" + Environment.NewLine;
-                sSql = sSql + "id_Lista_Precio, id_Producto, valor_Porcentaje," + Environment.NewLine;
-                sSql = sSql + "valor, fecha_inicio, fecha_final, estado," + Environment.NewLine;
-                sSql = sSql + "numero_replica_trigger, numero_control_replica," + Environment.NewLine;
-                sSql = sSql + "fecha_ingreso, usuario_ingreso, terminal_ingreso)" + Environment.NewLine;
-                sSql = sSql + "values(" + Environment.NewLine;
-                sSql = sSql + iIdListaBase + ", " + iIdProducto + ", 0, " + dSubtotal + ", GETDATE()," + Environment.NewLine;
-                sSql = sSql + "'" + sFechaListaBase + "', 'A', 1, 1, GETDATE(), '" + Program.sDatosMaximo[0] + "'," + Environment.NewLine;
-                sSql = sSql + "'" + Program.sDatosMaximo[1] + "')";
+                sSql += "insert into cv403_precios_productos (" + Environment.NewLine;
+                sSql += "id_Lista_Precio, id_Producto, valor_Porcentaje," + Environment.NewLine;
+                sSql += "valor, fecha_inicio, fecha_final, estado," + Environment.NewLine;
+                sSql += "numero_replica_trigger, numero_control_replica," + Environment.NewLine;
+                sSql += "fecha_ingreso, usuario_ingreso, terminal_ingreso)" + Environment.NewLine;
+                sSql += "values(" + Environment.NewLine;
+                sSql += iIdListaBase + ", " + iIdProducto + ", 0, " + dSubtotal + ", GETDATE()," + Environment.NewLine;
+                sSql += "'" + sFechaListaBase + "', 'A', 1, 1, GETDATE(), '" + Program.sDatosMaximo[0] + "'," + Environment.NewLine;
+                sSql += "'" + Program.sDatosMaximo[1] + "')";
 
                 //EJECUTAR LA INSTRUCCIÓN SQL
                 if (!conexion.GFun_Lo_Ejecuta_SQL(sSql))
                 {
-                    catchMensaje.LblMensaje.Text = sSql;
+                    catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
+                    catchMensaje.lblMensaje.Text = conexion.sMensajeError;
                     catchMensaje.ShowDialog();
                     goto reversa;
                 }
@@ -716,20 +721,21 @@ namespace Palatium.Productos
                 dSubtotal = Convert.ToDouble(txtPrecioMinorista.Text) / (1 + (Program.iva + Program.servicio));
 
                 sSql = "";
-                sSql = sSql + "insert into cv403_precios_productos (" + Environment.NewLine;
-                sSql = sSql + "id_Lista_Precio, id_Producto, valor_Porcentaje," + Environment.NewLine;
-                sSql = sSql + "valor, fecha_inicio, fecha_final, estado," + Environment.NewLine;
-                sSql = sSql + "numero_replica_trigger, numero_control_replica," + Environment.NewLine;
-                sSql = sSql + "fecha_ingreso, usuario_ingreso, terminal_ingreso)" + Environment.NewLine;
-                sSql = sSql + "values(" + Environment.NewLine;
-                sSql = sSql + iIdListaMinorista + ", " + iIdProducto + ", 0, " + dSubtotal + ", GETDATE()," + Environment.NewLine;
-                sSql = sSql + "'" + sFechaListaMinorista + "', 'A', 1, 1, GETDATE(), '" + Program.sDatosMaximo[0] + "'," + Environment.NewLine;
-                sSql = sSql + "'" + Program.sDatosMaximo[1] + "')";
+                sSql += "insert into cv403_precios_productos (" + Environment.NewLine;
+                sSql += "id_Lista_Precio, id_Producto, valor_Porcentaje," + Environment.NewLine;
+                sSql += "valor, fecha_inicio, fecha_final, estado," + Environment.NewLine;
+                sSql += "numero_replica_trigger, numero_control_replica," + Environment.NewLine;
+                sSql += "fecha_ingreso, usuario_ingreso, terminal_ingreso)" + Environment.NewLine;
+                sSql += "values(" + Environment.NewLine;
+                sSql += iIdListaMinorista + ", " + iIdProducto + ", 0, " + dSubtotal + ", GETDATE()," + Environment.NewLine;
+                sSql += "'" + sFechaListaMinorista + "', 'A', 1, 1, GETDATE(), '" + Program.sDatosMaximo[0] + "'," + Environment.NewLine;
+                sSql += "'" + Program.sDatosMaximo[1] + "')";
 
                 //EJECUTAR LA INSTRUCCIÓN SQL
                 if (!conexion.GFun_Lo_Ejecuta_SQL(sSql))
                 {
-                    catchMensaje.LblMensaje.Text = sSql;
+                    catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
+                    catchMensaje.lblMensaje.Text = conexion.sMensajeError;
                     catchMensaje.ShowDialog();
                     goto reversa;
                 }
@@ -737,62 +743,66 @@ namespace Palatium.Productos
                 //INSTRUCCIONES PARA INSERTAR EN  LA TABLA CV401_UNIDADES_PRODUCTOS
                 //INSERTAR LA UNIDAD DE COMPRA
                 sSql = "";
-                sSql = sSql + "insert into cv401_unidades_productos (" + Environment.NewLine;
-                sSql = sSql + "id_Producto, cg_tipo_unidad, cg_unidad, unidad_compra," + Environment.NewLine;
-                sSql = sSql + "estado, usuario_creacion, terminal_creacion, fecha_creacion," + Environment.NewLine;
-                sSql = sSql + "numero_replica_trigger, numero_control_replica, fecha_ingreso," + Environment.NewLine;
-                sSql = sSql + " usuario_ingreso, terminal_ingreso)" + Environment.NewLine;
-                sSql = sSql + "values(" + Environment.NewLine;
-                sSql = sSql + iIdProducto + ", " + iTipoUnidadCompra + ", " + iUnidadCompra + "," + Environment.NewLine;
-                sSql = sSql + "1, 'A', '" + Program.sDatosMaximo[0] + "', '" + Program.sDatosMaximo[1] + "'," + Environment.NewLine;
-                sSql = sSql + "GETDATE(), 1, 1, GETDATE(), '" + Program.sDatosMaximo[0] + "', '" + Program.sDatosMaximo[1] + "')";
+                sSql += "insert into cv401_unidades_productos (" + Environment.NewLine;
+                sSql += "id_Producto, cg_tipo_unidad, cg_unidad, unidad_compra," + Environment.NewLine;
+                sSql += "estado, usuario_creacion, terminal_creacion, fecha_creacion," + Environment.NewLine;
+                sSql += "numero_replica_trigger, numero_control_replica, fecha_ingreso," + Environment.NewLine;
+                sSql += " usuario_ingreso, terminal_ingreso)" + Environment.NewLine;
+                sSql += "values(" + Environment.NewLine;
+                sSql += iIdProducto + ", " + iTipoUnidadCompra + ", " + iUnidadCompra + "," + Environment.NewLine;
+                sSql += "1, 'A', '" + Program.sDatosMaximo[0] + "', '" + Program.sDatosMaximo[1] + "'," + Environment.NewLine;
+                sSql += "GETDATE(), 1, 1, GETDATE(), '" + Program.sDatosMaximo[0] + "', '" + Program.sDatosMaximo[1] + "')";
 
                 //EJECUTAR LA INSTRUCCIÓN SQL
                 if (!conexion.GFun_Lo_Ejecuta_SQL(sSql))
                 {
-                    catchMensaje.LblMensaje.Text = sSql;
+                    catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
+                    catchMensaje.lblMensaje.Text = conexion.sMensajeError;
                     catchMensaje.ShowDialog();
                     goto reversa;
                 }
 
                 //INSERTAR LA UNIDAD DE CONSUMO
                 sSql = "";
-                sSql = sSql + "insert into cv401_unidades_productos (" + Environment.NewLine;
-                sSql = sSql + "id_Producto, cg_tipo_unidad, cg_unidad, unidad_compra," + Environment.NewLine;
-                sSql = sSql + "estado, usuario_creacion, terminal_creacion, fecha_creacion," + Environment.NewLine;
-                sSql = sSql + "numero_replica_trigger, numero_control_replica, fecha_ingreso," + Environment.NewLine;
-                sSql = sSql + "usuario_ingreso, terminal_ingreso)" + Environment.NewLine;
-                sSql = sSql + "values(" + Environment.NewLine;
-                sSql = sSql + iIdProducto + ", " + iTipoUnidadConsumo + ", " + iUnidadConsumo + "," + Environment.NewLine;
-                sSql = sSql + "0, 'A', '" + Program.sDatosMaximo[0] + "', '" + Program.sDatosMaximo[1] + "'," + Environment.NewLine;
-                sSql = sSql + "GETDATE(), 1, 1, GETDATE(), '" + Program.sDatosMaximo[0] + "', '" + Program.sDatosMaximo[1] + "')";
+                sSql += "insert into cv401_unidades_productos (" + Environment.NewLine;
+                sSql += "id_Producto, cg_tipo_unidad, cg_unidad, unidad_compra," + Environment.NewLine;
+                sSql += "estado, usuario_creacion, terminal_creacion, fecha_creacion," + Environment.NewLine;
+                sSql += "numero_replica_trigger, numero_control_replica, fecha_ingreso," + Environment.NewLine;
+                sSql += "usuario_ingreso, terminal_ingreso)" + Environment.NewLine;
+                sSql += "values(" + Environment.NewLine;
+                sSql += iIdProducto + ", " + iTipoUnidadConsumo + ", " + iUnidadConsumo + "," + Environment.NewLine;
+                sSql += "0, 'A', '" + Program.sDatosMaximo[0] + "', '" + Program.sDatosMaximo[1] + "'," + Environment.NewLine;
+                sSql += "GETDATE(), 1, 1, GETDATE(), '" + Program.sDatosMaximo[0] + "', '" + Program.sDatosMaximo[1] + "')";
 
                 //EJECUTAR LA INSTRUCCIÓN SQL
                 if (!conexion.GFun_Lo_Ejecuta_SQL(sSql))
                 {
-                    catchMensaje.LblMensaje.Text = sSql;
+                    catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
+                    catchMensaje.lblMensaje.Text = conexion.sMensajeError;
                     catchMensaje.ShowDialog();
                     goto reversa;
                 }
 
                 //SI SE EJECUTA TODO REALIZA EL COMMIT
                 conexion.GFun_Lo_Maneja_Transaccion(Program.G_TERMINA_TRANSACCION);
-                ok.LblMensaje.Text = "Registro ingresado correctamente.";
+
+                ok = new VentanasMensajes.frmMensajeNuevoOk();
+                ok.lblMensaje.Text = "Registro ingresado correctamente.";
                 ok.ShowDialog();
                 limpiarTodo();
-                llenarGrid(1);
-                goto fin;
+                llenarGrid();
+                return;
             }
             
             catch (Exception ex)
             {
-                catchMensaje.LblMensaje.Text = sSql;
+                catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
+                catchMensaje.lblMensaje.Text = ex.Message;
                 catchMensaje.ShowDialog();
+                goto reversa;
             }
 
             reversa: { conexion.GFun_Lo_Maneja_Transaccion(Program.G_REVERSA_TRANSACCION); }
-
-            fin: { }
         }
 
         //FUNCION PARA MODIFICAR REGISTROS EN LA BASE DE DATOS
@@ -803,7 +813,8 @@ namespace Palatium.Productos
                 //AQUI INICIA PROCESO DE ACTUALIZACION
                 if (!conexion.GFun_Lo_Maneja_Transaccion(Program.G_INICIA_TRANSACCION))
                 {
-                    ok.LblMensaje.Text = "Error al abrir transacción.";
+                    ok = new VentanasMensajes.frmMensajeNuevoOk();
+                    ok.lblMensaje.Text = "Error al abrir transacción.";
                     ok.ShowDialog();
                     limpiarTodo();
                     goto fin;
@@ -811,21 +822,23 @@ namespace Palatium.Productos
 
                 //ACTUALIZA LA TABLA CV401_PRODUCTOS CON LOS DATOS NUEVOS DEL FORMULARIO
                 sSql = "";
-                sSql = sSql + "update cv401_productos set" + Environment.NewLine;
-                sSql = sSql + "secuencia = '" + txtSecuencia.Text.ToString().Trim() + "'," + Environment.NewLine;
-                sSql = sSql + "paga_iva = " + iPagaIva + "," + Environment.NewLine;
-                sSql = sSql + "precio_modificable = " + iPrecioModificable + "," + Environment.NewLine;
-                sSql = sSql + "modificable = " + iModificable + "," + Environment.NewLine;
-                sSql = sSql + "id_pos_tipo_producto = " + Convert.ToInt32(cmbTipoProducto.SelectedValue) + "," + Environment.NewLine;
-                sSql = sSql + "id_pos_clase_producto = " + Convert.ToInt32(cmbClaseProducto.SelectedValue) + "," + Environment.NewLine;
-                sSql = sSql + "id_pos_impresion_comanda = " + Convert.ToInt32(cmbDestinoImpresion.SelectedValue) + Environment.NewLine;
-                sSql = sSql + "where id_Producto = '" + iIdProducto + "'";
+                sSql += "update cv401_productos set" + Environment.NewLine;
+                sSql += "secuencia = '" + txtSecuencia.Text.ToString().Trim() + "'," + Environment.NewLine;
+                sSql += "paga_iva = " + iPagaIva + "," + Environment.NewLine;
+                sSql += "precio_modificable = " + iPrecioModificable + "," + Environment.NewLine;
+                sSql += "modificable = " + iModificable + "," + Environment.NewLine;
+                sSql += "is_active = " + iHabilitado + "," + Environment.NewLine;
+                sSql += "id_pos_tipo_producto = " + Convert.ToInt32(cmbTipoProducto.SelectedValue) + "," + Environment.NewLine;
+                sSql += "id_pos_clase_producto = " + Convert.ToInt32(cmbClaseProducto.SelectedValue) + "," + Environment.NewLine;
+                sSql += "id_pos_impresion_comanda = " + Convert.ToInt32(cmbDestinoImpresion.SelectedValue) + Environment.NewLine;
+                sSql += "where id_Producto = '" + iIdProducto + "'";
 
 
                 //SI NO SE EJECUTA LA INSTRUCCION SALTA A REVERSA 
                 if (!conexion.GFun_Lo_Ejecuta_SQL(sSql))
                 {
-                    catchMensaje.LblMensaje.Text = sSql;
+                    catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
+                    catchMensaje.lblMensaje.Text = conexion.sMensajeError;
                     catchMensaje.ShowDialog();
                     goto reversa;
                 }
@@ -835,35 +848,37 @@ namespace Palatium.Productos
                 {
                     //CAMBIO DE ESTADO DE 'A' AL ESTADO 'E'
                     sSql = "";
-                    sSql = sSql + "update cv401_nombre_productos set" + Environment.NewLine;
-                    sSql = sSql + "estado = 'E'," + Environment.NewLine;
-                    sSql = sSql + "fecha_anula = GETDATE()," + Environment.NewLine;
-                    sSql = sSql + "usuario_anula = '" + Program.sDatosMaximo[0] + "'," + Environment.NewLine;
-                    sSql = sSql + "terminal_anula = '" + Program.sDatosMaximo[1] + "'" + Environment.NewLine;
-                    sSql = sSql + "where id_Producto = '" + iIdProducto + "'";
+                    sSql += "update cv401_nombre_productos set" + Environment.NewLine;
+                    sSql += "estado = 'E'," + Environment.NewLine;
+                    sSql += "fecha_anula = GETDATE()," + Environment.NewLine;
+                    sSql += "usuario_anula = '" + Program.sDatosMaximo[0] + "'," + Environment.NewLine;
+                    sSql += "terminal_anula = '" + Program.sDatosMaximo[1] + "'" + Environment.NewLine;
+                    sSql += "where id_Producto = '" + iIdProducto + "'";
 
                     //SI NO SE EJECUTA LA INSTRUCCION SALTA A REVERSA 
                     if (!conexion.GFun_Lo_Ejecuta_SQL(sSql))
                     {
-                        catchMensaje.LblMensaje.Text = sSql;
+                        catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
+                        catchMensaje.lblMensaje.Text = conexion.sMensajeError;
                         catchMensaje.ShowDialog();
                         goto reversa;
                     }
 
                     //INSTRUCCION PARA INSERTAR EN LA TABLA CV401_NOMBRE_PRODUCTOS
                     sSql = "";
-                    sSql = sSql + "insert into cv401_nombre_productos (" + Environment.NewLine;
-                    sSql = sSql + "id_Producto, cg_tipo_nombre, nombre, nombre_interno," + Environment.NewLine;
-                    sSql = sSql + "estado, numero_replica_trigger, numero_control_replica," + Environment.NewLine;
-                    sSql = sSql + "fecha_ingreso, usuario_ingreso, terminal_ingreso)" + Environment.NewLine;
-                    sSql = sSql + "values(" + Environment.NewLine;
-                    sSql = sSql + iIdProducto + ", 5076, 'EXTRA " + txtDescripcion.Text.Trim().ToUpper() + "'," + Environment.NewLine;
-                    sSql = sSql + "1, 'A', 1, 1, GETDATE(), '" + Program.sDatosMaximo[0] + "', '" + Program.sDatosMaximo[1] + "')";
+                    sSql += "insert into cv401_nombre_productos (" + Environment.NewLine;
+                    sSql += "id_Producto, cg_tipo_nombre, nombre, nombre_interno," + Environment.NewLine;
+                    sSql += "estado, numero_replica_trigger, numero_control_replica," + Environment.NewLine;
+                    sSql += "fecha_ingreso, usuario_ingreso, terminal_ingreso)" + Environment.NewLine;
+                    sSql += "values(" + Environment.NewLine;
+                    sSql += iIdProducto + ", 5076, 'EXTRA " + txtDescripcion.Text.Trim().ToUpper() + "'," + Environment.NewLine;
+                    sSql += "1, 'A', 1, 1, GETDATE(), '" + Program.sDatosMaximo[0] + "', '" + Program.sDatosMaximo[1] + "')";
 
                     //SI NO SE EJECUTA LA INSTRUCCION SALTA A REVERSA 
                     if (!conexion.GFun_Lo_Ejecuta_SQL(sSql))
                     {
-                        catchMensaje.LblMensaje.Text = sSql;
+                        catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
+                        catchMensaje.lblMensaje.Text = conexion.sMensajeError;
                         catchMensaje.ShowDialog();
                         goto reversa;
                     }
@@ -874,18 +889,19 @@ namespace Palatium.Productos
                 {
                     //CAMBIO DE ESTADO DE 'A' AL ESTADO 'E'
                     sSql = "";
-                    sSql = sSql + "update cv403_precios_productos set" + Environment.NewLine;
-                    sSql = sSql + "estado = 'E'," + Environment.NewLine;
-                    sSql = sSql + "fecha_anula = GETDATE()," + Environment.NewLine;
-                    sSql = sSql + "usuario_anula = '" + Program.sDatosMaximo[0] + "'," + Environment.NewLine;
-                    sSql = sSql + "terminal_anula = '" + Program.sDatosMaximo[1] + "'" + Environment.NewLine;
-                    sSql = sSql + "where id_Producto = " + iIdProducto + Environment.NewLine;
-                    sSql = sSql + "and id_Lista_Precio = " + iIdListaBase;
+                    sSql += "update cv403_precios_productos set" + Environment.NewLine;
+                    sSql += "estado = 'E'," + Environment.NewLine;
+                    sSql += "fecha_anula = GETDATE()," + Environment.NewLine;
+                    sSql += "usuario_anula = '" + Program.sDatosMaximo[0] + "'," + Environment.NewLine;
+                    sSql += "terminal_anula = '" + Program.sDatosMaximo[1] + "'" + Environment.NewLine;
+                    sSql += "where id_Producto = " + iIdProducto + Environment.NewLine;
+                    sSql += "and id_Lista_Precio = " + iIdListaBase;
 
                     //SI NO SE EJECUTA LA INSTRUCCION SALTA A REVERSA 
                     if (!conexion.GFun_Lo_Ejecuta_SQL(sSql))
                     {
-                        catchMensaje.LblMensaje.Text = sSql;
+                        catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
+                        catchMensaje.lblMensaje.Text = conexion.sMensajeError;
                         catchMensaje.ShowDialog();
                         goto reversa;
                     }
@@ -894,18 +910,19 @@ namespace Palatium.Productos
                     dSubtotal = Convert.ToDouble(txtPrecioCompra.Text) / (1 + (Program.iva + Program.servicio));
 
                     sSql = "";
-                    sSql = sSql + "insert into cv403_precios_productos (" + Environment.NewLine;
-                    sSql = sSql + "id_Lista_Precio, id_Producto, valor_Porcentaje, valor," + Environment.NewLine;
-                    sSql = sSql + "fecha_inicio, fecha_final, estado, numero_replica_trigger," + Environment.NewLine;
-                    sSql = sSql + "numero_control_replica, fecha_ingreso, usuario_ingreso, terminal_ingreso)" + Environment.NewLine;
-                    sSql = sSql + "values(" + Environment.NewLine;
-                    sSql = sSql + iIdListaBase + ", " + iIdProducto + ", 0, " + dSubtotal + ", GETDATE()," + Environment.NewLine;
-                    sSql = sSql + "'" + sFechaListaBase + "', 'A', 1, 1, GETDATE(), '" + Program.sDatosMaximo[0] + "'," + Environment.NewLine;
-                    sSql = sSql + "'" + Program.sDatosMaximo[1] + "')";
+                    sSql += "insert into cv403_precios_productos (" + Environment.NewLine;
+                    sSql += "id_Lista_Precio, id_Producto, valor_Porcentaje, valor," + Environment.NewLine;
+                    sSql += "fecha_inicio, fecha_final, estado, numero_replica_trigger," + Environment.NewLine;
+                    sSql += "numero_control_replica, fecha_ingreso, usuario_ingreso, terminal_ingreso)" + Environment.NewLine;
+                    sSql += "values(" + Environment.NewLine;
+                    sSql += iIdListaBase + ", " + iIdProducto + ", 0, " + dSubtotal + ", GETDATE()," + Environment.NewLine;
+                    sSql += "'" + sFechaListaBase + "', 'A', 1, 1, GETDATE(), '" + Program.sDatosMaximo[0] + "'," + Environment.NewLine;
+                    sSql += "'" + Program.sDatosMaximo[1] + "')";
 
                     if (!conexion.GFun_Lo_Ejecuta_SQL(sSql))
                     {
-                        catchMensaje.LblMensaje.Text = sSql;
+                        catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
+                        catchMensaje.lblMensaje.Text = conexion.sMensajeError;
                         catchMensaje.ShowDialog();
                         goto reversa;
                     }
@@ -916,17 +933,18 @@ namespace Palatium.Productos
                 {
                     //CAMBIO DE ESTADO DE 'A' AL ESTADO 'E'
                     sSql = "";
-                    sSql = sSql + "update cv403_precios_productos set" + Environment.NewLine;
-                    sSql = sSql + "estado = 'E'," + Environment.NewLine;
-                    sSql = sSql + "fecha_anula = GETDATE()," + Environment.NewLine;
-                    sSql = sSql + "usuario_anula = '" + Program.sDatosMaximo[0] + "'," + Environment.NewLine;
-                    sSql = sSql + "terminal_anula = '" + Program.sDatosMaximo[1] + "'" + Environment.NewLine;
-                    sSql = sSql + "where id_Producto = " + iIdProducto + Environment.NewLine;
-                    sSql = sSql + "and id_Lista_Precio = " + iIdListaMinorista;
+                    sSql += "update cv403_precios_productos set" + Environment.NewLine;
+                    sSql += "estado = 'E'," + Environment.NewLine;
+                    sSql += "fecha_anula = GETDATE()," + Environment.NewLine;
+                    sSql += "usuario_anula = '" + Program.sDatosMaximo[0] + "'," + Environment.NewLine;
+                    sSql += "terminal_anula = '" + Program.sDatosMaximo[1] + "'" + Environment.NewLine;
+                    sSql += "where id_Producto = " + iIdProducto + Environment.NewLine;
+                    sSql += "and id_Lista_Precio = " + iIdListaMinorista;
 
                     if (!conexion.GFun_Lo_Ejecuta_SQL(sSql))
                     {
-                        catchMensaje.LblMensaje.Text = sSql;
+                        catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
+                        catchMensaje.lblMensaje.Text = conexion.sMensajeError;
                         catchMensaje.ShowDialog();
                         goto reversa;
                     }
@@ -935,28 +953,29 @@ namespace Palatium.Productos
                     dSubtotal = Convert.ToDouble(txtPrecioMinorista.Text) / (1 + (Program.iva + Program.servicio));
 
                     sSql = "";
-                    sSql = sSql + "insert into cv403_precios_productos (" + Environment.NewLine;
-                    sSql = sSql + "id_Lista_Precio, id_Producto, valor_Porcentaje, valor," + Environment.NewLine;
-                    sSql = sSql + "fecha_inicio, fecha_final, estado,numero_replica_trigger," + Environment.NewLine;
-                    sSql = sSql + "numero_control_replica, fecha_ingreso, usuario_ingreso, terminal_ingreso)" + Environment.NewLine;
-                    sSql = sSql + "values(" + Environment.NewLine;
-                    sSql = sSql + iIdListaMinorista + ", " + iIdProducto + ", 0, " + dSubtotal + ", GETDATE()," + Environment.NewLine;
-                    sSql = sSql + "'" + sFechaListaMinorista + "', 'A', 1, 1, GETDATE(), '" + Program.sDatosMaximo[0] + "'," + Environment.NewLine;
-                    sSql = sSql + "'" + Program.sDatosMaximo[1] + "')";
+                    sSql += "insert into cv403_precios_productos (" + Environment.NewLine;
+                    sSql += "id_Lista_Precio, id_Producto, valor_Porcentaje, valor," + Environment.NewLine;
+                    sSql += "fecha_inicio, fecha_final, estado,numero_replica_trigger," + Environment.NewLine;
+                    sSql += "numero_control_replica, fecha_ingreso, usuario_ingreso, terminal_ingreso)" + Environment.NewLine;
+                    sSql += "values(" + Environment.NewLine;
+                    sSql += iIdListaMinorista + ", " + iIdProducto + ", 0, " + dSubtotal + ", GETDATE()," + Environment.NewLine;
+                    sSql += "'" + sFechaListaMinorista + "', 'A', 1, 1, GETDATE(), '" + Program.sDatosMaximo[0] + "'," + Environment.NewLine;
+                    sSql += "'" + Program.sDatosMaximo[1] + "')";
 
                     if (!conexion.GFun_Lo_Ejecuta_SQL(sSql))
                     {
-                        catchMensaje.LblMensaje.Text = sSql;
+                        catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
+                        catchMensaje.lblMensaje.Text = conexion.sMensajeError;
                         catchMensaje.ShowDialog();
                         goto reversa;
                     }
                 }
 
                 sSql = "";
-                sSql = sSql + "select cg_tipo_unidad, cg_unidad, unidad_compra" + Environment.NewLine;
-                sSql = sSql + "from cv401_unidades_productos" + Environment.NewLine;
-                sSql = sSql + "where id_producto = " + iIdProducto + Environment.NewLine;
-                sSql = sSql + "and estado = 'A'";
+                sSql += "select cg_tipo_unidad, cg_unidad, unidad_compra" + Environment.NewLine;
+                sSql += "from cv401_unidades_productos" + Environment.NewLine;
+                sSql += "where id_producto = " + iIdProducto + Environment.NewLine;
+                sSql += "and estado = 'A'";
 
                 dtConsulta = new DataTable();
                 dtConsulta.Clear();
@@ -969,16 +988,19 @@ namespace Palatium.Productos
                 }
 
                 conexion.GFun_Lo_Maneja_Transaccion(Program.G_TERMINA_TRANSACCION);
-                ok.LblMensaje.Text = "Registro actualizado correctamente.";
+
+                ok = new VentanasMensajes.frmMensajeNuevoOk();
+                ok.lblMensaje.Text = "Registro actualizado correctamente.";
                 ok.ShowDialog();
                 limpiarTodo();
-                llenarGrid(1);
+                llenarGrid();
                 goto fin;
             }
 
             catch (Exception ex)
             {
-                catchMensaje.LblMensaje.Text = ex.Message;
+                catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
+                catchMensaje.lblMensaje.Text = ex.Message;
                 catchMensaje.ShowDialog();
             }
 
@@ -995,64 +1017,69 @@ namespace Palatium.Productos
                 //AQUI INICIA PROCESO DE ACTUALIZACION
                 if (!conexion.GFun_Lo_Maneja_Transaccion(Program.G_INICIA_TRANSACCION))
                 {
-                    ok.LblMensaje.Text = "Error al abrir transacción.";
+                    ok = new VentanasMensajes.frmMensajeNuevoOk();
+                    ok.lblMensaje.Text = "Error al abrir transacción.";
                     ok.ShowDialog();
                     limpiarTodo();
-                    goto fin;
+                    return;
                 }
                 else
                 {
                     //ELIMINACION DEL PRODUCTO EN CV401_PRODUCTOS
                     sSql = "";
-                    sSql = sSql + "update cv401_productos set" + Environment.NewLine;
-                    sSql = sSql + "codigo = '" + txtCodigo.Text.Trim() + "(" + iIdProducto + ")'," + Environment.NewLine;
-                    sSql = sSql + "estado = 'E'," + Environment.NewLine;
-                    sSql = sSql + "fecha_anula = GETDATE()," + Environment.NewLine;
-                    sSql = sSql + "usuario_anula = '" + Program.sDatosMaximo[0] + "'," + Environment.NewLine;
-                    sSql = sSql + "terminal_anula = '" + Program.sDatosMaximo[1] + "'" + Environment.NewLine;
-                    sSql = sSql + "where id_producto = " + iIdProducto;
+                    sSql += "update cv401_productos set" + Environment.NewLine;
+                    sSql += "is_active = 0" + Environment.NewLine;
+                    //sSql += "codigo = '" + txtCodigo.Text.Trim() + "(" + iIdProducto + ")'," + Environment.NewLine;
+                    //sSql += "estado = 'E'," + Environment.NewLine;
+                    //sSql += "fecha_anula = GETDATE()," + Environment.NewLine;
+                    //sSql += "usuario_anula = '" + Program.sDatosMaximo[0] + "'," + Environment.NewLine;
+                    //sSql += "terminal_anula = '" + Program.sDatosMaximo[1] + "'" + Environment.NewLine;
+                    sSql += "where id_producto = " + iIdProducto;
 
                     if (!conexion.GFun_Lo_Ejecuta_SQL(sSql))
                     {
-                        catchMensaje.LblMensaje.Text = sSql;
+                        catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
+                        catchMensaje.lblMensaje.Text = conexion.sMensajeError;
                         catchMensaje.ShowDialog();
                         goto reversa;
                     }
 
-                    //ELIMINACION DEL PRODUCTO EN CV401_NOMBRE_PRODUCTOS
-                    sSql = "";
-                    sSql = sSql + "update cv401_nombre_productos set" + Environment.NewLine;
-                    sSql = sSql + "estado = 'E'," + Environment.NewLine;
-                    sSql = sSql + "fecha_anula = GETDATE()," + Environment.NewLine;
-                    sSql = sSql + "usuario_anula = '" + Program.sDatosMaximo[0] + "'," + Environment.NewLine;
-                    sSql = sSql + "terminal_anula = '" + Program.sDatosMaximo[1] + "'" + Environment.NewLine;
-                    sSql = sSql + "where id_Producto = " + iIdProducto;
+                    ////ELIMINACION DEL PRODUCTO EN CV401_NOMBRE_PRODUCTOS
+                    //sSql = "";
+                    //sSql += "update cv401_nombre_productos set" + Environment.NewLine;
+                    //sSql += "estado = 'E'," + Environment.NewLine;
+                    //sSql += "fecha_anula = GETDATE()," + Environment.NewLine;
+                    //sSql += "usuario_anula = '" + Program.sDatosMaximo[0] + "'," + Environment.NewLine;
+                    //sSql += "terminal_anula = '" + Program.sDatosMaximo[1] + "'" + Environment.NewLine;
+                    //sSql += "where id_Producto = " + iIdProducto;
 
-                    if (!conexion.GFun_Lo_Ejecuta_SQL(sSql))
-                    {
-                        catchMensaje.LblMensaje.Text = sSql;
-                        catchMensaje.ShowDialog();
-                        goto reversa;
-                    }
+                    //if (!conexion.GFun_Lo_Ejecuta_SQL(sSql))
+                    //{
+                    //    catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
+                    //    catchMensaje.lblMensaje.Text = conexion.sMensajeError;
+                    //    catchMensaje.ShowDialog();
+                    //    goto reversa;
+                    //}
 
                     //si se ejecuta bien hara un commit
                     conexion.GFun_Lo_Maneja_Transaccion(Program.G_TERMINA_TRANSACCION);
-                    ok.LblMensaje.Text = "El registro se ha eliminado con éxito.";
+
+                    ok = new VentanasMensajes.frmMensajeNuevoOk();
+                    ok.lblMensaje.Text = "El registro se ha eliminado con éxito.";
                     ok.ShowDialog();
                     limpiarTodo();
-                    goto fin;
+                    return;
                 }
             }
 
             catch (Exception ex)
             {
-                catchMensaje.LblMensaje.Text = ex.Message;
+                catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
+                catchMensaje.lblMensaje.Text = ex.Message;
                 catchMensaje.ShowDialog();
             }
 
             reversa: { conexion.GFun_Lo_Maneja_Transaccion(Program.G_REVERSA_TRANSACCION); }
-
-            fin: { }
         }
 
         #endregion
@@ -1073,8 +1100,8 @@ namespace Palatium.Productos
             {
                 if (iIdProducto == 0)
                 {
-                    ok.LblMensaje.Text = "No hay un registro para eliminar.";
-                    ok.ShowInTaskbar = false;
+                    ok = new VentanasMensajes.frmMensajeNuevoOk();
+                    ok.lblMensaje.Text = "No hay un registro para eliminar.";
                     ok.ShowDialog();
                 }
 
@@ -1082,13 +1109,15 @@ namespace Palatium.Productos
                 {
                     if (contarPedidos() > 0)
                     {
-                        ok.LblMensaje.Text = "No puede eliminar el registro, ya que se encuentra en uso dentro del sistema.";
+                        ok = new VentanasMensajes.frmMensajeNuevoOk();
+                        ok.lblMensaje.Text = "No puede eliminar el registro, ya que se encuentra en uso dentro del sistema.";
                         ok.ShowDialog();
                     }
 
                     else if (contarPedidos() == 0)
                     {
-                        SiNo.LblMensaje.Text = "¿Está seguro de eliminar el registro seleccionado?";
+                        SiNo = new VentanasMensajes.frmMensajeNuevoSiNo();
+                        SiNo.lblMensaje.Text = "¿Está seguro de eliminar el registro seleccionado?";
                         SiNo.ShowDialog();
 
                         if (SiNo.DialogResult == DialogResult.OK)
@@ -1101,7 +1130,8 @@ namespace Palatium.Productos
 
             catch (Exception ex)
             {
-                catchMensaje.LblMensaje.Text = ex.Message;
+                catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
+                catchMensaje.lblMensaje.Text = ex.Message;
                 catchMensaje.ShowDialog();
                 limpiarTodo();
             }
@@ -1128,35 +1158,40 @@ namespace Palatium.Productos
             {
                 if (Convert.ToInt32(cmbEmpresa.SelectedValue) == 0)
                 {
-                    ok.LblMensaje.Text = "Favor selecciones la empresa.";
+                    ok = new VentanasMensajes.frmMensajeNuevoOk();
+                    ok.lblMensaje.Text = "Favor selecciones la empresa.";
                     ok.ShowDialog();
                     cmbEmpresa.Focus();
                 }
 
                 else if (Convert.ToInt32(cmbPadre.SelectedValue) == 0)
                 {
-                    ok.LblMensaje.Text = "Favor selecciones el identificador del modificador.";
+                    ok = new VentanasMensajes.frmMensajeNuevoOk();
+                    ok.lblMensaje.Text = "Favor selecciones el identificador del modificador.";
                     ok.ShowDialog();
                     cmbPadre.Focus();
                 }
 
                 else if (txtCodigo.Text.Trim() == "")
                 {
-                    ok.LblMensaje.Text = "Favor ingrese el código del modificador.";
+                    ok = new VentanasMensajes.frmMensajeNuevoOk();
+                    ok.lblMensaje.Text = "Favor ingrese el código del modificador.";
                     ok.ShowDialog();
                     txtCodigo.Focus();
                 }
 
                 else if (txtDescripcion.Text.Trim() == "")
                 {
-                    ok.LblMensaje.Text = "Favor ingrese el nombre del modificador.";
+                    ok = new VentanasMensajes.frmMensajeNuevoOk();
+                    ok.lblMensaje.Text = "Favor ingrese el nombre del modificador.";
                     ok.ShowDialog();
                     txtDescripcion.Focus();
                 }
 
                 else if (txtSecuencia.Text.Trim() == "")
                 {
-                    ok.LblMensaje.Text = "Favor ingrese el número de secuencia del modificador.";
+                    ok = new VentanasMensajes.frmMensajeNuevoOk();
+                    ok.lblMensaje.Text = "Favor ingrese el número de secuencia del modificador.";
                     ok.ShowDialog();
                     txtSecuencia.Focus();
                 }
@@ -1164,40 +1199,28 @@ namespace Palatium.Productos
                 else
                 {
                     if (chkModificable.Checked == true)
-                    {
                         iModificable = 1;
-                    }
-
                     else
-                    {
                         iModificable = 0;
-                    }
 
                     if (chkPrecioModificable.Checked == true)
-                    {
                         iPrecioModificable = 1;
-                    }
-
                     else
-                    {
                         iPrecioModificable = 0;
-                    }
 
                     if (chkPagaIva.Checked == true)
-                    {
                         iPagaIva = 1;
-                    }
-
                     else
-                    {
                         iPagaIva = 0;
-                    }
+
+                    if (chkHabilitado.Checked == true)
+                        iHabilitado = 1;
+                    else
+                        iHabilitado = 0;
 
                     //COMPLETAR EL CAMPO DE CODIGO EN CASO DE QUE SOLO SE INGRESE UN NUMERO
                     if (txtCodigo.Text.Trim().Length == 1)
-                    {
                         txtCodigo.Text = "0" + txtCodigo.Text.Trim();
-                    }
 
                     //ENVIO A GUARDAR O ACTUALIZAR
                     if (btnNuevo.Text == "Guardar")
@@ -1222,41 +1245,33 @@ namespace Palatium.Productos
 
             iModificable = Convert.ToInt32(dgvDatos.CurrentRow.Cells[3].Value);
             if (iModificable == 1)
-            {
                 chkModificable.Checked = true;
-            }
-
             else
-            {
                 chkModificable.Checked = false;
-            }
 
             iPrecioModificable = Convert.ToInt32(dgvDatos.CurrentRow.Cells[4].Value);
             if (iPrecioModificable == 1)
-            {
                 chkPrecioModificable.Checked = true;
-            }
-
             else
-            {
                 chkPrecioModificable.Checked = false;
-            }
 
             iPagaIva = Convert.ToInt32(dgvDatos.CurrentRow.Cells[5].Value);
             if (iPagaIva == 1)
-            {
                 chkPagaIva.Checked = true;
-            }
-
             else
-            {
                 chkPagaIva.Checked = false;
-            }
+
+            //CHECKED HABILITADO
+            //-----------------------------------------------------------------------------------
+            if (Convert.ToInt32(dgvDatos.CurrentRow.Cells[13].Value) == 1)
+                chkHabilitado.Checked = true;
+            else
+                chkHabilitado.Checked = false;
+            //-----------------------------------------------------------------------------------
 
             txtSecuencia.Text = dgvDatos.CurrentRow.Cells[6].Value.ToString();
             cmbClaseProducto.SelectedValue = Convert.ToInt32(dgvDatos.CurrentRow.Cells[7].Value);
             cmbTipoProducto.SelectedValue = Convert.ToInt32(dgvDatos.CurrentRow.Cells[8].Value);
-            cmbEstado.Text = dgvDatos.CurrentRow.Cells[9].Value.ToString();
             txtPrecioCompra.Text = dgvDatos.CurrentRow.Cells[10].Value.ToString();
             sPrecioBase = dgvDatos.CurrentRow.Cells[10].Value.ToString();
             txtPrecioMinorista.Text = dgvDatos.CurrentRow.Cells[11].Value.ToString();
@@ -1268,6 +1283,7 @@ namespace Palatium.Productos
             grupoPrecio.Enabled = true;
             grupoImpresion.Enabled = true;
             btnAnular.Enabled = true;
+            chkHabilitado.Enabled = true;
             btnNuevo.Text = "Actualizar";
 
             txtDescripcion.Focus();
@@ -1276,15 +1292,7 @@ namespace Palatium.Productos
 
         private void btnBuscar_Click(object sender, EventArgs e)
         {
-            if (txtBuscar.Text.Trim() == "")
-            {
-                llenarGrid(0);
-            }
-
-            else
-            {
-                llenarGrid(1);
-            }
+            llenarGrid();
         }
 
         private void txtCodigo_KeyPress(object sender, KeyPressEventArgs e)

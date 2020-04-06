@@ -53,6 +53,8 @@
             this.txtPass_1 = new System.Windows.Forms.TextBox();
             this.lblComment = new System.Windows.Forms.Label();
             this.ttMensaje = new System.Windows.Forms.ToolTip(this.components);
+            this.label2 = new System.Windows.Forms.Label();
+            this.txtNombreEquipo = new System.Windows.Forms.TextBox();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.groupBox1.SuspendLayout();
@@ -164,9 +166,9 @@
             // pictureBox1
             // 
             this.pictureBox1.Image = global::Palatium.Properties.Resources.fondo_nombre_sistema;
-            this.pictureBox1.Location = new System.Drawing.Point(386, 23);
+            this.pictureBox1.Location = new System.Drawing.Point(386, 9);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(371, 205);
+            this.pictureBox1.Size = new System.Drawing.Size(371, 193);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox1.TabIndex = 18;
             this.pictureBox1.TabStop = false;
@@ -353,6 +355,27 @@
             this.lblComment.Text = "Para usar esta aplicación, debes comprarla.\r\n\r\nAntes de comprar, puede ejecutar l" +
     "a aplicación como prueba. para su conocimiento y adaptación de la misma.";
             // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.Location = new System.Drawing.Point(383, 220);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(128, 16);
+            this.label2.TabIndex = 21;
+            this.label2.Text = "Nombre del Equipo:";
+            // 
+            // txtNombreEquipo
+            // 
+            this.txtNombreEquipo.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
+            this.txtNombreEquipo.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtNombreEquipo.Location = new System.Drawing.Point(517, 219);
+            this.txtNombreEquipo.MaxLength = 50;
+            this.txtNombreEquipo.Name = "txtNombreEquipo";
+            this.txtNombreEquipo.Size = new System.Drawing.Size(240, 22);
+            this.txtNombreEquipo.TabIndex = 22;
+            this.txtNombreEquipo.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            // 
             // frmDialogoLicencia
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -360,6 +383,8 @@
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
             this.ClientSize = new System.Drawing.Size(769, 370);
+            this.Controls.Add(this.txtNombreEquipo);
+            this.Controls.Add(this.label2);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.groupBox1);
@@ -376,6 +401,7 @@
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -405,5 +431,7 @@
         private System.Windows.Forms.ToolTip ttMensaje;
         private System.Windows.Forms.Button btnPegar;
         private System.Windows.Forms.Button btnCopiar;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.TextBox txtNombreEquipo;
     }
 }

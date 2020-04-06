@@ -238,6 +238,8 @@ namespace Palatium.Inicio
                 lblVersionDemo.Visible = true;
             else
                 lblVersionDemo.Visible = false;
+
+            lblNombreEquipo.Text = Program.sNombreEquipo;
         }
 
         private void lblSitioWeb_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)

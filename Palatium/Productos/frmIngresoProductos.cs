@@ -25,6 +25,7 @@ namespace Palatium.Productos
         int iIdPadre;
         int iIdProducto;
         int iPagaIva;
+        int iPagaServicio;
         int iExpira;
         int iPrecioModificable;
         int iIdPosReceta;
@@ -261,7 +262,7 @@ namespace Palatium.Productos
                 else
                 {
                     catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
-                    catchMensaje.lblMensaje.Text = "ERROR EN LA INSTRUCCIÓN:" + Environment.NewLine + sSql;
+                    catchMensaje.lblMensaje.Text = conexion.sMensajeError;
                     catchMensaje.ShowDialog();
                     return -1;
                 }
@@ -301,6 +302,11 @@ namespace Palatium.Productos
             chkItemTarjetaAlmuerzo.Checked = false;
             chkItemTarjetaRegalo.Checked = false;
 
+            if (Program.iManejaServicio == 1)
+                chkPagaServicio.Checked = true;
+            else
+                chkPagaServicio.Checked = false;
+
             grupoDatos.Enabled = false;
             grupoReceta.Enabled = false;
 
@@ -315,7 +321,7 @@ namespace Palatium.Productos
             dbAyudaReceta.limpiar();
 
             this.Cursor = Cursors.Default;
-            llenarGrid(0);
+            llenarGrid();
         }
 
         //FUNCION PARA LIMPIAR TODO EL FORMULARIO
@@ -350,6 +356,11 @@ namespace Palatium.Productos
             chkItemTarjetaAlmuerzo.Checked = false;
             chkItemTarjetaRegalo.Checked = false;
 
+            if (Program.iManejaServicio == 1)
+                chkPagaServicio.Checked = true;
+            else
+                chkPagaServicio.Checked = false;
+
             grupoRegistros.Enabled = false;
             grupoDatos.Enabled = false;
             grupoReceta.Enabled = false;
@@ -365,7 +376,51 @@ namespace Palatium.Productos
 
             lblNombreCategoria.Text = "NINGUNA";
             lblRegistros.Text = "0 Registros Encontrados";
-        }        
+        }
+
+        //FUNCION PARA LIMPIAR LAS CAJAS DE TEXTO
+        private void limpiarOK()
+        {
+            txtCodigo.Clear();
+            txtDescripcion.Clear();
+            txtSecuencia.Clear();
+            txtPrecioCompra.Text = "1.00";
+            txtPresentacion.Text = "1";
+            txtRendimiento.Text = "1";
+            iHabilitado = 0;
+            txtPrecioMinorista.Clear();
+            txtBuscar.Clear();
+
+            chkPagaIVA.Checked = true;
+            chkExpira.Checked = false;
+            chkPrecioModificable.Checked = false;
+            chkAhorroEmergencia.Checked = false;
+            chkUsarRecets.Checked = false;
+            chkHabilitado.Checked = true;
+            chkHabilitado.Enabled = false;
+            chkParaTarjetaAlmuerzo.Checked = false;
+            chkParaTarjetaRegalo.Checked = false;
+            chkItemTarjetaAlmuerzo.Checked = false;
+            chkItemTarjetaRegalo.Checked = false;
+
+            if (Program.iManejaServicio == 1)
+                chkPagaServicio.Checked = true;
+            else
+                chkPagaServicio.Checked = false;
+
+            grupoDatos.Enabled = false;
+            grupoReceta.Enabled = false;
+
+            btnAgregar.Text = "Nuevo";
+            btnEliminar.Enabled = false;
+            txtCodigo.Enabled = true;
+
+            llenarComboTipoProducto();
+            llenarComboClaseProducto();
+            llenarDestinoImpresion();
+            iIdProducto = 0;
+            dbAyudaReceta.limpiar();
+        }
 
         //FUNCION PARA CARGAR LA FECHA DEL SISTEMA
         private void fechaSistema()
@@ -385,7 +440,7 @@ namespace Palatium.Productos
                 {
                     this.Cursor = Cursors.Default;
                     catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
-                    catchMensaje.lblMensaje.Text = "ERROR EN LA SIGUIENTE INSTRUCCIÓN:" + Environment.NewLine + sSql;
+                    catchMensaje.lblMensaje.Text = conexion.sMensajeError;
                     catchMensaje.ShowDialog();
                     return;
                 }
@@ -403,7 +458,7 @@ namespace Palatium.Productos
         }
 
         //FUNCION PARA LLENAR EL DATAGRID SEGUN LA CONSULTA 
-        private void llenarGrid(int iOp)
+        private void llenarGrid()
         {
             try
             {
@@ -411,10 +466,8 @@ namespace Palatium.Productos
                 sSql += "select * from pos_vw_lista_productos" + Environment.NewLine;
                 sSql += "where id_producto_padre = " + dBAyudaCategorias.iId + Environment.NewLine;
 
-                if (iOp == 1)
-                {
+                if (txtBuscar.Text.Trim() != "")
                     sSql += "and descripcion like '%" + txtBuscar.Text.Trim() + "%'" + Environment.NewLine;
-                }
 
                 sSql += "order by codigo" + Environment.NewLine;
 
@@ -428,9 +481,7 @@ namespace Palatium.Productos
                     dgvProductos.DataSource = dtConsulta;
 
                     if (dtConsulta.Rows.Count > 0)
-                    {
                         completarGrid();
-                    }
 
                     columnasGrid(false);
                 }
@@ -439,7 +490,7 @@ namespace Palatium.Productos
                 {
                     this.Cursor = Cursors.Default;
                     catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
-                    catchMensaje.lblMensaje.Text = "ERROR EN LA SIGUIENTE INSTRUCCIÓN:" + Environment.NewLine + sSql;
+                    catchMensaje.lblMensaje.Text = conexion.sMensajeError;
                     catchMensaje.ShowDialog();
                     limpiar();
                 }
@@ -467,7 +518,7 @@ namespace Palatium.Productos
                     sSql += "from cv403_precios_productos PR inner join" + Environment.NewLine;
                     sSql += "cv401_productos P on PR.id_producto = P.id_producto" + Environment.NewLine;
                     sSql += "where id_lista_precio = 1" + Environment.NewLine;
-                    sSql += "and P.id_producto = " + Convert.ToInt32(dgvProductos.Rows[i].Cells[0].Value) + Environment.NewLine;
+                    sSql += "and P.id_producto = " + Convert.ToInt32(dgvProductos.Rows[i].Cells["id_producto"].Value) + Environment.NewLine;
                     sSql += "and PR.estado = 'A'";
 
                     dtConsulta = new DataTable();
@@ -475,38 +526,29 @@ namespace Palatium.Productos
 
                     bRespuesta = conexion.GFun_Lo_Busca_Registro(dtConsulta, sSql);
 
-                    if (bRespuesta == true)
-                    {
-                        if (dtConsulta.Rows.Count > 0)
-                        {
-                            if (Program.iCobrarConSinProductos == 1)
-                            {
-                                dgvProductos.Rows[i].Cells[3].Value = (Convert.ToDouble(dtConsulta.Rows[0][0].ToString()) * (1 + Program.iva + Program.servicio)).ToString("n2");
-                            }
-
-                            else
-                            {
-                                dgvProductos.Rows[i].Cells[3].Value = (Convert.ToDouble(dtConsulta.Rows[0][0].ToString())).ToString("n2");
-                            }
-                        }
-
-                        else
-                        {
-                            ok = new VentanasMensajes.frmMensajeNuevoOk();
-                            ok.lblMensaje.Text = "No se ecuentran registros 1.";
-                            ok.ShowDialog();
-                            return;
-                        }
-                    }
-
-                    else
+                    if (bRespuesta == false)
                     {
                         catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
-                        catchMensaje.lblMensaje.Text = "ERROR EN LA SIGUIENTE INSTRUCCIÓN:" + Environment.NewLine + sSql;
+                        catchMensaje.lblMensaje.Text = conexion.sMensajeError;
                         catchMensaje.ShowDialog();
                         return;
                     }
 
+                    if (dtConsulta.Rows.Count > 0)
+                    {
+                        if (Program.iCobrarConSinProductos == 1)
+                            dgvProductos.Rows[i].Cells["precioCompra"].Value = (Convert.ToDouble(dtConsulta.Rows[0]["valor"].ToString()) * (1 + Program.iva)).ToString("N2");
+                        else
+                            dgvProductos.Rows[i].Cells["precioCompra"].Value = (Convert.ToDouble(dtConsulta.Rows[0]["valor"].ToString())).ToString("N2");
+                    }
+
+                    else
+                    {
+                        ok = new VentanasMensajes.frmMensajeNuevoOk();
+                        ok.lblMensaje.Text = "No se encuentran registros 1.";
+                        ok.ShowDialog();
+                        return;
+                    }
 
                     //INSTRUCCION PARA REEMPLAZAR EL VALOR DE LA COLUMNA LISTA MINORISTA
                     sSql = "";
@@ -514,7 +556,7 @@ namespace Palatium.Productos
                     sSql += "from cv403_precios_productos PR inner join" + Environment.NewLine;
                     sSql += "cv401_productos P on PR.id_producto = P.id_producto" + Environment.NewLine;
                     sSql += "where id_lista_precio = 4" + Environment.NewLine;
-                    sSql += "and P.id_producto = " + Convert.ToInt32(dgvProductos.Rows[i].Cells[0].Value) + Environment.NewLine;
+                    sSql += "and P.id_producto = " + Convert.ToInt32(dgvProductos.Rows[i].Cells["id_producto"].Value) + Environment.NewLine;
                     sSql += "and pr.estado='A'";
 
                     dtConsulta = new DataTable();
@@ -522,35 +564,54 @@ namespace Palatium.Productos
 
                     bRespuesta = conexion.GFun_Lo_Busca_Registro(dtConsulta, sSql);
 
-                    if (bRespuesta == true)
+                    if (bRespuesta == false)
                     {
-                        if (dtConsulta.Rows.Count > 0)
+                        catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
+                        catchMensaje.lblMensaje.Text = conexion.sMensajeError;
+                        catchMensaje.ShowDialog();
+                        return;
+                    }
+
+                    if (dtConsulta.Rows.Count > 0)
+                    {
+                        iPagaIva = Convert.ToInt32(dgvProductos.Rows[i].Cells["paga_iva"].Value);
+                        iPagaServicio = Convert.ToInt32(dgvProductos.Rows[i].Cells["paga_servicio"].Value);
+
+                        if (Program.iCobrarConSinProductos == 1)
                         {
-                            if (Program.iCobrarConSinProductos == 1)
+                            if (iPagaServicio == 1)
                             {
-                                dgvProductos.Rows[i].Cells[4].Value = (Convert.ToDouble(dtConsulta.Rows[0][0].ToString()) * (1 + Program.iva + Program.servicio)).ToString("n2");
+                                if (iPagaIva == 1)
+                                    dgvProductos.Rows[i].Cells["PVP"].Value = (Convert.ToDouble(dtConsulta.Rows[0]["valor"].ToString()) * (1 + Program.iva + Program.servicio)).ToString("N2");
+                                else
+                                    dgvProductos.Rows[i].Cells["PVP"].Value = (Convert.ToDouble(dtConsulta.Rows[0]["valor"].ToString()) * (1 + Program.servicio)).ToString("N2");
                             }
 
                             else
                             {
-                                dgvProductos.Rows[i].Cells[4].Value = (Convert.ToDouble(dtConsulta.Rows[0][0].ToString())).ToString("n2");
-                            }
+                                if (iPagaIva == 1)
+                                    dgvProductos.Rows[i].Cells["PVP"].Value = (Convert.ToDouble(dtConsulta.Rows[0]["valor"].ToString()) * (1 + Program.iva)).ToString("N2");
+                                else
+                                    dgvProductos.Rows[i].Cells["PVP"].Value = Convert.ToDouble(dtConsulta.Rows[0]["valor"].ToString()).ToString("N2");
+                            }                        
                         }
 
                         else
                         {
-                            ok = new VentanasMensajes.frmMensajeNuevoOk();
-                            ok.lblMensaje.Text = "Ocurrió un problema al realizar la consulta 2.";
-                            ok.ShowDialog();
-                            return;
+                            dgvProductos.Rows[i].Cells["PVP"].Value = Convert.ToDouble(dtConsulta.Rows[0]["valor"].ToString()).ToString("N2");
                         }
+
+                        //if (Program.iCobrarConSinProductos == 1)
+                        //    dgvProductos.Rows[i].Cells["PVP"].Value = (Convert.ToDouble(dtConsulta.Rows[0]["valor"].ToString()) * (1 + Program.iva + Program.servicio)).ToString("N2");
+                        //else
+                        //    dgvProductos.Rows[i].Cells["PVP"].Value = (Convert.ToDouble(dtConsulta.Rows[0]["valor"].ToString())).ToString("n2");
                     }
 
                     else
                     {
-                        catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
-                        catchMensaje.lblMensaje.Text = "ERROR EN LA SIGUIENTE INSTRUCCIÓN:" + Environment.NewLine + sSql;
-                        catchMensaje.ShowDialog();
+                        ok = new VentanasMensajes.frmMensajeNuevoOk();
+                        ok.lblMensaje.Text = "Ocurrió un problema al realizar la consulta 2.";
+                        ok.ShowDialog();
                         return;
                     }
 
@@ -565,29 +626,24 @@ namespace Palatium.Productos
 
                     bRespuesta = conexion.GFun_Lo_Busca_Registro(dtConsulta, sSql);
 
-                    if (bRespuesta == true)
-                    {
-                        if (dtConsulta.Rows.Count == 0)
-                        {
-                            ok = new VentanasMensajes.frmMensajeNuevoOk();
-                            ok.lblMensaje.Text = "Ocurrió un problema al realizar la consulta 3.";
-                            ok.ShowDialog();
-                            return;
-                        }
-
-                        else
-                        {
-                            iIdPadre = Convert.ToInt32(dtConsulta.Rows[0][0].ToString());
-                        }
-                    }
-
-                    else
+                    if (bRespuesta == false)
                     {
                         catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
-                        catchMensaje.lblMensaje.Text = "ERROR EN LA SIGUIENTE INSTRUCCIÓN:" + Environment.NewLine + sSql;
+                        catchMensaje.lblMensaje.Text = conexion.sMensajeError;
                         catchMensaje.ShowDialog();
                         return;
                     }
+
+                    if (dtConsulta.Rows.Count == 0)
+                    {
+                        ok = new VentanasMensajes.frmMensajeNuevoOk();
+                        ok.lblMensaje.Text = "Ocurrió un problema al realizar la consulta 3.";
+                        ok.ShowDialog();
+                        return;
+                    }
+
+                    else
+                        iIdPadre = Convert.ToInt32(dtConsulta.Rows[0]["id_producto_padre"].ToString());
 
                     sSql = "";
                     sSql += "select UP.cg_unidad, TC.valor_texto" + Environment.NewLine;
@@ -595,40 +651,36 @@ namespace Palatium.Productos
                     sSql += "where TC.correlativo = UP.cg_unidad" + Environment.NewLine;
                     sSql += "and UP.id_producto = " + iIdPadre + Environment.NewLine;
                     sSql += "and UP.estado = 'A'";
-                    //sSql = "select * from cv401_unidades_productos where id_producto = " + iIdPadre + " and estado = 'A'";
 
                     dtConsulta = new DataTable();
                     dtConsulta.Clear();
 
                     bRespuesta = conexion.GFun_Lo_Busca_Registro(dtConsulta, sSql);
 
-                    if (bRespuesta == true)
+                    if (bRespuesta == false)
                     {
-                        if (dtConsulta.Rows.Count == 0)
-                        {
-                            ok = new VentanasMensajes.frmMensajeNuevoOk();
-                            ok.lblMensaje.Text = "Ocurrió un problema al realizar la consulta 4.";
-                            ok.ShowDialog();
-                            return;
-                        }
+                        catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
+                        catchMensaje.lblMensaje.Text = conexion.sMensajeError;
+                        catchMensaje.ShowDialog();
+                        return;
+                    }
 
-                        else
-                        {
-                            dgvProductos.Rows[i].Cells[12].Value = dtConsulta.Rows[0][0].ToString();
-                            dgvProductos.Rows[i].Cells[13].Value = dtConsulta.Rows[1][0].ToString();
-
-                            dgvProductos.Rows[i].Cells[14].Value = dtConsulta.Rows[0][1].ToString();
-                            dgvProductos.Rows[i].Cells[15].Value = dtConsulta.Rows[1][1].ToString();
-                        }
+                    if (dtConsulta.Rows.Count == 0)
+                    {
+                        ok = new VentanasMensajes.frmMensajeNuevoOk();
+                        ok.lblMensaje.Text = "Ocurrió un problema al realizar la consulta 4.";
+                        ok.ShowDialog();
+                        return;
                     }
 
                     else
                     {
-                        catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
-                        catchMensaje.lblMensaje.Text = "ERROR EN LA SIGUIENTE INSTRUCCIÓN:" + Environment.NewLine + sSql;
-                        catchMensaje.ShowDialog();
-                        return;
-                    }                    
+                        dgvProductos.Rows[i].Cells[12].Value = dtConsulta.Rows[0]["cg_unidad"].ToString();
+                        dgvProductos.Rows[i].Cells[13].Value = dtConsulta.Rows[1]["cg_unidad"].ToString();
+
+                        dgvProductos.Rows[i].Cells[14].Value = dtConsulta.Rows[0]["valor_texto"].ToString();
+                        dgvProductos.Rows[i].Cells[15].Value = dtConsulta.Rows[1]["valor_texto"].ToString();
+                    }                   
                 }
             }
 
@@ -685,6 +737,11 @@ namespace Palatium.Productos
             dgvProductos.Columns[30].Visible = ok;
             dgvProductos.Columns[31].Visible = ok;
             dgvProductos.Columns[32].Visible = ok;
+            dgvProductos.Columns[34].Visible = ok;
+            dgvProductos.Columns[35].Visible = ok;
+            dgvProductos.Columns[36].Visible = ok;
+            dgvProductos.Columns[37].Visible = ok;
+            dgvProductos.Columns[38].Visible = ok;
 
             lblRegistros.Text = dgvProductos.Rows.Count.ToString() + " Registros Encontrados";
         }
@@ -737,7 +794,7 @@ namespace Palatium.Productos
                 else
                 {
                     catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
-                    catchMensaje.lblMensaje.Text = "ERROR EN LA INSTRUCCIÓN:" + Environment.NewLine + sSql;
+                    catchMensaje.lblMensaje.Text = conexion.sMensajeError;
                     catchMensaje.ShowDialog();
                 }
             }
@@ -789,7 +846,7 @@ namespace Palatium.Productos
                 {
                     this.Cursor = Cursors.Default;
                     catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
-                    catchMensaje.lblMensaje.Text = "ERROR EN LA SIGUIENTE INSTRUCCIÓN:" + Environment.NewLine + sSql;
+                    catchMensaje.lblMensaje.Text = conexion.sMensajeError;
                     catchMensaje.ShowDialog();
                     return;
                 }
@@ -841,7 +898,7 @@ namespace Palatium.Productos
                 sSql += "terminal_ingreso, id_pos_receta, id_pos_tipo_producto," + Environment.NewLine;
                 sSql += "id_pos_clase_producto, id_pos_impresion_comanda, ahorro_emergencia," + Environment.NewLine;
                 sSql += "uso_receta, presentacion, rendimiento, is_active, maneja_tarjeta_almuerzo," + Environment.NewLine;
-                sSql += "maneja_item_tarjeta_almuerzo, maneja_tarjeta_regalo, maneja_item_tarjeta_regalo)" + Environment.NewLine;
+                sSql += "maneja_item_tarjeta_almuerzo, maneja_tarjeta_regalo, maneja_item_tarjeta_regalo, paga_servicio)" + Environment.NewLine;
                 sSql += "values(" + Environment.NewLine;
                 sSql += Program.iIdEmpresa + ",'" + txtCodigo.Text.Trim() + "'," + Environment.NewLine;
                 sSql += iIdCategoria + ", 'A', 3, 0, " + iPrecioModificable + ", " + iPagaIva + "," + Environment.NewLine;
@@ -851,13 +908,13 @@ namespace Palatium.Productos
                 sSql += Convert.ToInt32(cmbClaseProducto.SelectedValue) + ", " + Convert.ToInt32(cmbDestinoImpresion.SelectedValue) + "," + Environment.NewLine;
                 sSql += iAhorroEmergencia + ", " + iUsarEnReceta + ", " + txtPresentacion.Text.Trim() + "," + Environment.NewLine;
                 sSql += txtRendimiento.Text.Trim() + ", 1, " + iManejaTarjetaAlmuerzo + ", ";
-                sSql += iManejaItemTarjetaAlmuerzo + ", " + iManejaTarjetaRegalo + ", " + iManejaItemTarjetaRegalo + ")";
+                sSql += iManejaItemTarjetaAlmuerzo + ", " + iManejaTarjetaRegalo + ", " + iManejaItemTarjetaRegalo + ", " + iPagaServicio + ")";
 
                 //EJECUTAR LA INSTRUCCIÓN SQL
                 if (!conexion.GFun_Lo_Ejecuta_SQL(sSql))
                 {
                     catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
-                    catchMensaje.lblMensaje.Text = "ERROR EN LA INSTRUCCIÓN:" + Environment.NewLine + sSql;
+                    catchMensaje.lblMensaje.Text = conexion.sMensajeError;
                     catchMensaje.ShowDialog();
                     goto reversa;
                 }
@@ -894,21 +951,16 @@ namespace Palatium.Productos
                 if (!conexion.GFun_Lo_Ejecuta_SQL(sSql))
                 {
                     catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
-                    catchMensaje.lblMensaje.Text = "ERROR EN LA INSTRUCCIÓN:" + Environment.NewLine + sSql;
+                    catchMensaje.lblMensaje.Text = conexion.sMensajeError;
                     catchMensaje.ShowDialog();
                     goto reversa;
                 }
 
                 //INSTRUCCION PARA INSERTAR EN LA TABLA CV403_PRECIOS_PRODUCTOS CON LISTA BASE
                 if (Program.iCobrarConSinProductos == 1)
-                {
-                    dSubtotal = Convert.ToDouble(txtPrecioCompra.Text) / (1 + (Program.iva + Program.servicio));
-                }
-
+                    dSubtotal = Convert.ToDouble(txtPrecioCompra.Text) / (1 + Program.iva);
                 else
-                {
                     dSubtotal = Convert.ToDouble(txtPrecioCompra.Text);
-                }
 
                 sSql = "";
                 sSql += "insert into cv403_precios_productos (" + Environment.NewLine;
@@ -923,7 +975,7 @@ namespace Palatium.Productos
                 if (!conexion.GFun_Lo_Ejecuta_SQL(sSql))
                 {
                     catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
-                    catchMensaje.lblMensaje.Text = "ERROR EN LA INSTRUCCIÓN:" + Environment.NewLine + sSql;
+                    catchMensaje.lblMensaje.Text = conexion.sMensajeError;
                     catchMensaje.ShowDialog();
                     goto reversa;
                 }
@@ -931,7 +983,21 @@ namespace Palatium.Productos
                 //INSTRUCCION PARA NSERTAR EN LA TABLA CV403_PRECIOS_PRODUCTOS CON LISTA MINORISTA
                 if (Program.iCobrarConSinProductos == 1)
                 {
-                    dSubtotal = Convert.ToDouble(txtPrecioMinorista.Text) / (1 + (Program.iva + Program.servicio));
+                    if (chkPagaServicio.Checked == true)
+                    {
+                        if (chkPagaIVA.Checked == true)
+                            dSubtotal = Convert.ToDouble(txtPrecioMinorista.Text) / (1 + Program.iva + Program.servicio);
+                        else
+                            dSubtotal = Convert.ToDouble(txtPrecioMinorista.Text) / (1 + Program.servicio);
+                    }
+
+                    else
+                    {
+                        if (chkPagaIVA.Checked == true)
+                            dSubtotal = Convert.ToDouble(txtPrecioMinorista.Text) / (1 + Program.iva);
+                        else
+                            dSubtotal = Convert.ToDouble(txtPrecioMinorista.Text);
+                    }
                 }
 
                 else
@@ -952,7 +1018,7 @@ namespace Palatium.Productos
                 if (!conexion.GFun_Lo_Ejecuta_SQL(sSql))
                 {
                     catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
-                    catchMensaje.lblMensaje.Text = "ERROR EN LA INSTRUCCIÓN:" + Environment.NewLine + sSql;
+                    catchMensaje.lblMensaje.Text = conexion.sMensajeError;
                     catchMensaje.ShowDialog();
                     goto reversa;
                 }
@@ -972,7 +1038,7 @@ namespace Palatium.Productos
                 if (!conexion.GFun_Lo_Ejecuta_SQL(sSql))
                 {
                     catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
-                    catchMensaje.lblMensaje.Text = "ERROR EN LA INSTRUCCIÓN:" + Environment.NewLine + sSql;
+                    catchMensaje.lblMensaje.Text = conexion.sMensajeError;
                     catchMensaje.ShowDialog();
                     goto reversa;
                 }
@@ -991,7 +1057,7 @@ namespace Palatium.Productos
                 if (!conexion.GFun_Lo_Ejecuta_SQL(sSql))
                 {
                     catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
-                    catchMensaje.lblMensaje.Text = "ERROR EN LA INSTRUCCIÓN:" + Environment.NewLine + sSql;
+                    catchMensaje.lblMensaje.Text = conexion.sMensajeError;
                     catchMensaje.ShowDialog();
                     goto reversa;
                 }
@@ -1061,6 +1127,7 @@ namespace Palatium.Productos
                 sSql += "update cv401_productos set" + Environment.NewLine;
                 sSql += "secuencia = " + Convert.ToInt32(txtSecuencia.Text.ToString().Trim()) + "," + Environment.NewLine;
                 sSql += "paga_iva = " + iPagaIva + "," + Environment.NewLine;
+                sSql += "paga_servicio = " + iPagaServicio + "," + Environment.NewLine;
                 sSql += "modificador = " + iModificador + "," + Environment.NewLine;
                 sSql += "subcategoria = " + iSubcategoria + "," + Environment.NewLine;
                 sSql += "ultimo_nivel = " + iUltimo + "," + Environment.NewLine;
@@ -1085,7 +1152,7 @@ namespace Palatium.Productos
                 if (!conexion.GFun_Lo_Ejecuta_SQL(sSql))
                 {
                     catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
-                    catchMensaje.lblMensaje.Text = "ERROR EN LA INSTRUCCIÓN:" + Environment.NewLine + sSql;
+                    catchMensaje.lblMensaje.Text = conexion.sMensajeError;
                     catchMensaje.ShowDialog();
                     goto reversa;
                 }
@@ -1106,7 +1173,7 @@ namespace Palatium.Productos
                     if (!conexion.GFun_Lo_Ejecuta_SQL(sSql))
                     {
                         catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
-                        catchMensaje.lblMensaje.Text = "ERROR EN LA INSTRUCCIÓN:" + Environment.NewLine + sSql;
+                        catchMensaje.lblMensaje.Text = conexion.sMensajeError;
                         catchMensaje.ShowDialog();
                         goto reversa;
                     }
@@ -1125,15 +1192,15 @@ namespace Palatium.Productos
                     if (!conexion.GFun_Lo_Ejecuta_SQL(sSql))
                     {
                         catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
-                        catchMensaje.lblMensaje.Text = "ERROR EN LA INSTRUCCIÓN:" + Environment.NewLine + sSql;
+                        catchMensaje.lblMensaje.Text = conexion.sMensajeError;
                         catchMensaje.ShowDialog();
                         goto reversa;
                     }
                 }
 
                 //SI HUBO ALGUN CAMBIO EN EL PRECIO BASE, SE REALIZA LA ACTUALIZACION
-                if (txtPrecioCompra.Text.Trim() != sPrecioBase)
-                {
+                //if (txtPrecioCompra.Text.Trim() != sPrecioBase)
+                //{
                     //CAMBIO DE ESTADO DE 'A' AL ESTADO 'E'
                     sSql = "";
                     sSql += "update cv403_precios_productos set" + Environment.NewLine;
@@ -1148,21 +1215,16 @@ namespace Palatium.Productos
                     if (!conexion.GFun_Lo_Ejecuta_SQL(sSql))
                     {
                         catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
-                        catchMensaje.lblMensaje.Text = "ERROR EN LA INSTRUCCIÓN:" + Environment.NewLine + sSql;
+                        catchMensaje.lblMensaje.Text = conexion.sMensajeError;
                         catchMensaje.ShowDialog();
                         goto reversa;
                     }
 
                     //INSTRUCCION PARA INSERTAR EN LA TABLA CV403_PRECIOS_PRODUCTOS CON LISTA BASE
                     if (Program.iCobrarConSinProductos == 1)
-                    {
-                        dSubtotal = Convert.ToDouble(txtPrecioCompra.Text) / (1 + (Program.iva + Program.servicio));
-                    }
-
+                        dSubtotal = Convert.ToDouble(txtPrecioCompra.Text) / (1 + Program.iva);
                     else
-                    {
                         dSubtotal = Convert.ToDouble(txtPrecioCompra.Text);
-                    }
 
                     sSql = "";
                     sSql += "insert into cv403_precios_productos (" + Environment.NewLine;
@@ -1177,15 +1239,15 @@ namespace Palatium.Productos
                     if (!conexion.GFun_Lo_Ejecuta_SQL(sSql))
                     {
                         catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
-                        catchMensaje.lblMensaje.Text = "ERROR EN LA INSTRUCCIÓN:" + Environment.NewLine + sSql;
+                        catchMensaje.lblMensaje.Text = conexion.sMensajeError;
                         catchMensaje.ShowDialog();
                         goto reversa;
                     }
-                }
+                //}
 
                 //SI HUBO ALGUN CAMBIO EN EL PRECIO MINORISTA, SE REALIZA LA ACTUALIZACION
-                if (txtPrecioMinorista.Text.Trim() != sPrecioMinorista)
-                {
+                //if (txtPrecioMinorista.Text.Trim() != sPrecioMinorista)
+                //{
                     //CAMBIO DE ESTADO DE 'A' AL ESTADO 'E'
                     sSql = "";
                     sSql += "update cv403_precios_productos set" + Environment.NewLine;
@@ -1199,7 +1261,7 @@ namespace Palatium.Productos
                     if (!conexion.GFun_Lo_Ejecuta_SQL(sSql))
                     {
                         catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
-                        catchMensaje.lblMensaje.Text = "ERROR EN LA INSTRUCCIÓN:" + Environment.NewLine + sSql;
+                        catchMensaje.lblMensaje.Text = conexion.sMensajeError;
                         catchMensaje.ShowDialog();
                         goto reversa;
                     }
@@ -1207,7 +1269,21 @@ namespace Palatium.Productos
                     //INSTRUCCION PARA NSERTAR EN LA TABLA CV403_PRECIOS_PRODUCTOS CON LISTA MINORISTA
                     if (Program.iCobrarConSinProductos == 1)
                     {
-                        dSubtotal = Convert.ToDouble(txtPrecioMinorista.Text) / (1 + (Program.iva + Program.servicio));
+                        if (chkPagaServicio.Checked == true)
+                        {
+                            if (chkPagaIVA.Checked == true)
+                                dSubtotal = Convert.ToDouble(txtPrecioMinorista.Text) / (1 + Program.iva + Program.servicio);
+                            else
+                                dSubtotal = Convert.ToDouble(txtPrecioMinorista.Text) / (1 + Program.servicio);
+                        }
+
+                        else
+                        {
+                            if (chkPagaIVA.Checked == true)
+                                dSubtotal = Convert.ToDouble(txtPrecioMinorista.Text) / (1 + Program.iva);
+                            else
+                                dSubtotal = Convert.ToDouble(txtPrecioMinorista.Text);
+                        }
                     }
 
                     else
@@ -1228,11 +1304,11 @@ namespace Palatium.Productos
                     if (!conexion.GFun_Lo_Ejecuta_SQL(sSql))
                     {
                         catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
-                        catchMensaje.lblMensaje.Text = "ERROR EN LA INSTRUCCIÓN:" + Environment.NewLine + sSql;
+                        catchMensaje.lblMensaje.Text = conexion.sMensajeError;
                         catchMensaje.ShowDialog();
                         goto reversa;
                     }
-                }
+                //}
 
                 //ACTUALIZAR EL ESTADO DE LA UNIDAD DEL PRODUCTO
                 sSql = "";
@@ -1246,7 +1322,7 @@ namespace Palatium.Productos
                 if (!conexion.GFun_Lo_Ejecuta_SQL(sSql))
                 {
                     catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
-                    catchMensaje.lblMensaje.Text = "ERROR EN LA INSTRUCCIÓN:" + Environment.NewLine + sSql;
+                    catchMensaje.lblMensaje.Text = conexion.sMensajeError;
                     catchMensaje.ShowDialog();
                     goto reversa;
                 }
@@ -1266,7 +1342,7 @@ namespace Palatium.Productos
                 if (!conexion.GFun_Lo_Ejecuta_SQL(sSql))
                 {
                     catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
-                    catchMensaje.lblMensaje.Text = "ERROR EN LA INSTRUCCIÓN:" + Environment.NewLine + sSql;
+                    catchMensaje.lblMensaje.Text = conexion.sMensajeError;
                     catchMensaje.ShowDialog();
                     goto reversa;
                 }
@@ -1285,7 +1361,7 @@ namespace Palatium.Productos
                 if (!conexion.GFun_Lo_Ejecuta_SQL(sSql))
                 {
                     catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
-                    catchMensaje.lblMensaje.Text = "ERROR EN LA INSTRUCCIÓN:" + Environment.NewLine + sSql;
+                    catchMensaje.lblMensaje.Text = conexion.sMensajeError;
                     catchMensaje.ShowDialog();
                     goto reversa;
                 }
@@ -1331,17 +1407,12 @@ namespace Palatium.Productos
                 sSql = "";
                 sSql += "update cv401_productos set" + Environment.NewLine;
                 sSql += "is_active = 0" + Environment.NewLine;
-                //sSql += "codigo = '" + txtCodigo.Text.Trim().ToUpper() + "(" + iIdProducto + ")'," + Environment.NewLine;
-                //sSql += "estado = 'E'," + Environment.NewLine;
-                //sSql += "fecha_anula = GETDATE()," + Environment.NewLine;
-                //sSql += "usuario_anula = '" + Program.sDatosMaximo[0] + "'," + Environment.NewLine;
-                //sSql += "terminal_anula = '" + Program.sDatosMaximo[1] + "'" + Environment.NewLine;
                 sSql += "where id_producto = " + iIdProducto;
 
                 if (!conexion.GFun_Lo_Ejecuta_SQL(sSql))
                 {
                     catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
-                    catchMensaje.lblMensaje.Text = "ERROR EN LA INSTRUCCIÓN:" + Environment.NewLine + sSql;
+                    catchMensaje.lblMensaje.Text = conexion.sMensajeError;
                     catchMensaje.ShowDialog();
                     goto reversa;
                 }
@@ -1360,7 +1431,7 @@ namespace Palatium.Productos
                 //if (!conexion.GFun_Lo_Ejecuta_SQL(sSql))
                 //{
                 //    catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
-                //    catchMensaje.lblMensaje.Text = "ERROR EN LA INSTRUCCIÓN:" + Environment.NewLine + sSql;
+                //    catchMensaje.lblMensaje.Text = conexion.sMensajeError;
                 //    catchMensaje.ShowDialog();
                 //    goto reversa;
                 //}
@@ -1381,7 +1452,7 @@ namespace Palatium.Productos
                 //if (!conexion.GFun_Lo_Ejecuta_SQL(sSql))
                 //{
                 //    catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
-                //    catchMensaje.lblMensaje.Text = "ERROR EN LA INSTRUCCIÓN:" + Environment.NewLine + sSql;
+                //    catchMensaje.lblMensaje.Text = conexion.sMensajeError;
                 //    catchMensaje.ShowDialog();
                 //    goto reversa;
                 //}
@@ -1399,7 +1470,7 @@ namespace Palatium.Productos
                 //if (!conexion.GFun_Lo_Ejecuta_SQL(sSql))
                 //{
                 //    catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
-                //    catchMensaje.lblMensaje.Text = "ERROR EN LA INSTRUCCIÓN:" + Environment.NewLine + sSql;
+                //    catchMensaje.lblMensaje.Text = conexion.sMensajeError;
                 //    catchMensaje.ShowDialog();
                 //    goto reversa;
                 //}
@@ -1440,6 +1511,18 @@ namespace Palatium.Productos
                 rdbGuardaConImpuestos.Checked = true;
             }
 
+            if (Program.iManejaServicio == 1)
+            {
+                chkPagaServicio.Checked = true;
+                chkPagaServicio.Enabled = true;
+            }
+
+            else
+            {
+                chkPagaServicio.Checked = false;
+                chkPagaServicio.Enabled = false;
+            }
+
             datosListas();
             limpiarTodo();
         }
@@ -1461,14 +1544,9 @@ namespace Palatium.Productos
                 //CHECKED IVA
                 //-----------------------------------------------------------------------------------
                 if (Convert.ToInt32(dgvProductos.CurrentRow.Cells[5].Value) == 1)
-                {
                     chkPagaIVA.Checked = true;
-                }
-
                 else
-                {
                     chkPagaIVA.Checked = false;
-                }
                 //-----------------------------------------------------------------------------------
 
                 txtSecuencia.Text = dgvProductos.CurrentRow.Cells[6].Value.ToString();
@@ -1476,27 +1554,17 @@ namespace Palatium.Productos
                 //CHECKED PRECIO MODIFICABLE
                 //-----------------------------------------------------------------------------------
                 if (Convert.ToInt32(dgvProductos.CurrentRow.Cells[10].Value) == 1)
-                {
                     chkPrecioModificable.Checked = true;
-                }
-
                 else
-                {
                     chkPrecioModificable.Checked = false;
-                }
                 //-----------------------------------------------------------------------------------
 
                 //CHECKED EXPIRA
                 //-----------------------------------------------------------------------------------
                 if (Convert.ToInt32(dgvProductos.CurrentRow.Cells[11].Value) == 1)
-                {
                     chkExpira.Checked = true;
-                }
-
                 else
-                {
                     chkExpira.Checked = false;
-                }
                 //-----------------------------------------------------------------------------------
 
                 cmbDestinoImpresion.SelectedValue = dgvProductos.CurrentRow.Cells[17].Value.ToString();
@@ -1504,10 +1572,7 @@ namespace Palatium.Productos
                 cmbTipoProducto.SelectedValue = dgvProductos.CurrentRow.Cells[19].Value.ToString();
 
                 if (Convert.ToInt32(dgvProductos.CurrentRow.Cells[16].Value.ToString()) == 0)
-                {
                     dbAyudaReceta.limpiar();
-                }
-
                 else
                 {
                     dbAyudaReceta.iId = Convert.ToInt32(dgvProductos.CurrentRow.Cells[16].Value.ToString());
@@ -1521,40 +1586,25 @@ namespace Palatium.Productos
                 //CHECKED AHORRO EMERGENCIA
                 //-----------------------------------------------------------------------------------
                 if (Convert.ToInt32(dgvProductos.CurrentRow.Cells[30].Value) == 1)
-                {
                     chkAhorroEmergencia.Checked = true;
-                }
-
                 else
-                {
                     chkAhorroEmergencia.Checked = false;
-                }
                 //-----------------------------------------------------------------------------------
 
                 //CHECKED USAR EN RECETA
                 //-----------------------------------------------------------------------------------
                 if (Convert.ToInt32(dgvProductos.CurrentRow.Cells[31].Value) == 1)
-                {
                     chkUsarRecets.Checked = true;
-                }
-
                 else
-                {
                     chkUsarRecets.Checked = false;
-                }
                 //-----------------------------------------------------------------------------------
 
                 //CHECKED HABILITADO
                 //-----------------------------------------------------------------------------------
                 if (Convert.ToInt32(dgvProductos.CurrentRow.Cells[32].Value) == 1)
-                {
                     chkHabilitado.Checked = true;
-                }
-
                 else
-                {
                     chkHabilitado.Checked = false;
-                }
                 //-----------------------------------------------------------------------------------
 
                 if (Convert.ToInt32(dgvProductos.CurrentRow.Cells["maneja_tarjeta_almuerzo"].Value) == 1)
@@ -1576,6 +1626,11 @@ namespace Palatium.Productos
                     chkItemTarjetaRegalo.Checked = true;
                 else
                     chkItemTarjetaRegalo.Checked = false;
+
+                if (Convert.ToInt32(dgvProductos.CurrentRow.Cells["paga_servicio"].Value) == 1)
+                    chkPagaServicio.Checked = true;
+                else
+                    chkPagaServicio.Checked = false;
 
                 txtPresentacion.Text = dgvProductos.CurrentRow.Cells[27].Value.ToString();
                 txtRendimiento.Text = dgvProductos.CurrentRow.Cells[28].Value.ToString();
@@ -1600,14 +1655,7 @@ namespace Palatium.Productos
 
         private void btnBuscar_Click(object sender, EventArgs e)
         {
-            if (txtBuscar.Text == "")
-            {
-                llenarGrid(0);
-            }
-            else
-            {
-                llenarGrid(1);
-            }
+            llenarGrid();
         }
 
         private void btnAgregar_Click(object sender, EventArgs e)
@@ -1684,6 +1732,11 @@ namespace Palatium.Productos
                         iPagaIva = 1;
                     else
                         iPagaIva = 0;
+
+                    if (chkPagaServicio.Checked == true)
+                        iPagaServicio = 1;
+                    else
+                        iPagaServicio = 0;
 
                     if (chkExpira.Checked == true)
                         iExpira = 1;
@@ -1800,14 +1853,7 @@ namespace Palatium.Productos
         {
             if (e.KeyChar == (char)Keys.Enter)
             {
-                if (txtBuscar.Text == "")
-                {
-                    llenarGrid(0);
-                }
-                else
-                {
-                    llenarGrid(1);
-                }
+                llenarGrid();
             }
         }        
 
@@ -1837,13 +1883,13 @@ namespace Palatium.Productos
 
             else
             {
-                limpiar();
+                limpiarOK();
                 this.Cursor = Cursors.WaitCursor;
                 iIdCategoria = dBAyudaCategorias.iId;
                 lblNombreCategoria.Text = dBAyudaCategorias.txtDatos.Text.Trim().ToUpper();
                 extraerUnidadesProductosPadre(iIdCategoria);
                 txtBuscar.Clear();
-                llenarGrid(0);
+                llenarGrid();
                 grupoRegistros.Enabled = true;
                 btnAgregar.Enabled = true;
                 this.Cursor = Cursors.Default;

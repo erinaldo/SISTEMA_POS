@@ -159,13 +159,15 @@ namespace Palatium
                     Program.iIdPosTerminal = consultarEquipo.iIdPosTerminal_REC;
                     Program.iCantidadPermitida = iCantidadPermitida_REC;
                     Program.iCantidadUsada = iCantidadDisponible_REC;
+                    Program.sNombreEquipo = consultarEquipo.sNombreEquipo_REC;
+                    Program.iVistaAplicacion = consultarEquipo.iVistaPrevia_REC;
 
                     if (sIdEquipo_REC != Program.sIdEquipo)
                     {
                         if (sSerialEquipo_REC != Program.sSerialEquipo)
                         {
                             Program.iVersionDemo = 1;
-                            Licencia.frmDialogoLicencia verificador = new Licencia.frmDialogoLicencia(iCantidadPermitida_REC - iCantidadDisponible_REC, iInsertar_REC, 1);
+                            Licencia.frmDialogoLicencia verificador = new Licencia.frmDialogoLicencia(iCantidadPermitida_REC - iCantidadDisponible_REC, iInsertar_REC, 1, Program.sNombreEquipo);
                             verificador.ShowDialog();
 
                             if (verificador.DialogResult != DialogResult.OK)
@@ -181,7 +183,7 @@ namespace Palatium
                         if (iVersionDemo_REC == 1)
                         {
                             Program.iVersionDemo = 1;
-                            Licencia.frmDialogoLicencia verificador = new Licencia.frmDialogoLicencia(iCantidadPermitida_REC - iCantidadDisponible_REC, iInsertar_REC, 1);
+                            Licencia.frmDialogoLicencia verificador = new Licencia.frmDialogoLicencia(iCantidadPermitida_REC - iCantidadDisponible_REC, iInsertar_REC, 1, Program.sNombreEquipo);
                             verificador.ShowDialog();
 
                             if (verificador.DialogResult != DialogResult.OK)
@@ -233,8 +235,37 @@ namespace Palatium
                         Program.iArregloMenuColumna = 5;
                     }
 
-                    Application.Run(new Inicio.frmMenuTab());
-                    //Application.Run(new AsistenteConfiguracion.frmCrearParametrosLocalidad());
+                    if (iVistaAplicacion == 1)
+                    {
+                        Application.Run(new Inicio.frmMenuTab());
+                    }
+
+                    else
+                    {
+                        Inicio.frmIniciarSesion sesion = new Inicio.frmIniciarSesion();
+                        sesion.ShowInTaskbar = true;
+                        sesion.ShowDialog();
+
+                        if (sesion.DialogResult == DialogResult.OK)
+                        {
+                            sesion.Close();
+
+                            Clases_Crear_Comandas.ClaseObtenerIdOrigenOrden idOrigen = new Clases_Crear_Comandas.ClaseObtenerIdOrigenOrden();
+
+                            if (idOrigen.consultarDatos("12", "") == false)
+                            {
+                                catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
+                                catchMensaje.lblMensaje.Text = idOrigen.sMensajeError;
+                                catchMensaje.Show();
+                                Application.Exit();
+                                return;
+                            }
+
+                            int iIdOrigen_P = idOrigen.iIdOrigenOrden;
+
+                            Application.Run(new Empresa.frmPantallaEspereAlmuerzos(iIdOrigen_P));
+                        }
+                    }
                 }
 
                 else
@@ -261,6 +292,8 @@ namespace Palatium
         public static int iCantidadPermitida;
         public static int iCantidadUsada;
         public static int iIdPosTerminal;
+        public static string sNombreEquipo;
+        public static int iVistaAplicacion;
 
         //VARIABLES PARA FACTURACION ELECTRONICA
         public static int iTipoAmbiente;
@@ -323,6 +356,9 @@ namespace Palatium
         public static decimal dbPorcentajeRecargoTarjeta;
         public static int iComprobanteNotaEntrega;
         public static string sCorreoElectronicoDefault;
+        public static int iUsarLectorHuellas;
+        public static int iUsarLectorPantallaEspere;
+        public static int iIdProductoAlmuerzoDefault;
         //-----------------------------------------------------------------------------------------------------------------------
 
 

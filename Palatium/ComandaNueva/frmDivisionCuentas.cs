@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.SqlClient;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -33,6 +34,8 @@ namespace Palatium.ComandaNueva
         DataTable dtReceta;
         DataTable dtAuxiliar;
         DataTable dtLocalidad;
+
+        SqlParameter[] parametro;
 
         Double dbPorcentajePorLinea_P;
 
@@ -99,6 +102,7 @@ namespace Palatium.ComandaNueva
         int iTipoMovimiento;
         int iIdPosReceta;
         int iPagaIva_P;
+        int iPagaServicio_P;
         int iBanderaCortesia_P;
         int iBanderaDescuento_P;
         int iBanderaComentario_P;
@@ -205,7 +209,7 @@ namespace Palatium.ComandaNueva
                 if (bRespuesta == false)
                 {
                     catchMensaje = new VentanasMensajes.frmMensajeCatch();
-                    catchMensaje.LblMensaje.Text = "ERROR EN LA SIGUIENTE INSTRUCCIÓN:" + Environment.NewLine + sSql;
+                    catchMensaje.LblMensaje.Text = conexion.sMensajeError;
                     catchMensaje.ShowDialog();
                     return false;
                 }
@@ -225,7 +229,7 @@ namespace Palatium.ComandaNueva
                 if (bRespuesta == false)
                 {
                     catchMensaje = new VentanasMensajes.frmMensajeCatch();
-                    catchMensaje.LblMensaje.Text = "ERROR EN LA SIGUIENTE INSTRUCCIÓN:" + Environment.NewLine + sSql;
+                    catchMensaje.LblMensaje.Text = conexion.sMensajeError;
                     catchMensaje.ShowDialog();
                     return false;
                 }
@@ -255,7 +259,7 @@ namespace Palatium.ComandaNueva
                 if (bRespuesta == false)
                 {
                     catchMensaje = new VentanasMensajes.frmMensajeCatch();
-                    catchMensaje.LblMensaje.Text = "ERROR EN LA SIGUIENTE INSTRUCCIÓN:" + Environment.NewLine + sSql;
+                    catchMensaje.LblMensaje.Text = conexion.sMensajeError;
                     catchMensaje.ShowDialog();
                     return false;
                 }
@@ -313,7 +317,7 @@ namespace Palatium.ComandaNueva
                 if (bRespuesta == false)
                 {
                     catchMensaje = new VentanasMensajes.frmMensajeCatch();
-                    catchMensaje.LblMensaje.Text = "ERROR EN LA SIGUIENTE INSTRUCCIÓN:" + Environment.NewLine + sSql;
+                    catchMensaje.LblMensaje.Text = conexion.sMensajeError;
                     catchMensaje.ShowDialog();
                     return false;
                 }
@@ -338,7 +342,7 @@ namespace Palatium.ComandaNueva
                 if (bRespuesta == false)
                 {
                     catchMensaje = new VentanasMensajes.frmMensajeCatch();
-                    catchMensaje.LblMensaje.Text = "ERROR EN LA SIGUIENTE INSTRUCCIÓN:" + Environment.NewLine + sSql;
+                    catchMensaje.LblMensaje.Text = conexion.sMensajeError;
                     catchMensaje.ShowDialog();
                     return false;
                 }
@@ -360,7 +364,7 @@ namespace Palatium.ComandaNueva
                     if (bRespuesta == false)
                     {
                         catchMensaje = new VentanasMensajes.frmMensajeCatch();
-                        catchMensaje.LblMensaje.Text = "ERROR EN LA SIGUIENTE INSTRUCCIÓN:" + Environment.NewLine + sSql;
+                        catchMensaje.LblMensaje.Text = conexion.sMensajeError;
                         catchMensaje.ShowDialog();
                         return false;
                     }
@@ -386,7 +390,7 @@ namespace Palatium.ComandaNueva
                     if (!conexion.GFun_Lo_Ejecuta_SQL(sSql))
                     {
                         catchMensaje = new VentanasMensajes.frmMensajeCatch();
-                        catchMensaje.LblMensaje.Text = "ERROR EN LA SIGUIENTE INSTRUCCIÓN:" + Environment.NewLine + sSql;
+                        catchMensaje.LblMensaje.Text = conexion.sMensajeError;
                         catchMensaje.ShowDialog();
                         return false;
                     }
@@ -404,7 +408,7 @@ namespace Palatium.ComandaNueva
                     if (!conexion.GFun_Lo_Ejecuta_SQL(sSql))
                     {
                         catchMensaje = new VentanasMensajes.frmMensajeCatch();
-                        catchMensaje.LblMensaje.Text = "ERROR EN LA SIGUIENTE INSTRUCCIÓN:" + Environment.NewLine + sSql;
+                        catchMensaje.LblMensaje.Text = conexion.sMensajeError;
                         catchMensaje.ShowDialog();
                         return false;
                     }
@@ -533,7 +537,7 @@ namespace Palatium.ComandaNueva
                 if (bRespuesta == false)
                 {
                     catchMensaje = new VentanasMensajes.frmMensajeCatch();
-                    catchMensaje.LblMensaje.Text = "ERROR EN LA SIGUIENTE INSTRUCCIÓN:" + Environment.NewLine + sSql;
+                    catchMensaje.LblMensaje.Text = conexion.sMensajeError;
                     catchMensaje.ShowDialog();
                     return false;
                 }
@@ -558,7 +562,7 @@ namespace Palatium.ComandaNueva
                 if (bRespuesta == false)
                 {
                     catchMensaje = new VentanasMensajes.frmMensajeCatch();
-                    catchMensaje.LblMensaje.Text = "ERROR EN LA SIGUIENTE INSTRUCCIÓN:" + Environment.NewLine + sSql;
+                    catchMensaje.LblMensaje.Text = conexion.sMensajeError;
                     catchMensaje.ShowDialog();
                     return false;
                 }
@@ -990,6 +994,11 @@ namespace Palatium.ComandaNueva
                     valor_descuento.HeaderText = "VALOR DESCUENTO";
                     valor_descuento.Name = "valor_descuento";
                     valor_descuento.Visible = false;
+
+                    DataGridViewTextBoxColumn paga_servicio = new DataGridViewTextBoxColumn();
+                    paga_servicio.HeaderText = "PAGA SERVICIO";
+                    paga_servicio.Name = "paga_servicio";
+                    paga_servicio.Visible = false;
                    
                     dgvPedido2[posicion].Columns.Add(cantidad);
                     dgvPedido2[posicion].Columns.Add(nombre_producto);
@@ -1009,6 +1018,7 @@ namespace Palatium.ComandaNueva
                     dgvPedido2[posicion].Columns.Add(porcentaje_descuento);
                     dgvPedido2[posicion].Columns.Add(bandera_comentario);
                     dgvPedido2[posicion].Columns.Add(valor_descuento);
+                    dgvPedido2[posicion].Columns.Add(paga_servicio);
 
                     dgvPedido2[posicion].Name = "dgvPedido " + h;
                     dgvPedido2[posicion].ReadOnly = true;
@@ -1064,11 +1074,13 @@ namespace Palatium.ComandaNueva
 
                         //FUNCION PARA SUMAR LOS VALORES DEL GRID
                         int iPagaIva_REC;
+                        int iPagaServicio_REC;
 
                         Decimal dbCantidad_REC;
                         Decimal dbPrecioUnitario_REC;
                         Decimal dbValorDescuento_REC;
                         Decimal dbValorIva_REC;
+                        Decimal dbValorServicio_REC;
                         Decimal dbTotalDebido_REC;
 
                         Decimal dbSumaSubtotalConIva_REC = 0;
@@ -1086,6 +1098,7 @@ namespace Palatium.ComandaNueva
                         for (int i = 0; i < dgvPedido2[posicion].Rows.Count; i++)
                         {
                             iPagaIva_REC = Convert.ToInt32(dgvPedido2[posicion].Rows[i].Cells["paga_iva"].Value);
+                            iPagaServicio_REC = Convert.ToInt32(dgvPedido2[posicion].Rows[i].Cells["paga_servicio"].Value);
 
                             dbCantidad_REC = Convert.ToDecimal(dgvPedido2[posicion].Rows[i].Cells["cantidad"].Value);
                             dbPrecioUnitario_REC = Convert.ToDecimal(dgvPedido2[posicion].Rows[i].Cells["valor_unitario"].Value);
@@ -1104,13 +1117,19 @@ namespace Palatium.ComandaNueva
                                 dbValorIva_REC = (dbPrecioUnitario_REC - dbValorDescuento_REC) * Convert.ToDecimal(Program.iva);
                                 dbSumaIva_REC += dbCantidad_REC * dbValorIva_REC;
                             }
+
+                            if (iPagaServicio_REC == 1)
+                            {
+                                dbValorServicio_REC = (dbPrecioUnitario_REC - dbValorDescuento_REC) * Convert.ToDecimal(Program.servicio);
+                                dbSumaServicio_REC += dbCantidad_REC * dbValorServicio_REC;
+                            }
                         }
 
                         dbSumaSubtotales_REC = dbSumaSubtotalConIva_REC + dbSumaSubtotalSinIva_REC;
                         dbSumaDescuentos_REC = dbSumaDescuentoConIva_REC + dbSumaDescuentoSinIva_REC;
 
                         dbSubtotalNeto_REC = dbSumaSubtotalConIva_REC + dbSumaSubtotalSinIva_REC - dbSumaDescuentoConIva_REC - dbSumaDescuentoSinIva_REC;
-                        dbTotalDebido_REC = dbSubtotalNeto_REC + dbSumaIva_REC;
+                        dbTotalDebido_REC = dbSubtotalNeto_REC + dbSumaIva_REC + dbSumaServicio_REC;
 
                         lblTotalDividida[posicion].Text = "$ " + dbTotalDebido_REC.ToString("N2");
                         iMaximoGrid = dtComanda.Rows.Count;
@@ -1246,11 +1265,13 @@ namespace Palatium.ComandaNueva
                 //===================================================================================================================================================
 
                 int iPagaIva_REC;
+                int iPagaServicio_REC;
 
                 Decimal dbCantidad_REC;
                 Decimal dbPrecioUnitario_REC;
                 Decimal dbValorDescuento_REC;
                 Decimal dbValorIva_REC;
+                Decimal dbValorServicio_REC;
                 Decimal dbTotalDebido_REC;
 
                 Decimal dbSumaSubtotalConIva_REC = 0;
@@ -1267,7 +1288,9 @@ namespace Palatium.ComandaNueva
 
                 for (int i = 0; i < dgvPedido2[iGridOrigen_P].Rows.Count; i++)
                 {
+                    dbValorServicio_REC = 0;
                     iPagaIva_REC = Convert.ToInt32(dgvPedido2[iGridOrigen_P].Rows[i].Cells["paga_iva"].Value);
+                    iPagaServicio_REC = Convert.ToInt32(dgvPedido2[iGridOrigen_P].Rows[i].Cells["paga_servicio"].Value);
 
                     dbCantidad_REC = Convert.ToDecimal(dgvPedido2[iGridOrigen_P].Rows[i].Cells["cantidad"].Value);
                     dbPrecioUnitario_REC = Convert.ToDecimal(dgvPedido2[iGridOrigen_P].Rows[i].Cells["valor_unitario"].Value);
@@ -1286,13 +1309,19 @@ namespace Palatium.ComandaNueva
                         dbValorIva_REC = (dbPrecioUnitario_REC - dbValorDescuento_REC) * Convert.ToDecimal(Program.iva);
                         dbSumaIva_REC += dbCantidad_REC * dbValorIva_REC;
                     }
+
+                    if (iPagaServicio_REC == 1)
+                    {
+                        dbValorServicio_REC = (dbPrecioUnitario_REC - dbValorDescuento_REC) * Convert.ToDecimal(Program.servicio);
+                        dbSumaServicio_REC += dbCantidad_REC * dbValorServicio_REC;
+                    }
                 }
 
                 dbSumaSubtotales_REC = dbSumaSubtotalConIva_REC + dbSumaSubtotalSinIva_REC;
                 dbSumaDescuentos_REC = dbSumaDescuentoConIva_REC + dbSumaDescuentoSinIva_REC;
 
                 dbSubtotalNeto_REC = dbSumaSubtotalConIva_REC + dbSumaSubtotalSinIva_REC - dbSumaDescuentoConIva_REC - dbSumaDescuentoSinIva_REC;
-                dbTotalDebido_REC = dbSubtotalNeto_REC + dbSumaIva_REC;
+                dbTotalDebido_REC = dbSubtotalNeto_REC + dbSumaIva_REC + dbSumaServicio_REC;
 
                 lblTotalDividida[iGridOrigen_P].Text = "$ " + dbTotalDebido_REC.ToString("N2");                
 
@@ -1308,7 +1337,9 @@ namespace Palatium.ComandaNueva
 
                 for (int i = 0; i < dgvPedido2[iGridDestino_P].Rows.Count; i++)
                 {
+                    dbValorServicio_REC = 0;
                     iPagaIva_REC = Convert.ToInt32(dgvPedido2[iGridDestino_P].Rows[i].Cells["paga_iva"].Value);
+                    iPagaServicio_REC = Convert.ToInt32(dgvPedido2[iGridDestino_P].Rows[i].Cells["paga_servicio"].Value);
 
                     dbCantidad_REC = Convert.ToDecimal(dgvPedido2[iGridDestino_P].Rows[i].Cells["cantidad"].Value);
                     dbPrecioUnitario_REC = Convert.ToDecimal(dgvPedido2[iGridDestino_P].Rows[i].Cells["valor_unitario"].Value);
@@ -1327,13 +1358,19 @@ namespace Palatium.ComandaNueva
                         dbValorIva_REC = (dbPrecioUnitario_REC - dbValorDescuento_REC) * Convert.ToDecimal(Program.iva);
                         dbSumaIva_REC += dbCantidad_REC * dbValorIva_REC;
                     }
+
+                    if (iPagaServicio_REC == 1)
+                    {
+                        dbValorServicio_REC = (dbPrecioUnitario_REC - dbValorDescuento_REC) * Convert.ToDecimal(Program.servicio);
+                        dbSumaServicio_REC += dbCantidad_REC * dbValorServicio_REC;
+                    }
                 }
 
                 dbSumaSubtotales_REC = dbSumaSubtotalConIva_REC + dbSumaSubtotalSinIva_REC;
                 dbSumaDescuentos_REC = dbSumaDescuentoConIva_REC + dbSumaDescuentoSinIva_REC;
 
                 dbSubtotalNeto_REC = dbSumaSubtotalConIva_REC + dbSumaSubtotalSinIva_REC - dbSumaDescuentoConIva_REC - dbSumaDescuentoSinIva_REC;
-                dbTotalDebido_REC = dbSubtotalNeto_REC + dbSumaIva_REC;
+                dbTotalDebido_REC = dbSubtotalNeto_REC + dbSumaIva_REC + dbSumaServicio_REC;
 
                 lblTotalDividida[iGridDestino_P].Text = "$ " + dbTotalDebido_REC.ToString("N2"); 
             }
@@ -1462,7 +1499,7 @@ namespace Palatium.ComandaNueva
                 if (!conexion.GFun_Lo_Ejecuta_SQL(sSql))
                 {
                     catchMensaje = new VentanasMensajes.frmMensajeCatch();
-                    catchMensaje.LblMensaje.Text = "ERROR EN LA SIGUIENTE INSTRUCCIÓN:" + Environment.NewLine + sSql;
+                    catchMensaje.LblMensaje.Text = conexion.sMensajeError;
                     catchMensaje.ShowDialog();
                     goto reversa;
                 }
@@ -1477,7 +1514,7 @@ namespace Palatium.ComandaNueva
                 if (!conexion.GFun_Lo_Ejecuta_SQL(sSql))
                 {
                     catchMensaje = new VentanasMensajes.frmMensajeCatch();
-                    catchMensaje.LblMensaje.Text = "ERROR EN LA SIGUIENTE INSTRUCCIÓN:" + Environment.NewLine + sSql;
+                    catchMensaje.LblMensaje.Text = conexion.sMensajeError;
                     catchMensaje.ShowDialog();
                     goto reversa;
                 }
@@ -1494,6 +1531,70 @@ namespace Palatium.ComandaNueva
                 dtAuxiliar.Columns.Add("producto");
                 dtAuxiliar.Columns.Add("idProducto");
                 dtAuxiliar.Columns.Add("cantidad");
+
+                //INSERTAMOS EN LA TABLA CV403_DCTOS_POR_COBRAR
+                //=======================================================================================================
+                Decimal dbValorTotal_A = 0;
+                Decimal dbPrecioUnitario_A;
+                Decimal dbPrecioDescuento_A;
+                Decimal dbCantidad_A;
+                Decimal dbValorIva_A;
+                Decimal dbValorServicio_A;
+
+                for (int i = 0; i < dgvPedido2[0].Rows.Count; i++)
+                {
+                    iPagaIva_P = Convert.ToInt32(dgvPedido2[0].Rows[i].Cells["paga_iva"].Value);
+                    iPagaServicio_P = Convert.ToInt32(dgvPedido2[0].Rows[i].Cells["paga_servicio"].Value);
+                    dbPrecioUnitario_A = Convert.ToDecimal(dgvPedido2[0].Rows[i].Cells["valor_unitario"].Value);
+                    dbCantidad_A = Convert.ToDecimal(dgvPedido2[0].Rows[i].Cells["cantidad"].Value);
+                    dbPrecioDescuento_A = Convert.ToDecimal(dgvPedido2[0].Rows[i].Cells["valor_descuento"].Value);
+
+                    if (iPagaIva_P == 1)
+                        dbValorIva_A = (dbPrecioUnitario_A - dbPrecioDescuento_A) * Convert.ToDecimal(Program.iva);
+                    else
+                        dbValorIva_A = 0;
+
+                    if (iPagaServicio_P == 1)
+                        dbValorServicio_A = (dbPrecioUnitario_A - dbPrecioDescuento_A) * Convert.ToDecimal(Program.servicio);
+                    else
+                        dbValorServicio_A = 0;
+
+                    dbValorTotal_A += dbCantidad_A * (dbPrecioUnitario_A - dbPrecioDescuento_A + dbValorIva_A + dbValorServicio_A);
+                }
+
+                string sValor = dbValorTotal_A.ToString("N2");
+
+                //ACTUALIZAR LA TABLA CV403_DCTOS_POR_COBRAR
+                sSql = "";
+                sSql += "update cv403_dctos_por_cobrar set" + Environment.NewLine;
+                sSql += "valor = @valor" + Environment.NewLine;
+                sSql += "where id_pedido = @id_pedido" + Environment.NewLine;
+                sSql += "and estado = @estado";
+
+                parametro = new SqlParameter[3];
+                parametro[0] = new SqlParameter();
+                parametro[0].ParameterName = "@valor";
+                parametro[0].SqlDbType = SqlDbType.VarChar;
+                parametro[0].Value = sValor;
+
+                parametro[1] = new SqlParameter();
+                parametro[1].ParameterName = "@id_pedido";
+                parametro[1].SqlDbType = SqlDbType.Int;
+                parametro[1].Value = iIdPedido;
+
+                parametro[2] = new SqlParameter();
+                parametro[2].ParameterName = "@estado";
+                parametro[2].SqlDbType = SqlDbType.VarChar;
+                parametro[2].Value = "A";
+
+                //EJECUCION DE INSTRUCCION SQL
+                if (!conexion.GFun_Lo_Ejecutar_SQL_Parametros(sSql, parametro))
+                {
+                    catchMensaje = new VentanasMensajes.frmMensajeCatch();
+                    catchMensaje.LblMensaje.Text = conexion.sMensajeError;
+                    catchMensaje.ShowDialog();
+                    goto reversa;
+                }
 
                 //ORDENAR EL DATAGRIDVIEW
                 dgvPedido2[0].Sort(dgvPedido2[0].Columns["nombre_producto"], ListSortDirection.Ascending);
@@ -1518,44 +1619,24 @@ namespace Palatium.ComandaNueva
                     sCodigoProducto_P = dgvPedido2[0].Rows[i].Cells["codigo_producto"].Value.ToString();
                     sNombreProducto_P = dgvPedido2[0].Rows[i].Cells["nombre_producto"].Value.ToString();
                     dbPorcentajePorLinea_P = Convert.ToDouble(dgvPedido2[0].Rows[i].Cells["porcentaje_descuento"].Value);
+                    iPagaServicio_P = Convert.ToInt32(dgvPedido2[0].Rows[i].Cells["paga_servicio"].Value);
                     dServicio = 0;
                     iAcumulador = i + 1;
 
-                    //ACTUALIZACION DE CODIGO PARA RECALCULAR EL PORCENTAJE DE SERVICIO
-                    if (Program.iManejaServicio == 1)
-                    {
-                        if (Convert.ToDouble(sPorcentajeDescuento) == 0)
-                        {
-                            dServicio = dPrecioUnitario_P * Program.servicio;
-                        }
-
-                        else
-                        {
-                            dServicio = dPrecioUnitario_P * (Convert.ToDouble(sPorcentajeDescuento) / 100);
-                            dServicio = dPrecioUnitario_P - dServicio;
-                            dServicio = dServicio * Program.servicio;
-                        }
-                    }
-
                     if (iBanderaComentario_P == 1)
-                    {
                         sGuardarComentario = dgvPedido2[0].Rows[i].Cells["nombre_producto"].Value.ToString();
-                    }
-
                     else
-                    {
                         sGuardarComentario = "";
-                    }
+
+                    if (iPagaServicio_P == 1)
+                        dServicio = (dPrecioUnitario_P - dDescuento_P) * Program.servicio;
+                    else
+                        dServicio = 0;
 
                     if (iPagaIva_P == 1)
-                    {
                         dIVA_P = (dPrecioUnitario_P - dDescuento_P) * Program.iva;
-                    }
-
                     else
-                    {
                         dIVA_P = 0;
-                    }
 
                     //PROCESO PARA CONTAR
                     if (iAcumulador >= dgvPedido2[0].Rows.Count)
@@ -1621,7 +1702,7 @@ namespace Palatium.ComandaNueva
                     if (!conexion.GFun_Lo_Ejecuta_SQL(sSql))
                     {
                         catchMensaje = new VentanasMensajes.frmMensajeCatch();
-                        catchMensaje.LblMensaje.Text = "ERROR EN LA SIGUIENTE INSTRUCCIÓN:" + Environment.NewLine + sSql;
+                        catchMensaje.LblMensaje.Text = conexion.sMensajeError;
                         catchMensaje.ShowDialog();
                         goto reversa;
                     }
@@ -1723,7 +1804,7 @@ namespace Palatium.ComandaNueva
                             if (!conexion.GFun_Lo_Ejecuta_SQL(sSql))
                             {
                                 catchMensaje = new VentanasMensajes.frmMensajeCatch();
-                                catchMensaje.LblMensaje.Text = "ERROR EN LA SIGUIENTE INSTRUCCIÓN:" + Environment.NewLine + sSql;
+                                catchMensaje.LblMensaje.Text = conexion.sMensajeError;
                                 catchMensaje.ShowDialog();
                                 goto reversa;
                             }
@@ -1789,7 +1870,7 @@ namespace Palatium.ComandaNueva
                 if (!conexion.GFun_Lo_Ejecuta_SQL(sSql))
                 {
                     catchMensaje = new VentanasMensajes.frmMensajeCatch();
-                    catchMensaje.LblMensaje.Text = "ERROR EN LA SIGUIENTE INSTRUCCIÓN:" + Environment.NewLine + sSql;
+                    catchMensaje.LblMensaje.Text = conexion.sMensajeError;
                     catchMensaje.ShowDialog();
                     goto reversa;
                 }
@@ -1813,7 +1894,7 @@ namespace Palatium.ComandaNueva
                 if (!conexion.GFun_Lo_Ejecuta_SQL(sSql))
                 {
                     catchMensaje = new VentanasMensajes.frmMensajeCatch();
-                    catchMensaje.LblMensaje.Text = "ERROR EN LA SIGUIENTE INSTRUCCIÓN:" + Environment.NewLine + sSql;
+                    catchMensaje.LblMensaje.Text = conexion.sMensajeError;
                     catchMensaje.ShowDialog();
                     goto reversa;
                 }
@@ -1845,7 +1926,7 @@ namespace Palatium.ComandaNueva
                 if (!conexion.GFun_Lo_Ejecuta_SQL(sSql))
                 {
                     catchMensaje = new VentanasMensajes.frmMensajeCatch();
-                    catchMensaje.LblMensaje.Text = "ERROR EN LA SIGUIENTE INSTRUCCIÓN:" + Environment.NewLine + sSql;
+                    catchMensaje.LblMensaje.Text = conexion.sMensajeError;
                     catchMensaje.ShowDialog();
                     goto reversa;
                 }
@@ -1862,7 +1943,7 @@ namespace Palatium.ComandaNueva
                 if (!conexion.GFun_Lo_Ejecuta_SQL(sSql))
                 {
                     catchMensaje = new VentanasMensajes.frmMensajeCatch();
-                    catchMensaje.LblMensaje.Text = "ERROR EN LA SIGUIENTE INSTRUCCIÓN:" + Environment.NewLine + sSql;
+                    catchMensaje.LblMensaje.Text = conexion.sMensajeError;
                     catchMensaje.ShowDialog();
                     goto reversa;
                 }
@@ -1897,7 +1978,7 @@ namespace Palatium.ComandaNueva
                 if (!conexion.GFun_Lo_Ejecuta_SQL(sSql))
                 {
                     catchMensaje = new VentanasMensajes.frmMensajeCatch();
-                    catchMensaje.LblMensaje.Text = "ERROR EN LA SIGUIENTE INSTRUCCIÓN:" + Environment.NewLine + sSql;
+                    catchMensaje.LblMensaje.Text = conexion.sMensajeError;
                     catchMensaje.ShowDialog();
                     goto reversa;
                 }
@@ -1935,7 +2016,7 @@ namespace Palatium.ComandaNueva
                 if (!conexion.GFun_Lo_Ejecuta_SQL(sSql))
                 {
                     catchMensaje = new VentanasMensajes.frmMensajeCatch();
-                    catchMensaje.LblMensaje.Text = "ERROR EN LA SIGUIENTE INSTRUCCIÓN:" + Environment.NewLine + sSql;
+                    catchMensaje.LblMensaje.Text = conexion.sMensajeError;
                     catchMensaje.ShowDialog();
                     goto reversa;
                 }
@@ -1961,16 +2042,35 @@ namespace Palatium.ComandaNueva
 
                 //INSERTAMOS EN LA TABLA CV403_DCTOS_POR_COBRAR
                 //=======================================================================================================
-                double dbValorSubtotal = 0;
-                double dbValorTotal = 0;
+                Decimal dbValorTotal_A = 0;
+                Decimal dbPrecioUnitario_A;
+                Decimal dbPrecioDescuento_A;
+                Decimal dbCantidad_A;
+                Decimal dbValorIva_A;
+                Decimal dbValorServicio_A;
 
                 for (int i = 0; i < dgvPedido2[contador].Rows.Count; i++)
                 {
-                    dbValorSubtotal = Convert.ToDouble(dgvPedido2[contador].Rows[i].Cells["valor_total"].Value.ToString());
-                    dbValorTotal = dbValorTotal + (dbValorSubtotal * (1 + (Program.iva + Program.servicio)));
+                    iPagaIva_P = Convert.ToInt32(dgvPedido2[contador].Rows[i].Cells["paga_iva"].Value);
+                    iPagaServicio_P = Convert.ToInt32(dgvPedido2[contador].Rows[i].Cells["paga_servicio"].Value);
+                    dbPrecioUnitario_A = Convert.ToDecimal(dgvPedido2[contador].Rows[i].Cells["valor_unitario"].Value);
+                    dbCantidad_A = Convert.ToDecimal(dgvPedido2[contador].Rows[i].Cells["cantidad"].Value);
+                    dbPrecioDescuento_A = Convert.ToDecimal(dgvPedido2[contador].Rows[i].Cells["valor_descuento"].Value);
+
+                    if (iPagaIva_P == 1)
+                        dbValorIva_A = (dbPrecioUnitario_A - dbPrecioDescuento_A) * Convert.ToDecimal(Program.iva);
+                    else
+                        dbValorIva_A = 0;
+
+                    if (iPagaServicio_P == 1)
+                        dbValorServicio_A = (dbPrecioUnitario_A - dbPrecioDescuento_A) * Convert.ToDecimal(Program.servicio);
+                    else
+                        dbValorServicio_A = 0;
+
+                    dbValorTotal_A += dbCantidad_A * (dbPrecioUnitario_A - dbPrecioDescuento_A + dbValorIva_A + dbValorServicio_A);
                 }
 
-                string sValor = dbValorTotal.ToString("N2");
+                string sValor = dbValorTotal_A.ToString("N2");
 
                 sSql = "";
                 sSql += "insert into cv403_dctos_por_cobrar (" + Environment.NewLine;
@@ -1986,7 +2086,7 @@ namespace Palatium.ComandaNueva
                 if (!conexion.GFun_Lo_Ejecuta_SQL(sSql))
                 {
                     catchMensaje = new VentanasMensajes.frmMensajeCatch();
-                    catchMensaje.LblMensaje.Text = "ERROR EN LA SIGUIENTE INSTRUCCIÓN:" + Environment.NewLine + sSql;
+                    catchMensaje.LblMensaje.Text = conexion.sMensajeError;
                     catchMensaje.ShowDialog();
                     goto reversa;
                 }
@@ -2024,44 +2124,24 @@ namespace Palatium.ComandaNueva
                     sCodigoProducto_P = dgvPedido2[contador].Rows[i].Cells["codigo_producto"].Value.ToString();
                     sNombreProducto_P = dgvPedido2[contador].Rows[i].Cells["nombre_producto"].Value.ToString();
                     dbPorcentajePorLinea_P = Convert.ToDouble(dgvPedido2[contador].Rows[i].Cells["porcentaje_descuento"].Value);
+                    iPagaServicio_P = Convert.ToInt32(dgvPedido2[contador].Rows[i].Cells["paga_iva"].Value);
                     dServicio = 0;
                     iAcumulador = i + 1;
 
-                    //ACTUALIZACION DE CODIGO PARA RECALCULAR EL PORCENTAJE DE SERVICIO
-                    if (Program.iManejaServicio == 1)
-                    {
-                        if (Convert.ToDouble(sPorcentajeDescuento) == 0)
-                        {
-                            dServicio = dPrecioUnitario_P * Program.servicio;
-                        }
-
-                        else
-                        {
-                            dServicio = dPrecioUnitario_P * (Convert.ToDouble(sPorcentajeDescuento) / 100);
-                            dServicio = dPrecioUnitario_P - dServicio;
-                            dServicio = dServicio * Program.servicio;
-                        }
-                    }
-
                     if (iBanderaComentario_P == 1)
-                    {
                         sGuardarComentario = dgvPedido2[contador].Rows[i].Cells["nombre_producto"].Value.ToString();
-                    }
-
                     else
-                    {
                         sGuardarComentario = "";
-                    }
+
+                    if (iPagaServicio_P == 1)
+                        dServicio = (dPrecioUnitario_P - dDescuento_P) * Program.servicio;
+                    else
+                        dServicio = 0;
 
                     if (iPagaIva_P == 1)
-                    {
                         dIVA_P = (dPrecioUnitario_P - dDescuento_P) * Program.iva;
-                    }
-
                     else
-                    {
                         dIVA_P = 0;
-                    }
                     
                     //PROCESO PARA CONTAR
                     if (iAcumulador >= dgvPedido2[contador].Rows.Count)
@@ -2128,7 +2208,7 @@ namespace Palatium.ComandaNueva
                     if (!conexion.GFun_Lo_Ejecuta_SQL(sSql))
                     {
                         catchMensaje = new VentanasMensajes.frmMensajeCatch();
-                        catchMensaje.LblMensaje.Text = "ERROR EN LA SIGUIENTE INSTRUCCIÓN:" + Environment.NewLine + sSql;
+                        catchMensaje.LblMensaje.Text = conexion.sMensajeError;
                         catchMensaje.ShowDialog();
                         goto reversa;
                     }
@@ -2185,7 +2265,7 @@ namespace Palatium.ComandaNueva
                     if (!conexion.GFun_Lo_Ejecuta_SQL(sSql))
                     {
                         catchMensaje = new VentanasMensajes.frmMensajeCatch();
-                        catchMensaje.LblMensaje.Text = "ERROR EN LA SIGUIENTE INSTRUCCIÓN:" + Environment.NewLine + sSql;
+                        catchMensaje.LblMensaje.Text = conexion.sMensajeError;
                         catchMensaje.ShowDialog();
                         goto reversa;
                     }
@@ -2231,7 +2311,7 @@ namespace Palatium.ComandaNueva
                 else
                 {
                     catchMensaje = new VentanasMensajes.frmMensajeCatch();
-                    catchMensaje.LblMensaje.Text = "ERROR EN LA SIGUIENTE INSTRUCCIÓN:" + Environment.NewLine + sSql;
+                    catchMensaje.LblMensaje.Text = conexion.sMensajeError;
                     catchMensaje.ShowDialog();
                 }
             }
@@ -2350,7 +2430,7 @@ namespace Palatium.ComandaNueva
                     if (!conexion.GFun_Lo_Ejecuta_SQL(sSql))
                     {
                         catchMensaje = new VentanasMensajes.frmMensajeCatch();
-                        catchMensaje.LblMensaje.Text = "ERROR EN LA SIGUIENTE INSTRUCCIÓN:" + Environment.NewLine + sSql;
+                        catchMensaje.LblMensaje.Text = conexion.sMensajeError;
                         catchMensaje.ShowDialog();
                         return false;
                     }
@@ -2368,7 +2448,7 @@ namespace Palatium.ComandaNueva
                     if (!conexion.GFun_Lo_Ejecuta_SQL(sSql))
                     {
                         catchMensaje = new VentanasMensajes.frmMensajeCatch();
-                        catchMensaje.LblMensaje.Text = "ERROR EN LA SIGUIENTE INSTRUCCIÓN:" + Environment.NewLine + sSql;
+                        catchMensaje.LblMensaje.Text = conexion.sMensajeError;
                         catchMensaje.ShowDialog();
                         return false;
                     }
@@ -2386,7 +2466,7 @@ namespace Palatium.ComandaNueva
                     if (!conexion.GFun_Lo_Ejecuta_SQL(sSql))
                     {
                         catchMensaje = new VentanasMensajes.frmMensajeCatch();
-                        catchMensaje.LblMensaje.Text = "ERROR EN LA SIGUIENTE INSTRUCCIÓN:" + Environment.NewLine + sSql;
+                        catchMensaje.LblMensaje.Text = conexion.sMensajeError;
                         catchMensaje.ShowDialog();
                         return false;
                     }
@@ -2404,7 +2484,7 @@ namespace Palatium.ComandaNueva
                     if (!conexion.GFun_Lo_Ejecuta_SQL(sSql))
                     {
                         catchMensaje = new VentanasMensajes.frmMensajeCatch();
-                        catchMensaje.LblMensaje.Text = "ERROR EN LA SIGUIENTE INSTRUCCIÓN:" + Environment.NewLine + sSql;
+                        catchMensaje.LblMensaje.Text = conexion.sMensajeError;
                         catchMensaje.ShowDialog();
                         return false;
                     }
@@ -2440,7 +2520,7 @@ namespace Palatium.ComandaNueva
                 if (bRespuesta == false)
                 {
                     catchMensaje = new VentanasMensajes.frmMensajeCatch();
-                    catchMensaje.LblMensaje.Text = "ERROR EN LA SIGUIENTE INSTRUCCIÓN:" + Environment.NewLine + sSql;
+                    catchMensaje.LblMensaje.Text = conexion.sMensajeError;
                     catchMensaje.ShowDialog();
                     this.Close();
                     return;
@@ -2483,7 +2563,6 @@ namespace Palatium.ComandaNueva
         {
             if (iMaximoGrid != 0)
             {
-
                 if (bandera_clear == iBanderaAnteriorSiguiente)
                 {
                     if (iCuentaControlesGrid == 4)
@@ -2598,7 +2677,7 @@ namespace Palatium.ComandaNueva
                     if (bRespuesta == false)
                     {
                         catchMensaje = new VentanasMensajes.frmMensajeCatch();
-                        catchMensaje.LblMensaje.Text = "ERROR EN LA SIGUIENTE INSTRUCCIÓN:" + Environment.NewLine + sSql;
+                        catchMensaje.LblMensaje.Text = conexion.sMensajeError;
                         catchMensaje.ShowDialog();
                         return;
                     }

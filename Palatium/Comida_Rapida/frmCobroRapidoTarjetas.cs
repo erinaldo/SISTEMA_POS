@@ -222,12 +222,15 @@ namespace Palatium.Comida_Rapida
             try
             {
                 int iPagaIva;
+                int iPagaServicio;
                 Decimal dbCantidad;
                 Decimal dbValorUnitario;
                 Decimal dbValorRecargo;
                 Decimal dbSumaRecargo;
                 Decimal dbValorIva;
+                Decimal dbValorServicio;
                 Decimal dbSumaIva;
+                Decimal dbSumaServicio;
                 Decimal dbSumaTotal = 0;
 
                 if (dbPagar <= Program.dbValorMaximoRecargoTarjetas)
@@ -235,26 +238,31 @@ namespace Palatium.Comida_Rapida
                     for (int i = 0; i < dtValores.Rows.Count; i++)
                     {
                         iPagaIva = Convert.ToInt32(dtValores.Rows[i]["paga_iva"].ToString());
+                        iPagaServicio = Convert.ToInt32(dtValores.Rows[i]["paga_servicio"].ToString());
                         dbCantidad = Convert.ToDecimal(dtValores.Rows[i][0].ToString());
                         dbValorUnitario = Convert.ToDecimal(dtValores.Rows[i][1].ToString());
                         dbValorRecargo = dbValorUnitario * Program.dbPorcentajeRecargoTarjeta;
                         dbSumaRecargo = dbValorUnitario + dbValorRecargo;
 
                         if (iPagaIva == 1)
-                        {
-                            dbValorIva = dbSumaRecargo * Convert.ToDecimal(Program.iva);                            
-                        }
-
+                            dbValorIva = dbSumaRecargo * Convert.ToDecimal(Program.iva);
                         else
-                        {
                             dbValorIva = 0;
-                        }
 
-                        dbSumaIva = dbCantidad * (dbSumaRecargo + dbValorIva);
+                        //dbSumaIva = dbCantidad * (dbSumaRecargo + dbValorIva);
+
+                        if (iPagaServicio == 1)
+                            dbValorServicio = dbSumaRecargo * Convert.ToDecimal(Program.servicio);
+                        else
+                            dbValorServicio = 0;
+
+                        //dbSumaServicio = dbCantidad * (dbSumaRecargo + dbValorServicio);
+                        dbSumaIva = dbCantidad * (dbSumaRecargo + dbValorIva + dbValorServicio);
 
                         dtValores.Rows[i]["valor_recargo"] = dbSumaRecargo;
                         dtValores.Rows[i]["valor_iva"] = dbValorIva;
                         dtValores.Rows[i]["total"] = dbSumaIva;
+                        dtValores.Rows[i]["valor_servicio"] = dbValorServicio;
 
                         dbSumaTotal += dbSumaIva;
                     }

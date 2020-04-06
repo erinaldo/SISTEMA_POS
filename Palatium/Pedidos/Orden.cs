@@ -4480,7 +4480,7 @@ namespace Palatium
 
                 else
                 {
-                    Extras ex = new Extras(iVersionImpresionComanda);
+                    Pedidos.Extras ex = new Pedidos.Extras(iVersionImpresionComanda);
                     AddOwnedForm(ex);
                     ex.ShowDialog();
 

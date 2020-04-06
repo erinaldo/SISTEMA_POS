@@ -62,6 +62,7 @@
             this.pagaIva = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.idProducto = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tipoProducto = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.paga_servicio = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvPedido)).BeginInit();
@@ -267,7 +268,8 @@
             this.subtotal,
             this.pagaIva,
             this.idProducto,
-            this.tipoProducto});
+            this.tipoProducto,
+            this.paga_servicio});
             dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle8.BackColor = System.Drawing.SystemColors.Window;
             dataGridViewCellStyle8.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -369,6 +371,13 @@
             this.tipoProducto.ReadOnly = true;
             this.tipoProducto.Visible = false;
             // 
+            // paga_servicio
+            // 
+            this.paga_servicio.HeaderText = "PAGA_SERVICIO";
+            this.paga_servicio.Name = "paga_servicio";
+            this.paga_servicio.ReadOnly = true;
+            this.paga_servicio.Visible = false;
+            // 
             // frmComandaClienteEmpresarial
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -435,5 +444,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn pagaIva;
         private System.Windows.Forms.DataGridViewTextBoxColumn idProducto;
         private System.Windows.Forms.DataGridViewTextBoxColumn tipoProducto;
+        private System.Windows.Forms.DataGridViewTextBoxColumn paga_servicio;
     }
 }

@@ -49,6 +49,10 @@
             this.grupoReceta = new System.Windows.Forms.GroupBox();
             this.dbAyudaReceta = new Controles.Auxiliares.DB_Ayuda();
             this.grupoDatos = new System.Windows.Forms.GroupBox();
+            this.chkItemTarjetaRegalo = new System.Windows.Forms.CheckBox();
+            this.chkParaTarjetaRegalo = new System.Windows.Forms.CheckBox();
+            this.chkItemTarjetaAlmuerzo = new System.Windows.Forms.CheckBox();
+            this.chkParaTarjetaAlmuerzo = new System.Windows.Forms.CheckBox();
             this.label21 = new System.Windows.Forms.Label();
             this.txtRendimiento = new System.Windows.Forms.TextBox();
             this.label15 = new System.Windows.Forms.Label();
@@ -85,10 +89,7 @@
             this.rdbGuardaConImpuestos = new System.Windows.Forms.RadioButton();
             this.rdbGuardaSinImpuestos = new System.Windows.Forms.RadioButton();
             this.chkHabilitado = new System.Windows.Forms.CheckBox();
-            this.chkItemTarjetaAlmuerzo = new System.Windows.Forms.CheckBox();
-            this.chkParaTarjetaAlmuerzo = new System.Windows.Forms.CheckBox();
-            this.chkParaTarjetaRegalo = new System.Windows.Forms.CheckBox();
-            this.chkItemTarjetaRegalo = new System.Windows.Forms.CheckBox();
+            this.chkPagaServicio = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.dgvProductos)).BeginInit();
             this.grupoRegistros.SuspendLayout();
             this.grupoReceta.SuspendLayout();
@@ -248,7 +249,7 @@
             // 
             this.chkExpira.AutoSize = true;
             this.chkExpira.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.chkExpira.Location = new System.Drawing.Point(132, 242);
+            this.chkExpira.Location = new System.Drawing.Point(226, 242);
             this.chkExpira.Name = "chkExpira";
             this.chkExpira.Size = new System.Drawing.Size(61, 19);
             this.chkExpira.TabIndex = 17;
@@ -259,7 +260,7 @@
             // 
             this.chkPrecioModificable.AutoSize = true;
             this.chkPrecioModificable.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.chkPrecioModificable.Location = new System.Drawing.Point(226, 242);
+            this.chkPrecioModificable.Location = new System.Drawing.Point(293, 242);
             this.chkPrecioModificable.Name = "chkPrecioModificable";
             this.chkPrecioModificable.Size = new System.Drawing.Size(128, 19);
             this.chkPrecioModificable.TabIndex = 18;
@@ -305,6 +306,7 @@
             // 
             // grupoDatos
             // 
+            this.grupoDatos.Controls.Add(this.chkPagaServicio);
             this.grupoDatos.Controls.Add(this.chkItemTarjetaRegalo);
             this.grupoDatos.Controls.Add(this.chkParaTarjetaRegalo);
             this.grupoDatos.Controls.Add(this.chkItemTarjetaAlmuerzo);
@@ -349,6 +351,50 @@
             this.grupoDatos.TabIndex = 24;
             this.grupoDatos.TabStop = false;
             this.grupoDatos.Text = "Datos Generales";
+            // 
+            // chkItemTarjetaRegalo
+            // 
+            this.chkItemTarjetaRegalo.AutoSize = true;
+            this.chkItemTarjetaRegalo.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.chkItemTarjetaRegalo.Location = new System.Drawing.Point(226, 303);
+            this.chkItemTarjetaRegalo.Name = "chkItemTarjetaRegalo";
+            this.chkItemTarjetaRegalo.Size = new System.Drawing.Size(183, 19);
+            this.chkItemTarjetaRegalo.TabIndex = 84;
+            this.chkItemTarjetaRegalo.Text = "Ítem de una tarjeta de regalo";
+            this.chkItemTarjetaRegalo.UseVisualStyleBackColor = true;
+            // 
+            // chkParaTarjetaRegalo
+            // 
+            this.chkParaTarjetaRegalo.AutoSize = true;
+            this.chkParaTarjetaRegalo.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.chkParaTarjetaRegalo.Location = new System.Drawing.Point(12, 303);
+            this.chkParaTarjetaRegalo.Name = "chkParaTarjetaRegalo";
+            this.chkParaTarjetaRegalo.Size = new System.Drawing.Size(153, 19);
+            this.chkParaTarjetaRegalo.TabIndex = 83;
+            this.chkParaTarjetaRegalo.Text = "Para Tarjeta de Regalo";
+            this.chkParaTarjetaRegalo.UseVisualStyleBackColor = true;
+            // 
+            // chkItemTarjetaAlmuerzo
+            // 
+            this.chkItemTarjetaAlmuerzo.AutoSize = true;
+            this.chkItemTarjetaAlmuerzo.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.chkItemTarjetaAlmuerzo.Location = new System.Drawing.Point(226, 282);
+            this.chkItemTarjetaAlmuerzo.Name = "chkItemTarjetaAlmuerzo";
+            this.chkItemTarjetaAlmuerzo.Size = new System.Drawing.Size(200, 19);
+            this.chkItemTarjetaAlmuerzo.TabIndex = 82;
+            this.chkItemTarjetaAlmuerzo.Text = "Ítem de una tarjeta de almuerzo";
+            this.chkItemTarjetaAlmuerzo.UseVisualStyleBackColor = true;
+            // 
+            // chkParaTarjetaAlmuerzo
+            // 
+            this.chkParaTarjetaAlmuerzo.AutoSize = true;
+            this.chkParaTarjetaAlmuerzo.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.chkParaTarjetaAlmuerzo.Location = new System.Drawing.Point(12, 282);
+            this.chkParaTarjetaAlmuerzo.Name = "chkParaTarjetaAlmuerzo";
+            this.chkParaTarjetaAlmuerzo.Size = new System.Drawing.Size(165, 19);
+            this.chkParaTarjetaAlmuerzo.TabIndex = 81;
+            this.chkParaTarjetaAlmuerzo.Text = "Para Tarjeta de Almuerzo";
+            this.chkParaTarjetaAlmuerzo.UseVisualStyleBackColor = true;
             // 
             // label21
             // 
@@ -752,49 +798,17 @@
             this.chkHabilitado.Text = "Producto Habilitado";
             this.chkHabilitado.UseVisualStyleBackColor = true;
             // 
-            // chkItemTarjetaAlmuerzo
+            // chkPagaServicio
             // 
-            this.chkItemTarjetaAlmuerzo.AutoSize = true;
-            this.chkItemTarjetaAlmuerzo.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.chkItemTarjetaAlmuerzo.Location = new System.Drawing.Point(226, 282);
-            this.chkItemTarjetaAlmuerzo.Name = "chkItemTarjetaAlmuerzo";
-            this.chkItemTarjetaAlmuerzo.Size = new System.Drawing.Size(200, 19);
-            this.chkItemTarjetaAlmuerzo.TabIndex = 82;
-            this.chkItemTarjetaAlmuerzo.Text = "Ítem de una tarjeta de almuerzo";
-            this.chkItemTarjetaAlmuerzo.UseVisualStyleBackColor = true;
-            // 
-            // chkParaTarjetaAlmuerzo
-            // 
-            this.chkParaTarjetaAlmuerzo.AutoSize = true;
-            this.chkParaTarjetaAlmuerzo.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.chkParaTarjetaAlmuerzo.Location = new System.Drawing.Point(12, 282);
-            this.chkParaTarjetaAlmuerzo.Name = "chkParaTarjetaAlmuerzo";
-            this.chkParaTarjetaAlmuerzo.Size = new System.Drawing.Size(165, 19);
-            this.chkParaTarjetaAlmuerzo.TabIndex = 81;
-            this.chkParaTarjetaAlmuerzo.Text = "Para Tarjeta de Almuerzo";
-            this.chkParaTarjetaAlmuerzo.UseVisualStyleBackColor = true;
-            // 
-            // chkParaTarjetaRegalo
-            // 
-            this.chkParaTarjetaRegalo.AutoSize = true;
-            this.chkParaTarjetaRegalo.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.chkParaTarjetaRegalo.Location = new System.Drawing.Point(12, 303);
-            this.chkParaTarjetaRegalo.Name = "chkParaTarjetaRegalo";
-            this.chkParaTarjetaRegalo.Size = new System.Drawing.Size(153, 19);
-            this.chkParaTarjetaRegalo.TabIndex = 83;
-            this.chkParaTarjetaRegalo.Text = "Para Tarjeta de Regalo";
-            this.chkParaTarjetaRegalo.UseVisualStyleBackColor = true;
-            // 
-            // chkItemTarjetaRegalo
-            // 
-            this.chkItemTarjetaRegalo.AutoSize = true;
-            this.chkItemTarjetaRegalo.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.chkItemTarjetaRegalo.Location = new System.Drawing.Point(226, 303);
-            this.chkItemTarjetaRegalo.Name = "chkItemTarjetaRegalo";
-            this.chkItemTarjetaRegalo.Size = new System.Drawing.Size(183, 19);
-            this.chkItemTarjetaRegalo.TabIndex = 84;
-            this.chkItemTarjetaRegalo.Text = "Ítem de una tarjeta de regalo";
-            this.chkItemTarjetaRegalo.UseVisualStyleBackColor = true;
+            this.chkPagaServicio.AutoSize = true;
+            this.chkPagaServicio.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.chkPagaServicio.ForeColor = System.Drawing.Color.Red;
+            this.chkPagaServicio.Location = new System.Drawing.Point(93, 242);
+            this.chkPagaServicio.Name = "chkPagaServicio";
+            this.chkPagaServicio.Size = new System.Drawing.Size(101, 19);
+            this.chkPagaServicio.TabIndex = 85;
+            this.chkPagaServicio.Text = "Paga Servicio";
+            this.chkPagaServicio.UseVisualStyleBackColor = true;
             // 
             // frmIngresoProductos
             // 
@@ -893,5 +907,6 @@
         private System.Windows.Forms.CheckBox chkParaTarjetaRegalo;
         private System.Windows.Forms.CheckBox chkItemTarjetaAlmuerzo;
         private System.Windows.Forms.CheckBox chkParaTarjetaAlmuerzo;
+        private System.Windows.Forms.CheckBox chkPagaServicio;
     }
 }

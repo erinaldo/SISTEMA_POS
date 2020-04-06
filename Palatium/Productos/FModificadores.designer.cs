@@ -35,14 +35,13 @@
             this.cmbDestinoImpresion = new MisControles.ComboDatos();
             this.label5 = new System.Windows.Forms.Label();
             this.grupoPrecio = new System.Windows.Forms.GroupBox();
+            this.chkHabilitado = new System.Windows.Forms.CheckBox();
             this.txtPrecioCompra = new System.Windows.Forms.TextBox();
             this.txtPrecioMinorista = new System.Windows.Forms.TextBox();
             this.lblPreCompra = new System.Windows.Forms.Label();
             this.lblPrecioMinorista = new System.Windows.Forms.Label();
             this.txtSecuencia = new System.Windows.Forms.TextBox();
             this.lblSecuencia = new System.Windows.Forms.Label();
-            this.lblEstaCajero = new System.Windows.Forms.Label();
-            this.cmbEstado = new System.Windows.Forms.ComboBox();
             this.chkPagaIva = new System.Windows.Forms.CheckBox();
             this.chkModificable = new System.Windows.Forms.CheckBox();
             this.chkPrecioModificable = new System.Windows.Forms.CheckBox();
@@ -87,7 +86,7 @@
             this.tabCon_Modificadores.Location = new System.Drawing.Point(-4, 0);
             this.tabCon_Modificadores.Name = "tabCon_Modificadores";
             this.tabCon_Modificadores.SelectedIndex = 0;
-            this.tabCon_Modificadores.Size = new System.Drawing.Size(997, 564);
+            this.tabCon_Modificadores.Size = new System.Drawing.Size(997, 507);
             this.tabCon_Modificadores.TabIndex = 3;
             // 
             // tabPag_Modificadores
@@ -101,7 +100,7 @@
             this.tabPag_Modificadores.Location = new System.Drawing.Point(4, 22);
             this.tabPag_Modificadores.Name = "tabPag_Modificadores";
             this.tabPag_Modificadores.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPag_Modificadores.Size = new System.Drawing.Size(989, 538);
+            this.tabPag_Modificadores.Size = new System.Drawing.Size(989, 481);
             this.tabPag_Modificadores.TabIndex = 0;
             this.tabPag_Modificadores.Text = "Mantenimiento de Modificadores";
             // 
@@ -111,7 +110,7 @@
             this.grupoImpresion.Controls.Add(this.label5);
             this.grupoImpresion.Enabled = false;
             this.grupoImpresion.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.grupoImpresion.Location = new System.Drawing.Point(17, 380);
+            this.grupoImpresion.Location = new System.Drawing.Point(17, 347);
             this.grupoImpresion.Name = "grupoImpresion";
             this.grupoImpresion.Size = new System.Drawing.Size(398, 61);
             this.grupoImpresion.TabIndex = 74;
@@ -140,14 +139,13 @@
             // 
             // grupoPrecio
             // 
+            this.grupoPrecio.Controls.Add(this.chkHabilitado);
             this.grupoPrecio.Controls.Add(this.txtPrecioCompra);
             this.grupoPrecio.Controls.Add(this.txtPrecioMinorista);
             this.grupoPrecio.Controls.Add(this.lblPreCompra);
             this.grupoPrecio.Controls.Add(this.lblPrecioMinorista);
             this.grupoPrecio.Controls.Add(this.txtSecuencia);
             this.grupoPrecio.Controls.Add(this.lblSecuencia);
-            this.grupoPrecio.Controls.Add(this.lblEstaCajero);
-            this.grupoPrecio.Controls.Add(this.cmbEstado);
             this.grupoPrecio.Controls.Add(this.chkPagaIva);
             this.grupoPrecio.Controls.Add(this.chkModificable);
             this.grupoPrecio.Controls.Add(this.chkPrecioModificable);
@@ -155,10 +153,25 @@
             this.grupoPrecio.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.grupoPrecio.Location = new System.Drawing.Point(17, 208);
             this.grupoPrecio.Name = "grupoPrecio";
-            this.grupoPrecio.Size = new System.Drawing.Size(404, 160);
+            this.grupoPrecio.Size = new System.Drawing.Size(404, 133);
             this.grupoPrecio.TabIndex = 73;
             this.grupoPrecio.TabStop = false;
             this.grupoPrecio.Text = "Control de Precio";
+            // 
+            // chkHabilitado
+            // 
+            this.chkHabilitado.AutoSize = true;
+            this.chkHabilitado.Checked = true;
+            this.chkHabilitado.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkHabilitado.Enabled = false;
+            this.chkHabilitado.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.chkHabilitado.ForeColor = System.Drawing.Color.Red;
+            this.chkHabilitado.Location = new System.Drawing.Point(312, 102);
+            this.chkHabilitado.Name = "chkHabilitado";
+            this.chkHabilitado.Size = new System.Drawing.Size(83, 17);
+            this.chkHabilitado.TabIndex = 15;
+            this.chkHabilitado.Text = "Habilitado";
+            this.chkHabilitado.UseVisualStyleBackColor = true;
             // 
             // txtPrecioCompra
             // 
@@ -223,39 +236,14 @@
             this.lblSecuencia.TabIndex = 49;
             this.lblSecuencia.Text = "Secuencia:";
             // 
-            // lblEstaCajero
-            // 
-            this.lblEstaCajero.AutoSize = true;
-            this.lblEstaCajero.BackColor = System.Drawing.Color.Transparent;
-            this.lblEstaCajero.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblEstaCajero.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.lblEstaCajero.Location = new System.Drawing.Point(17, 95);
-            this.lblEstaCajero.Name = "lblEstaCajero";
-            this.lblEstaCajero.Size = new System.Drawing.Size(48, 15);
-            this.lblEstaCajero.TabIndex = 7;
-            this.lblEstaCajero.Text = "Estado:";
-            // 
-            // cmbEstado
-            // 
-            this.cmbEstado.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbEstado.Enabled = false;
-            this.cmbEstado.FormattingEnabled = true;
-            this.cmbEstado.Items.AddRange(new object[] {
-            "ACTIVO",
-            "INACTIVO"});
-            this.cmbEstado.Location = new System.Drawing.Point(168, 92);
-            this.cmbEstado.Name = "cmbEstado";
-            this.cmbEstado.Size = new System.Drawing.Size(151, 24);
-            this.cmbEstado.TabIndex = 12;
-            // 
             // chkPagaIva
             // 
             this.chkPagaIva.AutoSize = true;
             this.chkPagaIva.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.chkPagaIva.Location = new System.Drawing.Point(266, 134);
+            this.chkPagaIva.Location = new System.Drawing.Point(233, 102);
             this.chkPagaIva.Name = "chkPagaIva";
             this.chkPagaIva.Size = new System.Drawing.Size(73, 19);
-            this.chkPagaIva.TabIndex = 15;
+            this.chkPagaIva.TabIndex = 14;
             this.chkPagaIva.Text = "Paga Iva";
             this.chkPagaIva.UseVisualStyleBackColor = true;
             // 
@@ -263,10 +251,10 @@
             // 
             this.chkModificable.AutoSize = true;
             this.chkModificable.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.chkModificable.Location = new System.Drawing.Point(12, 134);
+            this.chkModificable.Location = new System.Drawing.Point(12, 102);
             this.chkModificable.Name = "chkModificable";
             this.chkModificable.Size = new System.Drawing.Size(90, 19);
-            this.chkModificable.TabIndex = 13;
+            this.chkModificable.TabIndex = 12;
             this.chkModificable.Text = "Modificable";
             this.chkModificable.UseVisualStyleBackColor = true;
             // 
@@ -274,10 +262,10 @@
             // 
             this.chkPrecioModificable.AutoSize = true;
             this.chkPrecioModificable.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.chkPrecioModificable.Location = new System.Drawing.Point(117, 134);
+            this.chkPrecioModificable.Location = new System.Drawing.Point(103, 102);
             this.chkPrecioModificable.Name = "chkPrecioModificable";
             this.chkPrecioModificable.Size = new System.Drawing.Size(128, 19);
-            this.chkPrecioModificable.TabIndex = 14;
+            this.chkPrecioModificable.TabIndex = 13;
             this.chkPrecioModificable.Text = "Precio modificable";
             this.chkPrecioModificable.UseVisualStyleBackColor = true;
             // 
@@ -289,7 +277,7 @@
             this.grupoGrid.Controls.Add(this.dgvDatos);
             this.grupoGrid.Location = new System.Drawing.Point(427, 19);
             this.grupoGrid.Name = "grupoGrid";
-            this.grupoGrid.Size = new System.Drawing.Size(549, 501);
+            this.grupoGrid.Size = new System.Drawing.Size(549, 453);
             this.grupoGrid.TabIndex = 24;
             this.grupoGrid.TabStop = false;
             this.grupoGrid.Text = "Lista de Registros";
@@ -318,12 +306,15 @@
             // 
             this.dgvDatos.AllowUserToAddRows = false;
             this.dgvDatos.AllowUserToDeleteRows = false;
+            this.dgvDatos.AllowUserToResizeColumns = false;
+            this.dgvDatos.AllowUserToResizeRows = false;
+            this.dgvDatos.BackgroundColor = System.Drawing.SystemColors.ControlLightLight;
             this.dgvDatos.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvDatos.Location = new System.Drawing.Point(15, 54);
             this.dgvDatos.Name = "dgvDatos";
             this.dgvDatos.ReadOnly = true;
             this.dgvDatos.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvDatos.Size = new System.Drawing.Size(517, 432);
+            this.dgvDatos.Size = new System.Drawing.Size(517, 385);
             this.dgvDatos.TabIndex = 21;
             this.dgvDatos.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvDatos_CellDoubleClick);
             // 
@@ -333,9 +324,9 @@
             this.grupoOpciones.Controls.Add(this.btnLimpiar);
             this.grupoOpciones.Controls.Add(this.btnAnular);
             this.grupoOpciones.Controls.Add(this.btnNuevo);
-            this.grupoOpciones.Location = new System.Drawing.Point(17, 447);
+            this.grupoOpciones.Location = new System.Drawing.Point(17, 412);
             this.grupoOpciones.Name = "grupoOpciones";
-            this.grupoOpciones.Size = new System.Drawing.Size(349, 73);
+            this.grupoOpciones.Size = new System.Drawing.Size(349, 64);
             this.grupoOpciones.TabIndex = 23;
             this.grupoOpciones.TabStop = false;
             this.grupoOpciones.Text = "Opciones";
@@ -433,9 +424,9 @@
             this.label1.ForeColor = System.Drawing.Color.Red;
             this.label1.Location = new System.Drawing.Point(244, 125);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(69, 15);
+            this.label1.Size = new System.Drawing.Size(76, 15);
             this.label1.TabIndex = 75;
-            this.label1.Text = "01-99 Max.";
+            this.label1.Text = "01-999 Max.";
             // 
             // cmbClaseProducto
             // 
@@ -553,7 +544,7 @@
             // txtCodigo
             // 
             this.txtCodigo.Location = new System.Drawing.Point(168, 123);
-            this.txtCodigo.MaxLength = 2;
+            this.txtCodigo.MaxLength = 3;
             this.txtCodigo.Name = "txtCodigo";
             this.txtCodigo.Size = new System.Drawing.Size(63, 20);
             this.txtCodigo.TabIndex = 7;
@@ -565,7 +556,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
-            this.ClientSize = new System.Drawing.Size(997, 568);
+            this.ClientSize = new System.Drawing.Size(997, 504);
             this.Controls.Add(this.tabCon_Modificadores);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
@@ -612,8 +603,6 @@
         private System.Windows.Forms.CheckBox chkPrecioModificable;
         private System.Windows.Forms.CheckBox chkModificable;
         private System.Windows.Forms.Label lblCodigo;
-        private System.Windows.Forms.ComboBox cmbEstado;
-        private System.Windows.Forms.Label lblEstaCajero;
         private System.Windows.Forms.Label lblDescrCajero;
         private System.Windows.Forms.TextBox txtDescripcion;
         private System.Windows.Forms.Label lblCodCategoria;
@@ -633,5 +622,6 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.ToolTip ttMensaje;
+        private System.Windows.Forms.CheckBox chkHabilitado;
     }
 }

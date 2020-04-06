@@ -475,6 +475,8 @@ namespace Palatium.Inicio
                 lblVersionDemo.Visible = true;
             else
                 lblVersionDemo.Visible = false;
+
+            lblNombreEquipo.Text = Program.sNombreEquipo;
         }
 
         private void btnGenerarFactura_MouseEnter(object sender, EventArgs e)
@@ -544,16 +546,26 @@ namespace Palatium.Inicio
             empleado.ShowDialog();
         }
 
-        private void btnBusquedaDactilar_Click(object sender, EventArgs e)
+        private void btnBusquedaDactilar_MouseEnter(object sender, EventArgs e)
+        {
+            ingresaBoton(btnBusquedaPorIdentificacion);
+        }
+
+        private void btnBusquedaDactilar_MouseLeave(object sender, EventArgs e)
+        {
+            salidaBoton(btnBusquedaPorIdentificacion);
+        }
+
+        private void btnBusquedaPorIdentificacion_Click(object sender, EventArgs e)
         {
             if (Program.iPuedeCobrar == 1)
             {
                 llenarArregloMaximo();
-                ingresaBoton(btnBusquedaDactilar);
+                ingresaBoton(btnBusquedaPorIdentificacion);
                 Program.sIDPERSONA = null;
                 consultarDatos("12", "");
 
-                Empresa.frmEspereHuellaDactilar espere = new Empresa.frmEspereHuellaDactilar(Program.iIdOrigenOrden);
+                Empresa.frmPantallaEspereAlmuerzos espere = new Empresa.frmPantallaEspereAlmuerzos(Program.iIdOrigenOrden);
                 espere.ShowDialog();
             }
 
@@ -565,14 +577,14 @@ namespace Palatium.Inicio
             }
         }
 
-        private void btnBusquedaDactilar_MouseEnter(object sender, EventArgs e)
+        private void btnBusquedaPorIdentificacion_MouseEnter(object sender, EventArgs e)
         {
-            ingresaBoton(btnBusquedaDactilar);
+            ingresaBoton(btnBusquedaPorIdentificacion);
         }
 
-        private void btnBusquedaDactilar_MouseLeave(object sender, EventArgs e)
+        private void btnBusquedaPorIdentificacion_MouseLeave(object sender, EventArgs e)
         {
-            salidaBoton(btnBusquedaDactilar);
+            salidaBoton(btnBusquedaPorIdentificacion);
         }
     }
 }

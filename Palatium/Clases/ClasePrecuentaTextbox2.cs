@@ -212,7 +212,7 @@ namespace Palatium.Clases
 
             if (dbPorcentajeServicio != 0)
             {
-                sTexto += (dbPorcentajeServicio.ToString("N0") + "% SERVICIO").PadRight(31, ' ') + dbSumaServicio.ToString("N2").PadLeft(9, ' ') + Environment.NewLine;
+                sTexto += (dbPorcentajeServicio.ToString("N0") + "% SERVICIO:").PadRight(31, ' ') + dbSumaServicio.ToString("N2").PadLeft(9, ' ') + Environment.NewLine;
             }
 
             sTexto += "----------------------------------------" + Environment.NewLine;

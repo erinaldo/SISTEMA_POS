@@ -43,6 +43,8 @@
             this.btnDatosClientes = new System.Windows.Forms.Button();
             this.logo = new System.Windows.Forms.PictureBox();
             this.lblVersionDemo = new System.Windows.Forms.Label();
+            this.lblNombreEquipo = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.logo)).BeginInit();
             this.SuspendLayout();
             // 
@@ -333,12 +335,34 @@
             this.lblVersionDemo.TabIndex = 81;
             this.lblVersionDemo.Text = "Versión Demo";
             // 
+            // lblNombreEquipo
+            // 
+            this.lblNombreEquipo.AutoSize = true;
+            this.lblNombreEquipo.Font = new System.Drawing.Font("Maiandra GD", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblNombreEquipo.Location = new System.Drawing.Point(197, 591);
+            this.lblNombreEquipo.Name = "lblNombreEquipo";
+            this.lblNombreEquipo.Size = new System.Drawing.Size(209, 22);
+            this.lblNombreEquipo.TabIndex = 94;
+            this.lblNombreEquipo.Text = "NOMBRE DEL EQUIPO";
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Font = new System.Drawing.Font("Maiandra GD", 14.25F);
+            this.label7.Location = new System.Drawing.Point(42, 591);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(149, 22);
+            this.label7.TabIndex = 93;
+            this.label7.Text = "Nombre Equipo:";
+            // 
             // frmInicioRestaurante
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
             this.ClientSize = new System.Drawing.Size(1360, 694);
+            this.Controls.Add(this.lblNombreEquipo);
+            this.Controls.Add(this.label7);
             this.Controls.Add(this.lblVersionDemo);
             this.Controls.Add(this.btnSalidaCajero);
             this.Controls.Add(this.btnDatosClientes);
@@ -381,5 +405,7 @@
         private System.Windows.Forms.Button btnDatosClientes;
         private System.Windows.Forms.PictureBox logo;
         private System.Windows.Forms.Label lblVersionDemo;
+        private System.Windows.Forms.Label lblNombreEquipo;
+        private System.Windows.Forms.Label label7;
     }
 }

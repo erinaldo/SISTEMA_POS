@@ -108,9 +108,9 @@
             this.label2.ForeColor = System.Drawing.SystemColors.Desktop;
             this.label2.Location = new System.Drawing.Point(12, 170);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(214, 20);
+            this.label2.Size = new System.Drawing.Size(260, 20);
             this.label2.TabIndex = 9;
-            this.label2.Text = "Precio Unitario incluido IVA: *";
+            this.label2.Text = "Precio Unitario incluido impuestos: *";
             // 
             // txtNombreProducto
             // 

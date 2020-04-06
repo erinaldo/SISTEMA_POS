@@ -454,6 +454,7 @@
     <Compile Include="Clases\ClaseReportePropietario.cs" />
     <Compile Include="Clases\ClaseReportes.cs" />
     <Compile Include="Clases\ClaseReportesAdicionales.cs" />
+    <Compile Include="Clases_Crear_Comandas\ClaseObtenerIdOrigenOrden.cs" />
     <Compile Include="Clases_Factura_Electronica\ClaseImprimirFacturaElectronica.cs" />
     <Compile Include="Clases_Factura_Electronica\ClaseRIDE.cs" />
     <Compile Include="Clases_Factura_Electronica\ClaseVerificarDirectorios.cs" />
@@ -541,12 +542,6 @@
     <Compile Include="Comida_Rapida\frmComandaComidaRapida.designer.cs">
       <DependentUpon>frmComandaComidaRapida.cs</DependentUpon>
     </Compile>
-    <Compile Include="Comida_Rapida\frmComandaPrueba.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Comida_Rapida\frmComandaPrueba.Designer.cs">
-      <DependentUpon>frmComandaPrueba.cs</DependentUpon>
-    </Compile>
     <Compile Include="ControlesNuevos\BotonCircular.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -596,6 +591,7 @@
       <DependentUpon>dsReporte.xsd</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Clases_Crear_Comandas\ClaseCrearComanda.cs" />
     <Compile Include="Empresa\frmClienteEmpresarial.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -661,6 +657,12 @@
     </Compile>
     <Compile Include="Empresa\frmModalEmpleadoEmpresa.Designer.cs">
       <DependentUpon>frmModalEmpleadoEmpresa.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Empresa\frmPantallaEspereAlmuerzos.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Empresa\frmPantallaEspereAlmuerzos.Designer.cs">
+      <DependentUpon>frmPantallaEspereAlmuerzos.cs</DependentUpon>
     </Compile>
     <Compile Include="Empresa\frmRegistrarHuellaEmpleadoEmpresa.cs">
       <SubType>Form</SubType>
@@ -2851,9 +2853,6 @@
     <EmbeddedResource Include="Comida_Rapida\frmComandaComidaRapida.resx">
       <DependentUpon>frmComandaComidaRapida.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Comida_Rapida\frmComandaPrueba.resx">
-      <DependentUpon>frmComandaPrueba.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="ControlesNuevos\DbAyuda_Nuevo.resx">
       <DependentUpon>DbAyuda_Nuevo.cs</DependentUpon>
     </EmbeddedResource>
@@ -2907,6 +2906,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Empresa\frmModalEmpleadoEmpresa.resx">
       <DependentUpon>frmModalEmpleadoEmpresa.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Empresa\frmPantallaEspereAlmuerzos.resx">
+      <DependentUpon>frmPantallaEspereAlmuerzos.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Empresa\frmRegistrarHuellaEmpleadoEmpresa.resx">
       <DependentUpon>frmRegistrarHuellaEmpleadoEmpresa.cs</DependentUpon>

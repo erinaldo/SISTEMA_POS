@@ -156,6 +156,10 @@ namespace Palatium.Clases
                         Program.dbPorcentajeRecargoTarjeta = Convert.ToDecimal(dtConsulta.Rows[0]["porcentaje_recargo_tarjetas"].ToString()) / 100;
                         Program.sCorreoElectronicoDefault = dtConsulta.Rows[0]["correo_electronico_default"].ToString();
 
+                        Program.iUsarLectorHuellas = Convert.ToInt32(dtConsulta.Rows[0]["usar_lector_huellas_dactilares"].ToString());
+                        Program.iUsarLectorPantallaEspere = Convert.ToInt32(dtConsulta.Rows[0]["usar_pantalla_espera_almuerzos"].ToString());
+                        Program.iIdProductoAlmuerzoDefault = Convert.ToInt32(dtConsulta.Rows[0]["id_producto_almuerzo_default"].ToString());
+
                         return "";
                     }
 

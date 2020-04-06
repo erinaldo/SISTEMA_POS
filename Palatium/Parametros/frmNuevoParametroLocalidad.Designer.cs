@@ -139,6 +139,12 @@
             this.cmbLocalidad = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
             this.btnGrabar = new System.Windows.Forms.Button();
+            this.tabAlmuerzos = new System.Windows.Forms.TabPage();
+            this.chkPantallaEsperaAlmuerzos = new System.Windows.Forms.CheckBox();
+            this.chkLectorHuellas = new System.Windows.Forms.CheckBox();
+            this.btnLimpiarAlmuerzo = new System.Windows.Forms.Button();
+            this.dbAyudaItemAlmuerzo = new Controles.Auxiliares.DB_Ayuda();
+            this.label21 = new System.Windows.Forms.Label();
             this.tbControl.SuspendLayout();
             this.tabComandas.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -148,6 +154,7 @@
             this.groupBox1.SuspendLayout();
             this.groupBox4.SuspendLayout();
             this.tabParametrosAdicionales.SuspendLayout();
+            this.tabAlmuerzos.SuspendLayout();
             this.SuspendLayout();
             // 
             // tbControl
@@ -157,6 +164,7 @@
             this.tbControl.Controls.Add(this.tabOpciones);
             this.tbControl.Controls.Add(this.tabAsignacion);
             this.tbControl.Controls.Add(this.tabParametrosAdicionales);
+            this.tbControl.Controls.Add(this.tabAlmuerzos);
             this.tbControl.Location = new System.Drawing.Point(0, 50);
             this.tbControl.Name = "tbControl";
             this.tbControl.SelectedIndex = 0;
@@ -1520,6 +1528,79 @@
             this.btnGrabar.UseVisualStyleBackColor = false;
             this.btnGrabar.Click += new System.EventHandler(this.btnGrabar_Click);
             // 
+            // tabAlmuerzos
+            // 
+            this.tabAlmuerzos.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.tabAlmuerzos.Controls.Add(this.btnLimpiarAlmuerzo);
+            this.tabAlmuerzos.Controls.Add(this.dbAyudaItemAlmuerzo);
+            this.tabAlmuerzos.Controls.Add(this.label21);
+            this.tabAlmuerzos.Controls.Add(this.chkPantallaEsperaAlmuerzos);
+            this.tabAlmuerzos.Controls.Add(this.chkLectorHuellas);
+            this.tabAlmuerzos.Location = new System.Drawing.Point(4, 22);
+            this.tabAlmuerzos.Name = "tabAlmuerzos";
+            this.tabAlmuerzos.Size = new System.Drawing.Size(584, 402);
+            this.tabAlmuerzos.TabIndex = 5;
+            this.tabAlmuerzos.Text = "Configuración Adicional de Almuerzos";
+            // 
+            // chkPantallaEsperaAlmuerzos
+            // 
+            this.chkPantallaEsperaAlmuerzos.AutoSize = true;
+            this.chkPantallaEsperaAlmuerzos.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F);
+            this.chkPantallaEsperaAlmuerzos.Location = new System.Drawing.Point(19, 47);
+            this.chkPantallaEsperaAlmuerzos.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.chkPantallaEsperaAlmuerzos.Name = "chkPantallaEsperaAlmuerzos";
+            this.chkPantallaEsperaAlmuerzos.Size = new System.Drawing.Size(410, 19);
+            this.chkPantallaEsperaAlmuerzos.TabIndex = 55;
+            this.chkPantallaEsperaAlmuerzos.Text = "Permitir el uso de pantalla de espera para generar tickets de almuerzo";
+            this.chkPantallaEsperaAlmuerzos.UseVisualStyleBackColor = true;
+            // 
+            // chkLectorHuellas
+            // 
+            this.chkLectorHuellas.AutoSize = true;
+            this.chkLectorHuellas.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F);
+            this.chkLectorHuellas.Location = new System.Drawing.Point(19, 23);
+            this.chkLectorHuellas.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.chkLectorHuellas.Name = "chkLectorHuellas";
+            this.chkLectorHuellas.Size = new System.Drawing.Size(360, 19);
+            this.chkLectorHuellas.TabIndex = 54;
+            this.chkLectorHuellas.Text = "Permitir el uso de lector de huellas dactilares para almuerzos";
+            this.chkLectorHuellas.UseVisualStyleBackColor = true;
+            // 
+            // btnLimpiarAlmuerzo
+            // 
+            this.btnLimpiarAlmuerzo.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnLimpiarAlmuerzo.ForeColor = System.Drawing.Color.Red;
+            this.btnLimpiarAlmuerzo.Location = new System.Drawing.Point(545, 94);
+            this.btnLimpiarAlmuerzo.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.btnLimpiarAlmuerzo.Name = "btnLimpiarAlmuerzo";
+            this.btnLimpiarAlmuerzo.Size = new System.Drawing.Size(28, 25);
+            this.btnLimpiarAlmuerzo.TabIndex = 122;
+            this.btnLimpiarAlmuerzo.Text = "X";
+            this.btnLimpiarAlmuerzo.UseVisualStyleBackColor = true;
+            // 
+            // dbAyudaItemAlmuerzo
+            // 
+            this.dbAyudaItemAlmuerzo.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F);
+            this.dbAyudaItemAlmuerzo.iId = 0;
+            this.dbAyudaItemAlmuerzo.Location = new System.Drawing.Point(9, 97);
+            this.dbAyudaItemAlmuerzo.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.dbAyudaItemAlmuerzo.Name = "dbAyudaItemAlmuerzo";
+            this.dbAyudaItemAlmuerzo.sCodigo = null;
+            this.dbAyudaItemAlmuerzo.Size = new System.Drawing.Size(528, 32);
+            this.dbAyudaItemAlmuerzo.sNombre = null;
+            this.dbAyudaItemAlmuerzo.TabIndex = 121;
+            // 
+            // label21
+            // 
+            this.label21.AutoSize = true;
+            this.label21.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label21.Location = new System.Drawing.Point(9, 79);
+            this.label21.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label21.Name = "label21";
+            this.label21.Size = new System.Drawing.Size(103, 15);
+            this.label21.TabIndex = 120;
+            this.label21.Text = "Ítem de Almuerzo";
+            // 
             // frmNuevoParametroLocalidad
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1552,6 +1633,8 @@
             this.groupBox4.PerformLayout();
             this.tabParametrosAdicionales.ResumeLayout(false);
             this.tabParametrosAdicionales.PerformLayout();
+            this.tabAlmuerzos.ResumeLayout(false);
+            this.tabAlmuerzos.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1670,6 +1753,12 @@
         private System.Windows.Forms.CheckBox chkImprimirPrecuentaGuardar;
         private System.Windows.Forms.CheckBox chkLeerMeseroMesas;
         private System.Windows.Forms.Label label19;
+        private System.Windows.Forms.TabPage tabAlmuerzos;
+        private System.Windows.Forms.Button btnLimpiarAlmuerzo;
+        private Controles.Auxiliares.DB_Ayuda dbAyudaItemAlmuerzo;
+        private System.Windows.Forms.Label label21;
+        private System.Windows.Forms.CheckBox chkPantallaEsperaAlmuerzos;
+        private System.Windows.Forms.CheckBox chkLectorHuellas;
 
 
     }

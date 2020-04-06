@@ -320,5 +320,13 @@ namespace Palatium.ComandaNueva
             cargarComandas();
             txtBusqueda.Focus();
         }
+
+        private void frmComandasCuentasPorCobrar_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Escape)
+            {
+                this.Close();
+            }
+        }
     }
 }

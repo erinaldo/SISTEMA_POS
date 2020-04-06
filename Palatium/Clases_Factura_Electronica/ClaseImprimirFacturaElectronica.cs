@@ -235,7 +235,7 @@ namespace Palatium.Clases_Factura_Electronica
                 sFactura[0] = "SubT. " + (Convert.ToDouble(dtConsulta.Rows[0][32].ToString())).ToString("N0").PadLeft(2, ' ') + "%:";
                 sFactura[2] = "Descuento:";
                 sFactura[4] = "IVA   " + (Convert.ToDouble(dtConsulta.Rows[0][32].ToString())).ToString("N0").PadLeft(2, ' ') + "%:";
-                sFactura[5] = "Servicio " + (Convert.ToDouble(dtConsulta.Rows[0][70].ToString())).ToString("N0").PadLeft(2, ' ') + "%:";
+                sFactura[5] = "Serv. " + (Convert.ToDouble(dtConsulta.Rows[0][70].ToString())).ToString("N0").PadLeft(2, ' ') + "%:";
 
                 if (llenarItemsFactura() == false)
                 {

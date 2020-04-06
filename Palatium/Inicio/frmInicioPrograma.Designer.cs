@@ -48,6 +48,8 @@
             this.logo = new System.Windows.Forms.PictureBox();
             this.button1 = new System.Windows.Forms.Button();
             this.lblVersionDemo = new System.Windows.Forms.Label();
+            this.lblNombreEquipo = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
             this.grupoDatos.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.logo)).BeginInit();
@@ -113,6 +115,8 @@
             // 
             // grupoDatos
             // 
+            this.grupoDatos.Controls.Add(this.lblNombreEquipo);
+            this.grupoDatos.Controls.Add(this.label7);
             this.grupoDatos.Controls.Add(this.lblEstadoCaja);
             this.grupoDatos.Controls.Add(this.lblCajeroApertura);
             this.grupoDatos.Controls.Add(this.lblJornada);
@@ -126,7 +130,7 @@
             this.grupoDatos.Font = new System.Drawing.Font("Maiandra GD", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.grupoDatos.Location = new System.Drawing.Point(517, 487);
             this.grupoDatos.Name = "grupoDatos";
-            this.grupoDatos.Size = new System.Drawing.Size(690, 116);
+            this.grupoDatos.Size = new System.Drawing.Size(773, 116);
             this.grupoDatos.TabIndex = 76;
             this.grupoDatos.TabStop = false;
             this.grupoDatos.Text = "DATOS DE LA CAJA VIGENTE";
@@ -281,6 +285,25 @@
             this.lblVersionDemo.TabIndex = 80;
             this.lblVersionDemo.Text = "Versión Demo";
             // 
+            // lblNombreEquipo
+            // 
+            this.lblNombreEquipo.AutoSize = true;
+            this.lblNombreEquipo.Font = new System.Drawing.Font("Maiandra GD", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblNombreEquipo.Location = new System.Drawing.Point(514, 85);
+            this.lblNombreEquipo.Name = "lblNombreEquipo";
+            this.lblNombreEquipo.Size = new System.Drawing.Size(140, 22);
+            this.lblNombreEquipo.TabIndex = 11;
+            this.lblNombreEquipo.Text = "Fecha Apertura:";
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(349, 85);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(149, 22);
+            this.label7.TabIndex = 10;
+            this.label7.Text = "Nombre Equipo:";
+            // 
             // frmInicioPrograma
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -331,5 +354,7 @@
         private System.Windows.Forms.PictureBox logo;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Label lblVersionDemo;
+        private System.Windows.Forms.Label lblNombreEquipo;
+        private System.Windows.Forms.Label label7;
     }
 }
