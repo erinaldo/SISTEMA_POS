@@ -1523,6 +1523,18 @@ namespace Palatium.Productos
                 chkPagaServicio.Enabled = false;
             }
 
+            if (Program.iComandaTarjetaAlmuerzos == 1)
+            {
+                chkParaTarjetaAlmuerzo.Visible = true;
+                chkItemTarjetaAlmuerzo.Visible = true;
+            }
+
+            else
+            {
+                chkParaTarjetaAlmuerzo.Visible = false;
+                chkItemTarjetaAlmuerzo.Visible = false;
+            }
+
             datosListas();
             limpiarTodo();
         }
@@ -1634,7 +1646,6 @@ namespace Palatium.Productos
 
                 txtPresentacion.Text = dgvProductos.CurrentRow.Cells[27].Value.ToString();
                 txtRendimiento.Text = dgvProductos.CurrentRow.Cells[28].Value.ToString();
-
 
                 btnAgregar.Text = "Actualizar";
                 btnEliminar.Enabled = true;

@@ -70,6 +70,7 @@
             this.lblCodCategoria = new System.Windows.Forms.Label();
             this.txtCodigo = new System.Windows.Forms.TextBox();
             this.ttMensaje = new System.Windows.Forms.ToolTip(this.components);
+            this.chkPagaServicio = new System.Windows.Forms.CheckBox();
             this.tabCon_Modificadores.SuspendLayout();
             this.tabPag_Modificadores.SuspendLayout();
             this.grupoImpresion.SuspendLayout();
@@ -139,6 +140,7 @@
             // 
             // grupoPrecio
             // 
+            this.grupoPrecio.Controls.Add(this.chkPagaServicio);
             this.grupoPrecio.Controls.Add(this.chkHabilitado);
             this.grupoPrecio.Controls.Add(this.txtPrecioCompra);
             this.grupoPrecio.Controls.Add(this.txtPrecioMinorista);
@@ -166,7 +168,7 @@
             this.chkHabilitado.Enabled = false;
             this.chkHabilitado.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.chkHabilitado.ForeColor = System.Drawing.Color.Red;
-            this.chkHabilitado.Location = new System.Drawing.Point(312, 102);
+            this.chkHabilitado.Location = new System.Drawing.Point(247, 104);
             this.chkHabilitado.Name = "chkHabilitado";
             this.chkHabilitado.Size = new System.Drawing.Size(83, 17);
             this.chkHabilitado.TabIndex = 15;
@@ -240,7 +242,7 @@
             // 
             this.chkPagaIva.AutoSize = true;
             this.chkPagaIva.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.chkPagaIva.Location = new System.Drawing.Point(233, 102);
+            this.chkPagaIva.Location = new System.Drawing.Point(297, 24);
             this.chkPagaIva.Name = "chkPagaIva";
             this.chkPagaIva.Size = new System.Drawing.Size(73, 19);
             this.chkPagaIva.TabIndex = 14;
@@ -550,6 +552,18 @@
             this.txtCodigo.TabIndex = 7;
             this.txtCodigo.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtCodigo_KeyPress);
             // 
+            // chkPagaServicio
+            // 
+            this.chkPagaServicio.AutoSize = true;
+            this.chkPagaServicio.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.chkPagaServicio.ForeColor = System.Drawing.Color.Red;
+            this.chkPagaServicio.Location = new System.Drawing.Point(297, 43);
+            this.chkPagaServicio.Name = "chkPagaServicio";
+            this.chkPagaServicio.Size = new System.Drawing.Size(101, 19);
+            this.chkPagaServicio.TabIndex = 86;
+            this.chkPagaServicio.Text = "Paga Servicio";
+            this.chkPagaServicio.UseVisualStyleBackColor = true;
+            // 
             // FModificadores
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -623,5 +637,6 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.ToolTip ttMensaje;
         private System.Windows.Forms.CheckBox chkHabilitado;
+        private System.Windows.Forms.CheckBox chkPagaServicio;
     }
 }

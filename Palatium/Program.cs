@@ -403,6 +403,10 @@ namespace Palatium
         public static Decimal dbValorComisionEmpleados;
         public static int iManejaDeliveryVariable;
         public static int iCantidadImpresionesTarjetas;
+        public static int iComandaVentaRapida;
+        public static int iComandaClienteEmpresarial;
+        public static int iComandaTarjetaAlmuerzos;
+        public static int iComandaConsumoInterno;
         //-----------------------------------------------------------------------------------------------------------------------
 
         //VERSION DEL PRODUCTO

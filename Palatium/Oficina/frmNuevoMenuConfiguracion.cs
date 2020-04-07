@@ -863,5 +863,11 @@ namespace Palatium.Oficina
             Tarjeta_Almuerzo.frmMantenimientoTarjetaAlmuerzo tarjeta = new Tarjeta_Almuerzo.frmMantenimientoTarjetaAlmuerzo();
             verificarFormularios(tarjeta, this);
         }
+
+        private void subMenuProductosMasivoServicio_Click(object sender, EventArgs e)
+        {
+            Productos.frmCambioMasivoPropinaProductos prod = new Productos.frmCambioMasivoPropinaProductos();
+            verificarFormularios(prod, this);
+        }
     }
 }

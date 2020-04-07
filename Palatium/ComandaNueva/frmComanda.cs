@@ -232,7 +232,7 @@ namespace Palatium.ComandaNueva
                 if (bRespuesta == false)
                 {
                     catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
-                    catchMensaje.lblMensaje.Text = "ERROR EN LA SIGUIENTE INSTRUCCIÓN:" + Environment.NewLine + sSql;
+                    catchMensaje.lblMensaje.Text = conexion.sMensajeError;
                     catchMensaje.ShowDialog();
                     return false;
                 }
@@ -252,7 +252,7 @@ namespace Palatium.ComandaNueva
                 if (bRespuesta == false)
                 {
                     catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
-                    catchMensaje.lblMensaje.Text = "ERROR EN LA SIGUIENTE INSTRUCCIÓN:" + Environment.NewLine + sSql;
+                    catchMensaje.lblMensaje.Text = conexion.sMensajeError;
                     catchMensaje.ShowDialog();
                     return false;
                 }
@@ -282,7 +282,7 @@ namespace Palatium.ComandaNueva
                 if (bRespuesta == false)
                 {
                     catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
-                    catchMensaje.lblMensaje.Text = "ERROR EN LA SIGUIENTE INSTRUCCIÓN:" + Environment.NewLine + sSql;
+                    catchMensaje.lblMensaje.Text = conexion.sMensajeError;
                     catchMensaje.ShowDialog();
                     return false;
                 }
@@ -340,7 +340,7 @@ namespace Palatium.ComandaNueva
                 if (bRespuesta == false)
                 {
                     catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
-                    catchMensaje.lblMensaje.Text = "ERROR EN LA SIGUIENTE INSTRUCCIÓN:" + Environment.NewLine + sSql;
+                    catchMensaje.lblMensaje.Text = conexion.sMensajeError;
                     catchMensaje.ShowDialog();
                     return false;
                 }
@@ -365,7 +365,7 @@ namespace Palatium.ComandaNueva
                 if (bRespuesta == false)
                 {
                     catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
-                    catchMensaje.lblMensaje.Text = "ERROR EN LA SIGUIENTE INSTRUCCIÓN:" + Environment.NewLine + sSql;
+                    catchMensaje.lblMensaje.Text = conexion.sMensajeError;
                     catchMensaje.ShowDialog();
                     return false;
                 }
@@ -387,7 +387,7 @@ namespace Palatium.ComandaNueva
                     if (bRespuesta == false)
                     {
                         catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
-                        catchMensaje.lblMensaje.Text = "ERROR EN LA SIGUIENTE INSTRUCCIÓN:" + Environment.NewLine + sSql;
+                        catchMensaje.lblMensaje.Text = conexion.sMensajeError;
                         catchMensaje.ShowDialog();
                         return false;
                     }
@@ -413,7 +413,7 @@ namespace Palatium.ComandaNueva
                     if (!conexion.GFun_Lo_Ejecuta_SQL(sSql))
                     {
                         catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
-                        catchMensaje.lblMensaje.Text = "ERROR EN LA SIGUIENTE INSTRUCCIÓN:" + Environment.NewLine + sSql;
+                        catchMensaje.lblMensaje.Text = conexion.sMensajeError;
                         catchMensaje.ShowDialog();
                         return false;
                     }
@@ -431,7 +431,7 @@ namespace Palatium.ComandaNueva
                     if (!conexion.GFun_Lo_Ejecuta_SQL(sSql))
                     {
                         catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
-                        catchMensaje.lblMensaje.Text = "ERROR EN LA SIGUIENTE INSTRUCCIÓN:" + Environment.NewLine + sSql;
+                        catchMensaje.lblMensaje.Text = conexion.sMensajeError;
                         catchMensaje.ShowDialog();
                         return false;
                     }
@@ -629,7 +629,7 @@ namespace Palatium.ComandaNueva
                 if (bRespuesta == false)
                 {
                     catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
-                    catchMensaje.lblMensaje.Text = "ERROR EN LA SIGUIENTE INSTRUCCIÓN:" + Environment.NewLine + sSql;
+                    catchMensaje.lblMensaje.Text = conexion.sMensajeError;
                     catchMensaje.ShowDialog();
                     return false;
                 }
@@ -662,7 +662,7 @@ namespace Palatium.ComandaNueva
                 if (bRespuesta == false)
                 {
                     catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
-                    catchMensaje.lblMensaje.Text = "ERROR EN LA SIGUIENTE INSTRUCCIÓN:" + Environment.NewLine + sSql;
+                    catchMensaje.lblMensaje.Text = conexion.sMensajeError;
                     catchMensaje.ShowDialog();
                     return false;
                 }
@@ -996,7 +996,7 @@ namespace Palatium.ComandaNueva
                 if (bRespuesta == false)
                 {
                     catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
-                    catchMensaje.lblMensaje.Text = "ERROR EN LA SIGUIENTE INSTRUCCIÓN:" + Environment.NewLine + sSql;
+                    catchMensaje.lblMensaje.Text = conexion.sMensajeError;
                     catchMensaje.ShowDialog();
                     return;
                 }
@@ -1048,7 +1048,7 @@ namespace Palatium.ComandaNueva
                 if (bRespuesta == false)
                 {
                     catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
-                    catchMensaje.lblMensaje.Text = "ERROR EN LA SIGUIENTE INSTRUCCIÓN:" + Environment.NewLine + sSql;
+                    catchMensaje.lblMensaje.Text = conexion.sMensajeError;
                     catchMensaje.ShowDialog();
                     return;
                 }
@@ -1107,7 +1107,7 @@ namespace Palatium.ComandaNueva
                 if (bRespuesta == false)
                 {
                     catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
-                    catchMensaje.lblMensaje.Text = "ERROR EN LA SIGUIENTE INSTRUCCIÓN:" + Environment.NewLine + sSql;
+                    catchMensaje.lblMensaje.Text = conexion.sMensajeError;
                     catchMensaje.ShowDialog();
                     this.Close();
                     return;
@@ -1150,7 +1150,7 @@ namespace Palatium.ComandaNueva
                 if (bRespuesta == false)
                 {
                     catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
-                    catchMensaje.lblMensaje.Text = "ERROR EN LA SIGUIENTE INSTRUCCIÓN:" + Environment.NewLine + sSql;
+                    catchMensaje.lblMensaje.Text = conexion.sMensajeError;
                     catchMensaje.ShowDialog();
                     return false;
                 }
@@ -1210,7 +1210,7 @@ namespace Palatium.ComandaNueva
                 if (bRespuesta == false)
                 {
                     catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
-                    catchMensaje.lblMensaje.Text = "ERROR EN LA SIGUIENTE INSTRUCCIÓN:" + Environment.NewLine + sSql;
+                    catchMensaje.lblMensaje.Text = conexion.sMensajeError;
                     catchMensaje.ShowDialog();
                     return false;
                 }
@@ -1257,7 +1257,7 @@ namespace Palatium.ComandaNueva
                     if (bRespuesta == false)
                     {
                         catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
-                        catchMensaje.lblMensaje.Text = "ERROR EN LA SIGUIENTE INSTRUCCIÓN:" + Environment.NewLine + sSql;
+                        catchMensaje.lblMensaje.Text = conexion.sMensajeError;
                         catchMensaje.ShowDialog();
                         return false;
                     }
@@ -1528,7 +1528,7 @@ namespace Palatium.ComandaNueva
                 if (bRespuesta == false)
                 {
                     catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
-                    catchMensaje.lblMensaje.Text = "ERROR EN LA SIGUIENTE INSTRUCCIÓN:" + Environment.NewLine + sSql;
+                    catchMensaje.lblMensaje.Text = conexion.sMensajeError;
                     catchMensaje.ShowDialog();
                     return false;
                 }
@@ -1575,7 +1575,7 @@ namespace Palatium.ComandaNueva
                 if (bRespuesta == false)
                 {
                     catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
-                    catchMensaje.lblMensaje.Text = "ERROR EN LA INSTRUCCIÓN SQL:" + Environment.NewLine + sSql;
+                    catchMensaje.lblMensaje.Text = conexion.sMensajeError;
                     catchMensaje.ShowDialog();
                     return;
                 }
@@ -1760,7 +1760,7 @@ namespace Palatium.ComandaNueva
                 if (bRespuesta == false)
                 {
                     catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
-                    catchMensaje.lblMensaje.Text = "ERROR EN LA INSTRUCCIÓN SQL:" + Environment.NewLine + sSql;
+                    catchMensaje.lblMensaje.Text = conexion.sMensajeError;
                     catchMensaje.ShowDialog();
                     return;
                 }
@@ -2196,7 +2196,7 @@ namespace Palatium.ComandaNueva
                 if (bRespuesta == false)
                 {
                     catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
-                    catchMensaje.lblMensaje.Text = "ERROR EN LA SIGUIENTE INSTRUCCIÓN:" + Environment.NewLine + sSql;
+                    catchMensaje.lblMensaje.Text = conexion.sMensajeError;
                     catchMensaje.ShowDialog();
                     return;
                 }
@@ -2309,7 +2309,7 @@ namespace Palatium.ComandaNueva
                 if (!conexion.GFun_Lo_Ejecuta_SQL(sSql))
                 {
                     catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
-                    catchMensaje.lblMensaje.Text = "ERROR EN LA SIGUIENTE INSTRUCCIÓN:" + Environment.NewLine + sSql;
+                    catchMensaje.lblMensaje.Text = conexion.sMensajeError;
                     catchMensaje.ShowDialog();
                     return false;
                 }
@@ -2333,7 +2333,7 @@ namespace Palatium.ComandaNueva
                 if (!conexion.GFun_Lo_Ejecuta_SQL(sSql))
                 {
                     catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
-                    catchMensaje.lblMensaje.Text = "ERROR EN LA SIGUIENTE INSTRUCCIÓN:" + Environment.NewLine + sSql;
+                    catchMensaje.lblMensaje.Text = conexion.sMensajeError;
                     catchMensaje.ShowDialog();
                     return false;
                 }
@@ -2369,7 +2369,7 @@ namespace Palatium.ComandaNueva
                 if (bRespuesta == false)
                 {
                     catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
-                    catchMensaje.lblMensaje.Text = "ERROR EN LA SIGUIENTE INSTRUCCIÓN:" + Environment.NewLine + sSql;
+                    catchMensaje.lblMensaje.Text = conexion.sMensajeError;
                     catchMensaje.ShowDialog();
                     return false;
                 }
@@ -2386,7 +2386,7 @@ namespace Palatium.ComandaNueva
                 if (!conexion.GFun_Lo_Ejecuta_SQL(sSql))
                 {
                     catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
-                    catchMensaje.lblMensaje.Text = "ERROR EN LA SIGUIENTE INSTRUCCIÓN:" + Environment.NewLine + sSql;
+                    catchMensaje.lblMensaje.Text = conexion.sMensajeError;
                     catchMensaje.ShowDialog();
                     return false;
                 }
@@ -2405,7 +2405,7 @@ namespace Palatium.ComandaNueva
                 if (!conexion.GFun_Lo_Ejecuta_SQL(sSql))
                 {
                     catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
-                    catchMensaje.lblMensaje.Text = "ERROR EN LA SIGUIENTE INSTRUCCIÓN:" + Environment.NewLine + sSql;
+                    catchMensaje.lblMensaje.Text = conexion.sMensajeError;
                     catchMensaje.ShowDialog();
                     return false;
                 }
@@ -2439,7 +2439,7 @@ namespace Palatium.ComandaNueva
                 if (!conexion.GFun_Lo_Ejecuta_SQL(sSql))
                 {
                     catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
-                    catchMensaje.lblMensaje.Text = "ERROR EN LA SIGUIENTE INSTRUCCIÓN:" + Environment.NewLine + sSql;
+                    catchMensaje.lblMensaje.Text = conexion.sMensajeError;
                     catchMensaje.ShowDialog();
                     return false;
                 }
@@ -2474,7 +2474,7 @@ namespace Palatium.ComandaNueva
                 if (!conexion.GFun_Lo_Ejecuta_SQL(sSql))
                 {
                     catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
-                    catchMensaje.lblMensaje.Text = "ERROR EN LA SIGUIENTE INSTRUCCIÓN:" + Environment.NewLine + sSql;
+                    catchMensaje.lblMensaje.Text = conexion.sMensajeError;
                     catchMensaje.ShowDialog();
                     return false;
                 }
@@ -2511,7 +2511,7 @@ namespace Palatium.ComandaNueva
                 if (!conexion.GFun_Lo_Ejecuta_SQL(sSql))
                 {
                     catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
-                    catchMensaje.lblMensaje.Text = "ERROR EN LA SIGUIENTE INSTRUCCIÓN:" + Environment.NewLine + sSql;
+                    catchMensaje.lblMensaje.Text = conexion.sMensajeError;
                     catchMensaje.ShowDialog();
                     return false;
                 }
@@ -2595,7 +2595,7 @@ namespace Palatium.ComandaNueva
                 if (!conexion.GFun_Lo_Ejecuta_SQL(sSql))
                 {
                     catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
-                    catchMensaje.lblMensaje.Text = "ERROR EN LA SIGUIENTE INSTRUCCIÓN:" + Environment.NewLine + sSql;
+                    catchMensaje.lblMensaje.Text = conexion.sMensajeError;
                     catchMensaje.ShowDialog();
                     return false;
                 }
@@ -2611,7 +2611,7 @@ namespace Palatium.ComandaNueva
                 if (!conexion.GFun_Lo_Ejecuta_SQL(sSql))
                 {
                     catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
-                    catchMensaje.lblMensaje.Text = "ERROR EN LA SIGUIENTE INSTRUCCIÓN:" + Environment.NewLine + sSql;
+                    catchMensaje.lblMensaje.Text = conexion.sMensajeError;
                     catchMensaje.ShowDialog();
                     return false;
                 }
@@ -2627,7 +2627,7 @@ namespace Palatium.ComandaNueva
                 if (!conexion.GFun_Lo_Ejecuta_SQL(sSql))
                 {
                     catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
-                    catchMensaje.lblMensaje.Text = "ERROR EN LA SIGUIENTE INSTRUCCIÓN:" + Environment.NewLine + sSql;
+                    catchMensaje.lblMensaje.Text = conexion.sMensajeError;
                     catchMensaje.ShowDialog();
                     return false;
                 }
@@ -2651,7 +2651,7 @@ namespace Palatium.ComandaNueva
                 if (bRespuesta == false)
                 {
                     catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
-                    catchMensaje.lblMensaje.Text = "ERROR EN LA SIGUIENTE INSTRUCCIÓN:" + Environment.NewLine + sSql;
+                    catchMensaje.lblMensaje.Text = conexion.sMensajeError;
                     catchMensaje.ShowDialog();
                     return false;
                 }
@@ -2674,7 +2674,7 @@ namespace Palatium.ComandaNueva
                         if (!conexion.GFun_Lo_Ejecuta_SQL(sSql))
                         {
                             catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
-                            catchMensaje.lblMensaje.Text = "ERROR EN LA SIGUIENTE INSTRUCCIÓN:" + Environment.NewLine + sSql;
+                            catchMensaje.lblMensaje.Text = conexion.sMensajeError;
                             catchMensaje.ShowDialog();
                             return false;
                         }
@@ -2778,7 +2778,7 @@ namespace Palatium.ComandaNueva
                     if (!conexion.GFun_Lo_Ejecuta_SQL(sSql))
                     {
                         catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
-                        catchMensaje.lblMensaje.Text = "ERROR EN LA SIGUIENTE INSTRUCCIÓN:" + Environment.NewLine + sSql;
+                        catchMensaje.lblMensaje.Text = conexion.sMensajeError;
                         catchMensaje.ShowDialog();
                         return false;
                     }
@@ -2873,7 +2873,7 @@ namespace Palatium.ComandaNueva
                             if (!conexion.GFun_Lo_Ejecuta_SQL(sSql))
                             {
                                 catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
-                                catchMensaje.lblMensaje.Text = "ERROR EN LA SIGUIENTE INSTRUCCIÓN:" + Environment.NewLine + sSql;
+                                catchMensaje.lblMensaje.Text = conexion.sMensajeError;
                                 catchMensaje.ShowDialog();
                                 return false;
                             }
@@ -2912,7 +2912,7 @@ namespace Palatium.ComandaNueva
                 if (bRespuesta == false)
                 {
                     catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
-                    catchMensaje.lblMensaje.Text = "ERROR EN LA SIGUIENTE INSTRUCCIÓN:" + Environment.NewLine + sSql;
+                    catchMensaje.lblMensaje.Text = conexion.sMensajeError;
                     catchMensaje.ShowDialog();
                     return;
                 }
@@ -2956,7 +2956,7 @@ namespace Palatium.ComandaNueva
                 if (bRespuesta == false)
                 {
                     catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
-                    catchMensaje.lblMensaje.Text = "ERROR EN LA SIGUIENTE INSTRUCCIÓN:" + Environment.NewLine + sSql;
+                    catchMensaje.lblMensaje.Text = conexion.sMensajeError;
                     catchMensaje.ShowDialog();
                     return;
                 }
@@ -3250,7 +3250,7 @@ namespace Palatium.ComandaNueva
                 if (bRespuesta == false)
                 {
                     catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
-                    catchMensaje.lblMensaje.Text = "ERROR EN LA INSTRUCCIÓN SQL:" + Environment.NewLine + sSql;
+                    catchMensaje.lblMensaje.Text = conexion.sMensajeError;
                     catchMensaje.ShowDialog();
                     return;
                 }
@@ -4046,7 +4046,7 @@ namespace Palatium.ComandaNueva
                     if (bRespuesta == false)
                     {
                         catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
-                        catchMensaje.lblMensaje.Text = "ERROR EN LA SIGUIENTE INSTRUCCIÓN:" + Environment.NewLine + sSql;
+                        catchMensaje.lblMensaje.Text = conexion.sMensajeError;
                         catchMensaje.ShowDialog();
                         return;
                     }

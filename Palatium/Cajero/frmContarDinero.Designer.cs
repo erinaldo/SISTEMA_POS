@@ -47,6 +47,7 @@
             this.dgvBilletes.AllowUserToResizeColumns = false;
             this.dgvBilletes.AllowUserToResizeRows = false;
             this.dgvBilletes.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCellsExceptHeaders;
+            this.dgvBilletes.BackgroundColor = System.Drawing.SystemColors.ControlLightLight;
             this.dgvBilletes.ColumnHeadersHeight = 30;
             this.dgvBilletes.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.colBillete,

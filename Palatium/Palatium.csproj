@@ -440,6 +440,7 @@
       <DependentUpon>frmMotivoEliminacionComanda.cs</DependentUpon>
     </Compile>
     <Compile Include="Clases\ClaseAbrirCajon.cs" />
+    <Compile Include="Clases\ClaseComprimirArchivos.cs" />
     <Compile Include="Clases\ClaseExcel.cs" />
     <Compile Include="Clases\ClaseFormasPagosRecargo.cs" />
     <Compile Include="Clases\ClaseImprimirFacturaNormal.cs" />
@@ -983,6 +984,13 @@
     </Compile>
     <Compile Include="Personal\frmPruebaFormulario.Designer.cs">
       <DependentUpon>frmPruebaFormulario.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Productos\ClaseActualizarPreciosProductos.cs" />
+    <Compile Include="Productos\frmCambioMasivoPropinaProductos.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Productos\frmCambioMasivoPropinaProductos.Designer.cs">
+      <DependentUpon>frmCambioMasivoPropinaProductos.cs</DependentUpon>
     </Compile>
     <Compile Include="Productos\frmMateriaPrima.cs">
       <SubType>Form</SubType>
@@ -3065,6 +3073,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Personal\frmPromotores.resx">
       <DependentUpon>frmPromotores.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Productos\frmCambioMasivoPropinaProductos.resx">
+      <DependentUpon>frmCambioMasivoPropinaProductos.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Productos\frmMateriaPrima.resx">
       <DependentUpon>frmMateriaPrima.cs</DependentUpon>

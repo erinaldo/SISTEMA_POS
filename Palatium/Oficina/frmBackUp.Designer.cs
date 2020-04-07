@@ -39,6 +39,7 @@
             this.btnExaminar = new System.Windows.Forms.Button();
             this.btnProcesar = new System.Windows.Forms.Button();
             this.fbRuta = new System.Windows.Forms.FolderBrowserDialog();
+            this.chkComprimir = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // label1
@@ -116,20 +117,23 @@
             // 
             // txtRuta
             // 
+            this.txtRuta.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.txtRuta.Location = new System.Drawing.Point(19, 209);
             this.txtRuta.Name = "txtRuta";
+            this.txtRuta.ReadOnly = true;
             this.txtRuta.Size = new System.Drawing.Size(317, 20);
             this.txtRuta.TabIndex = 7;
             // 
             // btnExaminar
             // 
             this.btnExaminar.BackColor = System.Drawing.Color.Yellow;
-            this.btnExaminar.Location = new System.Drawing.Point(265, 177);
+            this.btnExaminar.Location = new System.Drawing.Point(268, 261);
             this.btnExaminar.Name = "btnExaminar";
             this.btnExaminar.Size = new System.Drawing.Size(71, 29);
             this.btnExaminar.TabIndex = 8;
             this.btnExaminar.Text = "Examinar";
             this.btnExaminar.UseVisualStyleBackColor = false;
+            this.btnExaminar.Visible = false;
             this.btnExaminar.Click += new System.EventHandler(this.btnExaminar_Click);
             // 
             // btnProcesar
@@ -147,13 +151,27 @@
             this.btnProcesar.UseVisualStyleBackColor = false;
             this.btnProcesar.Click += new System.EventHandler(this.btnProcesar_Click);
             // 
+            // chkComprimir
+            // 
+            this.chkComprimir.AutoSize = true;
+            this.chkComprimir.BackColor = System.Drawing.Color.White;
+            this.chkComprimir.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.chkComprimir.ForeColor = System.Drawing.Color.Red;
+            this.chkComprimir.Location = new System.Drawing.Point(193, 189);
+            this.chkComprimir.Name = "chkComprimir";
+            this.chkComprimir.Size = new System.Drawing.Size(143, 19);
+            this.chkComprimir.TabIndex = 10;
+            this.chkComprimir.Text = "Comprimir Archivo";
+            this.chkComprimir.UseVisualStyleBackColor = false;
+            // 
             // frmBackUp
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackColor = System.Drawing.Color.Silver;
-            this.ClientSize = new System.Drawing.Size(365, 302);
+            this.ClientSize = new System.Drawing.Size(361, 302);
+            this.Controls.Add(this.chkComprimir);
             this.Controls.Add(this.btnProcesar);
             this.Controls.Add(this.btnExaminar);
             this.Controls.Add(this.txtRuta);
@@ -190,5 +208,6 @@
         private System.Windows.Forms.Button btnExaminar;
         private System.Windows.Forms.Button btnProcesar;
         private System.Windows.Forms.FolderBrowserDialog fbRuta;
+        private System.Windows.Forms.CheckBox chkComprimir;
     }
 }

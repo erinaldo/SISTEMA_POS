@@ -33,6 +33,8 @@ namespace Palatium.Productos
         int iUnidadCompra;
         int iUnidadConsumo;
         int iCuenta;
+        int iPagaServicio;
+        int iHabilitado;
 
         double dSubtotal;
 
@@ -362,9 +364,10 @@ namespace Palatium.Productos
                 sSql += "select P.id_producto, P.codigo as CODIGO, NP.nombre as MODIFICADOR, P.modificable as Modificable," + Environment.NewLine;
                 sSql += "P.precio_modificable as Prec_Modificable, P.paga_iva as Paga_Iva, P.secuencia as SECUENCIA," + Environment.NewLine;
                 sSql += "P.id_pos_clase_producto, P.id_pos_tipo_producto," + Environment.NewLine;
-                sSql += "case P.estado when 'A' then 'ACTIVO' else 'INACTIVO' end as ESTADO," + Environment.NewLine;
-                sSql += "0.00 as precio_compra, 0.00 as precio_minorista," + Environment.NewLine;
-                sSql += conexion.GFun_St_esnulo() + "(P.id_pos_impresion_comanda, 0) id_pos_impresion_comanda" + Environment.NewLine;
+                sSql += "case P.is_active when 1 then 'A' else 'E' end as ESTADO," + Environment.NewLine;
+                sSql += "0.00 as precio_compra, 0.00 as PVP," + Environment.NewLine;
+                sSql += conexion.GFun_St_esnulo() + "(P.id_pos_impresion_comanda, 0) id_pos_impresion_comanda," + Environment.NewLine;
+                sSql += "P.paga_servicio, P.is_active, P.expira" + Environment.NewLine;
                 sSql += "from cv401_productos P, cv401_nombre_productos NP" + Environment.NewLine;
                 sSql += "where P.id_producto = NP.id_producto" + Environment.NewLine;
                 sSql += "and P.estado = 'A'" + Environment.NewLine;
@@ -425,7 +428,7 @@ namespace Palatium.Productos
                     sSql += "select PR.valor" + Environment.NewLine;
                     sSql += "from cv403_precios_productos PR inner join" + Environment.NewLine;
                     sSql += "cv401_productos P on PR.id_producto = P.id_producto" + Environment.NewLine;
-                    sSql += "where id_lista_precio in (" + iIdListaBase + ", " + iIdListaMinorista + ")" + Environment.NewLine;
+                    sSql += "where id_lista_precio = " + iIdListaBase + Environment.NewLine;
                     sSql += "and P.id_producto = " + iIdProducto + Environment.NewLine;
                     sSql += "and PR.estado = 'A'";
 
@@ -434,27 +437,87 @@ namespace Palatium.Productos
 
                     bRespuesta = conexion.GFun_Lo_Busca_Registro(dtConsulta, sSql);
 
-                    if (bRespuesta == true)
+                    if (bRespuesta == false)
                     {
-                        if (dtConsulta.Rows.Count > 0)
+                        catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
+                        catchMensaje.lblMensaje.Text = conexion.sMensajeError;
+                        catchMensaje.ShowDialog();
+                        return;
+                    }
+
+                    if (dtConsulta.Rows.Count > 0)
+                    {
+                        if (Program.iCobrarConSinProductos == 1)
+                            dgvDatos.Rows[i].Cells["precio_compra"].Value = (Convert.ToDouble(dtConsulta.Rows[0]["valor"].ToString()) * (1 + Program.iva)).ToString("N2");
+                        else
+                            dgvDatos.Rows[i].Cells["precio_compra"].Value = (Convert.ToDouble(dtConsulta.Rows[0]["valor"].ToString())).ToString("N2");
+                    }
+
+                    else
+                    {
+                        ok = new VentanasMensajes.frmMensajeNuevoOk();
+                        ok.lblMensaje.Text = "No se encuentran registros 1.";
+                        ok.ShowDialog();
+                        return;
+                    }
+
+                    //INSTRUCCION PARA REEMPLAZAR EL VALOR DE LA COLUMNA LISTA MINORISTA
+                    sSql = "";
+                    sSql += "select PR.valor" + Environment.NewLine;
+                    sSql += "from cv403_precios_productos PR inner join" + Environment.NewLine;
+                    sSql += "cv401_productos P on PR.id_producto = P.id_producto" + Environment.NewLine;
+                    sSql += "where id_lista_precio = " + iIdListaMinorista + Environment.NewLine;
+                    sSql += "and P.id_producto = " + iIdProducto + Environment.NewLine;
+                    sSql += "and pr.estado='A'";
+
+                    dtConsulta = new DataTable();
+                    dtConsulta.Clear();
+
+                    bRespuesta = conexion.GFun_Lo_Busca_Registro(dtConsulta, sSql);
+
+                    if (bRespuesta == false)
+                    {
+                        catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
+                        catchMensaje.lblMensaje.Text = conexion.sMensajeError;
+                        catchMensaje.ShowDialog();
+                        return;
+                    }
+
+                    if (dtConsulta.Rows.Count > 0)
+                    {
+                        iPagaIva = Convert.ToInt32(dgvDatos.Rows[i].Cells["paga_iva"].Value);
+                        iPagaServicio = Convert.ToInt32(dgvDatos.Rows[i].Cells["paga_servicio"].Value);
+
+                        if (Program.iCobrarConSinProductos == 1)
                         {
-                            dgvDatos.Rows[i].Cells[10].Value = (Convert.ToDouble(dtConsulta.Rows[0][0].ToString()) * (1 + Program.iva + Program.servicio)).ToString("N2");
-                            dgvDatos.Rows[i].Cells[11].Value = (Convert.ToDouble(dtConsulta.Rows[1][0].ToString()) * (1 + Program.iva + Program.servicio)).ToString("N2");
+                            if (iPagaServicio == 1)
+                            {
+                                if (iPagaIva == 1)
+                                    dgvDatos.Rows[i].Cells["PVP"].Value = (Convert.ToDouble(dtConsulta.Rows[0]["valor"].ToString()) * (1 + Program.iva + Program.servicio)).ToString("N2");
+                                else
+                                    dgvDatos.Rows[i].Cells["PVP"].Value = (Convert.ToDouble(dtConsulta.Rows[0]["valor"].ToString()) * (1 + Program.servicio)).ToString("N2");
+                            }
+
+                            else
+                            {
+                                if (iPagaIva == 1)
+                                    dgvDatos.Rows[i].Cells["PVP"].Value = (Convert.ToDouble(dtConsulta.Rows[0]["valor"].ToString()) * (1 + Program.iva)).ToString("N2");
+                                else
+                                    dgvDatos.Rows[i].Cells["PVP"].Value = Convert.ToDouble(dtConsulta.Rows[0]["valor"].ToString()).ToString("N2");
+                            }
                         }
 
                         else
                         {
-                            catchMensaje.lblMensaje.Text = sSql;
-                            catchMensaje.ShowDialog();
-                            return;
+                            dgvDatos.Rows[i].Cells["PVP"].Value = Convert.ToDouble(dtConsulta.Rows[0]["valor"].ToString()).ToString("N2");
                         }
                     }
 
                     else
                     {
-                        catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
-                        catchMensaje.lblMensaje.Text = conexion.sMensajeError;
-                        catchMensaje.ShowDialog();
+                        ok = new VentanasMensajes.frmMensajeNuevoOk();
+                        ok.lblMensaje.Text = "Ocurrió un problema al realizar la consulta 2.";
+                        ok.ShowDialog();
                         return;
                     }
                 }
@@ -473,6 +536,9 @@ namespace Palatium.Productos
                 dgvDatos.Columns[10].Visible = false;
                 dgvDatos.Columns[11].Visible = false;
                 dgvDatos.Columns[12].Visible = false;
+                dgvDatos.Columns[13].Visible = false;
+                dgvDatos.Columns[14].Visible = false;
+                dgvDatos.Columns[15].Visible = false;
 
                 dgvDatos.Columns[1].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
                 dgvDatos.Columns[6].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
@@ -607,14 +673,14 @@ namespace Palatium.Productos
                 sSql += "modificador, subcategoria, ultimo_nivel," + Environment.NewLine;
                 sSql += "stock_min, stock_max, Expira, fecha_ingreso, usuario_ingreso," + Environment.NewLine;
                 sSql += "terminal_ingreso, id_pos_tipo_producto, id_pos_clase_producto," + Environment.NewLine;
-                sSql += "id_pos_impresion_comanda)" + Environment.NewLine;
+                sSql += "id_pos_impresion_comanda, is_active, paga_servicio)" + Environment.NewLine;
                 sSql += "values(" + Environment.NewLine;
                 sSql += Convert.ToInt32(cmbEmpresa.SelectedValue) + ", '" + txtCodigo.Text.Trim().ToUpper() + "', " + iIdPadre + "," + Environment.NewLine;
                 sSql += "'A', 3, " + iModificable + ", " + iPrecioModificable + ", " + iPagaIva + "," + Environment.NewLine;
                 sSql += Convert.ToInt32(txtSecuencia.Text.ToString().Trim()) + ", 0, 0, 1, 0, 0, " + iExpira +  ", " + Environment.NewLine;
                 sSql += "GETDATE(), '" + Program.sDatosMaximo[0] + "', '" + Program.sDatosMaximo[1] + "'," + Environment.NewLine;
                 sSql += Convert.ToInt32(cmbTipoProducto.SelectedValue) + ", " + Convert.ToInt32(cmbClaseProducto.SelectedValue) + "," + Environment.NewLine;
-                sSql += Convert.ToInt32(cmbDestinoImpresion.SelectedValue) + " )";
+                sSql += Convert.ToInt32(cmbDestinoImpresion.SelectedValue) + ", 1, " + iPagaServicio + ")";
 
                 //EJECUTAR LA INSTRUCCIÓN SQL
                 if (!conexion.GFun_Lo_Ejecuta_SQL(sSql))
@@ -666,8 +732,11 @@ namespace Palatium.Productos
                     goto reversa;
                 }
 
-                //INSTRUCCION PARA NSERTAR EN LA TABLA CV403_PRECIOS_PRODUCTOS CON LISTA BASE
-                dSubtotal = Convert.ToDouble(txtPrecioCompra.Text) / (1 + (Program.iva + Program.servicio));
+                //INSTRUCCION PARA INSERTAR EN LA TABLA CV403_PRECIOS_PRODUCTOS CON LISTA BASE
+                if (Program.iCobrarConSinProductos == 1)
+                    dSubtotal = Convert.ToDouble(txtPrecioCompra.Text) / (1 + Program.iva);
+                else
+                    dSubtotal = Convert.ToDouble(txtPrecioCompra.Text);
 
                 sSql = "";
                 sSql += "insert into cv403_precios_productos (" + Environment.NewLine;
@@ -677,7 +746,7 @@ namespace Palatium.Productos
                 sSql += "fecha_ingreso, usuario_ingreso, terminal_ingreso)" + Environment.NewLine;
                 sSql += "values(" + Environment.NewLine;
                 sSql += iIdListaBase + ", " + iIdProducto + ", 0, " + dSubtotal + ", GETDATE()," + Environment.NewLine;
-                sSql += "'" + sFechaListaBase + "', 'A', 1, 1, GETDATE(), '" + Program.sDatosMaximo[0] + "'," + Environment.NewLine;
+                sSql += "'" + sFechaListaBase + "', 'A', 0, 0, GETDATE(), '" + Program.sDatosMaximo[0] + "'," + Environment.NewLine;
                 sSql += "'" + Program.sDatosMaximo[1] + "')";
 
                 //EJECUTAR LA INSTRUCCIÓN SQL
@@ -690,7 +759,29 @@ namespace Palatium.Productos
                 }
 
                 //INSTRUCCION PARA NSERTAR EN LA TABLA CV403_PRECIOS_PRODUCTOS CON LISTA MINORISTA
-                dSubtotal = Convert.ToDouble(txtPrecioMinorista.Text) / (1 + (Program.iva + Program.servicio));
+                if (Program.iCobrarConSinProductos == 1)
+                {
+                    if (chkPagaServicio.Checked == true)
+                    {
+                        if (chkPagaIva.Checked == true)
+                            dSubtotal = Convert.ToDouble(txtPrecioMinorista.Text) / (1 + Program.iva + Program.servicio);
+                        else
+                            dSubtotal = Convert.ToDouble(txtPrecioMinorista.Text) / (1 + Program.servicio);
+                    }
+
+                    else
+                    {
+                        if (chkPagaIva.Checked == true)
+                            dSubtotal = Convert.ToDouble(txtPrecioMinorista.Text) / (1 + Program.iva);
+                        else
+                            dSubtotal = Convert.ToDouble(txtPrecioMinorista.Text);
+                    }
+                }
+
+                else
+                {
+                    dSubtotal = Convert.ToDouble(txtPrecioMinorista.Text);
+                }
 
                 sSql = "";
                 sSql += "insert into cv403_precios_productos (" + Environment.NewLine;
@@ -700,7 +791,7 @@ namespace Palatium.Productos
                 sSql += "fecha_ingreso, usuario_ingreso, terminal_ingreso)" + Environment.NewLine;
                 sSql += "values(" + Environment.NewLine;
                 sSql += iIdListaMinorista + ", " + iIdProducto + ", 0, " + dSubtotal + ", GETDATE()," + Environment.NewLine;
-                sSql += "'" + sFechaListaMinorista + "', 'A', 1, 1, GETDATE(), '" + Program.sDatosMaximo[0] + "'," + Environment.NewLine;
+                sSql += "'" + sFechaListaMinorista + "', 'A', 0, 0, GETDATE(), '" + Program.sDatosMaximo[0] + "'," + Environment.NewLine;
                 sSql += "'" + Program.sDatosMaximo[1] + "')";
 
                 //EJECUTAR LA INSTRUCCIÓN SQL
@@ -796,9 +887,11 @@ namespace Palatium.Productos
                 //ACTUALIZA LA TABLA CV401_PRODUCTOS CON LOS DATOS NUEVOS DEL FORMULARIO
                 sSql = "";
                 sSql += "update cv401_productos set" + Environment.NewLine;
-                sSql += "estado = '" + sEstado + "'," + Environment.NewLine;
+                //sSql += "estado = '" + sEstado + "'," + Environment.NewLine;
+                sSql += "is_active = " + iHabilitado + "," + Environment.NewLine;
                 sSql += "secuencia = '" + txtSecuencia.Text.ToString().Trim() + "'," + Environment.NewLine;
                 sSql += "paga_iva = " + iPagaIva + "," + Environment.NewLine;
+                sSql += "paga_servicio = " + iPagaServicio + "," + Environment.NewLine;
                 sSql += "precio_modificable = " + iPrecioModificable + "," + Environment.NewLine;
                 sSql += "modificable = " + iModificable + "," + Environment.NewLine;
                 sSql += "modificador = 0," + Environment.NewLine;
@@ -858,9 +951,9 @@ namespace Palatium.Productos
                     }
                 }
 
-                //SI HUBO ALGUN CAMBIO EN EL PRECIO BASE, SE REALIZA LA ACTUALIZACION
-                if (txtPrecioCompra.Text.Trim() != sPrecioBase)
-                {
+                ////SI HUBO ALGUN CAMBIO EN EL PRECIO BASE, SE REALIZA LA ACTUALIZACION
+                //if (txtPrecioCompra.Text.Trim() != sPrecioBase)
+                //{
                     //CAMBIO DE ESTADO DE 'A' AL ESTADO 'E'
                     sSql = "";
                     sSql += "update cv403_precios_productos set" + Environment.NewLine;
@@ -880,8 +973,11 @@ namespace Palatium.Productos
                         goto reversa;
                     }
 
-                    //INSTRUCCION PARA NSERTAR EN LA TABLA CV403_PRECIOS_PRODUCTOS CON LISTA BASE
-                    dSubtotal = Convert.ToDouble(txtPrecioCompra.Text) / (1 + (Program.iva + Program.servicio));
+                    //INSTRUCCION PARA INSERTAR EN LA TABLA CV403_PRECIOS_PRODUCTOS CON LISTA BASE
+                    if (Program.iCobrarConSinProductos == 1)
+                        dSubtotal = Convert.ToDouble(txtPrecioCompra.Text) / (1 + Program.iva);
+                    else
+                        dSubtotal = Convert.ToDouble(txtPrecioCompra.Text);
 
                     sSql = "";
                     sSql += "insert into cv403_precios_productos (" + Environment.NewLine;
@@ -900,11 +996,11 @@ namespace Palatium.Productos
                         catchMensaje.ShowDialog();
                         goto reversa;
                     }
-                }
+                //}
 
-                //SI HUBO ALGUN CAMBIO EN EL PRECIO MINORISTA, SE REALIZA LA ACTUALIZACION
-                if (txtPrecioMinorista.Text.Trim() != sPrecioMinorista)
-                {
+                ////SI HUBO ALGUN CAMBIO EN EL PRECIO MINORISTA, SE REALIZA LA ACTUALIZACION
+                //if (txtPrecioMinorista.Text.Trim() != sPrecioMinorista)
+                //{
                     //CAMBIO DE ESTADO DE 'A' AL ESTADO 'E'
                     sSql = "";
                     sSql += "update cv403_precios_productos set" + Environment.NewLine;
@@ -924,7 +1020,29 @@ namespace Palatium.Productos
                     }
 
                     //INSTRUCCION PARA NSERTAR EN LA TABLA CV403_PRECIOS_PRODUCTOS CON LISTA MINORISTA
-                    dSubtotal = Convert.ToDouble(txtPrecioMinorista.Text) / (1 + (Program.iva + Program.servicio));
+                    if (Program.iCobrarConSinProductos == 1)
+                    {
+                        if (chkPagaServicio.Checked == true)
+                        {
+                            if (chkPagaIva.Checked == true)
+                                dSubtotal = Convert.ToDouble(txtPrecioMinorista.Text) / (1 + Program.iva + Program.servicio);
+                            else
+                                dSubtotal = Convert.ToDouble(txtPrecioMinorista.Text) / (1 + Program.servicio);
+                        }
+
+                        else
+                        {
+                            if (chkPagaIva.Checked == true)
+                                dSubtotal = Convert.ToDouble(txtPrecioMinorista.Text) / (1 + Program.iva);
+                            else
+                                dSubtotal = Convert.ToDouble(txtPrecioMinorista.Text);
+                        }
+                    }
+
+                    else
+                    {
+                        dSubtotal = Convert.ToDouble(txtPrecioMinorista.Text);
+                    }
 
                     sSql = "";
                     sSql += "insert into cv403_precios_productos (" + Environment.NewLine;
@@ -943,7 +1061,7 @@ namespace Palatium.Productos
                         catchMensaje.ShowDialog();
                         goto reversa;
                     }
-                }
+                //}
 
                 sSql = "";
                 sSql += "select cg_tipo_unidad, cg_unidad, unidad_compra" + Environment.NewLine;
@@ -1004,11 +1122,12 @@ namespace Palatium.Productos
                     //ELIMINACION DEL PRODUCTO EN CV401_PRODUCTOS
                     sSql = "";
                     sSql += "update cv401_productos set" + Environment.NewLine;
-                    sSql += "codigo = '" + txtCodigo.Text.Trim() + "(" + iIdProducto + ")'," + Environment.NewLine;
-                    sSql += "estado = 'E'," + Environment.NewLine;
-                    sSql += "fecha_anula = GETDATE()," + Environment.NewLine;
-                    sSql += "usuario_anula = '" + Program.sDatosMaximo[0] + "'," + Environment.NewLine;
-                    sSql += "terminal_anula = '" + Program.sDatosMaximo[1] + "'" + Environment.NewLine;
+                    sSql += "is_active = 0" + Environment.NewLine;
+                    //sSql += "codigo = '" + txtCodigo.Text.Trim() + "(" + iIdProducto + ")'," + Environment.NewLine;
+                    //sSql += "estado = 'E'," + Environment.NewLine;
+                    //sSql += "fecha_anula = GETDATE()," + Environment.NewLine;
+                    //sSql += "usuario_anula = '" + Program.sDatosMaximo[0] + "'," + Environment.NewLine;
+                    //sSql += "terminal_anula = '" + Program.sDatosMaximo[1] + "'" + Environment.NewLine;
                     sSql += "where id_producto = " + iIdProducto;
 
                     if (!conexion.GFun_Lo_Ejecuta_SQL(sSql))
@@ -1019,22 +1138,22 @@ namespace Palatium.Productos
                         goto reversa;
                     }
 
-                    //ELIMINACION DEL PRODUCTO EN CV401_NOMBRE_PRODUCTOS
-                    sSql = "";
-                    sSql += "update cv401_nombre_productos set" + Environment.NewLine;
-                    sSql += "estado = 'E'," + Environment.NewLine;
-                    sSql += "fecha_anula = GETDATE()," + Environment.NewLine;
-                    sSql += "usuario_anula = '" + Program.sDatosMaximo[0] + "'," + Environment.NewLine;
-                    sSql += "terminal_anula = '" + Program.sDatosMaximo[1] + "'" + Environment.NewLine;
-                    sSql += "where id_Producto = " + iIdProducto;
+                    ////ELIMINACION DEL PRODUCTO EN CV401_NOMBRE_PRODUCTOS
+                    //sSql = "";
+                    //sSql += "update cv401_nombre_productos set" + Environment.NewLine;
+                    //sSql += "estado = 'E'," + Environment.NewLine;
+                    //sSql += "fecha_anula = GETDATE()," + Environment.NewLine;
+                    //sSql += "usuario_anula = '" + Program.sDatosMaximo[0] + "'," + Environment.NewLine;
+                    //sSql += "terminal_anula = '" + Program.sDatosMaximo[1] + "'" + Environment.NewLine;
+                    //sSql += "where id_Producto = " + iIdProducto;
 
-                    if (!conexion.GFun_Lo_Ejecuta_SQL(sSql))
-                    {
-                        catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
-                        catchMensaje.lblMensaje.Text = conexion.sMensajeError;
-                        catchMensaje.ShowDialog();
-                        goto reversa;
-                    }
+                    //if (!conexion.GFun_Lo_Ejecuta_SQL(sSql))
+                    //{
+                    //    catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
+                    //    catchMensaje.lblMensaje.Text = conexion.sMensajeError;
+                    //    catchMensaje.ShowDialog();
+                    //    goto reversa;
+                    //}
 
                     //si se ejecuta bien hara un commit
                     conexion.GFun_Lo_Maneja_Transaccion(Program.G_TERMINA_TRANSACCION);
@@ -1069,7 +1188,6 @@ namespace Palatium.Productos
             llenarDestinoImpresion();
             datosListas();
             llenarDbAyuda();
-            cmbEstado.Text = "ACTIVO";
 
             txtCodigo.Enabled = true;
             grupoDatos.Enabled = false;
@@ -1081,6 +1199,13 @@ namespace Palatium.Productos
             chkPagaIva.Checked = false;
             chkPrecioModificable.Checked = false;
             chkExpira.Checked = false;
+            chkHabilitado.Checked = true;
+            chkHabilitado.Enabled = false;
+
+            if (Program.iManejaServicio == 1)
+                chkPagaServicio.Checked = true;
+            else
+                chkPagaServicio.Checked = false;
 
             iIdProducto = 0;
 
@@ -1107,43 +1232,58 @@ namespace Palatium.Productos
                 ok = new VentanasMensajes.frmMensajeNuevoOk();
                 ok.lblMensaje.Text = "Favor seleccione el ítem modificador.";
                 ok.ShowDialog();
+                return;
             }
 
-            else
-            {
-                llenarGrid();
-            }
+            llenarGrid();
         }
 
         private void dgvDatos_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
             try
             {
-                iIdProducto = Convert.ToInt32(dgvDatos.CurrentRow.Cells[0].Value.ToString());
-                txtCodigo.Text = dgvDatos.CurrentRow.Cells[1].Value.ToString();
-                txtDescripcion.Text = dgvDatos.CurrentRow.Cells[2].Value.ToString().Trim();
-                sNombreProducto = dgvDatos.CurrentRow.Cells[2].Value.ToString();
+                iIdProducto = Convert.ToInt32(dgvDatos.CurrentRow.Cells["id_producto"].Value.ToString());
+                txtCodigo.Text = dgvDatos.CurrentRow.Cells["codigo"].Value.ToString();
+                txtDescripcion.Text = dgvDatos.CurrentRow.Cells["modificador"].Value.ToString().Trim();
+                sNombreProducto = dgvDatos.CurrentRow.Cells["modificador"].Value.ToString();
 
-                iPagaIva = Convert.ToInt32(dgvDatos.CurrentRow.Cells[5].Value);
+                iPagaIva = Convert.ToInt32(dgvDatos.CurrentRow.Cells["paga_iva"].Value);
+
                 if (iPagaIva == 1)
-                {
                     chkPagaIva.Checked = true;
-                }
-
                 else
-                {
                     chkPagaIva.Checked = false;
-                }
 
-                txtSecuencia.Text = dgvDatos.CurrentRow.Cells[6].Value.ToString();
-                cmbClaseProducto.SelectedValue = Convert.ToInt32(dgvDatos.CurrentRow.Cells[7].Value);
-                cmbTipoProducto.SelectedValue = Convert.ToInt32(dgvDatos.CurrentRow.Cells[8].Value);
-                cmbEstado.Text = dgvDatos.CurrentRow.Cells[9].Value.ToString();
-                txtPrecioCompra.Text = dgvDatos.CurrentRow.Cells[10].Value.ToString();
-                sPrecioBase = dgvDatos.CurrentRow.Cells[10].Value.ToString();
-                txtPrecioMinorista.Text = dgvDatos.CurrentRow.Cells[11].Value.ToString();
-                sPrecioMinorista = dgvDatos.CurrentRow.Cells[11].Value.ToString();
-                cmbDestinoImpresion.SelectedValue = Convert.ToInt32(dgvDatos.CurrentRow.Cells[12].Value);
+                iPagaServicio = Convert.ToInt32(dgvDatos.CurrentRow.Cells["paga_servicio"].Value);
+
+                if (iPagaServicio == 1)
+                    chkPagaServicio.Checked = true;
+                else
+                    chkPagaServicio.Checked = false;
+
+                if (Convert.ToInt32(dgvDatos.CurrentRow.Cells["expira"].Value) == 1)
+                    chkExpira.Checked = true;
+                else
+                    chkExpira.Checked = false;
+
+                if (Convert.ToInt32(dgvDatos.CurrentRow.Cells["prec_modificable"].Value) == 1)
+                    chkPrecioModificable.Checked = true;
+                else
+                    chkPrecioModificable.Checked = false;
+
+                if (Convert.ToInt32(dgvDatos.CurrentRow.Cells["is_active"].Value) == 1)
+                    chkHabilitado.Checked = true;
+                else
+                    chkHabilitado.Checked = false;
+
+                txtSecuencia.Text = dgvDatos.CurrentRow.Cells["secuencia"].Value.ToString();
+                cmbClaseProducto.SelectedValue = Convert.ToInt32(dgvDatos.CurrentRow.Cells["id_pos_clase_producto"].Value);
+                cmbTipoProducto.SelectedValue = Convert.ToInt32(dgvDatos.CurrentRow.Cells["id_pos_tipo_producto"].Value);
+                txtPrecioCompra.Text = dgvDatos.CurrentRow.Cells["precio_compra"].Value.ToString();
+                sPrecioBase = dgvDatos.CurrentRow.Cells["precio_compra"].Value.ToString();
+                txtPrecioMinorista.Text = dgvDatos.CurrentRow.Cells["PVP"].Value.ToString();
+                sPrecioMinorista = dgvDatos.CurrentRow.Cells["PVP"].Value.ToString();
+                cmbDestinoImpresion.SelectedValue = Convert.ToInt32(dgvDatos.CurrentRow.Cells["id_pos_impresion_comanda"].Value);
 
                 txtCodigo.Enabled = false;
                 grupoDatos.Enabled = true;
@@ -1151,6 +1291,7 @@ namespace Palatium.Productos
                 grupoPrecio.Enabled = true;
                 grupoImpresion.Enabled = true;
                 btnAnular.Enabled = true;
+                chkHabilitado.Enabled = true;
                 btnNuevo.Text = "Actualizar";
 
                 txtDescripcion.Focus();
@@ -1238,44 +1379,29 @@ namespace Palatium.Productos
                 else
                 {
                     if (chkPrecioModificable.Checked == true)
-                    {
                         iPrecioModificable = 1;
-                    }
-
                     else
-                    {
                         iPrecioModificable = 0;
-                    }
 
                     if (chkExpira.Checked == true)
-                    {
                         iExpira = 1;
-                    }
-
                     else
-                    {
                         iExpira = 0;
-                    }
 
                     if (chkPagaIva.Checked == true)
-                    {
                         iPagaIva = 1;
-                    }
-
                     else
-                    {
                         iPagaIva = 0;
-                    }
 
-                    if (cmbEstado.Text == "ACTIVO")
-                    {
-                        sEstado = "A";
-                    }
-
+                    if (chkPagaServicio.Checked == true)
+                        iPagaServicio = 1;
                     else
-                    {
-                        sEstado = "N";
-                    }
+                        iPagaServicio = 0;
+
+                    if (chkHabilitado.Checked == true)
+                        iHabilitado = 1;
+                    else
+                        iHabilitado = 0;
 
                     //COMPLETAR EL CAMPO DE CODIGO EN CASO DE QUE SOLO SE INGRESE UN NUMERO
                     if (txtCodigo.Text.Trim().Length == 1)

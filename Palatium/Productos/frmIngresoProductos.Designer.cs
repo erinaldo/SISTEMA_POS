@@ -49,6 +49,7 @@
             this.grupoReceta = new System.Windows.Forms.GroupBox();
             this.dbAyudaReceta = new Controles.Auxiliares.DB_Ayuda();
             this.grupoDatos = new System.Windows.Forms.GroupBox();
+            this.chkPagaServicio = new System.Windows.Forms.CheckBox();
             this.chkItemTarjetaRegalo = new System.Windows.Forms.CheckBox();
             this.chkParaTarjetaRegalo = new System.Windows.Forms.CheckBox();
             this.chkItemTarjetaAlmuerzo = new System.Windows.Forms.CheckBox();
@@ -89,7 +90,6 @@
             this.rdbGuardaConImpuestos = new System.Windows.Forms.RadioButton();
             this.rdbGuardaSinImpuestos = new System.Windows.Forms.RadioButton();
             this.chkHabilitado = new System.Windows.Forms.CheckBox();
-            this.chkPagaServicio = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.dgvProductos)).BeginInit();
             this.grupoRegistros.SuspendLayout();
             this.grupoReceta.SuspendLayout();
@@ -352,6 +352,18 @@
             this.grupoDatos.TabStop = false;
             this.grupoDatos.Text = "Datos Generales";
             // 
+            // chkPagaServicio
+            // 
+            this.chkPagaServicio.AutoSize = true;
+            this.chkPagaServicio.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.chkPagaServicio.ForeColor = System.Drawing.Color.Red;
+            this.chkPagaServicio.Location = new System.Drawing.Point(93, 242);
+            this.chkPagaServicio.Name = "chkPagaServicio";
+            this.chkPagaServicio.Size = new System.Drawing.Size(101, 19);
+            this.chkPagaServicio.TabIndex = 85;
+            this.chkPagaServicio.Text = "Paga Servicio";
+            this.chkPagaServicio.UseVisualStyleBackColor = true;
+            // 
             // chkItemTarjetaRegalo
             // 
             this.chkItemTarjetaRegalo.AutoSize = true;
@@ -448,9 +460,9 @@
             this.chkUsarRecets.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.chkUsarRecets.Location = new System.Drawing.Point(226, 262);
             this.chkUsarRecets.Name = "chkUsarRecets";
-            this.chkUsarRecets.Size = new System.Drawing.Size(119, 19);
+            this.chkUsarRecets.Size = new System.Drawing.Size(123, 19);
             this.chkUsarRecets.TabIndex = 20;
-            this.chkUsarRecets.Text = "Usar para ecetas";
+            this.chkUsarRecets.Text = "Usar para recetas";
             this.chkUsarRecets.UseVisualStyleBackColor = true;
             // 
             // chkAhorroEmergencia
@@ -463,6 +475,7 @@
             this.chkAhorroEmergencia.TabIndex = 19;
             this.chkAhorroEmergencia.Text = "Para Ahorro de Emergencia";
             this.chkAhorroEmergencia.UseVisualStyleBackColor = true;
+            this.chkAhorroEmergencia.Visible = false;
             // 
             // cmbDestinoImpresion
             // 
@@ -797,18 +810,6 @@
             this.chkHabilitado.TabIndex = 60;
             this.chkHabilitado.Text = "Producto Habilitado";
             this.chkHabilitado.UseVisualStyleBackColor = true;
-            // 
-            // chkPagaServicio
-            // 
-            this.chkPagaServicio.AutoSize = true;
-            this.chkPagaServicio.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.chkPagaServicio.ForeColor = System.Drawing.Color.Red;
-            this.chkPagaServicio.Location = new System.Drawing.Point(93, 242);
-            this.chkPagaServicio.Name = "chkPagaServicio";
-            this.chkPagaServicio.Size = new System.Drawing.Size(101, 19);
-            this.chkPagaServicio.TabIndex = 85;
-            this.chkPagaServicio.Text = "Paga Servicio";
-            this.chkPagaServicio.UseVisualStyleBackColor = true;
             // 
             // frmIngresoProductos
             // 

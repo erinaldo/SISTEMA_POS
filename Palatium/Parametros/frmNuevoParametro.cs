@@ -193,6 +193,15 @@ namespace Palatium.Parametros
                     return;
                 }
 
+                if (txtUrlRespaldoBDD.Text.Trim() == "")
+                {
+                    ok = new VentanasMensajes.frmMensajeNuevoOk();
+                    ok.lblMensaje.Text = "Favor seleccione el directorio donde se alojarán los respaldos de la base de datos.";
+                    ok.ShowDialog();
+                    txtUrlRespaldoBDD.Focus();
+                    return;
+                }
+
                 if (Convert.ToInt32(this.cmbTipoComprobante.SelectedValue) == 0)
                 {
                     ok = new VentanasMensajes.frmMensajeNuevoOk();
@@ -630,6 +639,7 @@ namespace Palatium.Parametros
                     txtTelefono.Clear();
                     txtSitioWeb.Clear();
                     txtUrlContable.Clear();
+                    txtUrlRespaldoBDD.Clear();
 
                     cmbTipoComprobante.SelectedValue = 0;
                 }
@@ -641,6 +651,7 @@ namespace Palatium.Parametros
                     txtTelefono.Text = dtConsulta.Rows[0]["contacto_fabricante"].ToString();
                     txtSitioWeb.Text = dtConsulta.Rows[0]["sitio_web_fabricante"].ToString();
                     txtUrlContable.Text = dtConsulta.Rows[0]["url_contabilidad"].ToString();
+                    txtUrlRespaldoBDD.Text = dtConsulta.Rows[0]["url_backup_bdd"].ToString();
 
                     cmbTipoComprobante.SelectedValue = dtConsulta.Rows[0]["idtipocomprobante"].ToString();
                 }
@@ -674,11 +685,12 @@ namespace Palatium.Parametros
                 sSql += "contacto_fabricante = @contacto_fabricante," + Environment.NewLine;
                 sSql += "sitio_web_fabricante = @sitio_web_fabricante," + Environment.NewLine;
                 sSql += "url_contabilidad = @url_contabilidad," + Environment.NewLine;
+                sSql += "url_backup_bdd = @url_backup_bdd," + Environment.NewLine;
                 sSql += "idtipocomprobante = @idtipocomprobante" + Environment.NewLine;
                 sSql += "where id_pos_parametro = @id_pos_parametro" + Environment.NewLine;
                 sSql += "and estado = 'A'";
 
-                parametro = new SqlParameter[5];
+                parametro = new SqlParameter[6];
                 parametro[0] = new SqlParameter();
                 parametro[0].ParameterName = "@contacto_fabricante";
                 parametro[0].SqlDbType = SqlDbType.VarChar;
@@ -695,14 +707,19 @@ namespace Palatium.Parametros
                 parametro[2].Value = txtUrlContable.Text.Trim();
 
                 parametro[3] = new SqlParameter();
-                parametro[3].ParameterName = "@idtipocomprobante";
-                parametro[3].SqlDbType = SqlDbType.Int;
-                parametro[3].Value = cmbTipoComprobante.SelectedValue;
+                parametro[3].ParameterName = "@url_backup_bdd";
+                parametro[3].SqlDbType = SqlDbType.VarChar;
+                parametro[3].Value = txtUrlRespaldoBDD.Text.Trim();
 
                 parametro[4] = new SqlParameter();
-                parametro[4].ParameterName = "@id_pos_parametro";
+                parametro[4].ParameterName = "@idtipocomprobante";
                 parametro[4].SqlDbType = SqlDbType.Int;
-                parametro[4].Value = iIdParametro;
+                parametro[4].Value = cmbTipoComprobante.SelectedValue;
+
+                parametro[5] = new SqlParameter();
+                parametro[5].ParameterName = "@id_pos_parametro";
+                parametro[5].SqlDbType = SqlDbType.Int;
+                parametro[5].Value = iIdParametro;
 
                 //EJECUTAR LA INSTRUCCIÓN SQL
                 if (!conexion.GFun_Lo_Ejecutar_SQL_Parametros(sSql, parametro))
@@ -852,6 +869,19 @@ namespace Palatium.Parametros
         private void txtTelefono_KeyPress(object sender, KeyPressEventArgs e)
         {
             caracter.soloNumeros(e);
+        }
+
+        private void btnLimpiarRespaldo_Click(object sender, EventArgs e)
+        {
+            txtUrlRespaldoBDD.Clear();
+        }
+
+        private void btnExaminarDirectorio_Click(object sender, EventArgs e)
+        {
+            if (fbRuta.ShowDialog() == DialogResult.OK)
+            {
+                txtUrlRespaldoBDD.Text = fbRuta.SelectedPath;
+            }
         }        
     }
 }

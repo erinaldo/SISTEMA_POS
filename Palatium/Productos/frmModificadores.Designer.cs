@@ -45,8 +45,6 @@
             this.grupoOpciones = new System.Windows.Forms.GroupBox();
             this.chkExpira = new System.Windows.Forms.CheckBox();
             this.grupoPrecio = new System.Windows.Forms.GroupBox();
-            this.lblEstaCajero = new System.Windows.Forms.Label();
-            this.cmbEstado = new System.Windows.Forms.ComboBox();
             this.lblSecuencia = new System.Windows.Forms.Label();
             this.txtSecuencia = new System.Windows.Forms.TextBox();
             this.grupoImpresion = new System.Windows.Forms.GroupBox();
@@ -68,6 +66,8 @@
             this.txtDescripcion = new System.Windows.Forms.TextBox();
             this.lblCodiCategori = new System.Windows.Forms.Label();
             this.txtCodigo = new System.Windows.Forms.TextBox();
+            this.chkPagaServicio = new System.Windows.Forms.CheckBox();
+            this.chkHabilitado = new System.Windows.Forms.CheckBox();
             this.grupoGrid.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvDatos)).BeginInit();
             this.grupoBotones.SuspendLayout();
@@ -82,7 +82,7 @@
             // 
             this.chkPrecioModificable.AutoSize = true;
             this.chkPrecioModificable.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.chkPrecioModificable.Location = new System.Drawing.Point(18, 53);
+            this.chkPrecioModificable.Location = new System.Drawing.Point(105, 53);
             this.chkPrecioModificable.Name = "chkPrecioModificable";
             this.chkPrecioModificable.Size = new System.Drawing.Size(128, 19);
             this.chkPrecioModificable.TabIndex = 16;
@@ -113,7 +113,7 @@
             // txtPrecioMinorista
             // 
             this.txtPrecioMinorista.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.txtPrecioMinorista.Location = new System.Drawing.Point(160, 48);
+            this.txtPrecioMinorista.Location = new System.Drawing.Point(160, 58);
             this.txtPrecioMinorista.MaxLength = 20;
             this.txtPrecioMinorista.Name = "txtPrecioMinorista";
             this.txtPrecioMinorista.Size = new System.Drawing.Size(111, 20);
@@ -138,7 +138,7 @@
             this.lblPrecioMinorista.BackColor = System.Drawing.Color.Transparent;
             this.lblPrecioMinorista.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblPrecioMinorista.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.lblPrecioMinorista.Location = new System.Drawing.Point(13, 51);
+            this.lblPrecioMinorista.Location = new System.Drawing.Point(13, 61);
             this.lblPrecioMinorista.Name = "lblPrecioMinorista";
             this.lblPrecioMinorista.Size = new System.Drawing.Size(141, 15);
             this.lblPrecioMinorista.TabIndex = 36;
@@ -161,6 +161,7 @@
             this.dgvDatos.AllowUserToDeleteRows = false;
             this.dgvDatos.AllowUserToResizeColumns = false;
             this.dgvDatos.AllowUserToResizeRows = false;
+            this.dgvDatos.BackgroundColor = System.Drawing.SystemColors.ControlLightLight;
             this.dgvDatos.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvDatos.Location = new System.Drawing.Point(16, 25);
             this.dgvDatos.MultiSelect = false;
@@ -223,6 +224,8 @@
             // 
             // grupoOpciones
             // 
+            this.grupoOpciones.Controls.Add(this.chkHabilitado);
+            this.grupoOpciones.Controls.Add(this.chkPagaServicio);
             this.grupoOpciones.Controls.Add(this.chkPagaIva);
             this.grupoOpciones.Controls.Add(this.chkPrecioModificable);
             this.grupoOpciones.Controls.Add(this.chkExpira);
@@ -230,7 +233,7 @@
             this.grupoOpciones.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.grupoOpciones.Location = new System.Drawing.Point(331, 88);
             this.grupoOpciones.Name = "grupoOpciones";
-            this.grupoOpciones.Size = new System.Drawing.Size(243, 87);
+            this.grupoOpciones.Size = new System.Drawing.Size(243, 111);
             this.grupoOpciones.TabIndex = 41;
             this.grupoOpciones.TabStop = false;
             this.grupoOpciones.Text = "Opciones";
@@ -239,7 +242,7 @@
             // 
             this.chkExpira.AutoSize = true;
             this.chkExpira.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.chkExpira.Location = new System.Drawing.Point(148, 28);
+            this.chkExpira.Location = new System.Drawing.Point(18, 53);
             this.chkExpira.Name = "chkExpira";
             this.chkExpira.Size = new System.Drawing.Size(61, 19);
             this.chkExpira.TabIndex = 17;
@@ -248,8 +251,6 @@
             // 
             // grupoPrecio
             // 
-            this.grupoPrecio.Controls.Add(this.lblEstaCajero);
-            this.grupoPrecio.Controls.Add(this.cmbEstado);
             this.grupoPrecio.Controls.Add(this.lblSecuencia);
             this.grupoPrecio.Controls.Add(this.txtPrecioCompra);
             this.grupoPrecio.Controls.Add(this.txtSecuencia);
@@ -265,39 +266,13 @@
             this.grupoPrecio.TabStop = false;
             this.grupoPrecio.Text = "Control de Precio";
             // 
-            // lblEstaCajero
-            // 
-            this.lblEstaCajero.AutoSize = true;
-            this.lblEstaCajero.BackColor = System.Drawing.Color.Transparent;
-            this.lblEstaCajero.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblEstaCajero.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.lblEstaCajero.Location = new System.Drawing.Point(15, 96);
-            this.lblEstaCajero.Name = "lblEstaCajero";
-            this.lblEstaCajero.Size = new System.Drawing.Size(48, 15);
-            this.lblEstaCajero.TabIndex = 51;
-            this.lblEstaCajero.Text = "Estado:";
-            // 
-            // cmbEstado
-            // 
-            this.cmbEstado.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbEstado.Enabled = false;
-            this.cmbEstado.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cmbEstado.FormattingEnabled = true;
-            this.cmbEstado.Items.AddRange(new object[] {
-            "ACTIVO",
-            "INACTIVO"});
-            this.cmbEstado.Location = new System.Drawing.Point(160, 90);
-            this.cmbEstado.Name = "cmbEstado";
-            this.cmbEstado.Size = new System.Drawing.Size(111, 21);
-            this.cmbEstado.TabIndex = 52;
-            // 
             // lblSecuencia
             // 
             this.lblSecuencia.AutoSize = true;
             this.lblSecuencia.BackColor = System.Drawing.Color.Transparent;
             this.lblSecuencia.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblSecuencia.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.lblSecuencia.Location = new System.Drawing.Point(13, 74);
+            this.lblSecuencia.Location = new System.Drawing.Point(13, 92);
             this.lblSecuencia.Name = "lblSecuencia";
             this.lblSecuencia.Size = new System.Drawing.Size(76, 15);
             this.lblSecuencia.TabIndex = 50;
@@ -306,7 +281,7 @@
             // txtSecuencia
             // 
             this.txtSecuencia.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.txtSecuencia.Location = new System.Drawing.Point(160, 69);
+            this.txtSecuencia.Location = new System.Drawing.Point(160, 87);
             this.txtSecuencia.MaxLength = 20;
             this.txtSecuencia.Name = "txtSecuencia";
             this.txtSecuencia.Size = new System.Drawing.Size(111, 20);
@@ -318,7 +293,7 @@
             this.grupoImpresion.Controls.Add(this.cmbDestinoImpresion);
             this.grupoImpresion.Enabled = false;
             this.grupoImpresion.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.grupoImpresion.Location = new System.Drawing.Point(331, 188);
+            this.grupoImpresion.Location = new System.Drawing.Point(331, 210);
             this.grupoImpresion.Name = "grupoImpresion";
             this.grupoImpresion.Size = new System.Drawing.Size(243, 63);
             this.grupoImpresion.TabIndex = 43;
@@ -524,6 +499,33 @@
             this.txtCodigo.Size = new System.Drawing.Size(142, 20);
             this.txtCodigo.TabIndex = 7;
             // 
+            // chkPagaServicio
+            // 
+            this.chkPagaServicio.AutoSize = true;
+            this.chkPagaServicio.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.chkPagaServicio.ForeColor = System.Drawing.Color.Red;
+            this.chkPagaServicio.Location = new System.Drawing.Point(105, 28);
+            this.chkPagaServicio.Name = "chkPagaServicio";
+            this.chkPagaServicio.Size = new System.Drawing.Size(101, 19);
+            this.chkPagaServicio.TabIndex = 86;
+            this.chkPagaServicio.Text = "Paga Servicio";
+            this.chkPagaServicio.UseVisualStyleBackColor = true;
+            // 
+            // chkHabilitado
+            // 
+            this.chkHabilitado.AutoSize = true;
+            this.chkHabilitado.Checked = true;
+            this.chkHabilitado.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkHabilitado.Enabled = false;
+            this.chkHabilitado.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.chkHabilitado.ForeColor = System.Drawing.Color.Red;
+            this.chkHabilitado.Location = new System.Drawing.Point(18, 78);
+            this.chkHabilitado.Name = "chkHabilitado";
+            this.chkHabilitado.Size = new System.Drawing.Size(138, 17);
+            this.chkHabilitado.TabIndex = 87;
+            this.chkHabilitado.Text = "Producto Habilitado";
+            this.chkHabilitado.UseVisualStyleBackColor = true;
+            // 
             // frmModificadores
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -598,7 +600,7 @@
         private System.Windows.Forms.TextBox txtSecuencia;
         private System.Windows.Forms.Label lblSecuencia;
         private Controles.Auxiliares.DB_Ayuda dBAyudaModificadores;
-        private System.Windows.Forms.Label lblEstaCajero;
-        private System.Windows.Forms.ComboBox cmbEstado;
+        private System.Windows.Forms.CheckBox chkPagaServicio;
+        private System.Windows.Forms.CheckBox chkHabilitado;
     }
 }

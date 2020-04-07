@@ -30,6 +30,7 @@
         {
             this.tbControl = new System.Windows.Forms.TabControl();
             this.tabPorcentajes = new System.Windows.Forms.TabPage();
+            this.chkIncluirImpuestos = new System.Windows.Forms.CheckBox();
             this.chkNomina = new System.Windows.Forms.CheckBox();
             this.chkMostrarNombreMesa = new System.Windows.Forms.CheckBox();
             this.chkUsuariosLogin = new System.Windows.Forms.CheckBox();
@@ -65,7 +66,11 @@
             this.label30 = new System.Windows.Forms.Label();
             this.btnGuardar = new System.Windows.Forms.Button();
             this.label6 = new System.Windows.Forms.Label();
-            this.chkIncluirImpuestos = new System.Windows.Forms.CheckBox();
+            this.btnLimpiarRespaldo = new System.Windows.Forms.Button();
+            this.label7 = new System.Windows.Forms.Label();
+            this.btnExaminarDirectorio = new System.Windows.Forms.Button();
+            this.txtUrlRespaldoBDD = new System.Windows.Forms.TextBox();
+            this.fbRuta = new System.Windows.Forms.FolderBrowserDialog();
             this.tbControl.SuspendLayout();
             this.tabPorcentajes.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -101,6 +106,17 @@
             this.tabPorcentajes.Size = new System.Drawing.Size(584, 158);
             this.tabPorcentajes.TabIndex = 0;
             this.tabPorcentajes.Text = "Porcentajes del Sistema";
+            // 
+            // chkIncluirImpuestos
+            // 
+            this.chkIncluirImpuestos.AutoSize = true;
+            this.chkIncluirImpuestos.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F);
+            this.chkIncluirImpuestos.Location = new System.Drawing.Point(284, 133);
+            this.chkIncluirImpuestos.Name = "chkIncluirImpuestos";
+            this.chkIncluirImpuestos.Size = new System.Drawing.Size(198, 19);
+            this.chkIncluirImpuestos.TabIndex = 119;
+            this.chkIncluirImpuestos.Text = "Incluir impuestos en los precios";
+            this.chkIncluirImpuestos.UseVisualStyleBackColor = true;
             // 
             // chkNomina
             // 
@@ -366,6 +382,10 @@
             // tabParametros
             // 
             this.tabParametros.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
+            this.tabParametros.Controls.Add(this.btnLimpiarRespaldo);
+            this.tabParametros.Controls.Add(this.label7);
+            this.tabParametros.Controls.Add(this.btnExaminarDirectorio);
+            this.tabParametros.Controls.Add(this.txtUrlRespaldoBDD);
             this.tabParametros.Controls.Add(this.btnRemoverContable);
             this.tabParametros.Controls.Add(this.label14);
             this.tabParametros.Controls.Add(this.btnExaminarContable);
@@ -387,7 +407,7 @@
             // 
             this.btnRemoverContable.BackColor = System.Drawing.Color.Red;
             this.btnRemoverContable.ForeColor = System.Drawing.Color.Black;
-            this.btnRemoverContable.Location = new System.Drawing.Point(517, 73);
+            this.btnRemoverContable.Location = new System.Drawing.Point(517, 67);
             this.btnRemoverContable.Name = "btnRemoverContable";
             this.btnRemoverContable.Size = new System.Drawing.Size(27, 25);
             this.btnRemoverContable.TabIndex = 124;
@@ -399,7 +419,7 @@
             // 
             this.label14.AutoSize = true;
             this.label14.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F);
-            this.label14.Location = new System.Drawing.Point(38, 77);
+            this.label14.Location = new System.Drawing.Point(38, 71);
             this.label14.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(87, 15);
@@ -410,7 +430,7 @@
             // 
             this.btnExaminarContable.BackColor = System.Drawing.Color.Yellow;
             this.btnExaminarContable.ForeColor = System.Drawing.Color.Black;
-            this.btnExaminarContable.Location = new System.Drawing.Point(484, 72);
+            this.btnExaminarContable.Location = new System.Drawing.Point(484, 66);
             this.btnExaminarContable.Name = "btnExaminarContable";
             this.btnExaminarContable.Size = new System.Drawing.Size(27, 25);
             this.btnExaminarContable.TabIndex = 123;
@@ -422,7 +442,7 @@
             // 
             this.txtUrlContable.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.txtUrlContable.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtUrlContable.Location = new System.Drawing.Point(152, 74);
+            this.txtUrlContable.Location = new System.Drawing.Point(152, 68);
             this.txtUrlContable.Name = "txtUrlContable";
             this.txtUrlContable.ReadOnly = true;
             this.txtUrlContable.Size = new System.Drawing.Size(326, 22);
@@ -432,7 +452,7 @@
             // 
             this.txtSitioWeb.CharacterCasing = System.Windows.Forms.CharacterCasing.Lower;
             this.txtSitioWeb.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtSitioWeb.Location = new System.Drawing.Point(152, 46);
+            this.txtSitioWeb.Location = new System.Drawing.Point(152, 40);
             this.txtSitioWeb.MaxLength = 100;
             this.txtSitioWeb.Name = "txtSitioWeb";
             this.txtSitioWeb.Size = new System.Drawing.Size(392, 22);
@@ -442,7 +462,7 @@
             // 
             this.label12.AutoSize = true;
             this.label12.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F);
-            this.label12.Location = new System.Drawing.Point(38, 49);
+            this.label12.Location = new System.Drawing.Point(38, 43);
             this.label12.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(62, 15);
@@ -452,7 +472,7 @@
             // txtTelefono
             // 
             this.txtTelefono.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtTelefono.Location = new System.Drawing.Point(152, 18);
+            this.txtTelefono.Location = new System.Drawing.Point(152, 12);
             this.txtTelefono.MaxLength = 15;
             this.txtTelefono.Name = "txtTelefono";
             this.txtTelefono.Size = new System.Drawing.Size(157, 22);
@@ -463,7 +483,7 @@
             // 
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F);
-            this.label5.Location = new System.Drawing.Point(38, 21);
+            this.label5.Location = new System.Drawing.Point(38, 15);
             this.label5.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(58, 15);
@@ -474,7 +494,7 @@
             // 
             this.cmbTipoComprobante.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cmbTipoComprobante.FormattingEnabled = true;
-            this.cmbTipoComprobante.Location = new System.Drawing.Point(152, 102);
+            this.cmbTipoComprobante.Location = new System.Drawing.Point(152, 124);
             this.cmbTipoComprobante.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.cmbTipoComprobante.Name = "cmbTipoComprobante";
             this.cmbTipoComprobante.Size = new System.Drawing.Size(241, 23);
@@ -484,7 +504,7 @@
             // 
             this.label30.AutoSize = true;
             this.label30.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F);
-            this.label30.Location = new System.Drawing.Point(38, 102);
+            this.label30.Location = new System.Drawing.Point(38, 122);
             this.label30.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label30.Name = "label30";
             this.label30.Size = new System.Drawing.Size(99, 30);
@@ -516,16 +536,50 @@
             this.label6.TabIndex = 7;
             this.label6.Text = "CONFIGURACIÓN GENERAL DEL SISTEMA";
             // 
-            // chkIncluirImpuestos
+            // btnLimpiarRespaldo
             // 
-            this.chkIncluirImpuestos.AutoSize = true;
-            this.chkIncluirImpuestos.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F);
-            this.chkIncluirImpuestos.Location = new System.Drawing.Point(284, 133);
-            this.chkIncluirImpuestos.Name = "chkIncluirImpuestos";
-            this.chkIncluirImpuestos.Size = new System.Drawing.Size(198, 19);
-            this.chkIncluirImpuestos.TabIndex = 119;
-            this.chkIncluirImpuestos.Text = "Incluir impuestos en los precios";
-            this.chkIncluirImpuestos.UseVisualStyleBackColor = true;
+            this.btnLimpiarRespaldo.BackColor = System.Drawing.Color.Red;
+            this.btnLimpiarRespaldo.ForeColor = System.Drawing.Color.Black;
+            this.btnLimpiarRespaldo.Location = new System.Drawing.Point(517, 95);
+            this.btnLimpiarRespaldo.Name = "btnLimpiarRespaldo";
+            this.btnLimpiarRespaldo.Size = new System.Drawing.Size(27, 25);
+            this.btnLimpiarRespaldo.TabIndex = 128;
+            this.btnLimpiarRespaldo.Text = "X";
+            this.btnLimpiarRespaldo.UseVisualStyleBackColor = false;
+            this.btnLimpiarRespaldo.Click += new System.EventHandler(this.btnLimpiarRespaldo_Click);
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F);
+            this.label7.Location = new System.Drawing.Point(38, 99);
+            this.label7.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(79, 15);
+            this.label7.TabIndex = 129;
+            this.label7.Text = "URL Backup:";
+            // 
+            // btnExaminarDirectorio
+            // 
+            this.btnExaminarDirectorio.BackColor = System.Drawing.Color.Yellow;
+            this.btnExaminarDirectorio.ForeColor = System.Drawing.Color.Black;
+            this.btnExaminarDirectorio.Location = new System.Drawing.Point(484, 94);
+            this.btnExaminarDirectorio.Name = "btnExaminarDirectorio";
+            this.btnExaminarDirectorio.Size = new System.Drawing.Size(27, 25);
+            this.btnExaminarDirectorio.TabIndex = 127;
+            this.btnExaminarDirectorio.Text = "...";
+            this.btnExaminarDirectorio.UseVisualStyleBackColor = false;
+            this.btnExaminarDirectorio.Click += new System.EventHandler(this.btnExaminarDirectorio_Click);
+            // 
+            // txtUrlRespaldoBDD
+            // 
+            this.txtUrlRespaldoBDD.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.txtUrlRespaldoBDD.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtUrlRespaldoBDD.Location = new System.Drawing.Point(152, 96);
+            this.txtUrlRespaldoBDD.Name = "txtUrlRespaldoBDD";
+            this.txtUrlRespaldoBDD.ReadOnly = true;
+            this.txtUrlRespaldoBDD.Size = new System.Drawing.Size(326, 22);
+            this.txtUrlRespaldoBDD.TabIndex = 126;
             // 
             // frmNuevoParametro
             // 
@@ -598,5 +652,10 @@
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.CheckBox chkNomina;
         private System.Windows.Forms.CheckBox chkIncluirImpuestos;
+        private System.Windows.Forms.Button btnLimpiarRespaldo;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Button btnExaminarDirectorio;
+        private System.Windows.Forms.TextBox txtUrlRespaldoBDD;
+        private System.Windows.Forms.FolderBrowserDialog fbRuta;
     }
 }

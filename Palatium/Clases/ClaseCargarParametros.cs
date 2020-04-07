@@ -160,6 +160,11 @@ namespace Palatium.Clases
                         Program.iUsarLectorPantallaEspere = Convert.ToInt32(dtConsulta.Rows[0]["usar_pantalla_espera_almuerzos"].ToString());
                         Program.iIdProductoAlmuerzoDefault = Convert.ToInt32(dtConsulta.Rows[0]["id_producto_almuerzo_default"].ToString());
 
+                        Program.iComandaVentaRapida = Convert.ToInt32(dtConsulta.Rows[0]["maneja_venta_rapida"].ToString());
+                        Program.iComandaClienteEmpresarial = Convert.ToInt32(dtConsulta.Rows[0]["maneja_cliente_empresarial"].ToString());
+                        Program.iComandaTarjetaAlmuerzos = Convert.ToInt32(dtConsulta.Rows[0]["maneja_tarjeta_almuerzo"].ToString());
+                        Program.iComandaConsumoInterno = Convert.ToInt32(dtConsulta.Rows[0]["maneja_consumo_interno"].ToString());
+
                         return "";
                     }
 
