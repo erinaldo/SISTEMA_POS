@@ -2748,7 +2748,7 @@ namespace Palatium.ComandaNueva
                         sGuardarComentario = "";
 
                     if (iPagaServicio_P == 1)
-                        dServicio = (dPrecioUnitario_P - dValorDescuento) * Program.servicio;
+                        dServicio = (dPrecioUnitario_P - dDescuento_P) * Program.servicio;
                     else
                         dServicio = 0;
 

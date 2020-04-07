@@ -241,6 +241,24 @@ namespace Palatium.Parametros
                     else
                         iIncluirImpuesto = 0;
 
+                    if (chkManejaServicio.Checked == false)
+                    {
+                        int iCuenta_P = contarRegistrosServicio();
+
+                        if (iCuenta_P == -1)
+                            return;
+
+                        if (iCuenta_P > 0)
+                        {
+                            SiNo = new VentanasMensajes.frmMensajeNuevoSiNo();
+                            SiNo.lblMensaje.Text = "Existen ítems que contienen información del servicio." + Environment.NewLine + "¿Está seguro que desea actualizar de todas formas?";
+                            SiNo.ShowDialog();
+
+                            if (SiNo.DialogResult != DialogResult.OK)
+                                return;
+                        }
+                    }
+
                     actualizarTabPorcentajes();
                 }
 
@@ -259,6 +277,63 @@ namespace Palatium.Parametros
         #endregion
 
         #region FUNCIONES DEL TAB DE PORCENTAJES
+
+        //FUNCION PARA CONTAR REGISTROS QUE MANEJEN EL PORCENTAJE DE PROPINA
+        private int contarRegistrosServicio()
+        {
+            try
+            {
+                sSql = "";
+                sSql += "select * from cv401_productos" + Environment.NewLine;
+                sSql += "where estado = @estado" + Environment.NewLine;
+                sSql += "and nivel in (@nivel_3, @nivel_4)" + Environment.NewLine;
+                sSql += "and paga_servicio = @paga_servicio";
+
+                parametro = new SqlParameter[4];
+                parametro[0] = new SqlParameter();
+                parametro[0].ParameterName = "@estado";
+                parametro[0].SqlDbType = SqlDbType.VarChar;
+                parametro[0].Value = "A";
+
+                parametro[1] = new SqlParameter();
+                parametro[1].ParameterName = "@nivel_3";
+                parametro[1].SqlDbType = SqlDbType.Int;
+                parametro[1].Value = 3;
+
+                parametro[2] = new SqlParameter();
+                parametro[2].ParameterName = "@nivel_4";
+                parametro[2].SqlDbType = SqlDbType.Int;
+                parametro[2].Value = 4;
+
+                parametro[3] = new SqlParameter();
+                parametro[3].ParameterName = "@paga_servicio";
+                parametro[3].SqlDbType = SqlDbType.Int;
+                parametro[3].Value = 1;
+
+                dtAyuda = new DataTable();
+                dtAyuda.Clear();
+
+                bRespuesta = conexion.GFun_Lo_Busca_Registro_Parametros(dtAyuda, sSql, parametro);
+
+                if (bRespuesta == false)
+                {
+                    catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
+                    catchMensaje.lblMensaje.Text = conexion.sMensajeError;
+                    catchMensaje.ShowDialog();
+                    return -1;
+                }
+
+                return dtAyuda.Rows.Count;
+            }
+
+            catch (Exception ex)
+            {
+                catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
+                catchMensaje.lblMensaje.Text = ex.Message;
+                catchMensaje.ShowDialog();
+                return -1;
+            }
+        }
 
         //FUNCION PARA CARGAR LOS PARAMETROS DEL TAB
         private void cargarTabPorcentajes()
