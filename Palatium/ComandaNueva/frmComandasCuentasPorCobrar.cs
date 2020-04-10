@@ -287,7 +287,7 @@ namespace Palatium.ComandaNueva
         {
             Button botonsel = sender as Button;
 
-            Pedidos.frmCobros cobros = new Pedidos.frmCobros(botonsel.Name, 1);
+            ComandaNueva.frmCobros cobros = new ComandaNueva.frmCobros(botonsel.Name, 1);
             cobros.ShowDialog();
 
             if (cobros.DialogResult == DialogResult.OK)

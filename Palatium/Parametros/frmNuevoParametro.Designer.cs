@@ -54,6 +54,10 @@
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.tabParametros = new System.Windows.Forms.TabPage();
+            this.btnLimpiarRespaldo = new System.Windows.Forms.Button();
+            this.label7 = new System.Windows.Forms.Label();
+            this.btnExaminarDirectorio = new System.Windows.Forms.Button();
+            this.txtUrlRespaldoBDD = new System.Windows.Forms.TextBox();
             this.btnRemoverContable = new System.Windows.Forms.Button();
             this.label14 = new System.Windows.Forms.Label();
             this.btnExaminarContable = new System.Windows.Forms.Button();
@@ -66,10 +70,6 @@
             this.label30 = new System.Windows.Forms.Label();
             this.btnGuardar = new System.Windows.Forms.Button();
             this.label6 = new System.Windows.Forms.Label();
-            this.btnLimpiarRespaldo = new System.Windows.Forms.Button();
-            this.label7 = new System.Windows.Forms.Label();
-            this.btnExaminarDirectorio = new System.Windows.Forms.Button();
-            this.txtUrlRespaldoBDD = new System.Windows.Forms.TextBox();
             this.fbRuta = new System.Windows.Forms.FolderBrowserDialog();
             this.tbControl.SuspendLayout();
             this.tabPorcentajes.SuspendLayout();
@@ -403,11 +403,56 @@
             this.tabParametros.TabIndex = 2;
             this.tabParametros.Text = "Parametrización Adicional";
             // 
+            // btnLimpiarRespaldo
+            // 
+            this.btnLimpiarRespaldo.BackColor = System.Drawing.Color.Red;
+            this.btnLimpiarRespaldo.ForeColor = System.Drawing.Color.Black;
+            this.btnLimpiarRespaldo.Location = new System.Drawing.Point(517, 94);
+            this.btnLimpiarRespaldo.Name = "btnLimpiarRespaldo";
+            this.btnLimpiarRespaldo.Size = new System.Drawing.Size(27, 25);
+            this.btnLimpiarRespaldo.TabIndex = 128;
+            this.btnLimpiarRespaldo.Text = "X";
+            this.btnLimpiarRespaldo.UseVisualStyleBackColor = false;
+            this.btnLimpiarRespaldo.Click += new System.EventHandler(this.btnLimpiarRespaldo_Click);
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F);
+            this.label7.Location = new System.Drawing.Point(38, 99);
+            this.label7.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(79, 15);
+            this.label7.TabIndex = 129;
+            this.label7.Text = "URL Backup:";
+            // 
+            // btnExaminarDirectorio
+            // 
+            this.btnExaminarDirectorio.BackColor = System.Drawing.Color.Yellow;
+            this.btnExaminarDirectorio.ForeColor = System.Drawing.Color.Black;
+            this.btnExaminarDirectorio.Location = new System.Drawing.Point(484, 94);
+            this.btnExaminarDirectorio.Name = "btnExaminarDirectorio";
+            this.btnExaminarDirectorio.Size = new System.Drawing.Size(27, 25);
+            this.btnExaminarDirectorio.TabIndex = 127;
+            this.btnExaminarDirectorio.Text = "...";
+            this.btnExaminarDirectorio.UseVisualStyleBackColor = false;
+            this.btnExaminarDirectorio.Click += new System.EventHandler(this.btnExaminarDirectorio_Click);
+            // 
+            // txtUrlRespaldoBDD
+            // 
+            this.txtUrlRespaldoBDD.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.txtUrlRespaldoBDD.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtUrlRespaldoBDD.Location = new System.Drawing.Point(152, 96);
+            this.txtUrlRespaldoBDD.Name = "txtUrlRespaldoBDD";
+            this.txtUrlRespaldoBDD.ReadOnly = true;
+            this.txtUrlRespaldoBDD.Size = new System.Drawing.Size(326, 22);
+            this.txtUrlRespaldoBDD.TabIndex = 126;
+            // 
             // btnRemoverContable
             // 
             this.btnRemoverContable.BackColor = System.Drawing.Color.Red;
             this.btnRemoverContable.ForeColor = System.Drawing.Color.Black;
-            this.btnRemoverContable.Location = new System.Drawing.Point(517, 67);
+            this.btnRemoverContable.Location = new System.Drawing.Point(517, 65);
             this.btnRemoverContable.Name = "btnRemoverContable";
             this.btnRemoverContable.Size = new System.Drawing.Size(27, 25);
             this.btnRemoverContable.TabIndex = 124;
@@ -535,51 +580,6 @@
             this.label6.Size = new System.Drawing.Size(353, 19);
             this.label6.TabIndex = 7;
             this.label6.Text = "CONFIGURACIÓN GENERAL DEL SISTEMA";
-            // 
-            // btnLimpiarRespaldo
-            // 
-            this.btnLimpiarRespaldo.BackColor = System.Drawing.Color.Red;
-            this.btnLimpiarRespaldo.ForeColor = System.Drawing.Color.Black;
-            this.btnLimpiarRespaldo.Location = new System.Drawing.Point(517, 95);
-            this.btnLimpiarRespaldo.Name = "btnLimpiarRespaldo";
-            this.btnLimpiarRespaldo.Size = new System.Drawing.Size(27, 25);
-            this.btnLimpiarRespaldo.TabIndex = 128;
-            this.btnLimpiarRespaldo.Text = "X";
-            this.btnLimpiarRespaldo.UseVisualStyleBackColor = false;
-            this.btnLimpiarRespaldo.Click += new System.EventHandler(this.btnLimpiarRespaldo_Click);
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F);
-            this.label7.Location = new System.Drawing.Point(38, 99);
-            this.label7.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(79, 15);
-            this.label7.TabIndex = 129;
-            this.label7.Text = "URL Backup:";
-            // 
-            // btnExaminarDirectorio
-            // 
-            this.btnExaminarDirectorio.BackColor = System.Drawing.Color.Yellow;
-            this.btnExaminarDirectorio.ForeColor = System.Drawing.Color.Black;
-            this.btnExaminarDirectorio.Location = new System.Drawing.Point(484, 94);
-            this.btnExaminarDirectorio.Name = "btnExaminarDirectorio";
-            this.btnExaminarDirectorio.Size = new System.Drawing.Size(27, 25);
-            this.btnExaminarDirectorio.TabIndex = 127;
-            this.btnExaminarDirectorio.Text = "...";
-            this.btnExaminarDirectorio.UseVisualStyleBackColor = false;
-            this.btnExaminarDirectorio.Click += new System.EventHandler(this.btnExaminarDirectorio_Click);
-            // 
-            // txtUrlRespaldoBDD
-            // 
-            this.txtUrlRespaldoBDD.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.txtUrlRespaldoBDD.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtUrlRespaldoBDD.Location = new System.Drawing.Point(152, 96);
-            this.txtUrlRespaldoBDD.Name = "txtUrlRespaldoBDD";
-            this.txtUrlRespaldoBDD.ReadOnly = true;
-            this.txtUrlRespaldoBDD.Size = new System.Drawing.Size(326, 22);
-            this.txtUrlRespaldoBDD.TabIndex = 126;
             // 
             // frmNuevoParametro
             // 

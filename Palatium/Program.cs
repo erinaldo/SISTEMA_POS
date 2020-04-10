@@ -33,14 +33,14 @@ namespace Palatium
             VentanasMensajes.frmMensajeNuevoCatch catchMensaje;
             VentanasMensajes.frmMensajeNuevoSiNo SiNo;
             string sMensaje;
-            int iRespuesta_P;
-            
+            int iRespuesta_P;            
             
             //string path = "C:\\palatium\\config.ini";
             string path = args[0];
 
             if (File.Exists(path))
             {
+                conectar = new ConexionBD.ConexionBD();
                 if (conectar.lecturaConfiguracion(path) == true)
                 {
                     iIdEmpresa = Convert.ToInt32(conectar.id_Empresa);
@@ -52,7 +52,6 @@ namespace Palatium
                     SQLCONEXION = conectar.SQLCONEXION;
                     SQLSERVIDOR = conectar.SQLSERVIDOR;
                     SQLDNS = conectar.SQLDSN_ODBC;
-
 
                     //VERIFICAR LOS PARAMETROS GENERALES
                     //-----------------------------------------------------------------------------------------------------------

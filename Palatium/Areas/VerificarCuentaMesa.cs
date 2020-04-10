@@ -432,7 +432,7 @@ namespace Palatium
 
                     if (Convert.ToInt32(botonpagos.AccessibleDescription) == 1)
                     {
-                        Pedidos.frmCobros frmCobros = new Pedidos.frmCobros(botonpagos.Tag.ToString(), 0);
+                        ComandaNueva.frmCobros frmCobros = new ComandaNueva.frmCobros(botonpagos.Tag.ToString(), 0);
                         frmCobros.ShowDialog();
 
                         if (frmCobros.DialogResult == DialogResult.OK)

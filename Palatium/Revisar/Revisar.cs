@@ -697,7 +697,7 @@ namespace Palatium.Revisar
 
             if (Convert.ToInt32(btnPagar_P.AccessibleName) == 1)
             {
-                Pedidos.frmCobros t = new Pedidos.frmCobros(btnPagar_P.Name, 0);
+                ComandaNueva.frmCobros t = new ComandaNueva.frmCobros(btnPagar_P.Name, 0);
                 t.ShowDialog();
 
                 if (t.DialogResult == DialogResult.OK)

@@ -925,10 +925,10 @@
     <Compile Include="Pedidos\frmCobrarAlmuerzos.Designer.cs">
       <DependentUpon>frmCobrarAlmuerzos.cs</DependentUpon>
     </Compile>
-    <Compile Include="Pedidos\frmCobros.cs">
+    <Compile Include="ComandaNueva\frmCobros.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Pedidos\frmCobros.Designer.cs">
+    <Compile Include="ComandaNueva\frmCobros.Designer.cs">
       <DependentUpon>frmCobros.cs</DependentUpon>
     </Compile>
     <Compile Include="ComandaNueva\frmComanda.cs">
@@ -3047,7 +3047,7 @@
     <EmbeddedResource Include="Pedidos\frmCobrarAlmuerzos.resx">
       <DependentUpon>frmCobrarAlmuerzos.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Pedidos\frmCobros.resx">
+    <EmbeddedResource Include="ComandaNueva\frmCobros.resx">
       <DependentUpon>frmCobros.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ComandaNueva\frmComanda.resx">

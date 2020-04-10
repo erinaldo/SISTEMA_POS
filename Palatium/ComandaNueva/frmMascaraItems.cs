@@ -53,6 +53,11 @@ namespace Palatium.ComandaNueva
 
                 if (bRespuesta == true)
                 {
+                    DataRow row = dtConsulta.NewRow();
+                    row["id_pos_mascara_item"] = "0";
+                    row["descripcion"] = "Seleccione...!!!";
+                    dtConsulta.Rows.InsertAt(row, 0);
+
                     cmbMascaras.DisplayMember = "descripcion";
                     cmbMascaras.ValueMember = "id_pos_mascara_item";
                     cmbMascaras.DataSource = dtConsulta;
@@ -99,7 +104,8 @@ namespace Palatium.ComandaNueva
                                        dtOrigen.Rows[i]["porcentaje_descuento"].ToString().Trim(),
                                        dtOrigen.Rows[i]["bandera_comentario"].ToString().Trim(),
                                        dtOrigen.Rows[i]["valor_descuento"].ToString().Trim(),
-                                       dtOrigen.Rows[i]["nombre_producto"].ToString().Trim()
+                                       dtOrigen.Rows[i]["nombre_producto"].ToString().Trim(),
+                                       dtOrigen.Rows[i]["paga_servicio"].ToString().Trim()
                                     );
                 }
 
@@ -189,6 +195,7 @@ namespace Palatium.ComandaNueva
                 dt.Columns.Add("porcentaje_descuento");
                 dt.Columns.Add("bandera_comentario");
                 dt.Columns.Add("valor_descuento");
+                dt.Columns.Add("paga_servicio");
             }
 
             catch (Exception ex)
@@ -227,6 +234,7 @@ namespace Palatium.ComandaNueva
                     row["porcentaje_descuento"] = dgvPedido.Rows[i].Cells["porcentaje_descuento"].Value.ToString();
                     row["bandera_comentario"] = dgvPedido.Rows[i].Cells["bandera_comentario"].Value.ToString();
                     row["valor_descuento"] = dgvPedido.Rows[i].Cells["valor_descuento"].Value.ToString();
+                    row["paga_servicio"] = dgvPedido.Rows[i].Cells["paga_servicio"].Value.ToString();
 
                     dt.Rows.Add(row);
                 }
@@ -267,6 +275,15 @@ namespace Palatium.ComandaNueva
             {
                 if (dgvPedido.SelectedRows.Count > 0)
                 {
+                    if (Convert.ToInt32(cmbMascaras.SelectedValue) == 0)
+                    {
+                        ok = new VentanasMensajes.frmMensajeNuevoOk();
+                        ok.lblMensaje.Text = "Favor seleccione el registro para enmascarar.";
+                        ok.ShowDialog();
+                        cmbMascaras.Focus();
+                        return;
+                    }
+
                     int f = Convert.ToInt32(dgvPedido.CurrentRow.Index);
                     dgvPedido.Rows[f].Cells["id_mascara"].Value = cmbMascaras.SelectedValue.ToString();
                     dgvPedido.Rows[f].Cells["nombre_producto"].Value = cmbMascaras.Text.ToUpper();

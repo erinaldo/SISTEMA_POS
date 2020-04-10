@@ -60,85 +60,85 @@ namespace Palatium.Empresa
         //FUNCION PARA BUSCAR AL EMPLEADO CON NÚMERO DE CEDULA
         private void consultarEmpleadoIdentificacion()
         {
-            try
-            {
-                sSql = "";
-                sSql += "select * from pos_vw_busqueda_huellas_empleados_empresa" + Environment.NewLine;
-                sSql += "where identificacion = @identificacion";
+            //try
+            //{
+            //    sSql = "";
+            //    sSql += "select * from pos_vw_busqueda_huellas_empleados_empresa" + Environment.NewLine;
+            //    sSql += "where identificacion = @identificacion";
 
-                parametro = new SqlParameter[1];
-                parametro[0] = new SqlParameter();
-                parametro[0].ParameterName = "@identificacion";
-                parametro[0].SqlDbType = SqlDbType.VarChar;
-                parametro[0].Value = txtIdentificacion.Text.Trim();
+            //    parametro = new SqlParameter[1];
+            //    parametro[0] = new SqlParameter();
+            //    parametro[0].ParameterName = "@identificacion";
+            //    parametro[0].SqlDbType = SqlDbType.VarChar;
+            //    parametro[0].Value = txtIdentificacion.Text.Trim();
 
-                dtConsulta = new DataTable();
-                dtConsulta.Clear();
+            //    dtConsulta = new DataTable();
+            //    dtConsulta.Clear();
 
-                bRespuesta = conexion.GFun_Lo_Busca_Registro_Parametros(dtConsulta, sSql, parametro);
+            //    bRespuesta = conexion.GFun_Lo_Busca_Registro_Parametros(dtConsulta, sSql, parametro);
 
-                if (bRespuesta == false)
-                {
-                    catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
-                    catchMensaje.lblMensaje.Text = conexion.sMensajeError;
-                    catchMensaje.ShowDialog();
-                    return;
-                }
+            //    if (bRespuesta == false)
+            //    {
+            //        catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
+            //        catchMensaje.lblMensaje.Text = conexion.sMensajeError;
+            //        catchMensaje.ShowDialog();
+            //        return;
+            //    }
 
-                if (dtConsulta.Rows.Count == 0)
-                {
-                    ok = new VentanasMensajes.frmMensajeOK();
-                    ok.LblMensaje.Text = "No se encuentra el registro en el sistema.";
-                    ok.ShowDialog();
-                    limpiar();
-                    return;
-                }
+            //    if (dtConsulta.Rows.Count == 0)
+            //    {
+            //        ok = new VentanasMensajes.frmMensajeOK();
+            //        ok.LblMensaje.Text = "No se encuentra el registro en el sistema.";
+            //        ok.ShowDialog();
+            //        limpiar();
+            //        return;
+            //    }
 
-                iIdPersonaEmpresa = Convert.ToInt32(dtConsulta.Rows[0]["id_persona_empresa"].ToString());
-                iIdPersonaEmpresa = Convert.ToInt32(dtConsulta.Rows[0]["id_persona_empleado"].ToString());
+            //    iIdPersonaEmpresa = Convert.ToInt32(dtConsulta.Rows[0]["id_persona_empresa"].ToString());
+            //    iIdPersonaEmpresa = Convert.ToInt32(dtConsulta.Rows[0]["id_persona_empleado"].ToString());
 
-                //ok = new VentanasMensajes.frmMensajeNuevoOk();
-                //ok.lblMensaje.Text = dtConsulta.Rows[0]["empresa"].ToString().Trim().ToUpper() + Environment.NewLine + dtConsulta.Rows[0]["empleado"].ToString().Trim().ToUpper();
-                //ok.ShowDialog();
+            //    //ok = new VentanasMensajes.frmMensajeNuevoOk();
+            //    //ok.lblMensaje.Text = dtConsulta.Rows[0]["empresa"].ToString().Trim().ToUpper() + Environment.NewLine + dtConsulta.Rows[0]["empleado"].ToString().Trim().ToUpper();
+            //    //ok.ShowDialog();
 
-                if (llenarDataTable() == false)
-                    return;
+            //    if (llenarDataTable() == false)
+            //        return;
 
-                Clases_Crear_Comandas.ClaseCrearComanda comanda = new Clases_Crear_Comandas.ClaseCrearComanda();
-                if (comanda.insertarComanda(iIdPersonaEmpresa, iIdPersonaEmpleado, iIdOrigenOrden, dbTotal, "Cerrada",
-                                        0, 0, Program.CAJERO_ID, 0, "", Program.iIdMesero, Program.iIdPosTerminal,
-                                        0, 0, 0, 0, Program.iIdPosCierreCajero, dtItems) == false)
-                {
-                    catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
-                    catchMensaje.lblMensaje.Text = comanda.sMensajeError;
-                    catchMensaje.ShowDialog();
-                    return;
-                }
+            //    Clases_Crear_Comandas.ClaseCrearComanda comanda = new Clases_Crear_Comandas.ClaseCrearComanda();
+            //    if (comanda.insertarComanda(iIdPersonaEmpresa, iIdPersonaEmpleado, iIdOrigenOrden, dbTotal, "Cerrada",
+            //                            0, 0, Program.CAJERO_ID, 0, "", Program.iIdMesero, Program.iIdPosTerminal,
+            //                            0, 0, 0, 0, Program.iIdPosCierreCajero, dtItems) == false)
+            //    {
+            //        catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
+            //        catchMensaje.lblMensaje.Text = comanda.sMensajeError;
+            //        catchMensaje.ShowDialog();
+            //        return;
+            //    }
 
-                int iIdPedido = comanda.iIdPedido;
-                int iNumeroPedidoOrden = comanda.iNumeroPedidoOrden;
+            //    int iIdPedido = comanda.iIdPedido;
+            //    int iNumeroPedidoOrden = comanda.iNumeroPedidoOrden;
 
-                if (Program.iHabilitarDestinosImpresion == 1)
-                {
-                    ReportesTextBox.frmVerPrecuentaEmpresaTextBox precuenta = new ReportesTextBox.frmVerPrecuentaEmpresaTextBox(iIdPedido.ToString(), 1, 1, 0, 0);
-                    precuenta.ShowDialog();
-                }
+            //    if (Program.iHabilitarDestinosImpresion == 1)
+            //    {
+            //        ReportesTextBox.frmVerPrecuentaEmpresaTextBox precuenta = new ReportesTextBox.frmVerPrecuentaEmpresaTextBox(iIdPedido.ToString(), 1, 1, 0, 0);
+            //        precuenta.ShowDialog();
+            //    }
 
-                ok = new VentanasMensajes.frmMensajeOK();
-                ok.LblMensaje.Text = "Guardado en la orden: " + iNumeroPedidoOrden.ToString() + ".";
-                ok.ShowDialog();
-                Cursor = Cursors.Default;
-                limpiar();
-                return;                
-            }
+            //    ok = new VentanasMensajes.frmMensajeOK();
+            //    ok.LblMensaje.Text = "Guardado en la orden: " + iNumeroPedidoOrden.ToString() + ".";
+            //    ok.ShowDialog();
+            //    Cursor = Cursors.Default;
+            //    limpiar();
+            //    return;                
+            //}
 
-            catch (Exception ex)
-            {
-                Cursor = Cursors.Default;
-                catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
-                catchMensaje.lblMensaje.Text = ex.Message;
-                catchMensaje.ShowDialog();
-            }
+            //catch (Exception ex)
+            //{
+            //    Cursor = Cursors.Default;
+            //    catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
+            //    catchMensaje.lblMensaje.Text = ex.Message;
+            //    catchMensaje.ShowDialog();
+            //}
         }
 
         //FUNCION PARA LIMPIAR

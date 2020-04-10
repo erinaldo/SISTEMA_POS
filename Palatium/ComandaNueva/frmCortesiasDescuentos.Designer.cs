@@ -74,6 +74,7 @@
             this.porcentaje_descuento = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.bandera_comentario = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.valor_descuento = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.paga_servicio = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dgvPedido)).BeginInit();
             this.SuspendLayout();
             // 
@@ -107,7 +108,8 @@
             this.ordenamiento,
             this.porcentaje_descuento,
             this.bandera_comentario,
-            this.valor_descuento});
+            this.valor_descuento,
+            this.paga_servicio});
             dataGridViewCellStyle14.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle14.BackColor = System.Drawing.SystemColors.Window;
             dataGridViewCellStyle14.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -435,6 +437,13 @@
             this.valor_descuento.ReadOnly = true;
             this.valor_descuento.Visible = false;
             // 
+            // paga_servicio
+            // 
+            this.paga_servicio.HeaderText = "PAGA_SERVICIO";
+            this.paga_servicio.Name = "paga_servicio";
+            this.paga_servicio.ReadOnly = true;
+            this.paga_servicio.Visible = false;
+            // 
             // frmCortesiasDescuentos
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -501,5 +510,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn porcentaje_descuento;
         private System.Windows.Forms.DataGridViewTextBoxColumn bandera_comentario;
         private System.Windows.Forms.DataGridViewTextBoxColumn valor_descuento;
+        private System.Windows.Forms.DataGridViewTextBoxColumn paga_servicio;
     }
 }

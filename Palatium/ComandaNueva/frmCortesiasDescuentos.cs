@@ -50,6 +50,7 @@ namespace Palatium.ComandaNueva
         int iBanderaCortesia_G;
         int iBanderaDescuento_G;
         int iBanderaInsercion_G;
+        int iPagaServicio;
 
         public frmCortesiasDescuentos(DataTable dtOrigen_P, int iBanderaDescuento_P)
         {
@@ -87,6 +88,7 @@ namespace Palatium.ComandaNueva
                 dtDestino.Columns.Add("bandera_comentario");
                 dtDestino.Columns.Add("valor_descuento");
                 dtDestino.Columns.Add("bandera_insercion");
+                dtDestino.Columns.Add("paga_servicio");
             }
 
             catch (Exception ex)
@@ -123,6 +125,7 @@ namespace Palatium.ComandaNueva
                 dt.Columns.Add("porcentaje_descuento");
                 dt.Columns.Add("bandera_comentario");
                 dt.Columns.Add("valor_descuento");
+                dt.Columns.Add("paga_servicio");
             }
 
             catch (Exception ex)
@@ -163,7 +166,8 @@ namespace Palatium.ComandaNueva
                                                dtOrigen.Rows[i]["ordenamiento"].ToString().Trim(),
                                                dtOrigen.Rows[i]["porcentaje_descuento"].ToString().Trim(),
                                                dtOrigen.Rows[i]["bandera_comentario"].ToString().Trim(),
-                                               dtOrigen.Rows[i]["valor_descuento"].ToString().Trim()
+                                               dtOrigen.Rows[i]["valor_descuento"].ToString().Trim(),
+                                               dtOrigen.Rows[i]["paga_servicio"].ToString().Trim()
                                 );
                         }
                     }
@@ -187,7 +191,8 @@ namespace Palatium.ComandaNueva
                                            dtOrigen.Rows[i]["ordenamiento"].ToString().Trim(),
                                            dtOrigen.Rows[i]["porcentaje_descuento"].ToString().Trim(),
                                            dtOrigen.Rows[i]["bandera_comentario"].ToString().Trim(),
-                                           dtOrigen.Rows[i]["valor_descuento"].ToString().Trim()
+                                           dtOrigen.Rows[i]["valor_descuento"].ToString().Trim(),
+                                           dtOrigen.Rows[i]["paga_servicio"].ToString().Trim()
                                 );
                     }
                 }
@@ -267,6 +272,7 @@ namespace Palatium.ComandaNueva
                         row["bandera_comentario"] = dgvPedido.Rows[i].Cells["bandera_comentario"].Value.ToString();
                         row["valor_descuento"] = dgvPedido.Rows[i].Cells["valor_descuento"].Value.ToString();
                         row["bandera_insercion"] = "0";
+                        row["paga_servicio"] = dgvPedido.Rows[i].Cells["paga_servicio"].Value.ToString();
 
                         dtDestino.Rows.Add(row);
                     }
@@ -300,6 +306,7 @@ namespace Palatium.ComandaNueva
                         dbPorcentajeDescuento_G = Convert.ToDecimal(dtDestino.Rows[i]["porcentaje_descuento"].ToString());
                         sBanderaComentario_G = dtDestino.Rows[i]["bandera_comentario"].ToString();
                         dbValorDescuento_G = Convert.ToDecimal(dtDestino.Rows[i]["valor_descuento"].ToString());
+                        iPagaServicio = Convert.ToInt32(dtDestino.Rows[i]["paga_servicio"].ToString());
 
                         for (int j = 0; j < dtDestino.Rows.Count; j++)
                         {
@@ -340,6 +347,7 @@ namespace Palatium.ComandaNueva
                         row["porcentaje_descuento"] = dbPorcentajeDescuento_G.ToString();
                         row["bandera_comentario"] = sBanderaComentario_G;
                         row["valor_descuento"] = dbValorDescuento_G.ToString();
+                        row["paga_servicio"] = iPagaServicio.ToString();
                         dt.Rows.Add(row);                        
                     }
                 }
@@ -371,6 +379,7 @@ namespace Palatium.ComandaNueva
                         row["porcentaje_descuento"] = dgvPedido.Rows[i].Cells["porcentaje_descuento"].Value.ToString();
                         row["bandera_comentario"] = dgvPedido.Rows[i].Cells["bandera_comentario"].Value.ToString();
                         row["valor_descuento"] = dgvPedido.Rows[i].Cells["valor_descuento"].Value.ToString();
+                        row["paga_servicio"] = dgvPedido.Rows[i].Cells["paga_servicio"].Value.ToString();
 
                         dt.Rows.Add(row);
                     }
