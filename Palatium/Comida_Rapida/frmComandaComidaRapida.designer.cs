@@ -63,6 +63,15 @@
             this.TxtNumeroFactura = new System.Windows.Forms.TextBox();
             this.btnAceptar = new System.Windows.Forms.Button();
             this.dgvPedido = new System.Windows.Forms.DataGridView();
+            this.cantidad = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.producto = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.valuni = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.valor = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.subtotal = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.pagaIva = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.idProducto = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.tipoProducto = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.paga_servicio = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.btnRemoverItem = new System.Windows.Forms.Button();
             this.btnSalir = new System.Windows.Forms.Button();
             this.lblProductos = new System.Windows.Forms.Label();
@@ -76,15 +85,6 @@
             this.btnCobroTarjetaAlmuerzo = new System.Windows.Forms.Button();
             this.ttMensaje = new System.Windows.Forms.ToolTip(this.components);
             this.btnImprimirPrecuenta = new System.Windows.Forms.Button();
-            this.cantidad = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.producto = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.valuni = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.valor = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.subtotal = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.pagaIva = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.idProducto = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.tipoProducto = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.paga_servicio = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvPedido)).BeginInit();
@@ -432,6 +432,91 @@
             this.dgvPedido.TabIndex = 137;
             this.dgvPedido.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvPedido_CellDoubleClick);
             // 
+            // cantidad
+            // 
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Maiandra GD", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cantidad.DefaultCellStyle = dataGridViewCellStyle1;
+            this.cantidad.FillWeight = 60.9137F;
+            this.cantidad.HeaderText = "CANT.";
+            this.cantidad.Name = "cantidad";
+            this.cantidad.ReadOnly = true;
+            this.cantidad.Width = 53;
+            // 
+            // producto
+            // 
+            this.producto.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Maiandra GD", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.producto.DefaultCellStyle = dataGridViewCellStyle2;
+            this.producto.FillWeight = 168.8291F;
+            this.producto.HeaderText = "PRODUCTO";
+            this.producto.Name = "producto";
+            this.producto.ReadOnly = true;
+            // 
+            // valuni
+            // 
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Maiandra GD", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.valuni.DefaultCellStyle = dataGridViewCellStyle3;
+            this.valuni.HeaderText = "V. UNITARIO";
+            this.valuni.Name = "valuni";
+            this.valuni.ReadOnly = true;
+            this.valuni.Visible = false;
+            // 
+            // valor
+            // 
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle4.Font = new System.Drawing.Font("Maiandra GD", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.valor.DefaultCellStyle = dataGridViewCellStyle4;
+            this.valor.FillWeight = 70.25717F;
+            this.valor.HeaderText = "VALOR";
+            this.valor.Name = "valor";
+            this.valor.ReadOnly = true;
+            this.valor.Width = 62;
+            // 
+            // subtotal
+            // 
+            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle5.Font = new System.Drawing.Font("Maiandra GD", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.subtotal.DefaultCellStyle = dataGridViewCellStyle5;
+            this.subtotal.FillWeight = 70.25717F;
+            this.subtotal.HeaderText = "SUBTOTAL";
+            this.subtotal.Name = "subtotal";
+            this.subtotal.ReadOnly = true;
+            this.subtotal.Visible = false;
+            this.subtotal.Width = 62;
+            // 
+            // pagaIva
+            // 
+            dataGridViewCellStyle6.Font = new System.Drawing.Font("Maiandra GD", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.pagaIva.DefaultCellStyle = dataGridViewCellStyle6;
+            this.pagaIva.HeaderText = "PAGA IVA";
+            this.pagaIva.Name = "pagaIva";
+            this.pagaIva.ReadOnly = true;
+            this.pagaIva.Visible = false;
+            // 
+            // idProducto
+            // 
+            dataGridViewCellStyle7.Font = new System.Drawing.Font("Maiandra GD", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.idProducto.DefaultCellStyle = dataGridViewCellStyle7;
+            this.idProducto.HeaderText = "ID PRODUCTO";
+            this.idProducto.Name = "idProducto";
+            this.idProducto.ReadOnly = true;
+            this.idProducto.Visible = false;
+            // 
+            // tipoProducto
+            // 
+            this.tipoProducto.HeaderText = "TIPO PRODUCTO";
+            this.tipoProducto.Name = "tipoProducto";
+            this.tipoProducto.ReadOnly = true;
+            this.tipoProducto.Visible = false;
+            // 
+            // paga_servicio
+            // 
+            this.paga_servicio.HeaderText = "PAGA_SERVICIO";
+            this.paga_servicio.Name = "paga_servicio";
+            this.paga_servicio.ReadOnly = true;
+            this.paga_servicio.Visible = false;
+            // 
             // btnRemoverItem
             // 
             this.btnRemoverItem.BackColor = System.Drawing.Color.Orange;
@@ -574,91 +659,6 @@
             this.btnImprimirPrecuenta.Text = "Imprimir Precuenta";
             this.btnImprimirPrecuenta.UseVisualStyleBackColor = false;
             this.btnImprimirPrecuenta.Click += new System.EventHandler(this.btnImprimirPrecuenta_Click);
-            // 
-            // cantidad
-            // 
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Maiandra GD", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cantidad.DefaultCellStyle = dataGridViewCellStyle1;
-            this.cantidad.FillWeight = 60.9137F;
-            this.cantidad.HeaderText = "CANT.";
-            this.cantidad.Name = "cantidad";
-            this.cantidad.ReadOnly = true;
-            this.cantidad.Width = 53;
-            // 
-            // producto
-            // 
-            this.producto.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Maiandra GD", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.producto.DefaultCellStyle = dataGridViewCellStyle2;
-            this.producto.FillWeight = 168.8291F;
-            this.producto.HeaderText = "PRODUCTO";
-            this.producto.Name = "producto";
-            this.producto.ReadOnly = true;
-            // 
-            // valuni
-            // 
-            dataGridViewCellStyle3.Font = new System.Drawing.Font("Maiandra GD", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.valuni.DefaultCellStyle = dataGridViewCellStyle3;
-            this.valuni.HeaderText = "V. UNITARIO";
-            this.valuni.Name = "valuni";
-            this.valuni.ReadOnly = true;
-            this.valuni.Visible = false;
-            // 
-            // valor
-            // 
-            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle4.Font = new System.Drawing.Font("Maiandra GD", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.valor.DefaultCellStyle = dataGridViewCellStyle4;
-            this.valor.FillWeight = 70.25717F;
-            this.valor.HeaderText = "VALOR";
-            this.valor.Name = "valor";
-            this.valor.ReadOnly = true;
-            this.valor.Width = 62;
-            // 
-            // subtotal
-            // 
-            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle5.Font = new System.Drawing.Font("Maiandra GD", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.subtotal.DefaultCellStyle = dataGridViewCellStyle5;
-            this.subtotal.FillWeight = 70.25717F;
-            this.subtotal.HeaderText = "SUBTOTAL";
-            this.subtotal.Name = "subtotal";
-            this.subtotal.ReadOnly = true;
-            this.subtotal.Visible = false;
-            this.subtotal.Width = 62;
-            // 
-            // pagaIva
-            // 
-            dataGridViewCellStyle6.Font = new System.Drawing.Font("Maiandra GD", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.pagaIva.DefaultCellStyle = dataGridViewCellStyle6;
-            this.pagaIva.HeaderText = "PAGA IVA";
-            this.pagaIva.Name = "pagaIva";
-            this.pagaIva.ReadOnly = true;
-            this.pagaIva.Visible = false;
-            // 
-            // idProducto
-            // 
-            dataGridViewCellStyle7.Font = new System.Drawing.Font("Maiandra GD", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.idProducto.DefaultCellStyle = dataGridViewCellStyle7;
-            this.idProducto.HeaderText = "ID PRODUCTO";
-            this.idProducto.Name = "idProducto";
-            this.idProducto.ReadOnly = true;
-            this.idProducto.Visible = false;
-            // 
-            // tipoProducto
-            // 
-            this.tipoProducto.HeaderText = "TIPO PRODUCTO";
-            this.tipoProducto.Name = "tipoProducto";
-            this.tipoProducto.ReadOnly = true;
-            this.tipoProducto.Visible = false;
-            // 
-            // paga_servicio
-            // 
-            this.paga_servicio.HeaderText = "PAGA_SERVICIO";
-            this.paga_servicio.Name = "paga_servicio";
-            this.paga_servicio.ReadOnly = true;
-            this.paga_servicio.Visible = false;
             // 
             // frmComandaComidaRapida
             // 

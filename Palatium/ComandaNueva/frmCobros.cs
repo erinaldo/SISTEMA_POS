@@ -163,10 +163,16 @@ namespace Palatium.ComandaNueva
                 Cursor = Cursors.WaitCursor;
 
                 if (extraerFecha() == false)
+                {
+                    Cursor = Cursors.Default;
                     return false;
+                }
 
                 if (crearTablaPagos() == false)
+                {
+                    Cursor = Cursors.Default;
                     return false;
+                }
 
                 if (rdbFactura.Checked)
                     iIdTipoComprobante = 1;
@@ -410,9 +416,6 @@ namespace Palatium.ComandaNueva
             try
             {
                 comanda = new Clases_Crear_Comandas.ClaseCrearComanda();
-
-                Decimal dbCambio_A = Convert.ToDecimal(dgvDetalleDeuda.Rows[2].Cells[1].Value);
-                Decimal dbPropina_A = Convert.ToDecimal(dgvDetalleDeuda.Rows[3].Cells[1].Value);
 
                 bRespuesta = comanda.insertarFactura(Convert.ToInt32(sIdOrden), iIdTipoComprobante, iFacturaElectronica_P,
                                                      iIdPersona, Program.iIdLocalidad, dtPagos, dTotal, iBanderaRecargoBoton,

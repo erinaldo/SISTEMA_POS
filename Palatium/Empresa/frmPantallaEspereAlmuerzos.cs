@@ -24,6 +24,7 @@ namespace Palatium.Empresa
 
         DataTable dtConsulta;
         DataTable dtItems;
+        DataTable dtDetalleItems;
 
         bool bRespuesta;
 
@@ -60,85 +61,86 @@ namespace Palatium.Empresa
         //FUNCION PARA BUSCAR AL EMPLEADO CON NÚMERO DE CEDULA
         private void consultarEmpleadoIdentificacion()
         {
-            //try
-            //{
-            //    sSql = "";
-            //    sSql += "select * from pos_vw_busqueda_huellas_empleados_empresa" + Environment.NewLine;
-            //    sSql += "where identificacion = @identificacion";
+            try
+            {
+                sSql = "";
+                sSql += "select * from pos_vw_busqueda_huellas_empleados_empresa" + Environment.NewLine;
+                sSql += "where identificacion = @identificacion";
 
-            //    parametro = new SqlParameter[1];
-            //    parametro[0] = new SqlParameter();
-            //    parametro[0].ParameterName = "@identificacion";
-            //    parametro[0].SqlDbType = SqlDbType.VarChar;
-            //    parametro[0].Value = txtIdentificacion.Text.Trim();
+                parametro = new SqlParameter[1];
+                parametro[0] = new SqlParameter();
+                parametro[0].ParameterName = "@identificacion";
+                parametro[0].SqlDbType = SqlDbType.VarChar;
+                parametro[0].Value = txtIdentificacion.Text.Trim();
 
-            //    dtConsulta = new DataTable();
-            //    dtConsulta.Clear();
+                dtConsulta = new DataTable();
+                dtConsulta.Clear();
 
-            //    bRespuesta = conexion.GFun_Lo_Busca_Registro_Parametros(dtConsulta, sSql, parametro);
+                bRespuesta = conexion.GFun_Lo_Busca_Registro_Parametros(dtConsulta, sSql, parametro);
 
-            //    if (bRespuesta == false)
-            //    {
-            //        catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
-            //        catchMensaje.lblMensaje.Text = conexion.sMensajeError;
-            //        catchMensaje.ShowDialog();
-            //        return;
-            //    }
+                if (bRespuesta == false)
+                {
+                    catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
+                    catchMensaje.lblMensaje.Text = conexion.sMensajeError;
+                    catchMensaje.ShowDialog();
+                    return;
+                }
 
-            //    if (dtConsulta.Rows.Count == 0)
-            //    {
-            //        ok = new VentanasMensajes.frmMensajeOK();
-            //        ok.LblMensaje.Text = "No se encuentra el registro en el sistema.";
-            //        ok.ShowDialog();
-            //        limpiar();
-            //        return;
-            //    }
+                if (dtConsulta.Rows.Count == 0)
+                {
+                    ok = new VentanasMensajes.frmMensajeOK();
+                    ok.LblMensaje.Text = "No se encuentra el registro en el sistema.";
+                    ok.ShowDialog();
+                    limpiar();
+                    return;
+                }
 
-            //    iIdPersonaEmpresa = Convert.ToInt32(dtConsulta.Rows[0]["id_persona_empresa"].ToString());
-            //    iIdPersonaEmpresa = Convert.ToInt32(dtConsulta.Rows[0]["id_persona_empleado"].ToString());
+                iIdPersonaEmpresa = Convert.ToInt32(dtConsulta.Rows[0]["id_persona_empresa"].ToString());
+                iIdPersonaEmpleado = Convert.ToInt32(dtConsulta.Rows[0]["id_persona_empleado"].ToString());
 
-            //    //ok = new VentanasMensajes.frmMensajeNuevoOk();
-            //    //ok.lblMensaje.Text = dtConsulta.Rows[0]["empresa"].ToString().Trim().ToUpper() + Environment.NewLine + dtConsulta.Rows[0]["empleado"].ToString().Trim().ToUpper();
-            //    //ok.ShowDialog();
+                dtDetalleItems = new DataTable();
+                dtDetalleItems.Clear();
 
-            //    if (llenarDataTable() == false)
-            //        return;
+                if (llenarDataTable() == false)
+                    return;
 
-            //    Clases_Crear_Comandas.ClaseCrearComanda comanda = new Clases_Crear_Comandas.ClaseCrearComanda();
-            //    if (comanda.insertarComanda(iIdPersonaEmpresa, iIdPersonaEmpleado, iIdOrigenOrden, dbTotal, "Cerrada",
-            //                            0, 0, Program.CAJERO_ID, 0, "", Program.iIdMesero, Program.iIdPosTerminal,
-            //                            0, 0, 0, 0, Program.iIdPosCierreCajero, dtItems) == false)
-            //    {
-            //        catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
-            //        catchMensaje.lblMensaje.Text = comanda.sMensajeError;
-            //        catchMensaje.ShowDialog();
-            //        return;
-            //    }
+                Clases_Crear_Comandas.ClaseCrearComanda comanda = new Clases_Crear_Comandas.ClaseCrearComanda();
 
-            //    int iIdPedido = comanda.iIdPedido;
-            //    int iNumeroPedidoOrden = comanda.iNumeroPedidoOrden;
+                if (comanda.insertarComanda(0, iIdPersonaEmpresa, iIdPersonaEmpleado, iIdOrigenOrden, dbTotal, "Cerrada",
+                                        0, 0, Program.CAJERO_ID, 0, "", Program.iIdMesero, Program.iIdPosTerminal,
+                                        0, 0, 0, 0, Program.iIdPosCierreCajero, dtItems, dtDetalleItems, 0, 
+                                        Program.iIdLocalidad, conexion) == false)
+                {
+                    catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
+                    catchMensaje.lblMensaje.Text = comanda.sMensajeError;
+                    catchMensaje.ShowDialog();
+                    return;
+                }
 
-            //    if (Program.iHabilitarDestinosImpresion == 1)
-            //    {
-            //        ReportesTextBox.frmVerPrecuentaEmpresaTextBox precuenta = new ReportesTextBox.frmVerPrecuentaEmpresaTextBox(iIdPedido.ToString(), 1, 1, 0, 0);
-            //        precuenta.ShowDialog();
-            //    }
+                int iIdPedido = comanda.iIdPedido;
+                int iNumeroPedidoOrden = comanda.iNumeroPedidoOrden;
 
-            //    ok = new VentanasMensajes.frmMensajeOK();
-            //    ok.LblMensaje.Text = "Guardado en la orden: " + iNumeroPedidoOrden.ToString() + ".";
-            //    ok.ShowDialog();
-            //    Cursor = Cursors.Default;
-            //    limpiar();
-            //    return;                
-            //}
+                if (Program.iHabilitarDestinosImpresion == 1)
+                {
+                    ReportesTextBox.frmVerPrecuentaEmpresaTextBox precuenta = new ReportesTextBox.frmVerPrecuentaEmpresaTextBox(iIdPedido.ToString(), 1, 1, 0, 0);
+                    precuenta.ShowDialog();
+                }
 
-            //catch (Exception ex)
-            //{
-            //    Cursor = Cursors.Default;
-            //    catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
-            //    catchMensaje.lblMensaje.Text = ex.Message;
-            //    catchMensaje.ShowDialog();
-            //}
+                ok = new VentanasMensajes.frmMensajeOK();
+                ok.LblMensaje.Text = "Guardado en la orden: " + iNumeroPedidoOrden.ToString() + ".";
+                ok.ShowDialog();
+                Cursor = Cursors.Default;
+                limpiar();
+                return;
+            }
+
+            catch (Exception ex)
+            {
+                Cursor = Cursors.Default;
+                catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
+                catchMensaje.lblMensaje.Text = ex.Message;
+                catchMensaje.ShowDialog();
+            }
         }
 
         //FUNCION PARA LIMPIAR
@@ -154,25 +156,23 @@ namespace Palatium.Empresa
             try
             {
                 dtItems = new DataTable();
-                dtItems.Columns.Add("cantidad");
-                dtItems.Columns.Add("nombre_producto");
-                dtItems.Columns.Add("valor_unitario");
-                dtItems.Columns.Add("valor_total");
                 dtItems.Columns.Add("id_producto");
+                dtItems.Columns.Add("valor_unitario");
+                dtItems.Columns.Add("cantidad");
+                dtItems.Columns.Add("valor_descuento");
                 dtItems.Columns.Add("paga_iva");
-                dtItems.Columns.Add("codigo_producto");
-                dtItems.Columns.Add("secuencia_impresion");
                 dtItems.Columns.Add("bandera_cortesia");
-                dtItems.Columns.Add("motivo_cortesia");
                 dtItems.Columns.Add("bandera_descuento");
-                dtItems.Columns.Add("motivo_descuento");
+                dtItems.Columns.Add("bandera_comentario");
                 dtItems.Columns.Add("id_mascara");
                 dtItems.Columns.Add("id_ordenamiento");
-                dtItems.Columns.Add("ordenamiento");
+                dtItems.Columns.Add("secuencia_impresion");
+                dtItems.Columns.Add("motivo_cortesia");
+                dtItems.Columns.Add("motivo_descuento");
+                dtItems.Columns.Add("codigo_producto");                
+                dtItems.Columns.Add("nombre_producto");
                 dtItems.Columns.Add("porcentaje_descuento");
-                dtItems.Columns.Add("bandera_comentario");
-                dtItems.Columns.Add("valor_descuento");
-
+                dtItems.Columns.Add("paga_servicio");
                 dtItems.Clear();
             }
 
@@ -244,26 +244,23 @@ namespace Palatium.Empresa
                 }
 
                 DataRow row = dtItems.NewRow();
-
-                row["cantidad"] = "1";
-                row["nombre_producto"] = sNombreProducto;
-                row["valor_unitario"] = dbValor;
-                row["valor_total"] = dbTotal;
                 row["id_producto"] = Program.iIdProductoAlmuerzoDefault;
+                row["valor_unitario"] = dbValor;
+                row["cantidad"] = "1";
+                row["valor_descuento"] = "0";
                 row["paga_iva"] = iPagaIva;
-                row["codigo_producto"] = sCodigoClaseProducto;
-                row["secuencia_impresion"] = "1";
-                row["bandera_cortesia"] = "0";
-                row["motivo_cortesia"] = "";
+                row["bandera_cortesia"] = "0";                
                 row["bandera_descuento"] = "0";
-                row["motivo_descuento"] = "";
+                row["bandera_comentario"] = "0";
                 row["id_mascara"] = "0";
                 row["id_ordenamiento"] = "0";
-                row["ordenamiento"] = "";
+                row["secuencia_impresion"] = "1";
+                row["motivo_cortesia"] = "";
+                row["motivo_descuento"] = "";
+                row["codigo_producto"] = sCodigoClaseProducto;
+                row["nombre_producto"] = sNombreProducto;
                 row["porcentaje_descuento"] = "0";
-                row["bandera_comentario"] = "0";
-                row["valor_descuento"] = "0";
-
+                row["paga_servicio"] = "0";
                 dtItems.Rows.Add(row);
                 return true;
             }

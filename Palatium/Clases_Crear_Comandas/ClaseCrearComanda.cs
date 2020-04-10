@@ -939,19 +939,21 @@ namespace Palatium.Clases_Crear_Comandas
                     sSql += "id_definicion_combo, id_pos_mascara_item, secuencia, id_pos_secuencia_entrega," + Environment.NewLine;
                     sSql += "bandera_cortesia, motivo_cortesia, bandera_descuento, motivo_descuento," + Environment.NewLine;
                     sSql += "porcentaje_descuento_info, estado, fecha_ingreso, usuario_ingreso," + Environment.NewLine;
-                    sSql += "terminal_ingreso, numero_replica_trigger, numero_control_replica)" + Environment.NewLine;
+                    sSql += "terminal_ingreso, numero_replica_trigger, numero_control_replica," + Environment.NewLine;
+                    sSql += "id_empleado_cliente_empresarial)" + Environment.NewLine;
                     sSql += "values(" + Environment.NewLine;
                     sSql += "@id_pedido, @id_producto, @cg_unidad_medida, @precio_unitario, @cantidad," + Environment.NewLine;
                     sSql += "@valor_dscto, @valor_ice, @valor_iva, @valor_otro, @comentario," + Environment.NewLine;
                     sSql += "null, @id_pos_mascara_item, @secuencia, @id_pos_secuencia_entrega," + Environment.NewLine;
                     sSql += "@bandera_cortesia, @motivo_cortesia, @bandera_descuento, @motivo_descuento," + Environment.NewLine;
                     sSql += "@porcentaje_descuento_info, @estado, getdate(), @usuario_ingreso," + Environment.NewLine;
-                    sSql += "@terminal_ingreso, @numero_replica_trigger, @numero_control_replica)";
+                    sSql += "@terminal_ingreso, @numero_replica_trigger, @numero_control_replica," + Environment.NewLine;
+                    sSql += "@id_empleado_cliente_empresarial)";
                     
                     #region PARAMETROS
 
                     j = 0;
-                    parametro = new SqlParameter[23];
+                    parametro = new SqlParameter[24];
                     parametro[j] = new SqlParameter();
                     parametro[j].ParameterName = "@id_pedido";
                     parametro[j].SqlDbType = SqlDbType.Int;
@@ -1088,6 +1090,12 @@ namespace Palatium.Clases_Crear_Comandas
                     parametro[j].ParameterName = "@numero_control_replica";
                     parametro[j].SqlDbType = SqlDbType.Int;
                     parametro[j].Value = 0;
+                    j++;
+
+                    parametro[j] = new SqlParameter();
+                    parametro[j].ParameterName = "@id_empleado_cliente_empresarial";
+                    parametro[j].SqlDbType = SqlDbType.Int;
+                    parametro[j].Value = iIdPersonaEmpleado;
                     
                     #endregion
 
@@ -1668,7 +1676,7 @@ namespace Palatium.Clases_Crear_Comandas
                     sSql += "porcentaje_dscto = " + dbPorcentajeDescuento + "," + Environment.NewLine;
                     sSql += "recargo_tarjeta = 0," + Environment.NewLine;
                     sSql += "remover_iva = 0," + Environment.NewLine;
-                    sSql += "estado_orden = 'Abierta'," + Environment.NewLine;
+                    sSql += "estado_orden = '" + sEstadoOrden_P + "'," + Environment.NewLine;
                     sSql += "consumo_alimentos = " + iConsumoAlimentos + Environment.NewLine;
                     sSql += "where id_pedido = " + iIdPedido + Environment.NewLine;
                     sSql += "and estado = 'A'";
@@ -3083,43 +3091,6 @@ namespace Palatium.Clases_Crear_Comandas
                     sMensajeError = conexionM.sMensajeError;
                     return false;
                 }
-
-                return true;
-            }
-
-            catch (Exception ex)
-            {
-                sMensajeError = ex.Message;
-                return false;
-            }
-        }
-
-        //FUNCION PARA INSERTAR LOS PAGOS
-        public bool eliminarPagos(int iIdPedido_P, ConexionBD.ConexionBD conexionM_P)
-        {
-            try
-            {
-                this.conexionM = conexionM_P;
-
-                sSql = "";
-                sSql += "select id_documento_cobrar" + Environment.NewLine;
-                sSql += "from cv403_dctos_por_cobrar" + Environment.NewLine;
-                sSql += "where id_pedido = " + iIdPedido_P + Environment.NewLine;
-                sSql += "and estado = 'A'";
-
-                dtConsulta = new DataTable();
-                dtConsulta.Clear();
-
-                bRespuesta = conexionM.GFun_Lo_Busca_Registro(dtConsulta, sSql);
-
-                if (bRespuesta == false)
-                {
-                    sMensajeError = conexionM.sMensajeError;
-                    return false;
-                }
-
-                iIdDocumentoCobrar = Convert.ToInt32(dtConsulta.Rows[0]["id_documento_cobrar"].ToString());
-                iCuenta = 0;
 
                 return true;
             }
