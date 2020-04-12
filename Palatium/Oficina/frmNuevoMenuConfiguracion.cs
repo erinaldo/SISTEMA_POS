@@ -869,5 +869,11 @@ namespace Palatium.Oficina
             Productos.frmCambioMasivoPropinaProductos prod = new Productos.frmCambioMasivoPropinaProductos();
             verificarFormularios(prod, this);
         }
+
+        private void subMenuInformacionPublicitaria_Click(object sender, EventArgs e)
+        {
+            Oficina.frmInfoPublicitaria info = new frmInfoPublicitaria();
+            verificarFormularios(info, this);
+        }
     }
 }

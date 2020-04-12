@@ -56,7 +56,10 @@ namespace Palatium.Clases_Crear_Comandas
         int iIdCaja;
         int iIdPosMovimientoCaja;
         int iNumeroMovimientoCaja;
+        int iIdPosTarCabecera;
         public int iIdFactura;
+        public int iIdPosTarjeta;
+        public int iNumeroTarjeta;
 
         string sSql;
         public string sFecha;
@@ -2719,6 +2722,342 @@ namespace Palatium.Clases_Crear_Comandas
                         sMensajeError = conexionM.sMensajeError;
                         return false;
                     }
+                }
+
+                return true;
+            }
+
+            catch (Exception ex)
+            {
+                sMensajeError = ex.Message;
+                return false;
+            }
+        }
+
+        //FUNCION PARA CREAR UNA TARJETA DE ALMUERZO
+        public bool insertarTarjetaALmuerzo(int iIdTipoCantidadTarjeta_P, int iCantidadAlmuerzos_P, int iIdPersona_P,
+                                    int iIdLocalidad_P, int iIdProductoTarjeta_P, int iIdProductoDescarga_P,
+                                    string sObservacion_P, string sEstadoTarjeta_P, string sFecha_P, 
+                                    string sUsuario_P, string sTerminal_P, int iCantidadReal_P, 
+                                    int iIdPedido_P, int iTipoMovimiento_P, string sEstadoMovimiento_P,
+                                    int iIdPosTarjeta_P, ConexionBD.ConexionBD conexionM_P)
+        {
+            try
+            {
+                this.conexionM = conexionM_P;
+                this.iIdPosTarjeta = iIdPosTarjeta_P;
+
+                if (iTipoMovimiento_P == 0)
+                    iCantidadReal_P = iCantidadReal_P * -1;
+
+                if (iTipoMovimiento_P == 1)
+                {
+                    sSql = "";
+                    sSql += "insert into pos_tar_tarjeta (" + Environment.NewLine;
+                    sSql += "id_pos_tar_cantidad_tipo_almuerzo, id_pos_tar_cantidad_almuerzo, id_persona," + Environment.NewLine;
+                    sSql += "id_localidad, id_producto_tarjeta, id_producto_descarga, observacion," + Environment.NewLine;
+                    sSql += "estado_tarjeta, fecha_emision, is_active, estado, fecha_ingreso," + Environment.NewLine;
+                    sSql += "usuario_ingreso, terminal_ingreso)" + Environment.NewLine;
+                    sSql += "values (" + Environment.NewLine;
+                    sSql += "@id_pos_tar_cantidad_tipo_almuerzo, @id_pos_tar_cantidad_almuerzo, @id_persona," + Environment.NewLine;
+                    sSql += "@id_localidad, @id_producto_tarjeta, @id_producto_descarga, @observacion," + Environment.NewLine;
+                    sSql += "@estado_tarjeta, @fecha_emision, @is_active, @estado, getdate()," + Environment.NewLine;
+                    sSql += "@usuario_ingreso, @terminal_ingreso)" + Environment.NewLine;
+
+                    parametro = new SqlParameter[13];
+                    parametro[0] = new SqlParameter();
+                    parametro[0].ParameterName = "@id_pos_tar_cantidad_tipo_almuerzo";
+                    parametro[0].SqlDbType = SqlDbType.Int;
+                    parametro[0].Value = iIdTipoCantidadTarjeta_P;
+
+                    parametro[1] = new SqlParameter();
+                    parametro[1].ParameterName = "@id_pos_tar_cantidad_almuerzo";
+                    parametro[1].SqlDbType = SqlDbType.Int;
+                    parametro[1].Value = iCantidadAlmuerzos_P;
+
+                    parametro[2] = new SqlParameter();
+                    parametro[2].ParameterName = "@id_persona";
+                    parametro[2].SqlDbType = SqlDbType.Int;
+                    parametro[2].Value = iIdPersona_P;
+
+                    parametro[3] = new SqlParameter();
+                    parametro[3].ParameterName = "@id_localidad";
+                    parametro[3].SqlDbType = SqlDbType.Int;
+                    parametro[3].Value = iIdLocalidad_P;
+
+                    parametro[4] = new SqlParameter();
+                    parametro[4].ParameterName = "@id_producto_tarjeta";
+                    parametro[4].SqlDbType = SqlDbType.Int;
+                    parametro[4].Value = iIdProductoTarjeta_P;
+
+                    parametro[5] = new SqlParameter();
+                    parametro[5].ParameterName = "@id_producto_descarga";
+                    parametro[5].SqlDbType = SqlDbType.Int;
+                    parametro[5].Value = iIdProductoDescarga_P;
+
+                    parametro[6] = new SqlParameter();
+                    parametro[6].ParameterName = "@observacion";
+                    parametro[6].SqlDbType = SqlDbType.VarChar;
+                    parametro[6].Value = sObservacion_P;
+
+                    parametro[7] = new SqlParameter();
+                    parametro[7].ParameterName = "@estado_tarjeta";
+                    parametro[7].SqlDbType = SqlDbType.VarChar;
+                    parametro[7].Value = sEstadoTarjeta_P;
+
+                    parametro[8] = new SqlParameter();
+                    parametro[8].ParameterName = "@fecha_emision";
+                    parametro[8].SqlDbType = SqlDbType.VarChar;
+                    parametro[8].Value = sFecha_P;
+
+                    parametro[9] = new SqlParameter();
+                    parametro[9].ParameterName = "@is_active";
+                    parametro[9].SqlDbType = SqlDbType.Int;
+                    parametro[9].Value = 1;
+
+                    parametro[10] = new SqlParameter();
+                    parametro[10].ParameterName = "@estado";
+                    parametro[10].SqlDbType = SqlDbType.VarChar;
+                    parametro[10].Value = "A";
+
+                    parametro[11] = new SqlParameter();
+                    parametro[11].ParameterName = "@usuario_ingreso";
+                    parametro[11].SqlDbType = SqlDbType.VarChar;
+                    parametro[11].Value = sUsuario_P;
+
+                    parametro[12] = new SqlParameter();
+                    parametro[12].ParameterName = "@terminal_ingreso";
+                    parametro[12].SqlDbType = SqlDbType.VarChar;
+                    parametro[12].Value = sTerminal_P;
+
+                    if (!conexionM.GFun_Lo_Ejecutar_SQL_Parametros(sSql, parametro))
+                    {
+                        sMensajeError = conexionM.sMensajeError;
+                        return false;
+                    }
+
+                    //OBTENER EL ID DE LA TABLA POS_TAR_TARJETA
+                    //------------------------------------------------------------------------------------------------------------------------------------------------------------------
+                    sTabla = "pos_tar_tarjeta";
+                    sCampo = "id_pos_tar_tarjeta";
+
+                    iMaximo = conexionM.GFun_Ln_Saca_Maximo_ID(sTabla, sCampo, "", Program.sDatosMaximo);
+
+                    if (iMaximo == -1)
+                    {
+                        sMensajeError = conexionM.sMensajeError;
+                        return false;
+                    }
+
+                    iIdPosTarjeta = Convert.ToInt32(iMaximo);
+
+                    //EXTRAER EL NUMERO DE TARJETA
+                    //------------------------------------------------------------------------------------------------------------------------------------------------------------------
+                    sSql = "";
+                    sSql += "select numerotarjetaalmuerzo" + Environment.NewLine;
+                    sSql += "from tp_localidades_impresoras" + Environment.NewLine;
+                    sSql += "where estado = 'A'" + Environment.NewLine;
+                    sSql += "and id_localidad = " + Program.iIdLocalidad;
+
+                    dtConsulta = new DataTable();
+                    dtConsulta.Clear();
+
+                    bRespuesta = conexionM.GFun_Lo_Busca_Registro(dtConsulta, sSql);
+
+                    if (bRespuesta == false)
+                    {
+                        sMensajeError = conexionM.sMensajeError;
+                        return false;
+                    }
+
+                    iNumeroTarjeta = Convert.ToInt32(dtConsulta.Rows[0]["numerotarjetaalmuerzo"].ToString());
+
+                    sSql = "";
+                    sSql += "insert into pos_tar_numero_tarjeta (" + Environment.NewLine;
+                    sSql += "id_pos_tar_tarjeta, numero_tarjeta, estado, fecha_ingreso," + Environment.NewLine;
+                    sSql += "usuario_ingreso, terminal_ingreso)" + Environment.NewLine;
+                    sSql += "values (" + Environment.NewLine;
+                    sSql += "@id_pos_tar_tarjeta, @numero_tarjeta, @estado, getdate()," + Environment.NewLine;
+                    sSql += "@usuario_ingreso, @terminal_ingreso)";
+
+                    parametro = new SqlParameter[5];
+                    parametro[0] = new SqlParameter();
+                    parametro[0].ParameterName = "@id_pos_tar_tarjeta";
+                    parametro[0].SqlDbType = SqlDbType.Int;
+                    parametro[0].Value = iIdPosTarjeta;
+
+                    parametro[1] = new SqlParameter();
+                    parametro[1].ParameterName = "@numero_tarjeta";
+                    parametro[1].SqlDbType = SqlDbType.Int;
+                    parametro[1].Value = iNumeroTarjeta;
+
+                    parametro[2] = new SqlParameter();
+                    parametro[2].ParameterName = "@estado";
+                    parametro[2].SqlDbType = SqlDbType.VarChar;
+                    parametro[2].Value = "A";
+
+                    parametro[3] = new SqlParameter();
+                    parametro[3].ParameterName = "@usuario_ingreso";
+                    parametro[3].SqlDbType = SqlDbType.VarChar;
+                    parametro[3].Value = sUsuario_P;
+
+                    parametro[4] = new SqlParameter();
+                    parametro[4].ParameterName = "@terminal_ingreso";
+                    parametro[4].SqlDbType = SqlDbType.VarChar;
+                    parametro[4].Value = sTerminal_P;
+
+                    if (!conexionM.GFun_Lo_Ejecutar_SQL_Parametros(sSql, parametro))
+                    {
+                        sMensajeError = conexionM.sMensajeError;
+                        return false;
+                    }
+
+                    //ACTUALIZAR EL NUMERO DE TARJETA EN TP_LOCALIDADES_IMPRESORAS
+                    //------------------------------------------------------------------------------------------------------------------------------------------------------------------
+                    sSql = "";
+                    sSql += "update tp_localidades_impresoras set" + Environment.NewLine;
+                    sSql += "numerotarjetaalmuerzo = numerotarjetaalmuerzo + 1" + Environment.NewLine;
+                    sSql += "where id_localidad = @id_localidad" + Environment.NewLine;
+                    sSql += "and estado = @estado";
+
+                    parametro = new SqlParameter[2];
+                    parametro[0] = new SqlParameter();
+                    parametro[0].ParameterName = "@id_localidad";
+                    parametro[0].SqlDbType = SqlDbType.Int;
+                    parametro[0].Value = Program.iIdLocalidad;
+
+                    parametro[1] = new SqlParameter();
+                    parametro[1].ParameterName = "@estado";
+                    parametro[1].SqlDbType = SqlDbType.VarChar;
+                    parametro[1].Value = "A";
+
+                    if (!conexionM.GFun_Lo_Ejecutar_SQL_Parametros(sSql, parametro))
+                    {
+                        sMensajeError = conexionM.sMensajeError;
+                        return false;
+                    }
+                }
+
+                sSql = "";
+                sSql += "insert into pos_tar_cab_movimiento(" + Environment.NewLine;
+                sSql += "id_pos_tar_tarjeta, id_pedido, id_localidad, fecha_pedido_tarjeta," + Environment.NewLine;
+                sSql += "fecha_hora_pedido_tarjeta, estado_pedido_tarjeta, tipo_movimiento," + Environment.NewLine;
+                sSql += "estado, fecha_ingreso, usuario_ingreso, terminal_ingreso)" + Environment.NewLine;
+                sSql += "values (" + Environment.NewLine;
+                sSql += "@id_pos_tar_tarjeta, @id_pedido, @id_localidad, @fecha_pedido_tarjeta," + Environment.NewLine;
+                sSql += "getdate(), @estado_pedido_tarjeta, @tipo_movimiento," + Environment.NewLine;
+                sSql += "@estado, getdate(), @usuario_ingreso, @terminal_ingreso)";
+
+                parametro = new SqlParameter[9];
+                parametro[0] = new SqlParameter();
+                parametro[0].ParameterName = "@id_pos_tar_tarjeta";
+                parametro[0].SqlDbType = SqlDbType.Int;
+                parametro[0].Value = iIdPosTarjeta;
+
+                parametro[1] = new SqlParameter();
+                parametro[1].ParameterName = "@id_pedido";
+                parametro[1].SqlDbType = SqlDbType.Int;
+                parametro[1].Value = iIdPedido_P;
+
+                parametro[2] = new SqlParameter();
+                parametro[2].ParameterName = "@id_localidad";
+                parametro[2].SqlDbType = SqlDbType.Int;
+                parametro[2].Value = iIdLocalidad_P;
+
+                parametro[3] = new SqlParameter();
+                parametro[3].ParameterName = "@fecha_pedido_tarjeta";
+                parametro[3].SqlDbType = SqlDbType.VarChar;
+                parametro[3].Value = sFecha_P;
+
+                parametro[4] = new SqlParameter();
+                parametro[4].ParameterName = "@estado_pedido_tarjeta";
+                parametro[4].SqlDbType = SqlDbType.VarChar;
+                parametro[4].Value = sEstadoMovimiento_P;
+
+                parametro[5] = new SqlParameter();
+                parametro[5].ParameterName = "@tipo_movimiento";
+                parametro[5].SqlDbType = SqlDbType.Int;
+                parametro[5].Value = iTipoMovimiento_P;
+
+                parametro[6] = new SqlParameter();
+                parametro[6].ParameterName = "@estado";
+                parametro[6].SqlDbType = SqlDbType.VarChar;
+                parametro[6].Value = "A";
+
+                parametro[7] = new SqlParameter();
+                parametro[7].ParameterName = "@usuario_ingreso";
+                parametro[7].SqlDbType = SqlDbType.VarChar;
+                parametro[7].Value = sUsuario_P;
+
+                parametro[8] = new SqlParameter();
+                parametro[8].ParameterName = "@terminal_ingreso";
+                parametro[8].SqlDbType = SqlDbType.VarChar;
+                parametro[8].Value = sTerminal_P;
+
+                if (!conexionM.GFun_Lo_Ejecutar_SQL_Parametros(sSql, parametro))
+                {
+                    sMensajeError = conexionM.sMensajeError;
+                    return false;
+                }
+
+                //OBTENER EL ID DE LA TABLA pos_tar_cab_movimiento
+                //------------------------------------------------------------------------------------------------------------------------------------------------------------------
+                sTabla = "pos_tar_cab_movimiento";
+                sCampo = "id_pos_tar_cab_movimiento";
+
+                iMaximo = conexionM.GFun_Ln_Saca_Maximo_ID(sTabla, sCampo, "", Program.sDatosMaximo);
+
+                if (iMaximo == -1)
+                {
+                    sMensajeError = conexionM.sMensajeError;
+                    return false;
+                }
+
+                iIdPosTarCabecera = Convert.ToInt32(iMaximo);
+
+                sSql = "";
+                sSql += "insert into pos_tar_det_movimiento (" + Environment.NewLine;
+                sSql += "id_pos_tar_cab_movimiento, id_producto, cantidad, estado," + Environment.NewLine;
+                sSql += "fecha_ingreso, usuario_ingreso, terminal_ingreso)" + Environment.NewLine;
+                sSql += "values (" + Environment.NewLine;
+                sSql += "@id_pos_tar_cab_movimiento, @id_producto, @cantidad, @estado," + Environment.NewLine;
+                sSql += "getdate(), @usuario_ingreso, @terminal_ingreso)";
+
+                parametro = new SqlParameter[6];
+                parametro[0] = new SqlParameter();
+                parametro[0].ParameterName = "@id_pos_tar_cab_movimiento";
+                parametro[0].SqlDbType = SqlDbType.Int;
+                parametro[0].Value = iIdPosTarCabecera;
+
+                parametro[1] = new SqlParameter();
+                parametro[1].ParameterName = "@id_producto";
+                parametro[1].SqlDbType = SqlDbType.Int;
+                parametro[1].Value = iIdProductoDescarga_P;
+
+                parametro[2] = new SqlParameter();
+                parametro[2].ParameterName = "@cantidad";
+                parametro[2].SqlDbType = SqlDbType.Int;
+                parametro[2].Value = iCantidadReal_P;
+
+                parametro[3] = new SqlParameter();
+                parametro[3].ParameterName = "@estado";
+                parametro[3].SqlDbType = SqlDbType.VarChar;
+                parametro[3].Value = "A";
+
+                parametro[4] = new SqlParameter();
+                parametro[4].ParameterName = "@usuario_ingreso";
+                parametro[4].SqlDbType = SqlDbType.VarChar;
+                parametro[4].Value = sUsuario_P;
+
+                parametro[5] = new SqlParameter();
+                parametro[5].ParameterName = "@terminal_ingreso";
+                parametro[5].SqlDbType = SqlDbType.VarChar;
+                parametro[5].Value = sTerminal_P;
+
+                if (!conexionM.GFun_Lo_Ejecutar_SQL_Parametros(sSql, parametro))
+                {
+                    sMensajeError = conexionM.sMensajeError;
+                    return false;
                 }
 
                 return true;

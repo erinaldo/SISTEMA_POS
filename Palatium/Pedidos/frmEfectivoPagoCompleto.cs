@@ -29,6 +29,8 @@ namespace Palatium.Pedidos
         string sSql;
         
         int iIdOrden;
+        int iIdPersona;
+        int iNumeroPedidoOrden;
 
         double dbTotal;
         double dbRecibido;
@@ -39,11 +41,13 @@ namespace Palatium.Pedidos
         int iIdFacturaGenerada_P;
         int iBanderaComandaPendiente;
 
-        public frmEfectivoPagoCompleto(string sIdOrden_P, double dbTotal_P, int iBanderaComandaPendiente_P)
+        public frmEfectivoPagoCompleto(string sIdOrden_P, double dbTotal_P, int iBanderaComandaPendiente_P, int iIdPersona_P, int iNumeroPedidoOrden_P)
         {
             this.iIdOrden = Convert.ToInt32(sIdOrden_P);
             this.dbTotal = dbTotal_P;
             this.iBanderaComandaPendiente = iBanderaComandaPendiente_P;
+            this.iIdPersona = iIdPersona_P;
+            this.iNumeroPedidoOrden = iNumeroPedidoOrden_P;
             InitializeComponent();            
         }
 
@@ -134,7 +138,7 @@ namespace Palatium.Pedidos
                 dbRecibido = Convert.ToDouble(txt_valor.Text.Trim());
                 dbCambio = dbRecibido - dbTotal;
 
-                if (pagoCompleto.insertarPagoCompleto(iIdOrden, dbTotal, dbRecibido, dbCambio, iBanderaComandaPendiente) == true)
+                if (pagoCompleto.insertarPagoCompleto(iIdOrden, dbTotal, dbRecibido, dbCambio, iBanderaComandaPendiente, iIdPersona, iNumeroPedidoOrden) == true)
                 {
                     if (Program.iEjecutarImpresion == 1)
                     {
@@ -345,7 +349,7 @@ namespace Palatium.Pedidos
             dbRecibido = Convert.ToDouble(txt_valor.Text.Trim());
             dbCambio = dbRecibido - dbTotal;
 
-            if (pagoCompleto.insertarPagoCompleto(iIdOrden, dbTotal, dbRecibido, dbCambio, iBanderaComandaPendiente) == true)
+            if (pagoCompleto.insertarPagoCompleto(iIdOrden, dbTotal, dbRecibido, dbCambio, iBanderaComandaPendiente, iIdPersona, iNumeroPedidoOrden) == true)
             {
                 if (Program.iEjecutarImpresion == 1)
                 {

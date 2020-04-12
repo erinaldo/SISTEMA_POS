@@ -1303,10 +1303,17 @@ namespace Palatium.Comida_Rapida
 
                 else
                 {
+                    Decimal dbPrecioUni_P;
+
                     for (int i = 0; i < dtRecargos.Rows.Count; i++)
                     {
+                        if (Convert.ToDecimal(dtRecargos.Rows[i]["valor_recargo"].ToString()) == 0)
+                            dbPrecioUni_P = Convert.ToDecimal(dtRecargos.Rows[i]["valor_item"].ToString());
+                        else
+                            dbPrecioUni_P = Convert.ToDecimal(dtRecargos.Rows[i]["valor_recargo"].ToString());
+
                         dtItems.Rows.Add(dtRecargos.Rows[i]["id_producto"].ToString(),
-                                             dtRecargos.Rows[i]["valor_recargo"].ToString(),
+                                             dbPrecioUni_P,
                                              dtRecargos.Rows[i]["cantidad"].ToString(),
                                              "0",
                                              dtRecargos.Rows[i]["paga_iva"].ToString(),

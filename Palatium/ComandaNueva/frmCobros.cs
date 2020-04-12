@@ -2765,13 +2765,13 @@ namespace Palatium.ComandaNueva
              if (Program.iDescuentaIva == 1)
              {
                  btnRemoverIVA.Enabled = true;
-                 btnPagoCompleto.Enabled = true;
+                 //btnPagoCompleto.Enabled = true;
              }
 
              else
              {
                  btnRemoverIVA.Enabled = false;
-                 btnPagoCompleto.Enabled = false;
+                 //btnPagoCompleto.Enabled = false;
              }
 
              if (Program.iAplicaRecargoTarjeta == 1)
@@ -3111,6 +3111,7 @@ namespace Palatium.ComandaNueva
                  dTotal = dbTotalAyuda - dbSumaIva;
                  iEjecutarActualizacionIVA = 1;
                  btnRecargoTarjeta.Enabled = false;
+                 btnPagoCompleto.Enabled = true;
                  rdbNotaVenta.Checked = true;
                  rdbFactura.Enabled = false;
                  rdbNotaVenta.Enabled = false;
@@ -3125,6 +3126,7 @@ namespace Palatium.ComandaNueva
                  dTotal = dbTotalAyuda;
                  iEjecutarActualizacionIVA = 0;
                  btnRecargoTarjeta.Enabled = true;
+                 btnPagoCompleto.Enabled = false;
                  rdbFactura.Checked = true;
                  rdbFactura.Enabled = true;
                  rdbNotaVenta.Enabled = true;
@@ -3193,7 +3195,7 @@ namespace Palatium.ComandaNueva
 
          private void btnPagoCompleto_Click(object sender, EventArgs e)
          {
-             Pedidos.frmEfectivoPagoCompleto efectivoPagoCompleto = new Pedidos.frmEfectivoPagoCompleto(sIdOrden, Convert.ToDouble(dTotal), iBanderaComandaPendiente);
+             Pedidos.frmEfectivoPagoCompleto efectivoPagoCompleto = new Pedidos.frmEfectivoPagoCompleto(sIdOrden, Convert.ToDouble(dTotal), iBanderaComandaPendiente, iIdPersona, iNumeroPedido);
              efectivoPagoCompleto.ShowDialog();
 
              if (efectivoPagoCompleto.DialogResult == DialogResult.OK)

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,6 +15,10 @@ namespace Palatium.Pedidos
         VentanasMensajes.frmMensajeCatch catchMensaje;
         VentanasMensajes.frmMensajeOK ok;
 
+        Clases_Crear_Comandas.ClaseCrearComanda comanda;
+
+        SqlParameter[] parametro;
+
         string sSql;
         string sFechaCorta;
         string sTabla;
@@ -24,6 +29,7 @@ namespace Palatium.Pedidos
         string sTelefono;
         string sSecuencial;
         string sNumeroOrden;
+        public string sMensajeError;
 
         DataTable dtConsulta;
         DataTable dtMaximo;
@@ -1027,5 +1033,6 @@ namespace Palatium.Pedidos
 
             reversa: { conexion.GFun_Lo_Maneja_Transaccion(Program.G_REVERSA_TRANSACCION); return false; }
         }
+
     }
 }

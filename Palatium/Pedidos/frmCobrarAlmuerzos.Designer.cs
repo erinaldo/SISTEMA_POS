@@ -28,20 +28,14 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle12 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle13 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle14 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
             this.dgvDatos = new System.Windows.Forms.DataGridView();
-            this.txtMesa = new System.Windows.Forms.TextBox();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.btnBuscar = new System.Windows.Forms.Button();
-            this.btnSalir = new System.Windows.Forms.Button();
-            this.label2 = new System.Windows.Forms.Label();
-            this.btnActualizar = new System.Windows.Forms.Button();
             this.numeracion = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.id_pedido = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.id_det_pedido = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -55,6 +49,12 @@
             this.precio_unitario = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.valor_total = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.imprimir = new System.Windows.Forms.DataGridViewButtonColumn();
+            this.txtMesa = new System.Windows.Forms.TextBox();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.btnBuscar = new System.Windows.Forms.Button();
+            this.btnSalir = new System.Windows.Forms.Button();
+            this.label2 = new System.Windows.Forms.Label();
+            this.btnActualizar = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgvDatos)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
@@ -65,6 +65,7 @@
             this.dgvDatos.AllowUserToDeleteRows = false;
             this.dgvDatos.AllowUserToResizeColumns = false;
             this.dgvDatos.AllowUserToResizeRows = false;
+            this.dgvDatos.BackgroundColor = System.Drawing.SystemColors.ControlLightLight;
             this.dgvDatos.ColumnHeadersHeight = 30;
             this.dgvDatos.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             this.dgvDatos.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
@@ -91,6 +92,125 @@
             this.dgvDatos.TabIndex = 0;
             this.dgvDatos.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvDatos_CellContentClick);
             this.dgvDatos.CellPainting += new System.Windows.Forms.DataGridViewCellPaintingEventHandler(this.dgvDatos_CellPainting);
+            // 
+            // numeracion
+            // 
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Maiandra GD", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numeracion.DefaultCellStyle = dataGridViewCellStyle1;
+            this.numeracion.Frozen = true;
+            this.numeracion.HeaderText = "No.";
+            this.numeracion.Name = "numeracion";
+            this.numeracion.ReadOnly = true;
+            this.numeracion.Width = 50;
+            // 
+            // id_pedido
+            // 
+            this.id_pedido.Frozen = true;
+            this.id_pedido.HeaderText = "ID PEDIDO";
+            this.id_pedido.Name = "id_pedido";
+            this.id_pedido.ReadOnly = true;
+            this.id_pedido.Visible = false;
+            // 
+            // id_det_pedido
+            // 
+            this.id_det_pedido.Frozen = true;
+            this.id_det_pedido.HeaderText = "ID DET PEDIDO";
+            this.id_det_pedido.Name = "id_det_pedido";
+            this.id_det_pedido.ReadOnly = true;
+            this.id_det_pedido.Visible = false;
+            // 
+            // id_mesa
+            // 
+            this.id_mesa.Frozen = true;
+            this.id_mesa.HeaderText = "ID MESA";
+            this.id_mesa.Name = "id_mesa";
+            this.id_mesa.ReadOnly = true;
+            this.id_mesa.Visible = false;
+            // 
+            // numero_mesa
+            // 
+            this.numero_mesa.Frozen = true;
+            this.numero_mesa.HeaderText = "NUMERO MESA";
+            this.numero_mesa.Name = "numero_mesa";
+            this.numero_mesa.ReadOnly = true;
+            this.numero_mesa.Visible = false;
+            // 
+            // estado
+            // 
+            this.estado.Frozen = true;
+            this.estado.HeaderText = "ESTADO";
+            this.estado.Name = "estado";
+            this.estado.ReadOnly = true;
+            this.estado.Visible = false;
+            // 
+            // mesa
+            // 
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Maiandra GD", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.mesa.DefaultCellStyle = dataGridViewCellStyle2;
+            this.mesa.Frozen = true;
+            this.mesa.HeaderText = "MESA";
+            this.mesa.Name = "mesa";
+            this.mesa.ReadOnly = true;
+            this.mesa.Width = 120;
+            // 
+            // tipo_orden
+            // 
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Maiandra GD", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tipo_orden.DefaultCellStyle = dataGridViewCellStyle3;
+            this.tipo_orden.Frozen = true;
+            this.tipo_orden.HeaderText = "TIPO DE ORDEN";
+            this.tipo_orden.Name = "tipo_orden";
+            this.tipo_orden.ReadOnly = true;
+            this.tipo_orden.Width = 120;
+            // 
+            // cantidad
+            // 
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle4.Font = new System.Drawing.Font("Maiandra GD", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cantidad.DefaultCellStyle = dataGridViewCellStyle4;
+            this.cantidad.Frozen = true;
+            this.cantidad.HeaderText = "CANT.";
+            this.cantidad.Name = "cantidad";
+            this.cantidad.ReadOnly = true;
+            this.cantidad.Width = 60;
+            // 
+            // descripcion
+            // 
+            this.descripcion.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            dataGridViewCellStyle5.Font = new System.Drawing.Font("Maiandra GD", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.descripcion.DefaultCellStyle = dataGridViewCellStyle5;
+            this.descripcion.HeaderText = "DESCRIPCIÓN";
+            this.descripcion.Name = "descripcion";
+            this.descripcion.ReadOnly = true;
+            // 
+            // precio_unitario
+            // 
+            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle6.Font = new System.Drawing.Font("Maiandra GD", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.precio_unitario.DefaultCellStyle = dataGridViewCellStyle6;
+            this.precio_unitario.HeaderText = "P. UNIT.";
+            this.precio_unitario.Name = "precio_unitario";
+            this.precio_unitario.ReadOnly = true;
+            this.precio_unitario.Width = 70;
+            // 
+            // valor_total
+            // 
+            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle7.Font = new System.Drawing.Font("Maiandra GD", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.valor_total.DefaultCellStyle = dataGridViewCellStyle7;
+            this.valor_total.HeaderText = "TOTAL";
+            this.valor_total.Name = "valor_total";
+            this.valor_total.ReadOnly = true;
+            this.valor_total.Width = 70;
+            // 
+            // imprimir
+            // 
+            this.imprimir.HeaderText = "COBRAR";
+            this.imprimir.Name = "imprimir";
+            this.imprimir.ReadOnly = true;
             // 
             // txtMesa
             // 
@@ -186,125 +306,6 @@
             this.btnActualizar.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.btnActualizar.UseVisualStyleBackColor = false;
             this.btnActualizar.Click += new System.EventHandler(this.btnActualizar_Click);
-            // 
-            // numeracion
-            // 
-            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle8.Font = new System.Drawing.Font("Maiandra GD", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numeracion.DefaultCellStyle = dataGridViewCellStyle8;
-            this.numeracion.Frozen = true;
-            this.numeracion.HeaderText = "No.";
-            this.numeracion.Name = "numeracion";
-            this.numeracion.ReadOnly = true;
-            this.numeracion.Width = 50;
-            // 
-            // id_pedido
-            // 
-            this.id_pedido.Frozen = true;
-            this.id_pedido.HeaderText = "ID PEDIDO";
-            this.id_pedido.Name = "id_pedido";
-            this.id_pedido.ReadOnly = true;
-            this.id_pedido.Visible = false;
-            // 
-            // id_det_pedido
-            // 
-            this.id_det_pedido.Frozen = true;
-            this.id_det_pedido.HeaderText = "ID DET PEDIDO";
-            this.id_det_pedido.Name = "id_det_pedido";
-            this.id_det_pedido.ReadOnly = true;
-            this.id_det_pedido.Visible = false;
-            // 
-            // id_mesa
-            // 
-            this.id_mesa.Frozen = true;
-            this.id_mesa.HeaderText = "ID MESA";
-            this.id_mesa.Name = "id_mesa";
-            this.id_mesa.ReadOnly = true;
-            this.id_mesa.Visible = false;
-            // 
-            // numero_mesa
-            // 
-            this.numero_mesa.Frozen = true;
-            this.numero_mesa.HeaderText = "NUMERO MESA";
-            this.numero_mesa.Name = "numero_mesa";
-            this.numero_mesa.ReadOnly = true;
-            this.numero_mesa.Visible = false;
-            // 
-            // estado
-            // 
-            this.estado.Frozen = true;
-            this.estado.HeaderText = "ESTADO";
-            this.estado.Name = "estado";
-            this.estado.ReadOnly = true;
-            this.estado.Visible = false;
-            // 
-            // mesa
-            // 
-            dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle9.Font = new System.Drawing.Font("Maiandra GD", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.mesa.DefaultCellStyle = dataGridViewCellStyle9;
-            this.mesa.Frozen = true;
-            this.mesa.HeaderText = "MESA";
-            this.mesa.Name = "mesa";
-            this.mesa.ReadOnly = true;
-            this.mesa.Width = 120;
-            // 
-            // tipo_orden
-            // 
-            dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle10.Font = new System.Drawing.Font("Maiandra GD", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tipo_orden.DefaultCellStyle = dataGridViewCellStyle10;
-            this.tipo_orden.Frozen = true;
-            this.tipo_orden.HeaderText = "TIPO DE ORDEN";
-            this.tipo_orden.Name = "tipo_orden";
-            this.tipo_orden.ReadOnly = true;
-            this.tipo_orden.Width = 120;
-            // 
-            // cantidad
-            // 
-            dataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle11.Font = new System.Drawing.Font("Maiandra GD", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cantidad.DefaultCellStyle = dataGridViewCellStyle11;
-            this.cantidad.Frozen = true;
-            this.cantidad.HeaderText = "CANT.";
-            this.cantidad.Name = "cantidad";
-            this.cantidad.ReadOnly = true;
-            this.cantidad.Width = 60;
-            // 
-            // descripcion
-            // 
-            this.descripcion.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            dataGridViewCellStyle12.Font = new System.Drawing.Font("Maiandra GD", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.descripcion.DefaultCellStyle = dataGridViewCellStyle12;
-            this.descripcion.HeaderText = "DESCRIPCIÓN";
-            this.descripcion.Name = "descripcion";
-            this.descripcion.ReadOnly = true;
-            // 
-            // precio_unitario
-            // 
-            dataGridViewCellStyle13.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle13.Font = new System.Drawing.Font("Maiandra GD", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.precio_unitario.DefaultCellStyle = dataGridViewCellStyle13;
-            this.precio_unitario.HeaderText = "P. UNIT.";
-            this.precio_unitario.Name = "precio_unitario";
-            this.precio_unitario.ReadOnly = true;
-            this.precio_unitario.Width = 70;
-            // 
-            // valor_total
-            // 
-            dataGridViewCellStyle14.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle14.Font = new System.Drawing.Font("Maiandra GD", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.valor_total.DefaultCellStyle = dataGridViewCellStyle14;
-            this.valor_total.HeaderText = "TOTAL";
-            this.valor_total.Name = "valor_total";
-            this.valor_total.ReadOnly = true;
-            this.valor_total.Width = 70;
-            // 
-            // imprimir
-            // 
-            this.imprimir.HeaderText = "COBRAR";
-            this.imprimir.Name = "imprimir";
-            this.imprimir.ReadOnly = true;
             // 
             // frmCobrarAlmuerzos
             // 

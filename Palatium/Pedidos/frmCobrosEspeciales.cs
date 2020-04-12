@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.SqlClient;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -19,11 +20,13 @@ namespace Palatium.Pedidos
 
         Clases.ClaseValidarRUC validarRuc = new Clases.ClaseValidarRUC();
         Clases.ClaseAbrirCajon abrir = new Clases.ClaseAbrirCajon();
+        Clases_Crear_Comandas.ClaseCrearComanda comanda;
         ValidarCedula validarCedula = new ValidarCedula();
+
+        SqlParameter[] parametro;
 
         string sSql;
         string sFecha;
-        string sIdOrden;
         string sCiudad;
         string sEstablecimiento;
         string sPuntoEmision;
@@ -31,33 +34,27 @@ namespace Palatium.Pedidos
         string sCodigoOrigenOrden;
         string sCorreoAyuda;
         string sFiltroPago;
-        string sTabla;
-        string sCampo;
         string sEtiquetaForma;
-
-        long iMaximo;
+        string sNumeroComprobante;
+        string sDescripcionFormaPago;
 
         bool bRespuesta;
 
         DataTable dtConsulta;
         DataTable dtOriginal;
+        DataTable dtPagos;
 
+        int iIdPedido;
+        int iIdSriFormaPago_P;
         int iIdListaMinorista_P;
         int iIdPersona;
         int iNumeroCuenta_P;
         int iNumeroPedido_P;
         int idTipoIdentificacion;
         int idTipoPersona;
-        int iNumeroMovimientoCaja;
-        int iIdLocalidadImpresora;
-        int iIdFormaPago;
-        int iIdPago;
-        int iNumeroPago;
-        int iCgTipoDocumento;
-        int iIdDocumentoCobrar;
+        int iIdTipoFormaCobro;
         int iIdTipoComprobante;
         int iIdSriFormaPago;
-        int iIdFormaPago_1;
         int iIdFactura;
         int iNumeroNotaEntrega;
         int iEtiqueta;
@@ -67,7 +64,7 @@ namespace Palatium.Pedidos
 
         public frmCobrosEspeciales(string sIdPedido_P)
         {
-            this.sIdOrden = sIdPedido_P;
+            this.iIdPedido = Convert.ToInt32(sIdPedido_P);
             InitializeComponent();
         }
 
@@ -316,7 +313,7 @@ namespace Palatium.Pedidos
                     sSql += "and P.estado = 'A' INNER JOIN" + Environment.NewLine;
                     sSql += "cv403_precios_productos PP ON P.id_producto = PP.id_producto" + Environment.NewLine;
                     sSql += "and PP.estado = 'A'" + Environment.NewLine;
-                    sSql += "where CP.id_pedido = " + sIdOrden + Environment.NewLine;
+                    sSql += "where CP.id_pedido = " + iIdPedido + Environment.NewLine;
                     sSql += "and PP.id_lista_precio = " + iIdListaMinorista_P;
 
                     dtOriginal = new DataTable();
@@ -358,7 +355,7 @@ namespace Palatium.Pedidos
                 sSql += "ltrim(str(sum(cantidad * (precio_unitario - valor_dscto)), 10, 2)) subtotal," + Environment.NewLine;
                 sSql += "ltrim(str(sum(cantidad * valor_iva), 10, 2)) iva" + Environment.NewLine;
                 sSql += "from pos_vw_det_pedido" + Environment.NewLine;
-                sSql += "where id_pedido = " + sIdOrden;
+                sSql += "where id_pedido = " + iIdPedido;
 
                 dtConsulta = new DataTable();
                 dtConsulta.Clear();
@@ -403,7 +400,7 @@ namespace Palatium.Pedidos
                 sSql += "and CP.estado = 'A' INNER JOIN" + Environment.NewLine;
                 sSql += "pos_metodo_pago MP ON MP.id_pos_metodo_pago = FC.id_pos_metodo_pago" + Environment.NewLine;
                 sSql += "and MP.estado = 'A'" + Environment.NewLine;
-                sSql += "where id_pedido = " + sIdOrden;
+                sSql += "where id_pedido = " + iIdPedido;
 
                 dtConsulta = new DataTable();
                 dtConsulta.Clear();
@@ -417,12 +414,12 @@ namespace Palatium.Pedidos
                         btnRegistrar.Enabled = false;
                         btnCobrar.Enabled = false;
                         iIdSriFormaPago = 0;
-                        iIdFormaPago = 0;
+                        iIdTipoFormaCobro = 0;
                     }
 
                     else
                     {
-                        iIdFormaPago = Convert.ToInt32(dtConsulta.Rows[0]["id_pos_tipo_forma_cobro"].ToString());
+                        iIdTipoFormaCobro = Convert.ToInt32(dtConsulta.Rows[0]["id_pos_tipo_forma_cobro"].ToString());
                         lblTipoComanda.Text = dtConsulta.Rows[0]["descripcion"].ToString();
                         sCodigoOrigenOrden = dtConsulta.Rows[0]["codigo"].ToString().Trim();
                         iIdSriFormaPago = Convert.ToInt32(dtConsulta.Rows[0]["id_sri_forma_pago"].ToString());
@@ -431,8 +428,6 @@ namespace Palatium.Pedidos
                             mostrarControlesCortesia(true);
                         else
                             mostrarControlesCortesia(false);
-
-                        obtenerIdFormaPago();
                     }
                 }
 
@@ -442,88 +437,6 @@ namespace Palatium.Pedidos
                     catchMensaje.LblMensaje.Text = "ERROR EN LA SIGUIENTE INSTRUCCIÓN:" + Environment.NewLine + sSql;
                     catchMensaje.ShowDialog();
                 }
-            }
-
-            catch (Exception ex)
-            {
-                catchMensaje = new VentanasMensajes.frmMensajeCatch();
-                catchMensaje.LblMensaje.Text = ex.Message;
-                catchMensaje.ShowDialog();
-            }
-        }
-
-
-        //OBTENER ID FORMA PAGO
-        private void obtenerIdFormaPago()
-        {
-            try
-            {
-                sSql = "";
-                sSql += "select id_forma_pago" + Environment.NewLine;
-                sSql += "from cv403_formas_pagos" + Environment.NewLine;
-                sSql += "where id_localidad = " + Program.iIdLocalidad + Environment.NewLine;
-                sSql += "and id_sri_forma_pago = " + iIdSriFormaPago + Environment.NewLine;
-                sSql += "and estado = 'A'";
-
-                dtConsulta = new DataTable();
-                dtConsulta.Clear();
-
-                bRespuesta = conexion.GFun_Lo_Busca_Registro(dtConsulta, sSql);
-
-                if (bRespuesta == false)
-                {
-                    catchMensaje = new VentanasMensajes.frmMensajeCatch();
-                    catchMensaje.LblMensaje.Text = "ERROR EN LA SIGUIENTE INSTRUCCIÓN:" + Environment.NewLine + sSql;
-                    catchMensaje.ShowDialog();
-                    return;
-                }
-
-                if (dtConsulta.Rows.Count == 0)
-                {
-                    btnRegistrar.Enabled = false;
-                    btnCobrar.Enabled = false;
-                    iIdFormaPago_1 = 0;
-                }
-
-                else
-                {
-                    iIdFormaPago_1 = Convert.ToInt32(dtConsulta.Rows[0]["id_forma_pago"].ToString());
-                }
-            }
-
-            catch (Exception ex)
-            {
-                catchMensaje = new VentanasMensajes.frmMensajeCatch();
-                catchMensaje.LblMensaje.Text = ex.Message;
-                catchMensaje.ShowDialog();
-            }
-        }
-
-        //FUNCION PARA OBTENER EL ID_DOCUMENTO_COBRAR
-        private void consultarIdDocumentoCobrar()
-        {
-            try
-            {
-                sSql = "";
-                sSql += "select id_documento_cobrar" + Environment.NewLine;
-                sSql += "from cv403_dctos_por_cobrar" + Environment.NewLine;
-                sSql += "where id_pedido = " + sIdOrden + Environment.NewLine;
-                sSql += "and estado = 'A'";
-
-                dtConsulta = new DataTable();
-                dtConsulta.Clear();
-
-                bRespuesta = conexion.GFun_Lo_Busca_Registro(dtConsulta, sSql);
-
-                if (bRespuesta == false)
-                {
-                    catchMensaje = new VentanasMensajes.frmMensajeCatch();
-                    catchMensaje.LblMensaje.Text = "ERROR EN LA SIGUIENTE INSTRUCCIÓN:" + Environment.NewLine + sSql;
-                    catchMensaje.ShowDialog();
-                    return;
-                }
-
-                iIdDocumentoCobrar = Convert.ToInt32(dtConsulta.Rows[0]["id_documento_cobrar"].ToString());
             }
 
             catch (Exception ex)
@@ -541,7 +454,7 @@ namespace Palatium.Pedidos
             {
                 sSql = "";
                 sSql += "select * from pos_vw_cargar_informacion_cliente" + Environment.NewLine;
-                sSql += "where id_pedido = " + sIdOrden;
+                sSql += "where id_pedido = " + iIdPedido;
 
                 dtConsulta = new DataTable();
                 dtConsulta.Clear();
@@ -607,594 +520,68 @@ namespace Palatium.Pedidos
             }
         }
 
-        //FUNCION PARA EXTRAER LA INFORMACION PARA FACTURAR
-        private void datosFactura()
-        {
-            try
-            {
-                sSql = "";
-                sSql += "select L.id_localidad, L.establecimiento, L.punto_emision, " + Environment.NewLine;
-                sSql += "P.numero_factura, P.numeronotaentrega, P.numeromovimientocaja, P.id_localidad_impresora" + Environment.NewLine;
-                sSql += "from tp_localidades L, tp_localidades_impresoras P " + Environment.NewLine;
-                sSql += "where L.id_localidad = P.id_localidad" + Environment.NewLine;
-                sSql += "and L.id_localidad = " + Program.iIdLocalidad + Environment.NewLine;
-                sSql += "and L.estado = 'A'" + Environment.NewLine;
-                sSql += "and P.estado = 'A'";
-
-                dtConsulta = new DataTable();
-                dtConsulta.Clear();
-
-                bRespuesta = conexion.GFun_Lo_Busca_Registro(dtConsulta, sSql);
-
-                if (bRespuesta == true)
-                {
-                    if (dtConsulta.Rows.Count == 0)
-                    {
-                        ok = new VentanasMensajes.frmMensajeOK();
-                        ok.LblMensaje.Text = "No se encuentran registros en la consulta.";
-                        ok.ShowDialog();
-                    }
-
-                    else
-                    {                        
-                        sEstablecimiento = dtConsulta.Rows[0]["establecimiento"].ToString();
-                        sPuntoEmision = dtConsulta.Rows[0]["punto_emision"].ToString();
-                        sNumeroSecuencial = dtConsulta.Rows[0]["numeronotaentrega"].ToString();
-                        iNumeroMovimientoCaja = Convert.ToInt32(dtConsulta.Rows[0]["numeromovimientocaja"].ToString());
-                        iIdLocalidadImpresora = Convert.ToInt32(dtConsulta.Rows[0]["id_localidad_impresora"].ToString());
-                    }
-                }
-
-                else
-                {
-                    catchMensaje = new VentanasMensajes.frmMensajeCatch();
-                    catchMensaje.LblMensaje.Text = "ERROR EN LA SIGUIENTE ISNTRUCCIÓN:" + Environment.NewLine + sSql;
-                    catchMensaje.ShowDialog();
-                }
-            }
-
-            catch (Exception ex)
-            {
-                catchMensaje = new VentanasMensajes.frmMensajeCatch();
-                catchMensaje.LblMensaje.Text = ex.Message;
-                catchMensaje.ShowDialog();
-            }
-        }
-
         #endregion
 
-        #region FUNCIONES PARA LA BASE DE DATOS
+        #region FUNCIONES PARA INTEGRAR LA SEGUNDA VERSION DE GUARDAR LA COMANDA
 
-        //FUNCION PARA EXTRAER LA FECHA DEL SISTEMA
-        private bool extraerFecha()
+        //FUNCION PARA CONTROLAR LA GENERACION DE COMANDAS
+        private bool cobrarComanda_V2()
         {
             try
             {
-                sSql = "";
-                sSql += "select getdate() fecha";
+                Cursor = Cursors.WaitCursor;
 
-                dtConsulta = new DataTable();
-                dtConsulta.Clear();
-
-                bRespuesta = conexion.GFun_Lo_Busca_Registro(dtConsulta, sSql);
-
-                if (bRespuesta == false)
-                {
-                    catchMensaje = new VentanasMensajes.frmMensajeCatch();
-                    catchMensaje.LblMensaje.Text = "ERROR EN LA SIGUIENTE INSTRUCCIÓN:" + Environment.NewLine + sSql;
-                    catchMensaje.ShowDialog();
-                    return false;
-                }
-
-                sFecha = Convert.ToDateTime(dtConsulta.Rows[0]["fecha"].ToString()).ToString("yyyy-MM-dd");
-                return true;
-            }
-
-            catch (Exception ex)
-            {
-                catchMensaje = new VentanasMensajes.frmMensajeCatch();
-                catchMensaje.LblMensaje.Text = ex.Message;
-                catchMensaje.ShowDialog();
-                return false;
-            }
-        }
-
-        //FUNCION PARA EXTRAER EL ID_PAGO
-        private int consultarIdPago()
-        {
-            try
-            {
-                sSql = "";
-                sSql += "select id_pago" + Environment.NewLine;
-                sSql += "from pos_vw_pedido_forma_pago" + Environment.NewLine;
-                sSql += "where id_pedido = " + sIdOrden;
-
-                dtConsulta = new DataTable();
-                dtConsulta.Clear();
-
-                bRespuesta = conexion.GFun_Lo_Busca_Registro(dtConsulta, sSql);
-
-                if (bRespuesta == false)
-                {
-                    catchMensaje = new VentanasMensajes.frmMensajeCatch();
-                    catchMensaje.LblMensaje.Text = "ERROR EN LA INSTRUCCIÓN:" + Environment.NewLine + sSql;
-                    catchMensaje.ShowDialog();
-                    return -1;
-                }
-
-                if (dtConsulta.Rows.Count == 0)
-                    return 0;
-
-                sFiltroPago = "";
-
-                for (int i = 0; i < dtConsulta.Rows.Count; i++)
-                {
-                    sFiltroPago += dtConsulta.Rows[i]["id_pago"].ToString().Trim();
-
-                    if (i + 1 < dtConsulta.Rows.Count)
-                        sFiltroPago += ", ";
-                }
-
-                return 1;
-            }
-
-            catch (Exception ex)
-            {
-                catchMensaje = new VentanasMensajes.frmMensajeCatch();
-                catchMensaje.LblMensaje.Text = ex.Message;
-                catchMensaje.ShowDialog();
-                return -1;
-            }
-        }
-
-        //FUNCION PARA ELIMINAR LOS PAGOS
-        private bool eliminarPagos()
-        {
-            try
-            {
-                sSql = "";
-                sSql += "update cv403_pagos set" + Environment.NewLine;
-                sSql += "estado = 'E'," + Environment.NewLine;
-                sSql += "fecha_anula = GETDATE()," + Environment.NewLine;
-                sSql += "usuario_anula = '" + Program.sDatosMaximo[0] + "'," + Environment.NewLine;
-                sSql += "terminal_anula = '" + Program.sDatosMaximo[1] + "'" + Environment.NewLine;
-                sSql += "where id_pago in (" + sFiltroPago + ")" + Environment.NewLine;
-                sSql += "and estado = 'A'";
-
-                if (!conexion.GFun_Lo_Ejecuta_SQL(sSql))
-                {
-                    catchMensaje = new VentanasMensajes.frmMensajeCatch();
-                    catchMensaje.LblMensaje.Text = "ERROR EN LA INSTRUCCIÓN:" + Environment.NewLine + sSql;
-                    catchMensaje.ShowDialog();
-                    return false;
-                }
-
-                sSql = "";
-                sSql += "update cv403_numeros_pagos set" + Environment.NewLine;
-                sSql += "estado = 'E'," + Environment.NewLine;
-                sSql += "fecha_anula = GETDATE()," + Environment.NewLine;
-                sSql += "usuario_anula = '" + Program.sDatosMaximo[0] + "'," + Environment.NewLine;
-                sSql += "terminal_anula = '" + Program.sDatosMaximo[1] + "'" + Environment.NewLine;
-                sSql += "where id_pago in (" + sFiltroPago + ")" + Environment.NewLine;
-                sSql += "and estado = 'A'";
-
-                if (!conexion.GFun_Lo_Ejecuta_SQL(sSql))
-                {
-                    catchMensaje = new VentanasMensajes.frmMensajeCatch();
-                    catchMensaje.LblMensaje.Text = "ERROR EN LA INSTRUCCIÓN:" + Environment.NewLine + sSql;
-                    catchMensaje.ShowDialog();
-                    return false;
-                }
-
-                sSql = "";
-                sSql += "update cv403_documentos_pagos set" + Environment.NewLine;
-                sSql += "estado = 'E'," + Environment.NewLine;
-                sSql += "fecha_anula = GETDATE()," + Environment.NewLine;
-                sSql += "usuario_anula = '" + Program.sDatosMaximo[0] + "'," + Environment.NewLine;
-                sSql += "terminal_anula = '" + Program.sDatosMaximo[1] + "'" + Environment.NewLine;
-                sSql += "where id_pago in (" + sFiltroPago + ")" + Environment.NewLine;
-                sSql += "and estado = 'A'";
-
-                if (!conexion.GFun_Lo_Ejecuta_SQL(sSql))
-                {
-                    catchMensaje = new VentanasMensajes.frmMensajeCatch();
-                    catchMensaje.LblMensaje.Text = "ERROR EN LA INSTRUCCIÓN:" + Environment.NewLine + sSql;
-                    catchMensaje.ShowDialog();
-                    return false;
-                }
-
-                sSql = "";
-                sSql += "update cv403_documentos_pagados set" + Environment.NewLine;
-                sSql += "estado = 'E'," + Environment.NewLine;
-                sSql += "fecha_anula = GETDATE()," + Environment.NewLine;
-                sSql += "usuario_anula = '" + Program.sDatosMaximo[0] + "'," + Environment.NewLine;
-                sSql += "terminal_anula = '" + Program.sDatosMaximo[1] + "'" + Environment.NewLine;
-                sSql += "where id_pago in (" + sFiltroPago + ")" + Environment.NewLine;
-                sSql += "and estado = 'A'";
-
-                if (!conexion.GFun_Lo_Ejecuta_SQL(sSql))
-                {
-                    catchMensaje = new VentanasMensajes.frmMensajeCatch();
-                    catchMensaje.LblMensaje.Text = "ERROR EN LA INSTRUCCIÓN:" + Environment.NewLine + sSql;
-                    catchMensaje.ShowDialog();
-                    return false;
-                }
-
-                return true;
-            }
-
-            catch (Exception ex)
-            {
-                catchMensaje = new VentanasMensajes.frmMensajeCatch();
-                catchMensaje.LblMensaje.Text = ex.Message;
-                catchMensaje.ShowDialog();
-                return false;
-            }
-        }
-
-        //FUNCION PARA INSERTAR LOS PAGOS
-        private bool insertarPagos()
-        {
-            try
-            {
-                sSql = "";
-                sSql += "insert into cv403_pagos (" + Environment.NewLine;
-                sSql += "idempresa, id_persona, fecha_pago, cg_moneda, valor," + Environment.NewLine;
-                sSql += "propina, cg_empresa, id_localidad, cg_cajero, fecha_ingreso," + Environment.NewLine;
-                sSql += "usuario_ingreso, terminal_ingreso, estado, " + Environment.NewLine;
-                sSql += "numero_replica_trigger, numero_control_replica, cambio) " + Environment.NewLine;
-                sSql += "values(" + Environment.NewLine;
-                sSql += Program.iIdEmpresa + ", " + Program.iIdPersona + ", '" + sFecha + "', " + Program.iMoneda + "," + Environment.NewLine;
-                sSql += dTotal + ", 0, " + Program.iCgEmpresa + ", " + Program.iIdLocalidad + ", 7799, GETDATE()," + Environment.NewLine;
-                sSql += "'" + Program.sDatosMaximo[0] + "', '" + Program.sDatosMaximo[1] + "', 'A' , 1, 0, 0)";
-
-                if (!conexion.GFun_Lo_Ejecuta_SQL(sSql))
-                {
-                    catchMensaje = new VentanasMensajes.frmMensajeCatch();
-                    catchMensaje.LblMensaje.Text = "ERROR EN LA SIGUIENTE INSTRUCCIÓN:" + Environment.NewLine + sSql;
-                    catchMensaje.ShowDialog();
-                    return false; ;
-                }
-
-                sTabla = "cv403_pagos";
-                sCampo = "id_pago";
-
-                iMaximo = conexion.GFun_Ln_Saca_Maximo_ID(sTabla, sCampo, "", Program.sDatosMaximo);
-
-                if (iMaximo == -1)
-                {
-                    ok = new VentanasMensajes.frmMensajeOK();
-                    ok.LblMensaje.Text = "No se pudo obtener el codigo de la tabla " + sTabla;
-                    ok.ShowDialog();
-                    return false; ;
-                }
-
-                iIdPago = Convert.ToInt32(iMaximo);
-
-                sSql = "";
-                sSql += "select numero_pago" + Environment.NewLine;
-                sSql += "from tp_localidades_impresoras" + Environment.NewLine;
-                sSql += "where id_localidad = " + Program.iIdLocalidad + Environment.NewLine;
-                sSql += "and estado = 'A'";
-
-                dtConsulta = new DataTable();
-                dtConsulta.Clear();
-
-                bRespuesta = conexion.GFun_Lo_Busca_Registro(dtConsulta, sSql);
-
-                if (bRespuesta == false)
-                {
-                    catchMensaje = new VentanasMensajes.frmMensajeCatch();
-                    catchMensaje.LblMensaje.Text = "ERROR EN LA SIGUIENTE INSTRUCCIÓN:" + Environment.NewLine + sSql;
-                    catchMensaje.ShowDialog();
-                    return false;
-                }
-
-                iNumeroPago = Convert.ToInt32(dtConsulta.Rows[0][0].ToString());
-
-                sSql = "";
-                sSql += "update tp_localidades_impresoras set" + Environment.NewLine;
-                sSql += "numero_pago = numero_pago + 1" + Environment.NewLine;
-                sSql += "where id_localidad = " + Program.iIdLocalidad + Environment.NewLine;
-
-                if (!conexion.GFun_Lo_Ejecuta_SQL(sSql))
-                {
-                    catchMensaje = new VentanasMensajes.frmMensajeCatch();
-                    catchMensaje.LblMensaje.Text = "ERROR EN LA SIGUIENTE INSTRUCCIÓN:" + Environment.NewLine + sSql;
-                    catchMensaje.ShowDialog();
-                    return false;
-                }
-
-                sSql = "";
-                sSql += "insert into cv403_numeros_pagos (" + Environment.NewLine;
-                sSql += "id_pago, serie, numero_pago, fecha_ingreso, usuario_ingreso," + Environment.NewLine;
-                sSql += "terminal_ingreso, estado, numero_replica_trigger, numero_control_replica)" + Environment.NewLine;
-                sSql += "values(" + Environment.NewLine;
-                sSql += iIdPago + ", 'A', " + iNumeroPago + ", GETDATE(), '" + Program.sDatosMaximo[0] + "'," + Environment.NewLine;
-                sSql += "'" + Program.sDatosMaximo[1] + "', 'A', 1, 0)";
-
-                if (!conexion.GFun_Lo_Ejecuta_SQL(sSql))
-                {
-                    catchMensaje = new VentanasMensajes.frmMensajeCatch();
-                    catchMensaje.LblMensaje.Text = "ERROR EN LA SIGUIENTE INSTRUCCIÓN:" + Environment.NewLine + sSql;
-                    catchMensaje.ShowDialog();
-                    return false;
-                }
-
-                sSql = "";
-                sSql += "insert into cv403_documentos_pagos (" + Environment.NewLine;
-                sSql += "id_pago, cg_tipo_documento, numero_documento, fecha_vcto, " + Environment.NewLine;
-                sSql += "cg_moneda, cotizacion, valor, id_pos_tipo_forma_cobro," + Environment.NewLine;
-                sSql += "estado, fecha_ingreso, usuario_ingreso, terminal_ingreso," + Environment.NewLine;
-                sSql += "numero_replica_trigger, numero_control_replica, valor_recibido," + Environment.NewLine;
-                sSql += "lote_tarjeta, id_pos_operador_tarjeta, id_pos_tipo_tarjeta)" + Environment.NewLine;
-                sSql += "values(" + Environment.NewLine;
-                sSql += iIdPago + ", " + iCgTipoDocumento + ", 9999, '" + sFecha + "', " + Environment.NewLine;
-                sSql += Program.iMoneda + ", 1, " + dTotal + ", " + iIdFormaPago + ", " + Environment.NewLine;
-                sSql += "'A', GETDATE(), '" + Program.sDatosMaximo[0] + "', '" + Program.sDatosMaximo[1] + "', 0, 0,";
-                sSql += dTotal + ", null, null, null)";
-
-                if (!conexion.GFun_Lo_Ejecuta_SQL(sSql))
-                {
-                    catchMensaje = new VentanasMensajes.frmMensajeCatch();
-                    catchMensaje.LblMensaje.Text = "ERROR EN LA SIGUIENTE INSTRUCCIÓN:" + Environment.NewLine + sSql;
-                    catchMensaje.ShowDialog();
-                    return false;
-                }
-
-                sSql = "";
-                sSql += "insert into cv403_documentos_pagados (" + Environment.NewLine;
-                sSql += "id_documento_cobrar, id_pago, valor, " + Environment.NewLine;
-                sSql += "estado, numero_replica_trigger,numero_control_replica," + Environment.NewLine;
-                sSql += "fecha_ingreso, usuario_ingreso, terminal_ingreso) " + Environment.NewLine;
-                sSql += "values (" + Environment.NewLine;
-                sSql += iIdDocumentoCobrar + ", " + iIdPago + ", " + dTotal + ", 'A', 0, 0," + Environment.NewLine;
-                sSql += "GETDATE(), '" + Program.sDatosMaximo[0] + "', '" + Program.sDatosMaximo[1] + "')";
-
-                if (!conexion.GFun_Lo_Ejecuta_SQL(sSql))
-                {
-                    catchMensaje = new VentanasMensajes.frmMensajeCatch();
-                    catchMensaje.LblMensaje.Text = "ERROR EN LA SIGUIENTE INSTRUCCIÓN:" + Environment.NewLine + sSql;
-                    catchMensaje.ShowDialog();
-                    return false;
-                }
-
-                return true;
-            }
-
-            catch (Exception ex)
-            {
-                catchMensaje = new VentanasMensajes.frmMensajeCatch();
-                catchMensaje.LblMensaje.Text = ex.Message;
-                catchMensaje.ShowDialog();
-                return false;
-            }
-        }
-
-        //FUNCION PARA INSERTAR LA NOTA DE ENTREGA
-        private bool insertarFactura()
-        {
-            try
-            {
-                iIdTipoComprobante = Program.iComprobanteNotaEntrega;
-
-                sSql = "";
-                sSql += "insert into cv403_facturas (idempresa, id_persona, cg_empresa, idtipocomprobante," + Environment.NewLine;
-                sSql += "id_localidad, idformulariossri, id_vendedor, id_forma_pago," + Environment.NewLine;
-                sSql += "fecha_factura, fecha_vcto, cg_moneda, valor, cg_estado_factura, editable, fecha_ingreso, " + Environment.NewLine;
-                sSql += "usuario_ingreso, terminal_ingreso, estado, numero_replica_trigger, numero_control_replica, " + Environment.NewLine;
-                sSql += "Direccion_Factura, Telefono_Factura, Ciudad_Factura, correo_electronico, servicio," + Environment.NewLine;
-                sSql += "facturaelectronica, id_tipo_emision, id_tipo_ambiente)" + Environment.NewLine;
-                sSql += "values(" + Environment.NewLine;
-                sSql += Program.iIdEmpresa + ", " + iIdPersona + ", " + Program.iCgEmpresa + "," + Environment.NewLine;
-                sSql += iIdTipoComprobante + "," + Program.iIdLocalidad + ", " + Program.iIdFormularioSri + ", " + Program.iIdVendedor + ", " + iIdFormaPago_1 + ", " + Environment.NewLine;
-                sSql += "'" + sFecha + "', '" + sFecha + "', " + Program.iMoneda + ", " + dTotal + ", 0, 0, GETDATE()," + Environment.NewLine;
-                sSql += "'" + Program.sDatosMaximo[0] + "', '" + Program.sDatosMaximo[1] + "', 'A', 1, 0," + Environment.NewLine;
-                sSql += "'" + txtDireccion.Text.Trim() + "', '" + txtTelefono.Text + "', '" + sCiudad + "'," + Environment.NewLine;
-                sSql += "'" + txtMail.Text.Trim() + "', 0, 0, 0, 0)" + Environment.NewLine;
-                
-                if (!conexion.GFun_Lo_Ejecuta_SQL(sSql))
-                {
-                    catchMensaje = new VentanasMensajes.frmMensajeCatch();
-                    catchMensaje.LblMensaje.Text = "ERROR EN LA SIGUIENTE INSTRUCCIÓN:" + Environment.NewLine + sSql;
-                    catchMensaje.ShowDialog();
-                    return false;
-                }
-
-                sTabla = "cv403_facturas";
-                sCampo = "id_factura";
-
-                iMaximo = conexion.GFun_Ln_Saca_Maximo_ID(sTabla, sCampo, "", Program.sDatosMaximo);
-
-                if (iMaximo == -1)
-                {
-                    ok = new VentanasMensajes.frmMensajeOK();
-                    ok.LblMensaje.Text = "No se pudo obtener el codigo de la tabla " + sTabla;
-                    ok.ShowDialog();
-                    return false;
-                }
-
-                iIdFactura = Convert.ToInt32(iMaximo);
-
-                sSql = "";
-                sSql += "select numeronotaentrega" + Environment.NewLine;
-                sSql += "from tp_localidades_impresoras" + Environment.NewLine;
-                sSql += "where id_localidad = " + Program.iIdLocalidad + Environment.NewLine;
-                sSql += "and estado = 'A'";
-
-                dtConsulta = new DataTable();
-                dtConsulta.Clear();
-
-                bRespuesta = conexion.GFun_Lo_Busca_Registro(dtConsulta, sSql);
-
-                if (bRespuesta == false)
-                {
-                    catchMensaje = new VentanasMensajes.frmMensajeCatch();
-                    catchMensaje.LblMensaje.Text = "ERROR EN LA SIGUIENTE INSTRUCCIÓN:" + Environment.NewLine + sSql;
-                    catchMensaje.ShowDialog();
-                    return false;
-                }
-
-                iNumeroNotaEntrega = Convert.ToInt32(dtConsulta.Rows[0][0].ToString());
-
-                sSql = "";
-                sSql += "update tp_localidades_impresoras set" + Environment.NewLine;
-                sSql += "numeronotaentrega = numeronotaentrega + 1" + Environment.NewLine;
-                sSql += "where id_localidad = " + Program.iIdLocalidad + Environment.NewLine;
-
-                if (!conexion.GFun_Lo_Ejecuta_SQL(sSql))
-                {
-                    catchMensaje = new VentanasMensajes.frmMensajeCatch();
-                    catchMensaje.LblMensaje.Text = "ERROR EN LA SIGUIENTE INSTRUCCIÓN:" + Environment.NewLine + sSql;
-                    catchMensaje.ShowDialog();
-                    return false;
-                }
-
-                sSql = "";
-                sSql += "insert into cv403_numeros_facturas (id_factura, idtipocomprobante, numero_factura," + Environment.NewLine;
-                sSql += "fecha_ingreso, usuario_ingreso, terminal_ingreso, estado, numero_replica_trigger," + Environment.NewLine;
-                sSql += "numero_control_replica) " + Environment.NewLine;
-                sSql += "values (" + Environment.NewLine;
-                sSql += iIdFactura + ", " + iIdTipoComprobante + ", " + iNumeroNotaEntrega + ", GETDATE()," + Environment.NewLine;
-                sSql += "'" + Program.sDatosMaximo[0] + "', '" + Program.sDatosMaximo[1] + "', 'A', 0, 0 )";
-
-                if (!conexion.GFun_Lo_Ejecuta_SQL(sSql))
-                {
-                    catchMensaje = new VentanasMensajes.frmMensajeCatch();
-                    catchMensaje.LblMensaje.Text = "ERROR EN LA SIGUIENTE INSTRUCCIÓN:" + Environment.NewLine + sSql;
-                    catchMensaje.ShowDialog();
-                    return false;
-                }
-
-                sSql = "";
-                sSql += "insert into cv403_facturas_pedidos (" + Environment.NewLine;
-                sSql += "id_factura, id_pedido, fecha_ingreso, usuario_ingreso, terminal_ingreso," + Environment.NewLine;
-                sSql += "estado, numero_replica_trigger, numero_control_replica) " + Environment.NewLine;
-                sSql += "values (" + Environment.NewLine;
-                sSql += iIdFactura + ", " + sIdOrden + ", GETDATE()," + Environment.NewLine;
-                sSql += "'" + Program.sDatosMaximo[0] + "', '" + Program.sDatosMaximo[1] + "', 'A', 0, 0 )";
-
-                if (!conexion.GFun_Lo_Ejecuta_SQL(sSql))
-                {
-                    catchMensaje = new VentanasMensajes.frmMensajeCatch();
-                    catchMensaje.LblMensaje.Text = "ERROR EN LA SIGUIENTE INSTRUCCIÓN:" + Environment.NewLine + sSql;
-                    catchMensaje.ShowDialog();
-                    return false;
-                }
-
-                sSql = "";
-                sSql += "update cv403_dctos_por_cobrar set" + Environment.NewLine;
-                sSql += "id_factura = " + iIdFactura + "," + Environment.NewLine;
-                sSql += "cg_estado_dcto = 7461," + Environment.NewLine;
-                sSql += "numero_documento = " + iNumeroNotaEntrega + Environment.NewLine;
-                sSql += "where id_pedido = " + sIdOrden;
-
-                if (!conexion.GFun_Lo_Ejecuta_SQL(sSql))
-                {
-                    catchMensaje = new VentanasMensajes.frmMensajeCatch();
-                    catchMensaje.LblMensaje.Text = "ERROR EN LA SIGUIENTE INSTRUCCIÓN:" + Environment.NewLine + sSql;
-                    catchMensaje.ShowDialog();
-                    return false;
-                }
-
-                sSql = "";
-                sSql += "update cv403_cab_pedidos set" + Environment.NewLine;
-                sSql += "estado_orden = 'Pagada'," + Environment.NewLine;
-                sSql += "id_persona = " + iIdPersona + "," + Environment.NewLine;
-                sSql += "fecha_cierre_orden = GETDATE()," + Environment.NewLine;
-                sSql += "comentarios = '" + txtMotivo.Text.Trim().ToUpper() + "'" + Environment.NewLine;
-                sSql += "where id_pedido = " + sIdOrden + Environment.NewLine;
-                sSql += "and estado = 'A'";
-
-                if (!conexion.GFun_Lo_Ejecuta_SQL(sSql))
-                {
-                    catchMensaje = new VentanasMensajes.frmMensajeCatch();
-                    catchMensaje.LblMensaje.Text = "ERROR EN LA SIGUIENTE INSTRUCCIÓN:" + Environment.NewLine + sSql;
-                    catchMensaje.ShowDialog();
-                    return false;
-                }
-
-                sSql = "";
-                sSql += "update cv403_numero_cab_pedido set" + Environment.NewLine;
-                sSql += "idtipocomprobante = " + Program.iComprobanteNotaEntrega + Environment.NewLine;
-                sSql += "where id_pedido = " + sIdOrden + Environment.NewLine;
-                sSql += "and estado = 'A'";
-
-                if (!conexion.GFun_Lo_Ejecuta_SQL(sSql))
-                {
-                    catchMensaje = new VentanasMensajes.frmMensajeCatch();
-                    catchMensaje.LblMensaje.Text = "ERROR EN LA SIGUIENTE INSTRUCCIÓN:" + Environment.NewLine + sSql;
-                    catchMensaje.ShowDialog();
-                    return false;
-                }
-
-                return true;
-            }
-
-            catch (Exception ex)
-            {
-                catchMensaje = new VentanasMensajes.frmMensajeCatch();
-                catchMensaje.LblMensaje.Text = ex.Message;
-                catchMensaje.ShowDialog();
-                return false;
-            }
-        }
-
-        //FUNCION PARA PROCESAR EL CIERRE DE LA COMANDA
-        private void procesarComanda()
-        {
-            try
-            {
                 if (extraerFecha() == false)
                 {
-                    return;
+                    Cursor = Cursors.Default;
+                    return false;
                 }
 
-                int iCuenta = consultarIdPago();
-
-                if (iCuenta == -1)
-                    return;
-
-                //INICIAMOS UNA NUEVA TRANSACCION
                 if (!conexion.GFun_Lo_Maneja_Transaccion(Program.G_INICIA_TRANSACCION))
                 {
+                    Cursor = Cursors.Default;
                     ok = new VentanasMensajes.frmMensajeOK();
                     ok.LblMensaje.Text = "Error al abrir transacción";
                     ok.ShowDialog();
-                    return;
-                }                
+                    return false;
+                }
 
                 sSql = "";
                 sSql += "update tp_personas set" + Environment.NewLine;
-                sSql += "correo_electronico = '" + txtMail.Text.Trim().ToLower() + "'" + Environment.NewLine;
-                sSql += "where id_persona = " + iIdPersona + Environment.NewLine;
+                sSql += "correo_electronico = @correo_electronico" + Environment.NewLine;
+                sSql += "where id_persona = @id_persona" + Environment.NewLine;
                 sSql += "and estado = 'A'";
 
-                if (!conexion.GFun_Lo_Ejecuta_SQL(sSql))
+                parametro = new SqlParameter[2];
+                parametro[0] = new SqlParameter();
+                parametro[0].ParameterName = "@correo_electronico";
+                parametro[0].SqlDbType = SqlDbType.VarChar;
+                parametro[0].Value = txtMail.Text.Trim().ToLower();
+
+                parametro[1] = new SqlParameter();
+                parametro[1].ParameterName = "@id_persona";
+                parametro[1].SqlDbType = SqlDbType.Int;
+                parametro[1].Value = iIdPersona;
+
+                if (!conexion.GFun_Lo_Ejecutar_SQL_Parametros(sSql, parametro))
                 {
                     conexion.GFun_Lo_Maneja_Transaccion(Program.G_REVERSA_TRANSACCION);
-                    catchMensaje = new VentanasMensajes.frmMensajeCatch();
-                    catchMensaje.LblMensaje.Text = "ERROR EN LA SIGUIENTE INSTRUCCIÓN:" + Environment.NewLine + sSql;
-                    catchMensaje.ShowDialog();
-                    return;
+                    Cursor = Cursors.Default;
+                    return false;
                 }
 
-                if (iCuenta  == 1)
-                {
-                    if (eliminarPagos() == false)
-                    {
-                        conexion.GFun_Lo_Maneja_Transaccion(Program.G_REVERSA_TRANSACCION);
-                    }
-                }
-
-                if (insertarPagos() == false)
+                if (insertarPagos_V2() == false)
                 {
                     conexion.GFun_Lo_Maneja_Transaccion(Program.G_REVERSA_TRANSACCION);
+                    Cursor = Cursors.Default;
+                    return false;
                 }
 
-                if (insertarFactura() == false)
+                if (insertarFactura_V2() == false)
                 {
                     conexion.GFun_Lo_Maneja_Transaccion(Program.G_REVERSA_TRANSACCION);
+                    Cursor = Cursors.Default;
+                    return false;
                 }
 
                 conexion.GFun_Lo_Maneja_Transaccion(Program.G_TERMINA_TRANSACCION);
@@ -1223,7 +610,7 @@ namespace Palatium.Pedidos
                     sEtiquetaForma = "CANJE GENERADO";
                 }
 
-                ReportesTextBox.frmVerPrecuentaEmpresaTextBox precuenta = new ReportesTextBox.frmVerPrecuentaEmpresaTextBox(sIdOrden, 1, 2, 1, iEtiqueta);
+                ReportesTextBox.frmVerPrecuentaEmpresaTextBox precuenta = new ReportesTextBox.frmVerPrecuentaEmpresaTextBox(iIdPedido.ToString(), 1, 2, 1, iEtiqueta);
                 precuenta.ShowDialog();
 
                 if (precuenta.DialogResult == DialogResult.OK)
@@ -1235,6 +622,44 @@ namespace Palatium.Pedidos
                     this.DialogResult = DialogResult.OK;
                     this.Close();
                 }
+
+                return true;
+            }
+
+            catch (Exception ex)
+            {
+                conexion.GFun_Lo_Maneja_Transaccion(Program.G_TERMINA_TRANSACCION);
+                Cursor = Cursors.Default;
+                catchMensaje = new VentanasMensajes.frmMensajeCatch();
+                catchMensaje.LblMensaje.Text = ex.Message;
+                catchMensaje.ShowDialog();
+                return false;
+            }
+        }
+
+        //FUNCION PARA EXTRAER LA FECHA DEL SISTEMA
+        private bool extraerFecha()
+        {
+            try
+            {
+                sSql = "";
+                sSql += "select getdate() fecha";
+
+                dtConsulta = new DataTable();
+                dtConsulta.Clear();
+
+                bRespuesta = conexion.GFun_Lo_Busca_Registro(dtConsulta, sSql);
+
+                if (bRespuesta == false)
+                {
+                    catchMensaje = new VentanasMensajes.frmMensajeCatch();
+                    catchMensaje.LblMensaje.Text = conexion.sMensajeError;
+                    catchMensaje.ShowDialog();
+                    return false;
+                }
+
+                sFecha = Convert.ToDateTime(dtConsulta.Rows[0]["fecha"].ToString()).ToString("yyyy-MM-dd");
+                return true;
             }
 
             catch (Exception ex)
@@ -1242,6 +667,195 @@ namespace Palatium.Pedidos
                 catchMensaje = new VentanasMensajes.frmMensajeCatch();
                 catchMensaje.LblMensaje.Text = ex.Message;
                 catchMensaje.ShowDialog();
+                return false;
+            }
+        }
+
+        //FUNCION PARA ENVIAR LOS PARAMETROS- INSERTAR NUEVOS PAGOS
+        private bool insertarPagos_V2()
+        {
+            try
+            {
+                if (crearTablaPagos() == false)
+                    return false;
+
+                comanda = new Clases_Crear_Comandas.ClaseCrearComanda();
+
+                bRespuesta = comanda.insertarPagos(iIdPedido, dtPagos, dTotal, 0, 0,
+                                                   iIdPersona, sFecha, Program.iIdLocalidad, 0, conexion);
+
+                if (bRespuesta == false)
+                {
+                    conexion.GFun_Lo_Maneja_Transaccion(Program.G_REVERSA_TRANSACCION);
+                    catchMensaje = new VentanasMensajes.frmMensajeCatch();
+                    catchMensaje.LblMensaje.Text = comanda.sMensajeError;
+                    catchMensaje.ShowDialog();
+                    return false;
+                }
+
+                return true;
+            }
+
+            catch (Exception ex)
+            {
+                conexion.GFun_Lo_Maneja_Transaccion(Program.G_REVERSA_TRANSACCION);
+                catchMensaje = new VentanasMensajes.frmMensajeCatch();
+                catchMensaje.LblMensaje.Text = ex.Message;
+                catchMensaje.ShowDialog();
+                return false;
+            }
+        }
+
+        //FUNCION PARA ENVIAR LOS PARAMETROS- INSERTAR FACTURA
+        private bool insertarFactura_V2()
+        {
+            try
+            {
+                comanda = new Clases_Crear_Comandas.ClaseCrearComanda();
+
+                bRespuesta = comanda.insertarFactura(iIdPedido, iIdTipoComprobante, 0,
+                                                     iIdPersona, Program.iIdLocalidad, dtPagos, dTotal, 0,
+                                                     0, 0, sFecha, conexion);
+
+                if (bRespuesta == false)
+                {
+                    conexion.GFun_Lo_Maneja_Transaccion(Program.G_REVERSA_TRANSACCION);
+                    catchMensaje = new VentanasMensajes.frmMensajeCatch();
+                    catchMensaje.LblMensaje.Text = comanda.sMensajeError;
+                    catchMensaje.ShowDialog();
+                    return false;
+                }
+
+                sEstablecimiento = comanda.sEstablecimiento;
+                sPuntoEmision = comanda.sPuntoEmision;
+                sNumeroComprobante = comanda.sNumeroComprobante;
+                iIdFactura = comanda.iIdFactura;
+
+                return true;
+            }
+
+            catch (Exception ex)
+            {
+                conexion.GFun_Lo_Maneja_Transaccion(Program.G_REVERSA_TRANSACCION);
+                catchMensaje = new VentanasMensajes.frmMensajeCatch();
+                catchMensaje.LblMensaje.Text = ex.Message;
+                catchMensaje.ShowDialog();
+                return false;
+            }
+        }
+
+        //FUNCION PARA CREAR LA TABLA DE PAGOS PARA ENVIAR POR PARAMETRO
+        private bool crearTablaPagos()
+        {
+            try
+            {
+                dtPagos = new DataTable();
+                dtPagos.Clear();
+
+                dtPagos.Columns.Add("id_pos_tipo_forma_cobro");
+                dtPagos.Columns.Add("forma_pago");
+                dtPagos.Columns.Add("valor");
+                dtPagos.Columns.Add("id_sri_forma_pago");
+                dtPagos.Columns.Add("conciliacion");
+                dtPagos.Columns.Add("id_operador_tarjeta");
+                dtPagos.Columns.Add("id_tipo_tarjeta");
+                dtPagos.Columns.Add("numero_lote");
+                dtPagos.Columns.Add("bandera_insertar_lote");
+                dtPagos.Columns.Add("propina");
+
+                dtPagos.Rows.Add(iIdTipoFormaCobro, sDescripcionFormaPago, dTotal, iIdSriFormaPago_P, 0, 0, 0, "", 0, 0);
+
+                return true;
+            }
+
+            catch (Exception ex)
+            {
+                catchMensaje = new VentanasMensajes.frmMensajeCatch();
+                catchMensaje.LblMensaje.Text = ex.Message;
+                catchMensaje.ShowDialog();
+                return false;
+            }
+        }
+
+        //FUNCION PARA OBTENER LOS VALORES PARA INSERTAR EN LA SECCION DE PAGOS
+        private bool obtenerDatosFormaPagoRealizada(int iIdPosTipoFormaCobro)
+        {
+            try
+            {
+                sSql = "";
+                sSql += "select * from pos_vw_obtener_datos_formas_pagos" + Environment.NewLine;
+                sSql += "where id_localidad = @id_localidad" + Environment.NewLine;
+                sSql += "and id_pos_tipo_forma_cobro = @id_pos_tipo_forma_cobro";
+
+                parametro = new SqlParameter[2];
+                parametro[0] = new SqlParameter();
+                parametro[0].ParameterName = "@id_localidad";
+                parametro[0].SqlDbType = SqlDbType.Int;
+                parametro[0].Value = Program.iIdLocalidad;
+
+                parametro[1] = new SqlParameter();
+                parametro[1].ParameterName = "@id_pos_tipo_forma_cobro";
+                parametro[1].SqlDbType = SqlDbType.Int;
+                parametro[1].Value = iIdPosTipoFormaCobro;
+
+                dtConsulta = new DataTable();
+                dtConsulta.Clear();
+
+                bRespuesta = conexion.GFun_Lo_Busca_Registro_Parametros(dtConsulta, sSql, parametro);
+
+                if (bRespuesta == false)
+                {
+                    catchMensaje = new VentanasMensajes.frmMensajeCatch();
+                    catchMensaje.LblMensaje.Text = conexion.sMensajeError;
+                    catchMensaje.ShowDialog();
+                    return false;
+                }
+
+                if (dtConsulta.Rows.Count == 0)
+                {
+                    ok = new VentanasMensajes.frmMensajeOK();
+                    ok.LblMensaje.Text = "No se encuentran configurados los registros de cobros. Favor comuníquese con el administrador.";
+                    ok.ShowDialog();
+                    return false;
+                }
+
+                iIdTipoFormaCobro = Convert.ToInt32(dtConsulta.Rows[0]["id_pos_tipo_forma_cobro"].ToString());
+                sDescripcionFormaPago = dtConsulta.Rows[0]["descripcion"].ToString().Trim().ToUpper();
+                iIdSriFormaPago_P = Convert.ToInt32(dtConsulta.Rows[0]["id_sri_forma_pago"].ToString());
+
+
+                return true;
+            }
+
+            catch (Exception ex)
+            {
+                catchMensaje = new VentanasMensajes.frmMensajeCatch();
+                catchMensaje.LblMensaje.Text = ex.Message;
+                catchMensaje.ShowDialog();
+                return false;
+            }
+        }
+
+        //FUNCION PARA CREAR EL REPORTE
+        private void crearReporte()
+        {
+            try
+            {
+                ReportesTextBox.frmVerPedidoTarjetaAlmuerzo precuenta = new ReportesTextBox.frmVerPedidoTarjetaAlmuerzo(iIdPedido.ToString(), 1);
+                precuenta.ShowDialog();
+
+                Cambiocs ok = new Cambiocs("$ 0.00");
+                ok.lblVerMensaje.Text = "TICKET DE TARJETA GENERADA";
+                ok.ShowDialog();
+                precuenta.Close();
+            }
+
+            catch (Exception ex)
+            {
+                catchMensaje = new VentanasMensajes.frmMensajeCatch();
+                catchMensaje.LblMensaje.Text = ex.Message;
+                catchMensaje.ShowDialog();
+                this.Close();
             }
         }
 
@@ -1258,7 +872,6 @@ namespace Palatium.Pedidos
             obtenerTotal();
             cargarInformacionCliente();
             consultarIdFormaPago();
-            consultarIdDocumentoCobrar();
 
             if (sCodigoOrigenOrden == "04")
                 this.ActiveControl = txtIdentificacion;
@@ -1309,7 +922,10 @@ namespace Palatium.Pedidos
                 }
             }
 
-            procesarComanda();
+            if (obtenerDatosFormaPagoRealizada(iIdTipoFormaCobro) == false)
+                return;
+
+            cobrarComanda_V2();
         }
 
         private void frmCobrosEspeciales_KeyDown(object sender, KeyEventArgs e)
@@ -1394,7 +1010,7 @@ namespace Palatium.Pedidos
 
         private void btnCobrar_Click(object sender, EventArgs e)
         {
-            ComandaNueva.frmCobros t = new ComandaNueva.frmCobros(sIdOrden, 0);
+            ComandaNueva.frmCobros t = new ComandaNueva.frmCobros(iIdPedido.ToString(), 0);
             this.Hide();
             t.ShowDialog();
 

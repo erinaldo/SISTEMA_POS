@@ -832,6 +832,12 @@
     <Compile Include="Oficina\frmCargoMovimientos.Designer.cs">
       <DependentUpon>frmCargoMovimientos.cs</DependentUpon>
     </Compile>
+    <Compile Include="Oficina\frmInfoPublicitaria.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Oficina\frmInfoPublicitaria.Designer.cs">
+      <DependentUpon>frmInfoPublicitaria.cs</DependentUpon>
+    </Compile>
     <Compile Include="Oficina\frmIngresoMasivoPersonal.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -3002,6 +3008,9 @@
     <EmbeddedResource Include="Oficina\frmCargoMovimientos.resx">
       <DependentUpon>frmCargoMovimientos.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Oficina\frmInfoPublicitaria.resx">
+      <DependentUpon>frmInfoPublicitaria.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Oficina\frmIngresoMasivoPersonal.resx">
       <DependentUpon>frmIngresoMasivoPersonal.cs</DependentUpon>
     </EmbeddedResource>
@@ -4205,6 +4214,10 @@
     <None Include="Resources\icono_boton_activar_producto.png" />
     <None Include="Resources\icono_boton_cuenta_por_cobrar.png" />
     <None Include="Resources\icono_boton_cuenta_por_cobrar_2.png" />
+    <None Include="Resources\icono_menu_configurar_tarjeta_almuerzo.png" />
+    <None Include="Resources\icono_menu_actualizacion_masiva_servicio.png" />
+    <None Include="Resources\icono_menu_publicidad.png" />
+    <None Include="Resources\icono_menu_info_publicitaria.png" />
     <Content Include="Resources\icono_sri_2.png" />
     <None Include="Resources\impresoras_menu.png" />
     <None Include="Resources\impresiones_nuevo.png" />

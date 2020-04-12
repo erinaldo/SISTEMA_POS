@@ -556,6 +556,7 @@
             // btnPagoCompleto
             // 
             this.btnPagoCompleto.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
+            this.btnPagoCompleto.Enabled = false;
             this.btnPagoCompleto.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
             this.btnPagoCompleto.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnPagoCompleto.Font = new System.Drawing.Font("Maiandra GD", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
