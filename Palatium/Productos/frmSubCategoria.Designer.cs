@@ -28,6 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             this.Grb_listReCajero = new System.Windows.Forms.GroupBox();
             this.btnBuscar = new System.Windows.Forms.Button();
             this.txtBuscar = new System.Windows.Forms.TextBox();
@@ -37,28 +40,36 @@
             this.BtnEliminar = new System.Windows.Forms.Button();
             this.btnAgregar = new System.Windows.Forms.Button();
             this.grupoDatos = new System.Windows.Forms.GroupBox();
+            this.chkHabilitado = new System.Windows.Forms.CheckBox();
             this.lblSecuencia = new System.Windows.Forms.Label();
             this.txtSecuencia = new System.Windows.Forms.TextBox();
             this.chkPagaIva = new System.Windows.Forms.CheckBox();
-            this.cmbEmpresa = new MisControles.ComboDatos();
-            this.lblEmpresa = new System.Windows.Forms.Label();
             this.cmbConsumo = new MisControles.ComboDatos();
             this.cmbCompra = new MisControles.ComboDatos();
             this.chkPrecioModificable = new System.Windows.Forms.CheckBox();
             this.chkModificable = new System.Windows.Forms.CheckBox();
             this.label1 = new System.Windows.Forms.Label();
             this.lblUnidadCompra = new System.Windows.Forms.Label();
-            this.cmbEstado = new System.Windows.Forms.ComboBox();
-            this.lblEstaCajero = new System.Windows.Forms.Label();
             this.lblDescrCajero = new System.Windows.Forms.Label();
             this.txtDescripcion = new System.Windows.Forms.TextBox();
             this.lblCodCategoria = new System.Windows.Forms.Label();
             this.txtCodigo = new System.Windows.Forms.TextBox();
-            this.cmbPadre = new MisControles.ComboDatos();
             this.lblCodigo = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.cmbInsumos = new MisControles.ComboDatos();
+            this.cmbEmpresa = new System.Windows.Forms.ComboBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.cmbCategorias = new System.Windows.Forms.ComboBox();
+            this.cmbCodigoOrigen = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
+            this.id_producto = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.modificable = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.precio_modificable = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.paga_iva = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.is_active = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.codigo = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.nombre = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.secuencia = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.estado = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Grb_listReCajero.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvDatos)).BeginInit();
             this.Grb_opcioCategori.SuspendLayout();
@@ -104,11 +115,25 @@
             // 
             this.dgvDatos.AllowUserToAddRows = false;
             this.dgvDatos.AllowUserToDeleteRows = false;
+            this.dgvDatos.AllowUserToResizeColumns = false;
+            this.dgvDatos.AllowUserToResizeRows = false;
+            this.dgvDatos.BackgroundColor = System.Drawing.SystemColors.ControlLightLight;
             this.dgvDatos.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvDatos.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.id_producto,
+            this.modificable,
+            this.precio_modificable,
+            this.paga_iva,
+            this.is_active,
+            this.codigo,
+            this.nombre,
+            this.secuencia,
+            this.estado});
             this.dgvDatos.Location = new System.Drawing.Point(15, 54);
             this.dgvDatos.MultiSelect = false;
             this.dgvDatos.Name = "dgvDatos";
             this.dgvDatos.ReadOnly = true;
+            this.dgvDatos.RowHeadersVisible = false;
             this.dgvDatos.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvDatos.Size = new System.Drawing.Size(469, 357);
             this.dgvDatos.TabIndex = 0;
@@ -165,30 +190,42 @@
             // 
             // grupoDatos
             // 
+            this.grupoDatos.Controls.Add(this.chkHabilitado);
             this.grupoDatos.Controls.Add(this.lblSecuencia);
             this.grupoDatos.Controls.Add(this.txtSecuencia);
             this.grupoDatos.Controls.Add(this.chkPagaIva);
-            this.grupoDatos.Controls.Add(this.cmbEmpresa);
-            this.grupoDatos.Controls.Add(this.lblEmpresa);
             this.grupoDatos.Controls.Add(this.cmbConsumo);
             this.grupoDatos.Controls.Add(this.cmbCompra);
             this.grupoDatos.Controls.Add(this.chkPrecioModificable);
             this.grupoDatos.Controls.Add(this.chkModificable);
             this.grupoDatos.Controls.Add(this.label1);
             this.grupoDatos.Controls.Add(this.lblUnidadCompra);
-            this.grupoDatos.Controls.Add(this.cmbEstado);
-            this.grupoDatos.Controls.Add(this.lblEstaCajero);
             this.grupoDatos.Controls.Add(this.lblDescrCajero);
             this.grupoDatos.Controls.Add(this.txtDescripcion);
             this.grupoDatos.Controls.Add(this.lblCodCategoria);
             this.grupoDatos.Controls.Add(this.txtCodigo);
             this.grupoDatos.Enabled = false;
-            this.grupoDatos.Location = new System.Drawing.Point(12, 111);
+            this.grupoDatos.Location = new System.Drawing.Point(12, 128);
             this.grupoDatos.Name = "grupoDatos";
-            this.grupoDatos.Size = new System.Drawing.Size(349, 257);
+            this.grupoDatos.Size = new System.Drawing.Size(349, 222);
             this.grupoDatos.TabIndex = 6;
             this.grupoDatos.TabStop = false;
             this.grupoDatos.Text = "Datos del Registro";
+            // 
+            // chkHabilitado
+            // 
+            this.chkHabilitado.AutoSize = true;
+            this.chkHabilitado.Checked = true;
+            this.chkHabilitado.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkHabilitado.Enabled = false;
+            this.chkHabilitado.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.chkHabilitado.ForeColor = System.Drawing.Color.Red;
+            this.chkHabilitado.Location = new System.Drawing.Point(124, 167);
+            this.chkHabilitado.Name = "chkHabilitado";
+            this.chkHabilitado.Size = new System.Drawing.Size(134, 17);
+            this.chkHabilitado.TabIndex = 61;
+            this.chkHabilitado.Text = "Registro Habilitado";
+            this.chkHabilitado.UseVisualStyleBackColor = true;
             // 
             // lblSecuencia
             // 
@@ -196,7 +233,7 @@
             this.lblSecuencia.BackColor = System.Drawing.Color.Transparent;
             this.lblSecuencia.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblSecuencia.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.lblSecuencia.Location = new System.Drawing.Point(15, 119);
+            this.lblSecuencia.Location = new System.Drawing.Point(18, 92);
             this.lblSecuencia.Name = "lblSecuencia";
             this.lblSecuencia.Size = new System.Drawing.Size(68, 15);
             this.lblSecuencia.TabIndex = 49;
@@ -204,7 +241,7 @@
             // 
             // txtSecuencia
             // 
-            this.txtSecuencia.Location = new System.Drawing.Point(121, 118);
+            this.txtSecuencia.Location = new System.Drawing.Point(124, 91);
             this.txtSecuencia.MaxLength = 3;
             this.txtSecuencia.Name = "txtSecuencia";
             this.txtSecuencia.Size = new System.Drawing.Size(63, 20);
@@ -214,36 +251,17 @@
             // 
             this.chkPagaIva.AutoSize = true;
             this.chkPagaIva.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.chkPagaIva.Location = new System.Drawing.Point(261, 223);
+            this.chkPagaIva.Location = new System.Drawing.Point(264, 196);
             this.chkPagaIva.Name = "chkPagaIva";
             this.chkPagaIva.Size = new System.Drawing.Size(73, 19);
             this.chkPagaIva.TabIndex = 12;
             this.chkPagaIva.Text = "Paga Iva";
             this.chkPagaIva.UseVisualStyleBackColor = true;
             // 
-            // cmbEmpresa
-            // 
-            this.cmbEmpresa.Enabled = false;
-            this.cmbEmpresa.FormattingEnabled = true;
-            this.cmbEmpresa.Location = new System.Drawing.Point(121, 27);
-            this.cmbEmpresa.Name = "cmbEmpresa";
-            this.cmbEmpresa.Size = new System.Drawing.Size(197, 21);
-            this.cmbEmpresa.TabIndex = 45;
-            // 
-            // lblEmpresa
-            // 
-            this.lblEmpresa.AutoSize = true;
-            this.lblEmpresa.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblEmpresa.Location = new System.Drawing.Point(15, 28);
-            this.lblEmpresa.Name = "lblEmpresa";
-            this.lblEmpresa.Size = new System.Drawing.Size(60, 15);
-            this.lblEmpresa.TabIndex = 44;
-            this.lblEmpresa.Text = "Empresa:";
-            // 
             // cmbConsumo
             // 
             this.cmbConsumo.FormattingEnabled = true;
-            this.cmbConsumo.Location = new System.Drawing.Point(121, 163);
+            this.cmbConsumo.Location = new System.Drawing.Point(124, 136);
             this.cmbConsumo.Name = "cmbConsumo";
             this.cmbConsumo.Size = new System.Drawing.Size(145, 21);
             this.cmbConsumo.TabIndex = 8;
@@ -251,7 +269,7 @@
             // cmbCompra
             // 
             this.cmbCompra.FormattingEnabled = true;
-            this.cmbCompra.Location = new System.Drawing.Point(121, 140);
+            this.cmbCompra.Location = new System.Drawing.Point(124, 113);
             this.cmbCompra.Name = "cmbCompra";
             this.cmbCompra.Size = new System.Drawing.Size(145, 21);
             this.cmbCompra.TabIndex = 7;
@@ -260,7 +278,7 @@
             // 
             this.chkPrecioModificable.AutoSize = true;
             this.chkPrecioModificable.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.chkPrecioModificable.Location = new System.Drawing.Point(120, 223);
+            this.chkPrecioModificable.Location = new System.Drawing.Point(123, 196);
             this.chkPrecioModificable.Name = "chkPrecioModificable";
             this.chkPrecioModificable.Size = new System.Drawing.Size(128, 19);
             this.chkPrecioModificable.TabIndex = 11;
@@ -271,7 +289,7 @@
             // 
             this.chkModificable.AutoSize = true;
             this.chkModificable.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.chkModificable.Location = new System.Drawing.Point(18, 223);
+            this.chkModificable.Location = new System.Drawing.Point(21, 196);
             this.chkModificable.Name = "chkModificable";
             this.chkModificable.Size = new System.Drawing.Size(90, 19);
             this.chkModificable.TabIndex = 10;
@@ -284,7 +302,7 @@
             this.label1.BackColor = System.Drawing.Color.Transparent;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.label1.Location = new System.Drawing.Point(15, 164);
+            this.label1.Location = new System.Drawing.Point(18, 137);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(106, 15);
             this.label1.TabIndex = 15;
@@ -296,36 +314,11 @@
             this.lblUnidadCompra.BackColor = System.Drawing.Color.Transparent;
             this.lblUnidadCompra.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblUnidadCompra.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.lblUnidadCompra.Location = new System.Drawing.Point(15, 141);
+            this.lblUnidadCompra.Location = new System.Drawing.Point(18, 114);
             this.lblUnidadCompra.Name = "lblUnidadCompra";
             this.lblUnidadCompra.Size = new System.Drawing.Size(97, 15);
             this.lblUnidadCompra.TabIndex = 13;
             this.lblUnidadCompra.Text = "Unidad Compra:";
-            // 
-            // cmbEstado
-            // 
-            this.cmbEstado.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbEstado.Enabled = false;
-            this.cmbEstado.FormattingEnabled = true;
-            this.cmbEstado.Items.AddRange(new object[] {
-            "ACTIVO",
-            "INACTIVO"});
-            this.cmbEstado.Location = new System.Drawing.Point(121, 186);
-            this.cmbEstado.Name = "cmbEstado";
-            this.cmbEstado.Size = new System.Drawing.Size(145, 21);
-            this.cmbEstado.TabIndex = 9;
-            // 
-            // lblEstaCajero
-            // 
-            this.lblEstaCajero.AutoSize = true;
-            this.lblEstaCajero.BackColor = System.Drawing.Color.Transparent;
-            this.lblEstaCajero.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblEstaCajero.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.lblEstaCajero.Location = new System.Drawing.Point(15, 186);
-            this.lblEstaCajero.Name = "lblEstaCajero";
-            this.lblEstaCajero.Size = new System.Drawing.Size(48, 15);
-            this.lblEstaCajero.TabIndex = 7;
-            this.lblEstaCajero.Text = "Estado:";
             // 
             // lblDescrCajero
             // 
@@ -333,7 +326,7 @@
             this.lblDescrCajero.BackColor = System.Drawing.Color.Transparent;
             this.lblDescrCajero.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblDescrCajero.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.lblDescrCajero.Location = new System.Drawing.Point(15, 73);
+            this.lblDescrCajero.Location = new System.Drawing.Point(18, 46);
             this.lblDescrCajero.Name = "lblDescrCajero";
             this.lblDescrCajero.Size = new System.Drawing.Size(75, 15);
             this.lblDescrCajero.TabIndex = 5;
@@ -342,7 +335,7 @@
             // txtDescripcion
             // 
             this.txtDescripcion.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
-            this.txtDescripcion.Location = new System.Drawing.Point(121, 72);
+            this.txtDescripcion.Location = new System.Drawing.Point(124, 45);
             this.txtDescripcion.MaxLength = 200;
             this.txtDescripcion.Multiline = true;
             this.txtDescripcion.Name = "txtDescripcion";
@@ -355,7 +348,7 @@
             this.lblCodCategoria.BackColor = System.Drawing.Color.Transparent;
             this.lblCodCategoria.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblCodCategoria.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.lblCodCategoria.Location = new System.Drawing.Point(15, 51);
+            this.lblCodCategoria.Location = new System.Drawing.Point(18, 24);
             this.lblCodCategoria.Name = "lblCodCategoria";
             this.lblCodCategoria.Size = new System.Drawing.Size(49, 15);
             this.lblCodCategoria.TabIndex = 3;
@@ -363,20 +356,12 @@
             // 
             // txtCodigo
             // 
-            this.txtCodigo.Location = new System.Drawing.Point(121, 50);
-            this.txtCodigo.MaxLength = 20;
+            this.txtCodigo.Location = new System.Drawing.Point(124, 23);
+            this.txtCodigo.MaxLength = 10;
             this.txtCodigo.Name = "txtCodigo";
             this.txtCodigo.Size = new System.Drawing.Size(107, 20);
             this.txtCodigo.TabIndex = 4;
-            // 
-            // cmbPadre
-            // 
-            this.cmbPadre.FormattingEnabled = true;
-            this.cmbPadre.Location = new System.Drawing.Point(124, 48);
-            this.cmbPadre.Name = "cmbPadre";
-            this.cmbPadre.Size = new System.Drawing.Size(197, 21);
-            this.cmbPadre.TabIndex = 1;
-            this.cmbPadre.SelectedIndexChanged += new System.EventHandler(this.cmbPadre_SelectedIndexChanged);
+            this.txtCodigo.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtCodigo_KeyPress);
             // 
             // lblCodigo
             // 
@@ -384,7 +369,7 @@
             this.lblCodigo.BackColor = System.Drawing.Color.Transparent;
             this.lblCodigo.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblCodigo.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.lblCodigo.Location = new System.Drawing.Point(18, 49);
+            this.lblCodigo.Location = new System.Drawing.Point(18, 81);
             this.lblCodigo.Name = "lblCodigo";
             this.lblCodigo.Size = new System.Drawing.Size(60, 15);
             this.lblCodigo.TabIndex = 11;
@@ -392,25 +377,58 @@
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.cmbInsumos);
+            this.groupBox1.Controls.Add(this.cmbEmpresa);
+            this.groupBox1.Controls.Add(this.label3);
+            this.groupBox1.Controls.Add(this.cmbCategorias);
+            this.groupBox1.Controls.Add(this.cmbCodigoOrigen);
             this.groupBox1.Controls.Add(this.label2);
-            this.groupBox1.Controls.Add(this.cmbPadre);
             this.groupBox1.Controls.Add(this.lblCodigo);
-            this.groupBox1.Location = new System.Drawing.Point(12, 21);
+            this.groupBox1.Location = new System.Drawing.Point(12, 1);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(349, 84);
+            this.groupBox1.Size = new System.Drawing.Size(349, 121);
             this.groupBox1.TabIndex = 16;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Opciones";
             // 
-            // cmbInsumos
+            // cmbEmpresa
             // 
-            this.cmbInsumos.FormattingEnabled = true;
-            this.cmbInsumos.Location = new System.Drawing.Point(124, 21);
-            this.cmbInsumos.Name = "cmbInsumos";
-            this.cmbInsumos.Size = new System.Drawing.Size(196, 21);
-            this.cmbInsumos.TabIndex = 17;
-            this.cmbInsumos.SelectedIndexChanged += new System.EventHandler(this.cmbInsumos_SelectedIndexChanged);
+            this.cmbEmpresa.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbEmpresa.FormattingEnabled = true;
+            this.cmbEmpresa.Location = new System.Drawing.Point(124, 20);
+            this.cmbEmpresa.Name = "cmbEmpresa";
+            this.cmbEmpresa.Size = new System.Drawing.Size(197, 21);
+            this.cmbEmpresa.TabIndex = 22;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.BackColor = System.Drawing.Color.Transparent;
+            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.label3.Location = new System.Drawing.Point(18, 21);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(60, 15);
+            this.label3.TabIndex = 21;
+            this.label3.Text = "Empresa:";
+            // 
+            // cmbCategorias
+            // 
+            this.cmbCategorias.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbCategorias.FormattingEnabled = true;
+            this.cmbCategorias.Location = new System.Drawing.Point(124, 80);
+            this.cmbCategorias.Name = "cmbCategorias";
+            this.cmbCategorias.Size = new System.Drawing.Size(197, 21);
+            this.cmbCategorias.TabIndex = 20;
+            this.cmbCategorias.SelectedIndexChanged += new System.EventHandler(this.cmbCategorias_SelectedIndexChanged);
+            // 
+            // cmbCodigoOrigen
+            // 
+            this.cmbCodigoOrigen.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbCodigoOrigen.FormattingEnabled = true;
+            this.cmbCodigoOrigen.Location = new System.Drawing.Point(124, 50);
+            this.cmbCodigoOrigen.Name = "cmbCodigoOrigen";
+            this.cmbCodigoOrigen.Size = new System.Drawing.Size(197, 21);
+            this.cmbCodigoOrigen.TabIndex = 19;
             // 
             // label2
             // 
@@ -418,11 +436,79 @@
             this.label2.BackColor = System.Drawing.Color.Transparent;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.label2.Location = new System.Drawing.Point(15, 21);
+            this.label2.Location = new System.Drawing.Point(18, 51);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(81, 15);
+            this.label2.Size = new System.Drawing.Size(89, 15);
             this.label2.TabIndex = 18;
-            this.label2.Text = "Código padre";
+            this.label2.Text = "Código Origen:";
+            // 
+            // id_producto
+            // 
+            this.id_producto.HeaderText = "ID_PRODUCTO";
+            this.id_producto.Name = "id_producto";
+            this.id_producto.ReadOnly = true;
+            this.id_producto.Visible = false;
+            // 
+            // modificable
+            // 
+            this.modificable.HeaderText = "MODIFICABLE";
+            this.modificable.Name = "modificable";
+            this.modificable.ReadOnly = true;
+            this.modificable.Visible = false;
+            // 
+            // precio_modificable
+            // 
+            this.precio_modificable.HeaderText = "PRECIO_MODIFICABLE";
+            this.precio_modificable.Name = "precio_modificable";
+            this.precio_modificable.ReadOnly = true;
+            this.precio_modificable.Visible = false;
+            // 
+            // paga_iva
+            // 
+            this.paga_iva.HeaderText = "PAGA_IVA";
+            this.paga_iva.Name = "paga_iva";
+            this.paga_iva.ReadOnly = true;
+            this.paga_iva.Visible = false;
+            // 
+            // is_active
+            // 
+            this.is_active.HeaderText = "IS_ACTIVE";
+            this.is_active.Name = "is_active";
+            this.is_active.ReadOnly = true;
+            this.is_active.Visible = false;
+            // 
+            // codigo
+            // 
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.codigo.DefaultCellStyle = dataGridViewCellStyle1;
+            this.codigo.HeaderText = "CÓDIGO";
+            this.codigo.Name = "codigo";
+            this.codigo.ReadOnly = true;
+            this.codigo.Width = 80;
+            // 
+            // nombre
+            // 
+            this.nombre.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.nombre.HeaderText = "DESCRIPCIÓN";
+            this.nombre.Name = "nombre";
+            this.nombre.ReadOnly = true;
+            // 
+            // secuencia
+            // 
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.secuencia.DefaultCellStyle = dataGridViewCellStyle2;
+            this.secuencia.HeaderText = "SECUENCIA";
+            this.secuencia.Name = "secuencia";
+            this.secuencia.ReadOnly = true;
+            this.secuencia.Width = 80;
+            // 
+            // estado
+            // 
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.estado.DefaultCellStyle = dataGridViewCellStyle3;
+            this.estado.HeaderText = "ESTADO";
+            this.estado.Name = "estado";
+            this.estado.ReadOnly = true;
             // 
             // frmSubCategoria
             // 
@@ -467,24 +553,32 @@
         private System.Windows.Forms.Label lblSecuencia;
         private System.Windows.Forms.TextBox txtSecuencia;
         private System.Windows.Forms.CheckBox chkPagaIva;
-        private MisControles.ComboDatos cmbEmpresa;
-        private System.Windows.Forms.Label lblEmpresa;
         private MisControles.ComboDatos cmbConsumo;
         private MisControles.ComboDatos cmbCompra;
-        private MisControles.ComboDatos cmbPadre;
         private System.Windows.Forms.CheckBox chkPrecioModificable;
         private System.Windows.Forms.CheckBox chkModificable;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label lblUnidadCompra;
         private System.Windows.Forms.Label lblCodigo;
-        private System.Windows.Forms.ComboBox cmbEstado;
-        private System.Windows.Forms.Label lblEstaCajero;
         private System.Windows.Forms.Label lblDescrCajero;
         private System.Windows.Forms.TextBox txtDescripcion;
         private System.Windows.Forms.Label lblCodCategoria;
         private System.Windows.Forms.TextBox txtCodigo;
         private System.Windows.Forms.GroupBox groupBox1;
-        private MisControles.ComboDatos cmbInsumos;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.ComboBox cmbCodigoOrigen;
+        private System.Windows.Forms.ComboBox cmbCategorias;
+        private System.Windows.Forms.ComboBox cmbEmpresa;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.CheckBox chkHabilitado;
+        private System.Windows.Forms.DataGridViewTextBoxColumn id_producto;
+        private System.Windows.Forms.DataGridViewTextBoxColumn modificable;
+        private System.Windows.Forms.DataGridViewTextBoxColumn precio_modificable;
+        private System.Windows.Forms.DataGridViewTextBoxColumn paga_iva;
+        private System.Windows.Forms.DataGridViewTextBoxColumn is_active;
+        private System.Windows.Forms.DataGridViewTextBoxColumn codigo;
+        private System.Windows.Forms.DataGridViewTextBoxColumn nombre;
+        private System.Windows.Forms.DataGridViewTextBoxColumn secuencia;
+        private System.Windows.Forms.DataGridViewTextBoxColumn estado;
     }
 }

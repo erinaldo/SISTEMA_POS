@@ -616,8 +616,10 @@
             this.txtPrecioMinorista.Name = "txtPrecioMinorista";
             this.txtPrecioMinorista.Size = new System.Drawing.Size(76, 21);
             this.txtPrecioMinorista.TabIndex = 9;
+            this.txtPrecioMinorista.Text = "1.00";
             this.txtPrecioMinorista.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.txtPrecioMinorista.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtPrecioMinorista_KeyPress_1);
+            this.txtPrecioMinorista.Leave += new System.EventHandler(this.txtPrecioMinorista_Leave);
             // 
             // label14
             // 
@@ -640,6 +642,7 @@
             this.txtPrecioCompra.Text = "1.00";
             this.txtPrecioCompra.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.txtPrecioCompra.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtPrecioCompra_KeyPress_1);
+            this.txtPrecioCompra.Leave += new System.EventHandler(this.txtPrecioCompra_Leave);
             // 
             // label13
             // 

@@ -106,13 +106,15 @@ namespace Palatium.Productos
 
                 else
                 {
-                    catchMensaje.lblMensaje.Text = sSql;
+                    catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
+                    catchMensaje.lblMensaje.Text = conexion.sMensajeError;
                     catchMensaje.ShowDialog();
                 }
             }
 
             catch (Exception ex)
             {
+                catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
                 catchMensaje.lblMensaje.Text = ex.Message;
                 catchMensaje.ShowDialog();
             }
@@ -184,6 +186,7 @@ namespace Palatium.Productos
                 sSql += "and P.estado ='A'" + Environment.NewLine;
                 sSql += "and NP.estado='A'" + Environment.NewLine;
                 sSql += "and P.subcategoria = 0" + Environment.NewLine;
+                sSql += "and P.modificador = 0" + Environment.NewLine;
                 //sSql += "and P.menu_pos = 1";
                 dBAyudaCategorias.Ver(sSql, "NP.nombre", 0, 1, 2);
 
@@ -287,7 +290,7 @@ namespace Palatium.Productos
             txtPresentacion.Text = "1";
             txtRendimiento.Text = "1";
             iHabilitado = 0;
-            txtPrecioMinorista.Clear();
+            txtPrecioMinorista.Text = "1.00";
             txtBuscar.Clear();
 
             chkPagaIVA.Checked = true;
@@ -341,7 +344,7 @@ namespace Palatium.Productos
             txtPresentacion.Text = "1";
             txtRendimiento.Text = "1";
             iHabilitado = 0;
-            txtPrecioMinorista.Clear();
+            txtPrecioMinorista.Text = "1.00";
             txtSecuencia.Clear();
 
             chkPagaIVA.Checked = true;
@@ -517,7 +520,7 @@ namespace Palatium.Productos
                     sSql += "select PR.valor" + Environment.NewLine;
                     sSql += "from cv403_precios_productos PR inner join" + Environment.NewLine;
                     sSql += "cv401_productos P on PR.id_producto = P.id_producto" + Environment.NewLine;
-                    sSql += "where id_lista_precio = 1" + Environment.NewLine;
+                    sSql += "where id_lista_precio = " + iIdListaBase + Environment.NewLine;
                     sSql += "and P.id_producto = " + Convert.ToInt32(dgvProductos.Rows[i].Cells["id_producto"].Value) + Environment.NewLine;
                     sSql += "and PR.estado = 'A'";
 
@@ -555,7 +558,7 @@ namespace Palatium.Productos
                     sSql += "select PR.valor" + Environment.NewLine;
                     sSql += "from cv403_precios_productos PR inner join" + Environment.NewLine;
                     sSql += "cv401_productos P on PR.id_producto = P.id_producto" + Environment.NewLine;
-                    sSql += "where id_lista_precio = 4" + Environment.NewLine;
+                    sSql += "where id_lista_precio = " + iIdListaMinorista + Environment.NewLine;
                     sSql += "and P.id_producto = " + Convert.ToInt32(dgvProductos.Rows[i].Cells["id_producto"].Value) + Environment.NewLine;
                     sSql += "and pr.estado='A'";
 
@@ -1962,6 +1965,18 @@ namespace Palatium.Productos
         private void txtSecuencia_KeyPress_1(object sender, KeyPressEventArgs e)
         {
             caracter.soloNumeros(e);
+        }
+
+        private void txtPrecioCompra_Leave(object sender, EventArgs e)
+        {
+            if (txtPrecioCompra.Text.Trim() == "")
+                txtPrecioCompra.Text = "1.00";
+        }
+
+        private void txtPrecioMinorista_Leave(object sender, EventArgs e)
+        {
+            if (txtPrecioMinorista.Text.Trim() == "")
+                txtPrecioMinorista.Text = "1.00";
         }
     }
 }

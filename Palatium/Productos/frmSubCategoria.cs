@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.SqlClient;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -12,40 +13,38 @@ namespace Palatium.Productos
     public partial class frmSubCategoria : Form
     {
         ConexionBD.ConexionBD conexion = new ConexionBD.ConexionBD();
-        VentanasMensajes.frmMensajeNuevoOk ok = new VentanasMensajes.frmMensajeNuevoOk();
-        VentanasMensajes.frmMensajeNuevoCatch catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
-        VentanasMensajes.frmMensajeNuevoSiNo NuevoSiNo = new VentanasMensajes.frmMensajeNuevoSiNo();
 
-        int iNivel = 3;
+        Clases.ClaseValidarCaracteres caracter;
+
+        VentanasMensajes.frmMensajeNuevoOk ok;
+        VentanasMensajes.frmMensajeNuevoCatch catchMensaje;
+        VentanasMensajes.frmMensajeNuevoSiNo NuevoSiNo;
+
+        SqlParameter[] parametro;
+
+        int iHabilitado;
         int iIdProducto;
-        int iIdProductoPadre;
+        int iUnidadCompra = 6142;
+        int iUnidadConsumo = 6143;
         int iModificable;
         int iPrecioModificable;
         int iPagaIva;
         int iSubcategoria = 1;
-        int iModificador;
         int iUltimo;
         int cg_tipoNombre = 5076;
         int nombInterno;
-        int iAxuliarCombo;
-
         int iCambioCompra;
         int iCambioConsumo;
 
-        string sEstado;
         string sCodigoSeparado;
-        
-
-        /*
-         * VARIACION DE CODIGOS Y VARIABLES
-         * AUTOR: ELVIS GUAIGUA
-         * FECHA DE MODIFICACIPON: 2018-07-14
-         * CONCEPTO: DEFINICIÓN DE VARIABLES PARA AJUSTARSE AL ESTANDAR ESTABLECIDO
-        */
-
+        string sNombreOriginal;
         string sSql;
+        string sCodigoCategoria;
+        string sTabla;
+        string sCampo;
 
         DataTable dtConsulta;
+        DataTable dtCategorias;
 
         bool bRespuesta;
 
@@ -56,6 +55,56 @@ namespace Palatium.Productos
 
         #region FUNCIONES DEL USUARIO
 
+        //llenar comboBox de Empresa
+        private void LLenarComboEmpresa()
+        {
+            try
+            {
+                sSql = "";
+                sSql += "select idempresa, isnull(nombrecomercial, razonsocial) nombre_comercial" + Environment.NewLine;
+                sSql += "from sis_empresa" + Environment.NewLine;
+                sSql += "where idempresa = @idempresa";
+
+                parametro = new SqlParameter[1];
+                parametro[0] = new SqlParameter();
+                parametro[0].ParameterName = "@idempresa";
+                parametro[0].SqlDbType = SqlDbType.Int;
+                parametro[0].Value = Program.iIdEmpresa;
+
+                dtConsulta = new DataTable();
+                dtConsulta.Clear();
+
+                bRespuesta = conexion.GFun_Lo_Busca_Registro_Parametros(dtConsulta, sSql, parametro);
+
+                if (bRespuesta == false)
+                {
+                    catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
+                    catchMensaje.lblMensaje.Text = conexion.sMensajeError;
+                    catchMensaje.ShowDialog();
+                    return;
+                }
+
+                if (dtConsulta.Rows.Count == 0)
+                {
+                    DataRow row = dtConsulta.NewRow();
+                    row["idempresa"] = "0";
+                    row["nombre_comercial"] = "Seleccione empresa...!!!";
+                    dtConsulta.Rows.InsertAt(row, 0);
+                }
+
+                cmbEmpresa.DisplayMember = "nombre_comercial";
+                cmbEmpresa.ValueMember = "idempresa";
+                cmbEmpresa.DataSource = dtConsulta;
+            }
+
+            catch (Exception ex)
+            {
+                catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
+                catchMensaje.lblMensaje.Text = ex.Message;
+                catchMensaje.ShowDialog();
+            }
+        }
+
         //llenar el comboBox Codigo Padre
         private void LLenarComboPadre()
         {
@@ -65,21 +114,71 @@ namespace Palatium.Productos
                 dtConsulta.Clear();
 
                 sSql = "";
-                sSql += "Select PRD.codigo, '['+PRD.codigo+'] '+ NOM.nombre nombre" + Environment.NewLine;
-                sSql += "from cv401_productos PRD, cv401_nombre_productos NOM" + Environment.NewLine;
-                sSql += "where PRD.nivel = 1" + Environment.NewLine;
-                sSql += "and PRD.ESTADO = 'A'" + Environment.NewLine;
-                sSql += "and NOM.ESTADO = 'A'" + Environment.NewLine;
-                sSql += "and PRD.id_producto = NOM.id_producto" + Environment.NewLine;
-                sSql += "and NOM.nombre_interno = 1" + Environment.NewLine;
-                sSql += "order by PRD.codigo ";
+                sSql += "select P.id_producto, '['+P.codigo+'] '+ NP.nombre nombre" + Environment.NewLine;
+                sSql += "from cv401_productos P INNER JOIN" + Environment.NewLine;
+                sSql += "cv401_nombre_productos NP ON P.id_producto = NP.id_producto" + Environment.NewLine;
+                sSql += "and P.ESTADO = @estado_1" + Environment.NewLine;
+                sSql += "and NP.ESTADO = @estado_2" + Environment.NewLine;
+                sSql += "where P.nivel = @nivel" + Environment.NewLine;
+                sSql += "and NP.nombre_interno = @nombre_interno" + Environment.NewLine;
+                sSql += "and P.codigo = @codigo" + Environment.NewLine;
+                sSql += "order by NP.nombre";
 
-                cmbInsumos.llenar(dtConsulta, sSql);
-                cmbInsumos.SelectedValue = 2;
+                parametro = new SqlParameter[5];
+                parametro[0] = new SqlParameter();
+                parametro[0].ParameterName = "@estado_1";
+                parametro[0].SqlDbType = SqlDbType.VarChar;
+                parametro[0].Value = "A";
+
+                parametro[1] = new SqlParameter();
+                parametro[1].ParameterName = "@estado_2";
+                parametro[1].SqlDbType = SqlDbType.VarChar;
+                parametro[1].Value = "A";
+
+                parametro[2] = new SqlParameter();
+                parametro[2].ParameterName = "@nivel";
+                parametro[2].SqlDbType = SqlDbType.Int;
+                parametro[2].Value = 1;
+
+                parametro[3] = new SqlParameter();
+                parametro[3].ParameterName = "@nombre_interno";
+                parametro[3].SqlDbType = SqlDbType.Int;
+                parametro[3].Value = 1;
+
+                parametro[4] = new SqlParameter();
+                parametro[4].ParameterName = "@codigo";
+                parametro[4].SqlDbType = SqlDbType.Int;
+                parametro[4].Value = 2;
+
+                dtConsulta = new DataTable();
+                dtConsulta.Clear();
+
+                bRespuesta = conexion.GFun_Lo_Busca_Registro_Parametros(dtConsulta, sSql, parametro);
+
+                if (bRespuesta == false)
+                {
+                    catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
+                    catchMensaje.lblMensaje.Text = conexion.sMensajeError;
+                    catchMensaje.ShowDialog();
+                    return;
+                }
+
+                if (dtConsulta.Rows.Count == 0)
+                {
+                    DataRow row = dtConsulta.NewRow();
+                    row["id_producto"] = "0";
+                    row["nombre"] = "Seleccione...!!!";
+                    dtConsulta.Rows.InsertAt(row, 0);
+                }
+
+                cmbCodigoOrigen.DisplayMember = "nombre";
+                cmbCodigoOrigen.ValueMember = "id_producto";
+                cmbCodigoOrigen.DataSource = dtConsulta;
             }
 
             catch (Exception ex)
             {
+                catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
                 catchMensaje.lblMensaje.Text = ex.Message;
                 catchMensaje.ShowDialog();
             }
@@ -91,68 +190,73 @@ namespace Palatium.Productos
             try
             {
 
-                dtConsulta = new DataTable();
-                dtConsulta.Clear();
-
                 sSql = "";
-                sSql += "select P.codigo, NP.nombre" + Environment.NewLine;
-                sSql += "from cv401_productos P, cv401_nombre_productos NP" + Environment.NewLine;
-                sSql += "where P.id_producto = NP.id_producto" + Environment.NewLine;
-                sSql += "and P.id_producto_padre in (" + Environment.NewLine;
-                sSql += "select id_producto from cv401_productos" + Environment.NewLine;
-                sSql += "where codigo = '" + Convert.ToInt32(cmbInsumos.SelectedValue) + "')" + Environment.NewLine;
-                sSql += "and P.nivel = 2" + Environment.NewLine;
-                sSql += "and P.estado = 'A'" + Environment.NewLine;
-                sSql += "and NP.estado = 'A'" + Environment.NewLine;
-                sSql += "and subcategoria = 1";
+                sSql += "select P.id_producto, NP.nombre, P.codigo" + Environment.NewLine;
+                sSql += "from cv401_productos P INNER JOIN" + Environment.NewLine;
+                sSql += "cv401_nombre_productos NP ON P.id_producto = NP.id_producto" + Environment.NewLine;
+                sSql += "and P.ESTADO = @estado_1" + Environment.NewLine;
+                sSql += "and NP.ESTADO = @estado_2" + Environment.NewLine;
+                sSql += "where P.id_producto_padre = @id_producto_padre" + Environment.NewLine;
+                sSql += "and P.nivel = @nivel" + Environment.NewLine;
+                sSql += "and P.subcategoria = @subcategoria" + Environment.NewLine;
+                sSql += "order by NP.nombre";
 
-                dtConsulta = new DataTable();
-                bRespuesta = conexion.GFun_Lo_Busca_Registro(dtConsulta, sSql);
+                parametro = new SqlParameter[5];
+                parametro[0] = new SqlParameter();
+                parametro[0].ParameterName = "@estado_1";
+                parametro[0].SqlDbType = SqlDbType.VarChar;
+                parametro[0].Value = "A";
 
-                if (bRespuesta == true)
+                parametro[1] = new SqlParameter();
+                parametro[1].ParameterName = "@estado_2";
+                parametro[1].SqlDbType = SqlDbType.VarChar;
+                parametro[1].Value = "A";
+
+                parametro[2] = new SqlParameter();
+                parametro[2].ParameterName = "@id_producto_padre";
+                parametro[2].SqlDbType = SqlDbType.Int;
+                parametro[2].Value = Convert.ToInt32(cmbCodigoOrigen.SelectedValue);
+
+                parametro[3] = new SqlParameter();
+                parametro[3].ParameterName = "@nivel";
+                parametro[3].SqlDbType = SqlDbType.Int;
+                parametro[3].Value = 2;
+
+                parametro[4] = new SqlParameter();
+                parametro[4].ParameterName = "@subcategoria";
+                parametro[4].SqlDbType = SqlDbType.Int;
+                parametro[4].Value = 1;
+
+                dtCategorias = new DataTable();
+                dtCategorias.Clear();
+
+                bRespuesta = conexion.GFun_Lo_Busca_Registro_Parametros(dtCategorias, sSql, parametro);
+
+                if (bRespuesta == false)
                 {
-                    cmbPadre.llenar(dtConsulta, sSql);
-
-                    if (cmbPadre.Items.Count > 0)
-                    {
-                        if (Convert.ToInt32(cmbPadre.SelectedValue) != 0)
-                        {
-                            extraerIdProductoPadre();
-                        }
-
-                        else
-                        {
-                            iIdProductoPadre = 0;
-                        }
-                    }
-                }
-
-                else
-                {
-                    catchMensaje.lblMensaje.Text = "ERROR EN LA INSTRUCCION:" + Environment.NewLine + sSql;
+                    catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
+                    catchMensaje.lblMensaje.Text = conexion.sMensajeError;
                     catchMensaje.ShowDialog();
+                    return;
                 }
+
+                DataRow row = dtCategorias.NewRow();
+                row["id_producto"] = "0";
+                row["nombre"] = "Seleccione...!!!";
+                row["codigo"] = "0";
+                dtCategorias.Rows.InsertAt(row, 0);
+
+                cmbCategorias.DisplayMember = "nombre";
+                cmbCategorias.ValueMember = "id_producto";
+                cmbCategorias.DataSource = dtCategorias;
             }
 
             catch (Exception ex)
             {
+                catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
                 catchMensaje.lblMensaje.Text = ex.Message;
                 catchMensaje.ShowDialog();
             }
-        }
-
-        //FUNCION PARA MOSTRAR U OCULTAR LAS COLUMAS DEL DATAGRID
-        private void columnasGrid(bool ok)
-        {
-            dgvDatos.Columns[0].Visible = ok;
-            dgvDatos.Columns[5].Visible = ok;
-            dgvDatos.Columns[6].Visible = ok;
-            dgvDatos.Columns[7].Visible = ok;
-
-            dgvDatos.Columns[1].Width = 75;
-            dgvDatos.Columns[2].Width = 170;
-            dgvDatos.Columns[3].Width = 75;
-            dgvDatos.Columns[4].Width = 75;
         }
 
         //FUNCION LIMPIAR NUEVO
@@ -170,7 +274,11 @@ namespace Palatium.Productos
             chkModificable.Checked = false;
             chkPagaIva.Checked = false;
             chkPrecioModificable.Checked = false;
-            cmbPadre.Enabled = true;
+            cmbCategorias.Enabled = true;
+            cmbCodigoOrigen.Enabled = true;
+            chkHabilitado.Checked = true;
+            chkHabilitado.Enabled = false;
+            BtnEliminar.Enabled = false;
 
             btnAgregar.Text = "Nuevo";
             txtCodigo.Enabled = true;
@@ -188,61 +296,22 @@ namespace Palatium.Productos
             txtBuscar.Clear();            
             txtSecuencia.Clear();
 
-            llenarGrid(0);
+            llenarGrid();
 
             grupoDatos.Enabled = false;
-            cmbPadre.Enabled = true;
+            cmbCodigoOrigen.Enabled = true;
+            cmbCategorias.Enabled = true;
 
             chkModificable.Checked = false;
             chkPagaIva.Checked = false;
             chkPrecioModificable.Checked = false;
+            chkHabilitado.Checked = true;
+            chkHabilitado.Enabled = false;
+            BtnEliminar.Enabled = false;
 
             btnAgregar.Text = "Nuevo";
             txtCodigo.Enabled = true;
-        }
-
-        
-
-        //EXTRAER EL ID DEL PRODUCTO PADRE LUEGO DE LLENAR EL COMBOBOX PADRE
-        private void extraerIdProductoPadre()
-        {
-            try
-            {
-                sSql = "";
-                sSql += "select id_producto from cv401_productos" + Environment.NewLine;
-                sSql += "where codigo = '" + cmbPadre.SelectedValue.ToString() + "'" + Environment.NewLine;
-                sSql += "and estado = 'A'";
-
-                dtConsulta = new DataTable();
-                dtConsulta.Clear();
-
-                bRespuesta = conexion.GFun_Lo_Busca_Registro(dtConsulta, sSql);
-
-                if (bRespuesta == true)
-                {
-                    if (dtConsulta.Rows.Count > 0)
-                    {
-                        iIdProductoPadre = Convert.ToInt32(dtConsulta.Rows[0][0].ToString());
-                    }
-                    
-                    else
-                    {
-                        iIdProductoPadre = 0;
-                    }
-                }
-
-                else
-                {
-                    catchMensaje.lblMensaje.Text = "ERROR EN LA INSTRUCCION:" + Environment.NewLine + sSql;
-                    catchMensaje.ShowDialog();
-                }
-            }
-
-            catch (Exception ex)
-            {
-                catchMensaje.lblMensaje.Text = ex.Message;
-                catchMensaje.ShowDialog();
-            }
+            txtBuscar.Focus();
         }
 
         //llenar el comboBox unidad compra 
@@ -257,18 +326,17 @@ namespace Palatium.Productos
                 sSql += "select correlativo, valor_texto" + Environment.NewLine;
                 sSql += "from tp_codigos" + Environment.NewLine;
                 sSql += "where tabla = 'SYS$00042'" + Environment.NewLine;
-                sSql += "and estado='A'";
+                sSql += "and estado = 'A'" + Environment.NewLine;
+                sSql += "and correlativo in (2760, 2754, 540, 2794, 546)" + Environment.NewLine;
+                sSql += "order by valor_texto";
 
                 cmbCompra.llenar(dtConsulta, sSql);
-
-                if (cmbCompra.Items.Count > 0)
-                {
-                    cmbCompra.SelectedIndex = 0;
-                }
+                cmbCompra.SelectedValue = 546;
             }
 
             catch (Exception ex)
             {
+                catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
                 catchMensaje.lblMensaje.Text = ex.Message;
                 catchMensaje.ShowDialog();
             }
@@ -286,53 +354,24 @@ namespace Palatium.Productos
                 sSql += "select correlativo, valor_texto" + Environment.NewLine;
                 sSql += "from tp_codigos" + Environment.NewLine;
                 sSql += "where tabla = 'SYS$00042'" + Environment.NewLine;
-                sSql += "and estado='A'";
+                sSql += "and estado = 'A'" + Environment.NewLine;
+                sSql += "and correlativo in (2760, 2754, 540, 2794, 546)" + Environment.NewLine;
+                sSql += "order by valor_texto";
 
                 cmbConsumo.llenar(dtConsulta, sSql);
-
-                if (cmbConsumo.Items.Count > 0)
-                {
-                    cmbConsumo.SelectedIndex = 0;
-                }
+                cmbConsumo.SelectedValue = 546;
             }
 
             catch (Exception ex)
             {
+                catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
                 catchMensaje.lblMensaje.Text = ex.Message;
                 catchMensaje.ShowDialog();
             }
         }
-
-        //llenar comboBox de Empresa
-        private void LLenarComboEmpresa()
-        {
-            try
-            {
-                dtConsulta = new DataTable();
-                dtConsulta.Clear();
-
-                sSql = "";
-                sSql += "select idempresa, isnull(nombrecomercial, razonsocial) nombre_comercial, *" + Environment.NewLine;
-                sSql += "from sis_empresa" + Environment.NewLine;
-                sSql += "where idempresa = " + Program.iIdEmpresa;
-
-                cmbEmpresa.llenar(dtConsulta, sSql);
-                
-                if (cmbEmpresa.Items.Count > 0)
-                {
-                    cmbEmpresa.SelectedIndex = 1;
-                }
-            }
-
-            catch (Exception ex)
-            {
-                catchMensaje.lblMensaje.Text = ex.Message;
-                catchMensaje.ShowDialog();
-            }
-        }
-
+        
         //FUNCION PARA MOSTRAR LOS DATOS EN LOS COMOBOBOX, ESTOS NO SE DEBEN EDITAR
-        private void seleccionarDatosCombobox()
+        private bool seleccionarDatosCombobox()
         {
             try
             {
@@ -340,142 +379,244 @@ namespace Palatium.Productos
                 sSql += "select UP.cg_unidad, TC.valor_texto, UP.unidad_compra" + Environment.NewLine;
                 sSql += "from cv401_unidades_productos UP, tp_codigos TC" + Environment.NewLine;
                 sSql += "where TC.correlativo = UP.cg_unidad" + Environment.NewLine;
-                sSql += "and UP.id_producto = " + iIdProducto + Environment.NewLine;
-                sSql += "and UP.estado = 'A'";
+                sSql += "and UP.id_producto = @id_producto" + Environment.NewLine;
+                sSql += "and UP.estado = @estado" + Environment.NewLine;
+                sSql += "order by UP.unidad_compra desc";
+
+                parametro = new SqlParameter[2];
+                parametro[0] = new SqlParameter();
+                parametro[0].ParameterName = "@id_producto";
+                parametro[0].SqlDbType = SqlDbType.Int;
+                parametro[0].Value = iIdProducto;
+
+                parametro[1] = new SqlParameter();
+                parametro[1].ParameterName = "@estado";
+                parametro[1].SqlDbType = SqlDbType.VarChar;
+                parametro[1].Value = "A";
 
                 dtConsulta = new DataTable();
                 dtConsulta.Clear();
 
-                bRespuesta = conexion.GFun_Lo_Busca_Registro(dtConsulta, sSql);
+                bRespuesta = conexion.GFun_Lo_Busca_Registro_Parametros(dtConsulta, sSql, parametro);
 
-                if (bRespuesta == true)
+                if (bRespuesta == false)
                 {
-                    if (dtConsulta.Rows.Count > 0)
-                    {
-                        iCambioCompra = Convert.ToInt32(dtConsulta.Rows[0][0].ToString());
-                        iCambioConsumo = Convert.ToInt32(dtConsulta.Rows[1][0].ToString());
+                    catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
+                    catchMensaje.lblMensaje.Text = conexion.sMensajeError;
+                    catchMensaje.ShowDialog();
+                    return false;
+                }
 
-                        cmbCompra.SelectedValue = iCambioCompra;
-                        cmbConsumo.SelectedValue = iCambioConsumo;
+                if (dtCategorias.Rows.Count == 0)
+                {
+                    iCambioCompra = 0;
+                    iCambioConsumo = 0;
+                }
+
+                if (dtCategorias.Rows.Count == 1)
+                {
+                    if (Convert.ToInt32(dtConsulta.Rows[0]["unidad_compra"].ToString()) == 0)
+                    {
+                        iCambioCompra = 0;
+                        iCambioConsumo = Convert.ToInt32(dtConsulta.Rows[1]["cg_unidad"].ToString());
+                    }
+
+                    else
+                    {
+                        iCambioCompra = Convert.ToInt32(dtConsulta.Rows[0]["cg_unidad"].ToString());
+                        iCambioConsumo = 0;
                     }
                 }
 
-                else
+                if (dtConsulta.Rows.Count > 0)
                 {
-                    catchMensaje.lblMensaje.Text = "ERROR EN LA INSTRUCCION:" + Environment.NewLine + sSql;
-                    catchMensaje.ShowDialog();
+                    iCambioCompra = Convert.ToInt32(dtConsulta.Rows[0]["cg_unidad"].ToString());
+                    iCambioConsumo = Convert.ToInt32(dtConsulta.Rows[1]["cg_unidad"].ToString());                    
                 }
+
+                cmbCompra.SelectedValue = iCambioCompra;
+                cmbConsumo.SelectedValue = iCambioConsumo;
+
+                return true;
             }
 
             catch (Exception ex)
             {
+                catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
                 catchMensaje.lblMensaje.Text = ex.Message;
                 catchMensaje.ShowDialog();
+                return false;
             }
         }
 
         //FUNCION PARA LLENAR EL DATAGRID SEGUN LA CONSULTA 
-        private void llenarGrid(int op)
+        private void llenarGrid()
         {
             try
             {
-                sSql = "";
-                sSql += "select P.id_producto, P.codigo CODIGO, NP.nombre DESCRIPCION, P.secuencia SECUENCIA," + Environment.NewLine;
-                sSql += "case P.estado when 'A' then 'ACTIVO' else 'INACTIVO' end ESTADO," + Environment.NewLine;
-                sSql += "P.modificable, P.precio_modificable, P.paga_iva" + Environment.NewLine;
-                sSql += "from cv401_productos P,cv401_nombre_productos NP" + Environment.NewLine;
-                sSql += "where P.id_producto = NP.id_producto" + Environment.NewLine;
-                sSql += "and id_producto_padre = " + iIdProductoPadre + Environment.NewLine;
-                sSql += "and P.nivel = 3" + Environment.NewLine;
-                sSql += "and P.estado ='A'";
-                sSql += "and NP.estado ='A'" + Environment.NewLine;
-                sSql += "and P.modificador = 0" + Environment.NewLine;
-                sSql += "and P.subcategoria = 1" + Environment.NewLine;
-                sSql += "and P.ultimo_nivel = 0" + Environment.NewLine;
+                dgvDatos.Rows.Clear();
 
-                if (op == 1)
+                int a = 6;
+
+                sSql = "";
+                sSql += "select P.id_producto, P.modificable, P.precio_modificable, P.paga_iva," + Environment.NewLine;
+                sSql += "P.is_active, P.codigo, NP.nombre, P.secuencia," + Environment.NewLine;
+                sSql += "case P.is_active when 1 then 'ACTIVO' else 'INACTIVO' end estado" + Environment.NewLine;
+                sSql += "from cv401_productos P INNER JOIN" + Environment.NewLine;
+                sSql += "cv401_nombre_productos NP ON P.id_producto = NP.id_producto" + Environment.NewLine;
+                sSql += "and P.estado = @estado_1" + Environment.NewLine;
+                sSql += "and NP.estado = @estado_2" + Environment.NewLine;
+                sSql += "where P.id_producto_padre = @id_producto_padre" + Environment.NewLine;
+                sSql += "and P.nivel = @nivel" + Environment.NewLine;
+                sSql += "and P.modificador = @modificador" + Environment.NewLine;
+                sSql += "and P.subcategoria = @subcategoria" + Environment.NewLine;
+                //sSql += "and P.ultimo_nivel = @ultimo_nivel" + Environment.NewLine;
+
+                if (txtBuscar.Text.Trim() != "")
                 {
-                    sSql += "and NP.nombre LIKE '%" + txtBuscar.Text.Trim() + "%'" + Environment.NewLine;
+                    a = 7;
+                    sSql += "and NP.nombre like '%@buscar%'" + Environment.NewLine;
                 }
 
-                sSql += "order by P.codigo";
+                sSql += "order by NP.nombre";
+
+                int b = 0;
+                parametro = new SqlParameter[a];
+                parametro[b] = new SqlParameter();
+                parametro[b].ParameterName = "@estado_1";
+                parametro[b].SqlDbType = SqlDbType.VarChar;
+                parametro[b].Value = "A";
+                b++;
+
+                parametro[b] = new SqlParameter();
+                parametro[b].ParameterName = "@estado_2";
+                parametro[b].SqlDbType = SqlDbType.VarChar;
+                parametro[b].Value = "A";
+                b++;
+
+                parametro[b] = new SqlParameter();
+                parametro[b].ParameterName = "@id_producto_padre";
+                parametro[b].SqlDbType = SqlDbType.Int;
+                parametro[b].Value = cmbCategorias.SelectedValue;
+                b++;
+
+                parametro[b] = new SqlParameter();
+                parametro[b].ParameterName = "@nivel";
+                parametro[b].SqlDbType = SqlDbType.Int;
+                parametro[b].Value = 3;
+                b++;
+
+                parametro[b] = new SqlParameter();
+                parametro[b].ParameterName = "@modificador";
+                parametro[b].SqlDbType = SqlDbType.Int;
+                parametro[b].Value = 0;
+                b++;
+
+                parametro[b] = new SqlParameter();
+                parametro[b].ParameterName = "@subcategoria";
+                parametro[b].SqlDbType = SqlDbType.Int;
+                parametro[b].Value = 1;
+                b++;
+
+                //parametro[b] = new SqlParameter();
+                //parametro[b].ParameterName = "@ultimo_nivel";
+                //parametro[b].SqlDbType = SqlDbType.Int;
+                //parametro[b].Value = 1;
+                
+                if (a == 7)
+                {
+                    b++;
+                    parametro[b] = new SqlParameter();
+                    parametro[b].ParameterName = "@buscar";
+                    parametro[b].SqlDbType = SqlDbType.VarChar;
+                    parametro[b].Value = txtBuscar.Text.Trim();
+                }
 
                 dtConsulta = new DataTable();
                 dtConsulta.Clear();
 
-                bRespuesta = conexion.GFun_Lo_Busca_Registro(dtConsulta, sSql);
+                bRespuesta = conexion.GFun_Lo_Busca_Registro_Parametros(dtConsulta, sSql, parametro);
 
-                if (bRespuesta == true)
+                if (bRespuesta == false)
                 {
-                    dgvDatos.DataSource = dtConsulta;
-                    columnasGrid(false);                    
-                }
-
-                else
-                {
-                    catchMensaje.lblMensaje.Text = "ERROR EN LA INSTRUCCION:" + Environment.NewLine + sSql;
+                    catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
+                    catchMensaje.lblMensaje.Text = conexion.sMensajeError;
                     catchMensaje.ShowDialog();
-                    limpiar();
+                    return;
                 }
+
+                for (int i = 0; i < dtConsulta.Rows.Count; i++)
+                {
+                    dgvDatos.Rows.Add(dtConsulta.Rows[i]["id_producto"].ToString(),
+                                      dtConsulta.Rows[i]["modificable"].ToString(),
+                                      dtConsulta.Rows[i]["precio_modificable"].ToString(),
+                                      dtConsulta.Rows[i]["paga_iva"].ToString(),
+                                      dtConsulta.Rows[i]["is_active"].ToString(),
+                                      dtConsulta.Rows[i]["codigo"].ToString(),
+                                      dtConsulta.Rows[i]["nombre"].ToString(),
+                                      dtConsulta.Rows[i]["secuencia"].ToString(),
+                                      dtConsulta.Rows[i]["estado"].ToString()
+                        
+                        );
+                }
+
+                dgvDatos.ClearSelection();
             }
 
             catch (Exception ex)
             {
+                catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
                 catchMensaje.lblMensaje.Text = ex.Message;
                 catchMensaje.ShowDialog();
                 limpiar();
             }
         }
-
-        //FUNCION PARA DAR DE BAJA UN REGISTRO
-        private void eliminarRegistro()
+        
+        //FUNCION PARA CONSULTAR EL CODIGO A INGRESAR
+        private int iContarCodigos()
         {
             try
             {
-                //AQUI INICIA PROCESO DE ACTUALIZACION
-                if (!conexion.GFun_Lo_Maneja_Transaccion(Program.G_INICIA_TRANSACCION))
-                {
-                    ok.lblMensaje.Text = "Error al abrir transacción.";
-                    ok.ShowDialog();
-                    limpiar();
-                    return;
-                }
-                else
-                {
-                    sSql = "";
-                    sSql += "update cv401_productos set" + Environment.NewLine;
-                    sSql += "estado = 'E'," + Environment.NewLine;
-                    sSql += "codigo = 'codigo." + iIdProducto.ToString() + "'," + Environment.NewLine;
-                    sSql += "fecha_anula = GETDATE()," + Environment.NewLine;
-                    sSql += "usuario_anula = '" + Program.sDatosMaximo[0] + "'," + Environment.NewLine;
-                    sSql += "terminal_anula = '" + Program.sDatosMaximo[1] + "'" + Environment.NewLine;
-                    sSql += "where id_producto = " + iIdProducto;
+                sSql = "";
+                sSql += "select count(*) cuenta" + Environment.NewLine;
+                sSql += "from cv401_productos" + Environment.NewLine;
+                sSql += "where estado = @estado" + Environment.NewLine;
+                sSql += "and codigo = @codigo";
 
-                    if (!conexion.GFun_Lo_Ejecuta_SQL(sSql))
-                    {
-                        catchMensaje.lblMensaje.Text = "ERROR EN LA INSTRUCCION:" + Environment.NewLine + sSql;
-                        catchMensaje.ShowDialog();
-                        goto reversa;
-                    }
+                parametro = new SqlParameter[2];
+                parametro[0] = new SqlParameter();
+                parametro[0].ParameterName = "@estado";
+                parametro[0].SqlDbType = SqlDbType.VarChar;
+                parametro[0].Value = "A";
 
-                    conexion.GFun_Lo_Maneja_Transaccion(Program.G_TERMINA_TRANSACCION);
-                    ok.lblMensaje.Text = "El registro se ha eliminado con éxito.";
-                    ok.ShowDialog();
-                    limpiar();
-                    btnAgregar.Text = "Nuevo";
-                    llenarGrid(1);
-                    return;
+                parametro[1] = new SqlParameter();
+                parametro[1].ParameterName = "@codigo";
+                parametro[1].SqlDbType = SqlDbType.VarChar;
+                parametro[1].Value = sCodigoCategoria.Trim() + "." + txtCodigo.Text.Trim();
+
+                dtConsulta = new DataTable();
+                dtConsulta.Clear();
+
+                bRespuesta = conexion.GFun_Lo_Busca_Registro_Parametros(dtConsulta, sSql, parametro);
+
+                if (bRespuesta == false)
+                {
+                    catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
+                    catchMensaje.lblMensaje.Text = conexion.sMensajeError;
+                    catchMensaje.ShowDialog();
+                    return -1;
                 }
+
+                return Convert.ToInt32(dtConsulta.Rows[0]["cuenta"].ToString());
             }
 
             catch (Exception ex)
             {
+                catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
                 catchMensaje.lblMensaje.Text = ex.Message;
                 catchMensaje.ShowDialog();
-                goto reversa;
+                return -1;
             }
-
-            reversa: { conexion.GFun_Lo_Maneja_Transaccion(Program.G_REVERSA_TRANSACCION); return; }
         }
 
         //FUNCION PARA INSERTAR UN NUEVO REGISTRO
@@ -483,35 +624,7 @@ namespace Palatium.Productos
         {
             try
             {
-                sSql = "";
-                sSql += "select * from cv401_productos" + Environment.NewLine;
-                sSql += "where codigo = '" + (cmbPadre.SelectedValue.ToString() + "." + txtCodigo.Text.Trim()) + "'" + Environment.NewLine;
-                sSql += "and estado = 'A'";
-
-                dtConsulta = new DataTable();
-                dtConsulta.Clear();
-
-                bRespuesta = conexion.GFun_Lo_Busca_Registro(dtConsulta, sSql);
-
-                if (bRespuesta == true)
-                {
-                    if (dtConsulta.Rows.Count > 0)
-                    {
-                        ok.lblMensaje.Text = "Ya existe un registro con el código ingresado.";
-                        ok.ShowDialog();
-                        txtCodigo.Clear();
-                        txtCodigo.Focus();
-                        return;
-                    }
-                }
-
-                else
-                {
-                    ok.lblMensaje.Text = "Ocurrió un problema al realizar la búsqueda del código.";
-                    ok.ShowDialog();
-                    return;
-                }
-
+                int a;
 
                 if (!conexion.GFun_Lo_Maneja_Transaccion(Program.G_INICIA_TRANSACCION))
                 {
@@ -524,104 +637,408 @@ namespace Palatium.Productos
                 //INSERTAR EN LA TABLA CV401_PRODUCTOS
                 sSql = "";
                 sSql += "insert into cv401_productos (" + Environment.NewLine;
-                sSql += "idempresa, codigo, id_producto_padre, estado, nivel, modificable, precio_modificable," + Environment.NewLine;
-                sSql += "paga_iva, secuencia, modificador, subcategoria, ultimo_nivel, fecha_ingreso," + Environment.NewLine;
-                sSql += "usuario_ingreso,terminal_ingreso)" + Environment.NewLine;
+                sSql += "idempresa, codigo, id_producto_padre, estado, nivel, modificable," + Environment.NewLine;
+                sSql += "precio_modificable, paga_iva, secuencia, modificador, subcategoria," + Environment.NewLine;
+                sSql += "ultimo_nivel, is_active, fecha_ingreso, usuario_ingreso,terminal_ingreso)" + Environment.NewLine;
                 sSql += "values(" + Environment.NewLine;
-                sSql += Convert.ToInt32(cmbEmpresa.SelectedValue) + ", '" + (cmbPadre.SelectedValue.ToString() + "." + (txtCodigo.Text.Trim())) + "'," + Environment.NewLine;
-                sSql += iIdProductoPadre + ", 'A', 3, " + iModificable + ", " + iPrecioModificable + "," + Environment.NewLine;
-                sSql += iPagaIva + ", '" + txtSecuencia.Text.Trim() + "', " + iModificador + ", " + iSubcategoria + "," + Environment.NewLine;
-                sSql += iUltimo + ", GETDATE(), '" + Program.sDatosMaximo[0] + "', '" + Program.sDatosMaximo[1] + "')";
+                sSql += "@idempresa, @codigo, @id_producto_padre, @estado, @nivel, @modificable," + Environment.NewLine;
+                sSql += "@precio_modificable, @paga_iva, @secuencia, @modificador, @subcategoria," + Environment.NewLine;
+                sSql += "@ultimo_nivel, @is_active, getdate(), @usuario_ingreso, @terminal_ingreso)";
 
-                if (!conexion.GFun_Lo_Ejecuta_SQL(sSql))
+                #region PARAMETROS
+
+                a = 0;
+                parametro = new SqlParameter[15];
+                parametro[a] = new SqlParameter();
+                parametro[a].ParameterName = "@idempresa";
+                parametro[a].SqlDbType = SqlDbType.Int;
+                parametro[a].Value = Convert.ToInt32(cmbEmpresa.SelectedValue);
+                a++;
+
+                parametro[a] = new SqlParameter();
+                parametro[a].ParameterName = "@codigo";
+                parametro[a].SqlDbType = SqlDbType.VarChar;
+                parametro[a].Value = sCodigoCategoria + "." + txtCodigo.Text.Trim();
+                a++;
+
+                parametro[a] = new SqlParameter();
+                parametro[a].ParameterName = "@id_producto_padre";
+                parametro[a].SqlDbType = SqlDbType.Int;
+                parametro[a].Value = Convert.ToInt32(cmbCategorias.SelectedValue);
+                a++;
+
+                parametro[a] = new SqlParameter();
+                parametro[a].ParameterName = "@estado";
+                parametro[a].SqlDbType = SqlDbType.VarChar;
+                parametro[a].Value = "A";
+                a++;
+
+                parametro[a] = new SqlParameter();
+                parametro[a].ParameterName = "@nivel";
+                parametro[a].SqlDbType = SqlDbType.Int;
+                parametro[a].Value = 3;
+                a++;
+
+                parametro[a] = new SqlParameter();
+                parametro[a].ParameterName = "@modificable";
+                parametro[a].SqlDbType = SqlDbType.Int;
+                parametro[a].Value = iModificable;
+                a++;
+
+                parametro[a] = new SqlParameter();
+                parametro[a].ParameterName = "@precio_modificable";
+                parametro[a].SqlDbType = SqlDbType.Int;
+                parametro[a].Value = iPrecioModificable;
+                a++;
+
+                parametro[a] = new SqlParameter();
+                parametro[a].ParameterName = "@paga_iva";
+                parametro[a].SqlDbType = SqlDbType.Int;
+                parametro[a].Value = iPagaIva;
+                a++;
+
+                parametro[a] = new SqlParameter();
+                parametro[a].ParameterName = "@secuencia";
+                parametro[a].SqlDbType = SqlDbType.Int;
+                parametro[a].Value = Convert.ToInt32(txtSecuencia.Text);
+                a++;
+
+                parametro[a] = new SqlParameter();
+                parametro[a].ParameterName = "@modificador";
+                parametro[a].SqlDbType = SqlDbType.Int;
+                parametro[a].Value = 0;
+                a++;
+
+                parametro[a] = new SqlParameter();
+                parametro[a].ParameterName = "@subcategoria";
+                parametro[a].SqlDbType = SqlDbType.Int;
+                parametro[a].Value = iSubcategoria;
+                a++;
+
+                parametro[a] = new SqlParameter();
+                parametro[a].ParameterName = "@ultimo_nivel";
+                parametro[a].SqlDbType = SqlDbType.Int;
+                parametro[a].Value = iUltimo;
+                a++;
+
+                parametro[a] = new SqlParameter();
+                parametro[a].ParameterName = "@is_active";
+                parametro[a].SqlDbType = SqlDbType.Int;
+                parametro[a].Value = 1;
+                a++;
+
+                parametro[a] = new SqlParameter();
+                parametro[a].ParameterName = "@usuario_ingreso";
+                parametro[a].SqlDbType = SqlDbType.VarChar;
+                parametro[a].Value = Program.sDatosMaximo[0];
+                a++;
+
+                parametro[a] = new SqlParameter();
+                parametro[a].ParameterName = "@terminal_ingreso";
+                parametro[a].SqlDbType = SqlDbType.VarChar;
+                parametro[a].Value = Program.sDatosMaximo[1];
+
+                #endregion                
+
+                if (!conexion.GFun_Lo_Ejecutar_SQL_Parametros(sSql, parametro))
                 {
-                    catchMensaje.lblMensaje.Text = "ERROR EN LA INSTRUCCION:" + Environment.NewLine + sSql;
+                    catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
+                    catchMensaje.lblMensaje.Text = conexion.sMensajeError;
                     catchMensaje.ShowDialog();
                     goto reversa;
                 }
 
                 //PROCEDIMINTO PARA EXTRAER EL ID DEL PRODUCTO REGISTRADO
-                dtConsulta = new DataTable();
-                dtConsulta.Clear();
-
-                string sTabla = "cv401_productos";
-                string sCampo = "id_Producto"; ;
+                sTabla = "cv401_productos";
+                sCampo = "id_Producto"; ;
 
                 long iMaximo = conexion.GFun_Ln_Saca_Maximo_ID(sTabla, sCampo, "", Program.sDatosMaximo);
 
                 if (iMaximo == -1)
                 {
+                    ok = new VentanasMensajes.frmMensajeNuevoOk();
                     ok.lblMensaje.Text = "No se pudo obtener el codigo de productos";
                     ok.ShowDialog();
                     goto reversa;
                 }
 
-                else
-                {
-                    iIdProducto = Convert.ToInt32(iMaximo);
-                }
+                iIdProducto = Convert.ToInt32(iMaximo);
 
                 //INSERTAR EN LA TABLA CV401_NOMBRES_PRODUCTOS
                 sSql = "";
                 sSql += "insert into cv401_nombre_productos (" + Environment.NewLine;
-                sSql += "id_producto, cg_tipo_nombre, nombre, nombre_interno, estado,numero_replica_trigger," + Environment.NewLine;
-                sSql += "numero_control_replica, fecha_ingreso, usuario_ingreso, terminal_ingreso)" + Environment.NewLine;
+                sSql += "id_producto, cg_tipo_nombre, nombre, nombre_interno, estado," + Environment.NewLine;
+                sSql += "numero_replica_trigger, numero_control_replica, fecha_ingreso," + Environment.NewLine;
+                sSql += "usuario_ingreso, terminal_ingreso)" + Environment.NewLine;
                 sSql += "values (" + Environment.NewLine;
-                sSql += iIdProducto + ", " + cg_tipoNombre + ", '" + txtDescripcion.Text.Trim() + "', " + nombInterno + "," + Environment.NewLine;
-                sSql += "'A', 1, 1, GETDATE(), '" + Program.sDatosMaximo[0] + "', '" + Program.sDatosMaximo[1] + "')";
+                sSql += "@id_producto, @cg_tipo_nombre, @nombre, @nombre_interno, @estado," + Environment.NewLine;
+                sSql += "@numero_replica_trigger, @numero_control_replica, getdate()," + Environment.NewLine;
+                sSql += "@usuario_ingreso, @terminal_ingreso)";
 
-                if (!conexion.GFun_Lo_Ejecuta_SQL(sSql))
+                #region PARAMETROS
+
+                a = 0;
+                parametro = new SqlParameter[9];
+                parametro[a] = new SqlParameter();
+                parametro[a].ParameterName = "@id_producto";
+                parametro[a].SqlDbType = SqlDbType.Int;
+                parametro[a].Value = iIdProducto;
+                a++;
+
+                parametro[a] = new SqlParameter();
+                parametro[a].ParameterName = "@cg_tipo_nombre";
+                parametro[a].SqlDbType = SqlDbType.Int;
+                parametro[a].Value = cg_tipoNombre;
+                a++;
+
+                parametro[a] = new SqlParameter();
+                parametro[a].ParameterName = "@nombre";
+                parametro[a].SqlDbType = SqlDbType.VarChar;
+                parametro[a].Value = txtDescripcion.Text.Trim().ToUpper();
+                a++;
+
+                parametro[a] = new SqlParameter();
+                parametro[a].ParameterName = "@nombre_interno";
+                parametro[a].SqlDbType = SqlDbType.VarChar;
+                parametro[a].Value = nombInterno;
+                a++;
+
+                parametro[a] = new SqlParameter();
+                parametro[a].ParameterName = "@estado";
+                parametro[a].SqlDbType = SqlDbType.VarChar;
+                parametro[a].Value = "A";
+                a++;
+
+                parametro[a] = new SqlParameter();
+                parametro[a].ParameterName = "@numero_replica_trigger";
+                parametro[a].SqlDbType = SqlDbType.Int;
+                parametro[a].Value = 0;
+                a++;
+
+                parametro[a] = new SqlParameter();
+                parametro[a].ParameterName = "@numero_control_replica";
+                parametro[a].SqlDbType = SqlDbType.Int;
+                parametro[a].Value = 0;
+                a++;
+
+                parametro[a] = new SqlParameter();
+                parametro[a].ParameterName = "@usuario_ingreso";
+                parametro[a].SqlDbType = SqlDbType.VarChar;
+                parametro[a].Value = Program.sDatosMaximo[0];
+                a++;
+
+                parametro[a] = new SqlParameter();
+                parametro[a].ParameterName = "@terminal_ingreso";
+                parametro[a].SqlDbType = SqlDbType.VarChar;
+                parametro[a].Value = Program.sDatosMaximo[1];
+
+
+                #endregion                
+
+                if (!conexion.GFun_Lo_Ejecutar_SQL_Parametros(sSql, parametro))
                 {
-                    catchMensaje.lblMensaje.Text = "ERROR EN LA INSTRUCCION:" + Environment.NewLine + sSql;
+                    catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
+                    catchMensaje.lblMensaje.Text = conexion.sMensajeError;
                     catchMensaje.ShowDialog();
                     goto reversa;
                 }
 
+                //INSERTAR EN LA TABLA CV401_UNIDADES_PRODUCTOS - UNIDAD DE COMPRA
                 sSql = "";
                 sSql += "insert into cv401_unidades_productos (" + Environment.NewLine;
                 sSql += "id_producto, cg_tipo_unidad, cg_unidad, unidad_compra, estado," + Environment.NewLine;
                 sSql += "usuario_creacion, terminal_creacion, fecha_creacion, numero_replica_trigger," + Environment.NewLine;
                 sSql += "numero_control_replica, fecha_ingreso, usuario_ingreso, terminal_ingreso)" + Environment.NewLine;
                 sSql += "values (" + Environment.NewLine;
-                sSql += iIdProducto + ", " + Program.iCgTipoUnidad + ", " + Convert.ToInt32(cmbCompra.SelectedValue) + ", 1, 'A'," + Environment.NewLine; 
-                sSql += "'" + Program.sDatosMaximo[0] + "', '" + Program.sDatosMaximo[1] + "', GETDATE(), 1, 1," + Environment.NewLine;
-                sSql += "GETDATE(), '" + Program.sDatosMaximo[0] + "', '" + Program.sDatosMaximo[1] + "')";
+                sSql += "@id_producto, @cg_tipo_unidad, @cg_unidad, @unidad_compra, @estado," + Environment.NewLine;
+                sSql += "@usuario_creacion, @terminal_creacion, getdate(), @numero_replica_trigger," + Environment.NewLine;
+                sSql += "@numero_control_replica, getdate(), @usuario_ingreso, @terminal_ingreso)";
 
-                if (!conexion.GFun_Lo_Ejecuta_SQL(sSql))
+                #region PARAMETROS
+
+                a = 0;
+                parametro = new SqlParameter[11];
+                parametro[a] = new SqlParameter();
+                parametro[a].ParameterName = "@id_producto";
+                parametro[a].SqlDbType = SqlDbType.Int;
+                parametro[a].Value = iIdProducto;
+                a++;
+
+                parametro[a] = new SqlParameter();
+                parametro[a].ParameterName = "@cg_tipo_unidad";
+                parametro[a].SqlDbType = SqlDbType.Int;
+                parametro[a].Value = iUnidadCompra;
+                a++;
+
+                parametro[a] = new SqlParameter();
+                parametro[a].ParameterName = "@cg_unidad";
+                parametro[a].SqlDbType = SqlDbType.Int;
+                parametro[a].Value = Convert.ToInt32(cmbCompra.SelectedValue);
+                a++;
+
+                parametro[a] = new SqlParameter();
+                parametro[a].ParameterName = "@unidad_compra";
+                parametro[a].SqlDbType = SqlDbType.Int;
+                parametro[a].Value = 1;
+                a++;
+
+                parametro[a] = new SqlParameter();
+                parametro[a].ParameterName = "@estado";
+                parametro[a].SqlDbType = SqlDbType.VarChar;
+                parametro[a].Value = "A";
+                a++;
+
+                parametro[a] = new SqlParameter();
+                parametro[a].ParameterName = "@usuario_creacion";
+                parametro[a].SqlDbType = SqlDbType.VarChar;
+                parametro[a].Value = Program.sDatosMaximo[0];
+                a++;
+
+                parametro[a] = new SqlParameter();
+                parametro[a].ParameterName = "@terminal_creacion";
+                parametro[a].SqlDbType = SqlDbType.VarChar;
+                parametro[a].Value = Program.sDatosMaximo[1];
+                a++;
+
+                parametro[a] = new SqlParameter();
+                parametro[a].ParameterName = "@numero_replica_trigger";
+                parametro[a].SqlDbType = SqlDbType.Int;
+                parametro[a].Value = 0;
+                a++;
+
+                parametro[a] = new SqlParameter();
+                parametro[a].ParameterName = "@numero_control_replica";
+                parametro[a].SqlDbType = SqlDbType.Int;
+                parametro[a].Value = 0;
+                a++;
+
+                parametro[a] = new SqlParameter();
+                parametro[a].ParameterName = "@usuario_ingreso";
+                parametro[a].SqlDbType = SqlDbType.VarChar;
+                parametro[a].Value = Program.sDatosMaximo[0];
+                a++;
+
+                parametro[a] = new SqlParameter();
+                parametro[a].ParameterName = "@terminal_ingreso";
+                parametro[a].SqlDbType = SqlDbType.VarChar;
+                parametro[a].Value = Program.sDatosMaximo[1];
+
+
+                #endregion                
+                
+                if (!conexion.GFun_Lo_Ejecutar_SQL_Parametros(sSql, parametro))
                 {
-                    catchMensaje.lblMensaje.Text = "ERROR EN LA INSTRUCCION:" + Environment.NewLine + sSql;
+                    catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
+                    catchMensaje.lblMensaje.Text = conexion.sMensajeError;
                     catchMensaje.ShowDialog();
                     goto reversa;
                 }
 
+                //INSERTAR EN LA TABLA CV401_UNIDADES_PRODUCTOS - UNIDAD DE CONSUMO
                 sSql = "";
                 sSql += "insert into cv401_unidades_productos (" + Environment.NewLine;
                 sSql += "id_producto, cg_tipo_unidad, cg_unidad, unidad_compra, estado," + Environment.NewLine;
                 sSql += "usuario_creacion, terminal_creacion, fecha_creacion, numero_replica_trigger," + Environment.NewLine;
                 sSql += "numero_control_replica, fecha_ingreso, usuario_ingreso, terminal_ingreso)" + Environment.NewLine;
                 sSql += "values (" + Environment.NewLine;
-                sSql += iIdProducto + "," + (Program.iCgTipoUnidad + 1) + ", " + Convert.ToInt32(cmbConsumo.SelectedValue) + ", 0, 'A'," + Environment.NewLine; 
-                sSql += "'" + Program.sDatosMaximo[0] + "', '" + Program.sDatosMaximo[1] + "', GETDATE(), 1, 1, GETDATE()," + Environment.NewLine;
-                sSql += "'" + Program.sDatosMaximo[0] + "', '" + Program.sDatosMaximo[1] + "')";
+                sSql += "@id_producto, @cg_tipo_unidad, @cg_unidad, @unidad_compra, @estado," + Environment.NewLine;
+                sSql += "@usuario_creacion, @terminal_creacion, getdate(), @numero_replica_trigger," + Environment.NewLine;
+                sSql += "@numero_control_replica, getdate(), @usuario_ingreso, @terminal_ingreso)";
 
-                if (!conexion.GFun_Lo_Ejecuta_SQL(sSql))
+                #region PARAMETROS
+
+                a = 0;
+                parametro = new SqlParameter[11];
+                parametro[a] = new SqlParameter();
+                parametro[a].ParameterName = "@id_producto";
+                parametro[a].SqlDbType = SqlDbType.Int;
+                parametro[a].Value = iIdProducto;
+                a++;
+
+                parametro[a] = new SqlParameter();
+                parametro[a].ParameterName = "@cg_tipo_unidad";
+                parametro[a].SqlDbType = SqlDbType.Int;
+                parametro[a].Value = iUnidadConsumo;
+                a++;
+
+                parametro[a] = new SqlParameter();
+                parametro[a].ParameterName = "@cg_unidad";
+                parametro[a].SqlDbType = SqlDbType.Int;
+                parametro[a].Value = Convert.ToInt32(cmbConsumo.SelectedValue);
+                a++;
+
+                parametro[a] = new SqlParameter();
+                parametro[a].ParameterName = "@unidad_compra";
+                parametro[a].SqlDbType = SqlDbType.Int;
+                parametro[a].Value = 0;
+                a++;
+
+                parametro[a] = new SqlParameter();
+                parametro[a].ParameterName = "@estado";
+                parametro[a].SqlDbType = SqlDbType.VarChar;
+                parametro[a].Value = "A";
+                a++;
+
+                parametro[a] = new SqlParameter();
+                parametro[a].ParameterName = "@usuario_creacion";
+                parametro[a].SqlDbType = SqlDbType.VarChar;
+                parametro[a].Value = Program.sDatosMaximo[0];
+                a++;
+
+                parametro[a] = new SqlParameter();
+                parametro[a].ParameterName = "@terminal_creacion";
+                parametro[a].SqlDbType = SqlDbType.VarChar;
+                parametro[a].Value = Program.sDatosMaximo[1];
+                a++;
+
+                parametro[a] = new SqlParameter();
+                parametro[a].ParameterName = "@numero_replica_trigger";
+                parametro[a].SqlDbType = SqlDbType.Int;
+                parametro[a].Value = 0;
+                a++;
+
+                parametro[a] = new SqlParameter();
+                parametro[a].ParameterName = "@numero_control_replica";
+                parametro[a].SqlDbType = SqlDbType.Int;
+                parametro[a].Value = 0;
+                a++;
+
+                parametro[a] = new SqlParameter();
+                parametro[a].ParameterName = "@usuario_ingreso";
+                parametro[a].SqlDbType = SqlDbType.VarChar;
+                parametro[a].Value = Program.sDatosMaximo[0];
+                a++;
+
+                parametro[a] = new SqlParameter();
+                parametro[a].ParameterName = "@terminal_ingreso";
+                parametro[a].SqlDbType = SqlDbType.VarChar;
+                parametro[a].Value = Program.sDatosMaximo[1];
+
+
+                #endregion
+
+                if (!conexion.GFun_Lo_Ejecutar_SQL_Parametros(sSql, parametro))
                 {
-                    catchMensaje.lblMensaje.Text = "ERROR EN LA INSTRUCCION:" + Environment.NewLine + sSql;
+                    catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
+                    catchMensaje.lblMensaje.Text = conexion.sMensajeError;
                     catchMensaje.ShowDialog();
                     goto reversa;
                 }
 
                 conexion.GFun_Lo_Maneja_Transaccion(Program.G_TERMINA_TRANSACCION);
+
+                ok = new VentanasMensajes.frmMensajeNuevoOk();
                 ok.lblMensaje.Text = "Registro ingresado correctamente";
                 ok.ShowDialog();
                 limpiarNuevo();
                 grupoDatos.Enabled = false;
-                llenarGrid(0);
+                llenarGrid();
                 return;
             }
 
             catch (Exception ex)
             {
+                catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
                 catchMensaje.lblMensaje.Text = ex.Message;
                 catchMensaje.ShowDialog();
                 goto reversa;
@@ -629,18 +1046,19 @@ namespace Palatium.Productos
 
             reversa: { conexion.GFun_Lo_Maneja_Transaccion(Program.G_REVERSA_TRANSACCION); return; }
         }
-
-
+        
         //FUNCION PARA ACTUALIZAR UN REGISTRO
         private void actualizarRegistro()
         {
             try
             {
+                int a;
+
                 //AQUI INICIA PROCESO DE ACTUALIZACION
                 if (!conexion.GFun_Lo_Maneja_Transaccion(Program.G_INICIA_TRANSACCION))
                 {
+                    ok = new VentanasMensajes.frmMensajeNuevoOk();
                     ok.lblMensaje.Text = "Error al abrir transacción.";
-                    ok.ShowInTaskbar = false;
                     ok.ShowDialog();
                     limpiar();
                     return;
@@ -649,31 +1067,198 @@ namespace Palatium.Productos
                 //ACTUALIZA LA TABLA CV401_PRODUCTOS CON LOS DATOS NUEVOS DEL FORMULARIO
                 sSql = "";
                 sSql += "update cv401_productos set" + Environment.NewLine;
-                sSql += "secuencia = '" + txtSecuencia.Text.Trim() + "'," + Environment.NewLine;
-                sSql += "paga_iva = " + iPagaIva + "," + Environment.NewLine;
-                sSql += "modificable = " + iModificable + "," + Environment.NewLine;
-                sSql += "precio_modificable = " + iPrecioModificable + Environment.NewLine;
-                sSql += "where id_producto = " + iIdProducto;
+                sSql += "secuencia = @secuencia," + Environment.NewLine;
+                sSql += "paga_iva = @paga_iva," + Environment.NewLine;
+                sSql += "modificable = @modificable," + Environment.NewLine;
+                sSql += "precio_modificable = @precio_modificable," + Environment.NewLine;
+                sSql += "is_active = @is_active" + Environment.NewLine;
+                sSql += "where id_producto = @id_producto";
 
-                //SI NO SE EJECUTA LA INSTRUCCION SALTA A REVERSA 
-                if (!conexion.GFun_Lo_Ejecuta_SQL(sSql))
+                #region PARAMETROS
+
+                a = 0;
+                parametro = new SqlParameter[6];
+                parametro[a] = new SqlParameter();
+                parametro[a].ParameterName = "@secuencia";
+                parametro[a].SqlDbType = SqlDbType.Int;
+                parametro[a].Value = Convert.ToInt32(txtSecuencia.Text);
+                a++;
+
+                parametro[a] = new SqlParameter();
+                parametro[a].ParameterName = "@paga_iva";
+                parametro[a].SqlDbType = SqlDbType.Int;
+                parametro[a].Value = iPagaIva;
+                a++;
+
+                parametro[a] = new SqlParameter();
+                parametro[a].ParameterName = "@modificable";
+                parametro[a].SqlDbType = SqlDbType.Int;
+                parametro[a].Value = iModificable;
+                a++;
+
+                parametro[a] = new SqlParameter();
+                parametro[a].ParameterName = "@precio_modificable";
+                parametro[a].SqlDbType = SqlDbType.Int;
+                parametro[a].Value = iPrecioModificable;
+                a++;
+
+                parametro[a] = new SqlParameter();
+                parametro[a].ParameterName = "@is_active";
+                parametro[a].SqlDbType = SqlDbType.Int;
+                parametro[a].Value = iHabilitado;
+                a++;
+
+                parametro[a] = new SqlParameter();
+                parametro[a].ParameterName = "@id_producto";
+                parametro[a].SqlDbType = SqlDbType.Int;
+                parametro[a].Value = iIdProducto;
+                a++;
+
+                #endregion
+
+                if (!conexion.GFun_Lo_Ejecutar_SQL_Parametros(sSql, parametro))
                 {
-                    catchMensaje.lblMensaje.Text = "ERROR EN LA INSTRUCCION:" + Environment.NewLine + sSql;
+                    catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
+                    catchMensaje.lblMensaje.Text = conexion.sMensajeError;
                     catchMensaje.ShowDialog();
                     goto reversa;
                 }
 
-                sSql = "";
-                sSql += "update cv401_nombre_productos set" + Environment.NewLine;
-                sSql += "nombre = '" + txtDescripcion.Text.Trim() + "'" + Environment.NewLine;
-                sSql += "where id_producto = " + iIdProducto;
+                //ACTUALIZA LA TABLA CV401_NOMBRE_PRODUCTOS CON LOS DATOS NUEVOS DEL FORMULARIO
+                string sNombreVerificar = txtDescripcion.Text.Trim().ToUpper();
 
-                //SI NO SE EJECUTA LA INSTRUCCION SALTA A REVERSA 
-                if (!conexion.GFun_Lo_Ejecuta_SQL(sSql))
+                if (sNombreVerificar != sNombreOriginal)
                 {
-                    catchMensaje.lblMensaje.Text = "ERROR EN LA INSTRUCCION:" + Environment.NewLine + sSql;
-                    catchMensaje.ShowDialog();
-                    goto reversa;
+                    sSql = "";
+                    sSql += "update cv401_nombre_productos set" + Environment.NewLine;
+                    sSql += "estado = @estado_1," + Environment.NewLine;
+                    sSql += "fecha_anula = getdate()," + Environment.NewLine;
+                    sSql += "usuario_anula = @usuario_anula," + Environment.NewLine;
+                    sSql += "terminal_anula = @terminal_anula" + Environment.NewLine;
+                    sSql += "where id_producto = @id_producto" + Environment.NewLine;
+                    sSql += "and estado = @estado_2";
+
+                    #region PARAMETROS
+
+                    a = 0;
+                    parametro = new SqlParameter[5];
+                    parametro[a] = new SqlParameter();
+                    parametro[a].ParameterName = "@estado_1";
+                    parametro[a].SqlDbType = SqlDbType.VarChar;
+                    parametro[a].Value = "E";
+                    a++;
+
+                    parametro[a] = new SqlParameter();
+                    parametro[a].ParameterName = "@usuario_anula";
+                    parametro[a].SqlDbType = SqlDbType.VarChar;
+                    parametro[a].Value = Program.sDatosMaximo[0];
+                    a++;
+
+                    parametro[a] = new SqlParameter();
+                    parametro[a].ParameterName = "@terminal_anula";
+                    parametro[a].SqlDbType = SqlDbType.VarChar;
+                    parametro[a].Value = Program.sDatosMaximo[1];
+                    a++;
+
+                    parametro[a] = new SqlParameter();
+                    parametro[a].ParameterName = "@id_producto";
+                    parametro[a].SqlDbType = SqlDbType.Int;
+                    parametro[a].Value = iIdProducto;
+                    a++;
+
+                    parametro[a] = new SqlParameter();
+                    parametro[a].ParameterName = "@estado_2";
+                    parametro[a].SqlDbType = SqlDbType.VarChar;
+                    parametro[a].Value = "A";
+
+                    #endregion
+
+                    if (!conexion.GFun_Lo_Ejecutar_SQL_Parametros(sSql, parametro))
+                    {
+                        catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
+                        catchMensaje.lblMensaje.Text = conexion.sMensajeError;
+                        catchMensaje.ShowDialog();
+                        goto reversa;
+                    }
+
+                    //INSERTAR EN LA TABLA CV401_NOMBRES_PRODUCTOS
+                    sSql = "";
+                    sSql += "insert into cv401_nombre_productos (" + Environment.NewLine;
+                    sSql += "id_producto, cg_tipo_nombre, nombre, nombre_interno, estado," + Environment.NewLine;
+                    sSql += "numero_replica_trigger, numero_control_replica, fecha_ingreso," + Environment.NewLine;
+                    sSql += "usuario_ingreso, terminal_ingreso)" + Environment.NewLine;
+                    sSql += "values (" + Environment.NewLine;
+                    sSql += "@id_producto, @cg_tipo_nombre, @nombre, @nombre_interno, @estado," + Environment.NewLine;
+                    sSql += "@numero_replica_trigger, @numero_control_replica, getdate()," + Environment.NewLine;
+                    sSql += "@usuario_ingreso, @terminal_ingreso)";
+
+                    #region PARAMETROS
+
+                    a = 0;
+                    parametro = new SqlParameter[9];
+                    parametro[a] = new SqlParameter();
+                    parametro[a].ParameterName = "@id_producto";
+                    parametro[a].SqlDbType = SqlDbType.Int;
+                    parametro[a].Value = iIdProducto;
+                    a++;
+
+                    parametro[a] = new SqlParameter();
+                    parametro[a].ParameterName = "@cg_tipo_nombre";
+                    parametro[a].SqlDbType = SqlDbType.Int;
+                    parametro[a].Value = cg_tipoNombre;
+                    a++;
+
+                    parametro[a] = new SqlParameter();
+                    parametro[a].ParameterName = "@nombre";
+                    parametro[a].SqlDbType = SqlDbType.VarChar;
+                    parametro[a].Value = txtDescripcion.Text.Trim().ToUpper();
+                    a++;
+
+                    parametro[a] = new SqlParameter();
+                    parametro[a].ParameterName = "@nombre_interno";
+                    parametro[a].SqlDbType = SqlDbType.VarChar;
+                    parametro[a].Value = nombInterno;
+                    a++;
+
+                    parametro[a] = new SqlParameter();
+                    parametro[a].ParameterName = "@estado";
+                    parametro[a].SqlDbType = SqlDbType.VarChar;
+                    parametro[a].Value = "A";
+                    a++;
+
+                    parametro[a] = new SqlParameter();
+                    parametro[a].ParameterName = "@numero_replica_trigger";
+                    parametro[a].SqlDbType = SqlDbType.Int;
+                    parametro[a].Value = 0;
+                    a++;
+
+                    parametro[a] = new SqlParameter();
+                    parametro[a].ParameterName = "@numero_control_replica";
+                    parametro[a].SqlDbType = SqlDbType.Int;
+                    parametro[a].Value = 0;
+                    a++;
+
+                    parametro[a] = new SqlParameter();
+                    parametro[a].ParameterName = "@usuario_ingreso";
+                    parametro[a].SqlDbType = SqlDbType.VarChar;
+                    parametro[a].Value = Program.sDatosMaximo[0];
+                    a++;
+
+                    parametro[a] = new SqlParameter();
+                    parametro[a].ParameterName = "@terminal_ingreso";
+                    parametro[a].SqlDbType = SqlDbType.VarChar;
+                    parametro[a].Value = Program.sDatosMaximo[1];
+
+
+                    #endregion
+
+                    if (!conexion.GFun_Lo_Ejecutar_SQL_Parametros(sSql, parametro))
+                    {
+                        catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
+                        catchMensaje.lblMensaje.Text = conexion.sMensajeError;
+                        catchMensaje.ShowDialog();
+                        goto reversa;
+                    }
                 }
 
                 //UNIDAD DE COMPRA
@@ -681,15 +1266,150 @@ namespace Palatium.Productos
                 {
                     sSql = "";
                     sSql += "update cv401_unidades_productos set" + Environment.NewLine;
-                    sSql += "cg_unidad = " + Convert.ToInt32(cmbCompra.SelectedValue) + Environment.NewLine;
-                    sSql += "where id_producto = " + iIdProducto + Environment.NewLine;
-                    sSql += "and unidad_compra = 1" + Environment.NewLine;
-                    sSql += "and estado = 'A'";
+                    sSql += "estado = @estado_1," + Environment.NewLine;
+                    sSql += "fecha_anula = getdate()," + Environment.NewLine;
+                    sSql += "usuario_anula = @usuario_anula," + Environment.NewLine;
+                    sSql += "terminal_anula = @terminal_anula" + Environment.NewLine;
+                    sSql += "where id_producto = @id_producto" + Environment.NewLine;
+                    sSql += "and estado = @estado_2" + Environment.NewLine;
+                    sSql += "and unidad_compra = @unidad_compra";
 
-                    //SI NO SE EJECUTA LA INSTRUCCION SALTA A REVERSA 
-                    if (!conexion.GFun_Lo_Ejecuta_SQL(sSql))
+                    #region PARAMETROS
+
+                    a = 0;
+                    parametro = new SqlParameter[6];
+                    parametro[a] = new SqlParameter();
+                    parametro[a].ParameterName = "@estado_1";
+                    parametro[a].SqlDbType = SqlDbType.VarChar;
+                    parametro[a].Value = "E";
+                    a++;
+
+                    parametro[a] = new SqlParameter();
+                    parametro[a].ParameterName = "@usuario_anula";
+                    parametro[a].SqlDbType = SqlDbType.VarChar;
+                    parametro[a].Value = Program.sDatosMaximo[0];
+                    a++;
+
+                    parametro[a] = new SqlParameter();
+                    parametro[a].ParameterName = "@terminal_anula";
+                    parametro[a].SqlDbType = SqlDbType.VarChar;
+                    parametro[a].Value = Program.sDatosMaximo[1];
+                    a++;
+
+                    parametro[a] = new SqlParameter();
+                    parametro[a].ParameterName = "@id_producto";
+                    parametro[a].SqlDbType = SqlDbType.Int;
+                    parametro[a].Value = iIdProducto;
+                    a++;
+
+                    parametro[a] = new SqlParameter();
+                    parametro[a].ParameterName = "@estado_2";
+                    parametro[a].SqlDbType = SqlDbType.VarChar;
+                    parametro[a].Value = "A";
+                    a++;
+
+                    parametro[a] = new SqlParameter();
+                    parametro[a].ParameterName = "@unidad_compra";
+                    parametro[a].SqlDbType = SqlDbType.Int;
+                    parametro[a].Value = 1;
+
+                    #endregion
+
+                    if (!conexion.GFun_Lo_Ejecutar_SQL_Parametros(sSql, parametro))
                     {
-                        catchMensaje.lblMensaje.Text = "ERROR EN LA INSTRUCCION:" + Environment.NewLine + sSql;
+                        catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
+                        catchMensaje.lblMensaje.Text = conexion.sMensajeError;
+                        catchMensaje.ShowDialog();
+                        goto reversa;
+                    }
+
+                    //INSERTAR EN LA TABLA CV401_UNIDADES_PRODUCTOS - UNIDAD DE COMPRA
+                    sSql = "";
+                    sSql += "insert into cv401_unidades_productos (" + Environment.NewLine;
+                    sSql += "id_producto, cg_tipo_unidad, cg_unidad, unidad_compra, estado," + Environment.NewLine;
+                    sSql += "usuario_creacion, terminal_creacion, fecha_creacion, numero_replica_trigger," + Environment.NewLine;
+                    sSql += "numero_control_replica, fecha_ingreso, usuario_ingreso, terminal_ingreso)" + Environment.NewLine;
+                    sSql += "values (" + Environment.NewLine;
+                    sSql += "@id_producto, @cg_tipo_unidad, @cg_unidad, @unidad_compra, @estado," + Environment.NewLine;
+                    sSql += "@usuario_creacion, @terminal_creacion, getdate(), @numero_replica_trigger," + Environment.NewLine;
+                    sSql += "@numero_control_replica, getdate(), @usuario_ingreso, @terminal_ingreso)";
+
+                    #region PARAMETROS
+
+                    a = 0;
+                    parametro = new SqlParameter[11];
+                    parametro[a] = new SqlParameter();
+                    parametro[a].ParameterName = "@id_producto";
+                    parametro[a].SqlDbType = SqlDbType.Int;
+                    parametro[a].Value = iIdProducto;
+                    a++;
+
+                    parametro[a] = new SqlParameter();
+                    parametro[a].ParameterName = "@cg_tipo_unidad";
+                    parametro[a].SqlDbType = SqlDbType.Int;
+                    parametro[a].Value = iUnidadCompra;
+                    a++;
+
+                    parametro[a] = new SqlParameter();
+                    parametro[a].ParameterName = "@cg_unidad";
+                    parametro[a].SqlDbType = SqlDbType.Int;
+                    parametro[a].Value = Convert.ToInt32(cmbCompra.SelectedValue);
+                    a++;
+
+                    parametro[a] = new SqlParameter();
+                    parametro[a].ParameterName = "@unidad_compra";
+                    parametro[a].SqlDbType = SqlDbType.Int;
+                    parametro[a].Value = 1;
+                    a++;
+
+                    parametro[a] = new SqlParameter();
+                    parametro[a].ParameterName = "@estado";
+                    parametro[a].SqlDbType = SqlDbType.VarChar;
+                    parametro[a].Value = "A";
+                    a++;
+
+                    parametro[a] = new SqlParameter();
+                    parametro[a].ParameterName = "@usuario_creacion";
+                    parametro[a].SqlDbType = SqlDbType.VarChar;
+                    parametro[a].Value = Program.sDatosMaximo[0];
+                    a++;
+
+                    parametro[a] = new SqlParameter();
+                    parametro[a].ParameterName = "@terminal_creacion";
+                    parametro[a].SqlDbType = SqlDbType.VarChar;
+                    parametro[a].Value = Program.sDatosMaximo[1];
+                    a++;
+
+                    parametro[a] = new SqlParameter();
+                    parametro[a].ParameterName = "@numero_replica_trigger";
+                    parametro[a].SqlDbType = SqlDbType.Int;
+                    parametro[a].Value = 0;
+                    a++;
+
+                    parametro[a] = new SqlParameter();
+                    parametro[a].ParameterName = "@numero_control_replica";
+                    parametro[a].SqlDbType = SqlDbType.Int;
+                    parametro[a].Value = 0;
+                    a++;
+
+                    parametro[a] = new SqlParameter();
+                    parametro[a].ParameterName = "@usuario_ingreso";
+                    parametro[a].SqlDbType = SqlDbType.VarChar;
+                    parametro[a].Value = Program.sDatosMaximo[0];
+                    a++;
+
+                    parametro[a] = new SqlParameter();
+                    parametro[a].ParameterName = "@terminal_ingreso";
+                    parametro[a].SqlDbType = SqlDbType.VarChar;
+                    parametro[a].Value = Program.sDatosMaximo[1];
+
+
+                    #endregion
+
+                    if (!conexion.GFun_Lo_Ejecutar_SQL_Parametros(sSql, parametro))
+                    {
+                        catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
+                        catchMensaje.lblMensaje.Text = conexion.sMensajeError;
                         catchMensaje.ShowDialog();
                         goto reversa;
                     }
@@ -700,15 +1420,150 @@ namespace Palatium.Productos
                 {
                     sSql = "";
                     sSql += "update cv401_unidades_productos set" + Environment.NewLine;
-                    sSql += "cg_unidad = " + Convert.ToInt32(cmbConsumo.SelectedValue) + Environment.NewLine;
-                    sSql += "where id_producto = " + iIdProducto + Environment.NewLine;
-                    sSql += "and unidad_compra = 0" + Environment.NewLine;
-                    sSql += "and estado = 'A'";
+                    sSql += "estado = @estado_1," + Environment.NewLine;
+                    sSql += "fecha_anula = getdate()," + Environment.NewLine;
+                    sSql += "usuario_anula = @usuario_anula," + Environment.NewLine;
+                    sSql += "terminal_anula = @terminal_anula" + Environment.NewLine;
+                    sSql += "where id_producto = @id_producto" + Environment.NewLine;
+                    sSql += "and estado = @estado_2" + Environment.NewLine;
+                    sSql += "and unidad_compra = @unidad_compra";
 
-                    //SI NO SE EJECUTA LA INSTRUCCION SALTA A REVERSA 
-                    if (!conexion.GFun_Lo_Ejecuta_SQL(sSql))
+                    #region PARAMETROS
+
+                    a = 0;
+                    parametro = new SqlParameter[6];
+                    parametro[a] = new SqlParameter();
+                    parametro[a].ParameterName = "@estado_1";
+                    parametro[a].SqlDbType = SqlDbType.VarChar;
+                    parametro[a].Value = "E";
+                    a++;
+
+                    parametro[a] = new SqlParameter();
+                    parametro[a].ParameterName = "@usuario_anula";
+                    parametro[a].SqlDbType = SqlDbType.VarChar;
+                    parametro[a].Value = Program.sDatosMaximo[0];
+                    a++;
+
+                    parametro[a] = new SqlParameter();
+                    parametro[a].ParameterName = "@terminal_anula";
+                    parametro[a].SqlDbType = SqlDbType.VarChar;
+                    parametro[a].Value = Program.sDatosMaximo[1];
+                    a++;
+
+                    parametro[a] = new SqlParameter();
+                    parametro[a].ParameterName = "@id_producto";
+                    parametro[a].SqlDbType = SqlDbType.Int;
+                    parametro[a].Value = iIdProducto;
+                    a++;
+
+                    parametro[a] = new SqlParameter();
+                    parametro[a].ParameterName = "@estado_2";
+                    parametro[a].SqlDbType = SqlDbType.VarChar;
+                    parametro[a].Value = "A";
+                    a++;
+
+                    parametro[a] = new SqlParameter();
+                    parametro[a].ParameterName = "@unidad_compra";
+                    parametro[a].SqlDbType = SqlDbType.Int;
+                    parametro[a].Value = 0;
+
+                    #endregion
+
+                    if (!conexion.GFun_Lo_Ejecutar_SQL_Parametros(sSql, parametro))
                     {
-                        catchMensaje.lblMensaje.Text = "ERROR EN LA INSTRUCCION:" + Environment.NewLine + sSql;
+                        catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
+                        catchMensaje.lblMensaje.Text = conexion.sMensajeError;
+                        catchMensaje.ShowDialog();
+                        goto reversa;
+                    }
+
+                    //INSERTAR EN LA TABLA CV401_UNIDADES_PRODUCTOS - UNIDAD DE CONSUMO
+                    sSql = "";
+                    sSql += "insert into cv401_unidades_productos (" + Environment.NewLine;
+                    sSql += "id_producto, cg_tipo_unidad, cg_unidad, unidad_compra, estado," + Environment.NewLine;
+                    sSql += "usuario_creacion, terminal_creacion, fecha_creacion, numero_replica_trigger," + Environment.NewLine;
+                    sSql += "numero_control_replica, fecha_ingreso, usuario_ingreso, terminal_ingreso)" + Environment.NewLine;
+                    sSql += "values (" + Environment.NewLine;
+                    sSql += "@id_producto, @cg_tipo_unidad, @cg_unidad, @unidad_compra, @estado," + Environment.NewLine;
+                    sSql += "@usuario_creacion, @terminal_creacion, getdate(), @numero_replica_trigger," + Environment.NewLine;
+                    sSql += "@numero_control_replica, getdate(), @usuario_ingreso, @terminal_ingreso)";
+
+                    #region PARAMETROS
+
+                    a = 0;
+                    parametro = new SqlParameter[11];
+                    parametro[a] = new SqlParameter();
+                    parametro[a].ParameterName = "@id_producto";
+                    parametro[a].SqlDbType = SqlDbType.Int;
+                    parametro[a].Value = iIdProducto;
+                    a++;
+
+                    parametro[a] = new SqlParameter();
+                    parametro[a].ParameterName = "@cg_tipo_unidad";
+                    parametro[a].SqlDbType = SqlDbType.Int;
+                    parametro[a].Value = iUnidadConsumo;
+                    a++;
+
+                    parametro[a] = new SqlParameter();
+                    parametro[a].ParameterName = "@cg_unidad";
+                    parametro[a].SqlDbType = SqlDbType.Int;
+                    parametro[a].Value = Convert.ToInt32(cmbConsumo.SelectedValue);
+                    a++;
+
+                    parametro[a] = new SqlParameter();
+                    parametro[a].ParameterName = "@unidad_compra";
+                    parametro[a].SqlDbType = SqlDbType.Int;
+                    parametro[a].Value = 0;
+                    a++;
+
+                    parametro[a] = new SqlParameter();
+                    parametro[a].ParameterName = "@estado";
+                    parametro[a].SqlDbType = SqlDbType.VarChar;
+                    parametro[a].Value = "A";
+                    a++;
+
+                    parametro[a] = new SqlParameter();
+                    parametro[a].ParameterName = "@usuario_creacion";
+                    parametro[a].SqlDbType = SqlDbType.VarChar;
+                    parametro[a].Value = Program.sDatosMaximo[0];
+                    a++;
+
+                    parametro[a] = new SqlParameter();
+                    parametro[a].ParameterName = "@terminal_creacion";
+                    parametro[a].SqlDbType = SqlDbType.VarChar;
+                    parametro[a].Value = Program.sDatosMaximo[1];
+                    a++;
+
+                    parametro[a] = new SqlParameter();
+                    parametro[a].ParameterName = "@numero_replica_trigger";
+                    parametro[a].SqlDbType = SqlDbType.Int;
+                    parametro[a].Value = 0;
+                    a++;
+
+                    parametro[a] = new SqlParameter();
+                    parametro[a].ParameterName = "@numero_control_replica";
+                    parametro[a].SqlDbType = SqlDbType.Int;
+                    parametro[a].Value = 0;
+                    a++;
+
+                    parametro[a] = new SqlParameter();
+                    parametro[a].ParameterName = "@usuario_ingreso";
+                    parametro[a].SqlDbType = SqlDbType.VarChar;
+                    parametro[a].Value = Program.sDatosMaximo[0];
+                    a++;
+
+                    parametro[a] = new SqlParameter();
+                    parametro[a].ParameterName = "@terminal_ingreso";
+                    parametro[a].SqlDbType = SqlDbType.VarChar;
+                    parametro[a].Value = Program.sDatosMaximo[1];
+
+
+                    #endregion
+
+                    if (!conexion.GFun_Lo_Ejecutar_SQL_Parametros(sSql, parametro))
+                    {
+                        catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
+                        catchMensaje.lblMensaje.Text = conexion.sMensajeError;
                         catchMensaje.ShowDialog();
                         goto reversa;
                     }
@@ -716,11 +1571,13 @@ namespace Palatium.Productos
 
                 //SI SE EJECUTA TODO REALIZA EL COMMIT
                 conexion.GFun_Lo_Maneja_Transaccion(Program.G_TERMINA_TRANSACCION);
+
+                ok = new VentanasMensajes.frmMensajeNuevoOk();
                 ok.lblMensaje.Text = "Registro actualizado correctamente.";
                 ok.ShowDialog();
                 limpiarNuevo();
                 grupoDatos.Enabled = false;
-                llenarGrid(0);
+                llenarGrid();
                 return;
 
             }
@@ -736,30 +1593,84 @@ namespace Palatium.Productos
             reversa: { conexion.GFun_Lo_Maneja_Transaccion(Program.G_REVERSA_TRANSACCION); return; }
         }
 
-        #endregion
-
-        private void cmbEstado_SelectedIndexChanged(object sender, EventArgs e)
+        //FUNCION PARA DAR DE BAJA UN REGISTRO
+        private void eliminarRegistro()
         {
-            if (cmbEstado.Text.Trim().Equals("ACTIVO"))
+            try
             {
-                sEstado = "A";
+                //AQUI INICIA PROCESO DE ACTUALIZACION
+                if (!conexion.GFun_Lo_Maneja_Transaccion(Program.G_INICIA_TRANSACCION))
+                {
+                    ok = new VentanasMensajes.frmMensajeNuevoOk();
+                    ok.lblMensaje.Text = "Error al abrir transacción.";
+                    ok.ShowDialog();
+                    limpiar();
+                    return;
+                }
+
+                sSql = "";
+                sSql += "update cv401_productos set" + Environment.NewLine;
+                sSql += "is_active = @is_active" + Environment.NewLine;
+                sSql += "where id_producto = @id_producto" + Environment.NewLine;
+                sSql += "and estado = @estado";
+
+                parametro = new SqlParameter[3];
+                parametro[0] = new SqlParameter();
+                parametro[0].ParameterName = "@is_active";
+                parametro[0].SqlDbType = SqlDbType.Int;
+                parametro[0].Value = 0;
+
+                parametro[1] = new SqlParameter();
+                parametro[1].ParameterName = "@id_producto";
+                parametro[1].SqlDbType = SqlDbType.Int;
+                parametro[1].Value = iIdProducto;
+
+                parametro[2] = new SqlParameter();
+                parametro[2].ParameterName = "@estado";
+                parametro[2].SqlDbType = SqlDbType.VarChar;
+                parametro[2].Value = "A";
+
+                if (!conexion.GFun_Lo_Ejecutar_SQL_Parametros(sSql, parametro))
+                {
+                    conexion.GFun_Lo_Maneja_Transaccion(Program.G_REVERSA_TRANSACCION);
+                    catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
+                    catchMensaje.lblMensaje.Text = conexion.sMensajeError;
+                    catchMensaje.ShowDialog();
+                    return;
+                }
+
+                conexion.GFun_Lo_Maneja_Transaccion(Program.G_TERMINA_TRANSACCION);
+                ok = new VentanasMensajes.frmMensajeNuevoOk();
+                ok.lblMensaje.Text = "El registro se ha inhabilitado con éxito.";
+                ok.ShowDialog();
+                limpiar();
+                btnAgregar.Text = "Nuevo";
+                llenarGrid();
+                return;
             }
-            else if (cmbEstado.Text.Trim().Equals("ELIMINADO"))
+
+            catch (Exception ex)
             {
-                sEstado = "E";
+                conexion.GFun_Lo_Maneja_Transaccion(Program.G_REVERSA_TRANSACCION);
+                catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
+                catchMensaje.lblMensaje.Text = ex.Message;
+                catchMensaje.ShowDialog();
             }
         }
 
+        #endregion
+
         private void frmSubCategoria_Load(object sender, EventArgs e)
         {            
-            cmbEstado.Text = "ACTIVO";
             LLenarComboEmpresa();
             LLenarComboPadre();
+
+            cmbCategorias.SelectedValueChanged -= new EventHandler(cmbCategorias_SelectedIndexChanged);
             LLenarComboCategorias();
+            cmbCategorias.SelectedValueChanged += new EventHandler(cmbCategorias_SelectedIndexChanged);
+
             LLenarComboCompra();
-            LLenarComboConsumo();            
-            llenarGrid(0);
-            iAxuliarCombo = 1;            
+            LLenarComboConsumo();
         }        
 
         private void btnLimpiar_Click(object sender, EventArgs e)
@@ -771,96 +1682,123 @@ namespace Palatium.Productos
         {
             if (btnAgregar.Text == "Nuevo")
             {
+                if (Convert.ToInt32(cmbCategorias.SelectedValue) == 0)
+                {
+                    ok = new VentanasMensajes.frmMensajeNuevoOk();
+                    ok.lblMensaje.Text = "Favor seleccione el dato padre para crear el registro.";
+                    ok.ShowDialog();
+                    cmbCompra.Focus();
+                    return;
+                }
+
                 limpiarNuevo();
+                cmbCodigoOrigen.Enabled = false;
+                cmbCategorias.Enabled = false;
                 grupoDatos.Enabled = true;
                 btnAgregar.Text = "Guardar";
                 BtnEliminar.Enabled = false;
                 txtCodigo.Focus();
+                return;
             }
+
+            if (txtCodigo.Text == "")
+            {
+                ok = new VentanasMensajes.frmMensajeNuevoOk();
+                ok.lblMensaje.Text = "Favor ingrese el código de la sub categoría.";
+                ok.ShowDialog();
+                txtCodigo.Focus();
+                return;
+            }
+
+            if (txtDescripcion.Text == "")
+            {
+                ok = new VentanasMensajes.frmMensajeNuevoOk();
+                ok.lblMensaje.Text = "Favor ingrese la descripción de la categoría.";
+                ok.ShowDialog();
+                txtDescripcion.Focus();
+                return;
+            }
+
+            if (cmbCompra.SelectedValue.ToString() == "0")
+            {
+                ok = new VentanasMensajes.frmMensajeNuevoOk();
+                ok.lblMensaje.Text = "Favor seleccione la unidad de compra del producto.";
+                ok.ShowDialog();
+                cmbCompra.Focus();
+                return;
+            }
+
+            if (cmbConsumo.SelectedValue.ToString() == "0")
+            {
+                ok = new VentanasMensajes.frmMensajeNuevoOk();
+                ok.lblMensaje.Text = "Favor seleccione la unidad de consumo del producto.";
+                ok.ShowDialog();
+                cmbConsumo.Focus();
+                return;
+            }
+
+            if (txtSecuencia.Text == "")
+            {
+                ok = new VentanasMensajes.frmMensajeNuevoOk();
+                ok.lblMensaje.Text = "Favor ingrese la secuencia del producto.";
+                ok.ShowDialog();
+                txtSecuencia.Focus();
+                return;
+            }            
+
+            if (chkModificable.Checked == true)
+                iModificable = 1;
+            else
+                iModificable = 0;
+
+            if (chkPagaIva.Checked == true)
+                iPagaIva = 1;
+            else
+                iPagaIva = 0;
+
+            if (chkPrecioModificable.Checked == true)
+                iPrecioModificable = 1;
+            else
+                iPrecioModificable = 0;
+
+            if (chkHabilitado.Checked == true)
+                iHabilitado = 1;
+            else
+                iHabilitado = 0;
+
+            NuevoSiNo = new VentanasMensajes.frmMensajeNuevoSiNo();
+
+            if (btnAgregar.Text == "Guardar")
+            {
+                int iCuenta_P = iContarCodigos();
+
+                if (iCuenta_P == -1)
+                    return;
+
+                if (iCuenta_P > 0)
+                {
+                    ok = new VentanasMensajes.frmMensajeNuevoOk();
+                    ok.lblMensaje.Text = "El código ingresado ya existe en el sistema. Favor ingrese un nuevo código.";
+                    ok.ShowDialog();
+                    txtCodigo.Clear();
+                    txtCodigo.Focus();
+                    return;
+                }
+
+                NuevoSiNo.lblMensaje.Text = "¿Está seguro que desea guardar el registro?";
+                NuevoSiNo.ShowDialog();
+
+                if (NuevoSiNo.DialogResult == DialogResult.OK)
+                    insertarRegistro();
+            }
+
             else
             {
-                if (cmbPadre.SelectedValue.ToString() == "0")
-                {
-                    ok.lblMensaje.Text = "Favor seleccione el dato padre para crear el registro.";
-                    ok.ShowDialog();
-                    cmbCompra.Focus();
-                }
+                NuevoSiNo.lblMensaje.Text = "¿Está seguro que desea actualizar el registro?";
+                NuevoSiNo.ShowDialog();
 
-                else if (txtCodigo.Text == "")
-                {
-                    ok.lblMensaje.Text = "Favor ingrese el código de la sub categoría.";
-                    ok.ShowDialog();
-                    txtCodigo.Focus();
-                }
-
-                else if (txtDescripcion.Text == "")
-                {
-                    ok.lblMensaje.Text = "Favor ingrese la descripción de la categoría.";
-                    ok.ShowDialog();
-                    txtDescripcion.Focus();
-                }
-
-                else if (cmbCompra.SelectedValue.ToString() == "0")
-                {
-                    ok.lblMensaje.Text = "Favor seleccione la unidad de compra del producto.";
-                    ok.ShowDialog();
-                    cmbCompra.Focus();
-                }
-
-                else if (cmbConsumo.SelectedValue.ToString() == "0")
-                {
-                    ok.lblMensaje.Text = "Favor seleccione la unidad de consumo del producto.";
-                    ok.ShowDialog();
-                    cmbConsumo.Focus();
-                }
-
-                else if (txtSecuencia.Text == "")
-                {
-                    ok.lblMensaje.Text = "Favor ingrese la secuencia del producto.";
-                    ok.ShowDialog();
-                    txtSecuencia.Focus();
-                }
-
-                else
-                {
-                    if (chkModificable.Checked == true)
-                        iModificable = 1;
-                    else
-                        iModificable = 0;
-
-                    if (chkPagaIva.Checked == true)
-                        iPagaIva = 1;
-                    else
-                        iPagaIva = 0;
-
-                    if (chkPrecioModificable.Checked == true)
-                        iPrecioModificable = 1;
-                    else
-                        iPrecioModificable = 0;
-
-                    if (btnAgregar.Text == "Guardar")
-                    {
-                        NuevoSiNo.lblMensaje.Text = "¿Desea guardar...?";
-                        NuevoSiNo.ShowDialog();
-
-                        if (NuevoSiNo.DialogResult == DialogResult.OK)
-                        {
-                            insertarRegistro();
-                        }
-
-                    }
-
-                    else
-                    {
-                        NuevoSiNo.lblMensaje.Text = "¿Desea actualizar...?";
-                        NuevoSiNo.ShowDialog();
-
-                        if (NuevoSiNo.DialogResult == DialogResult.OK)
-                        {
-                            actualizarRegistro();
-                        }
-                    }
-                }
+                if (NuevoSiNo.DialogResult == DialogResult.OK)
+                    actualizarRegistro();
             }
         }
 
@@ -868,7 +1806,8 @@ namespace Palatium.Productos
         {
             try
             {
-                NuevoSiNo.lblMensaje.Text = "¿Está seguro de eliminar el registro seleccionado?";
+                NuevoSiNo = new VentanasMensajes.frmMensajeNuevoSiNo();
+                NuevoSiNo.lblMensaje.Text = "¿Está seguro de inhabilitar el registro seleccionado?";
                 NuevoSiNo.ShowDialog();
 
                 if (NuevoSiNo.DialogResult == DialogResult.OK)
@@ -888,13 +1827,7 @@ namespace Palatium.Productos
         private void btnBuscar_Click(object sender, EventArgs e)
         {
             if (txtBuscar.Text == "")
-            {
-                llenarGrid(0);
-            }
-            else
-            {
-                llenarGrid(1);
-            }
+                llenarGrid();
         }
 
         private void dgvProductos_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
@@ -904,68 +1837,80 @@ namespace Palatium.Productos
                 btnAgregar.Text = "Actualizar";
                 BtnEliminar.Enabled = true;
                 grupoDatos.Enabled = true;
-                cmbPadre.Enabled = false;
+                cmbCategorias.Enabled = false;
+                cmbCodigoOrigen.Enabled = false;
                 txtCodigo.Enabled = false;
 
-                iIdProducto = Convert.ToInt32(dgvDatos.CurrentRow.Cells[0].Value.ToString());
-                string valReco = dgvDatos.CurrentRow.Cells[1].Value.ToString();
-                List<String> lista = valReco.Split(Convert.ToChar(".")).ToList<String>();
+                iIdProducto = Convert.ToInt32(dgvDatos.CurrentRow.Cells["id_producto"].Value);
 
-                foreach (String item in lista)
-                {
-                    sCodigoSeparado = item;
-                }
+                if (seleccionarDatosCombobox() == false)
+                    return;
+                
+                string sCodigo_P = dgvDatos.CurrentRow.Cells["codigo"].Value.ToString();
+                string[] item = sCodigo_P.Split('.');
 
-                if (sCodigoSeparado == "2")
-                {
-                    txtCodigo.Text = "";
-                }
+                sCodigoSeparado = item[2];
+                txtCodigo.Text = sCodigoSeparado;
 
-                else
-                {
-                    txtCodigo.Text = sCodigoSeparado;
-                }
+                txtDescripcion.Text = dgvDatos.CurrentRow.Cells["nombre"].Value.ToString();
+                sNombreOriginal = dgvDatos.CurrentRow.Cells["nombre"].Value.ToString().Trim().ToUpper();
+                txtSecuencia.Text = dgvDatos.CurrentRow.Cells["secuencia"].Value.ToString();
 
-                txtDescripcion.Text = dgvDatos.CurrentRow.Cells[2].Value.ToString();
-                txtSecuencia.Text = dgvDatos.CurrentRow.Cells[3].Value.ToString();
-                cmbEstado.Text = dgvDatos.CurrentRow.Cells[4].Value.ToString();
-
-                if (Convert.ToBoolean(dgvDatos.CurrentRow.Cells[5].Value) == true)
+                if (Convert.ToBoolean(dgvDatos.CurrentRow.Cells["modificable"].Value) == true)
                     chkModificable.Checked = true;
                 else
                     chkModificable.Checked = false;
 
-                if (Convert.ToBoolean(dgvDatos.CurrentRow.Cells[6].Value) == true)
+                if (Convert.ToBoolean(dgvDatos.CurrentRow.Cells["precio_modificable"].Value) == true)
                     chkPrecioModificable.Checked = true;
                 else
                     chkPrecioModificable.Checked = false;
 
-                if (dgvDatos.CurrentRow.Cells[7].Value.ToString() == "1")
+                if (Convert.ToInt32(dgvDatos.CurrentRow.Cells["paga_iva"].Value) == 1)
                     chkPagaIva.Checked = true;
                 else
                     chkPagaIva.Checked = false;
 
-                seleccionarDatosCombobox();
+                if (Convert.ToInt32(dgvDatos.CurrentRow.Cells["is_active"].Value) == 1)
+                    chkHabilitado.Checked = true;
+                else
+                    chkHabilitado.Checked = false;
+
+                chkHabilitado.Enabled = true;
                 txtDescripcion.Focus();
             }
 
             catch(Exception ex)
             {
+                catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
                 catchMensaje.lblMensaje.Text = ex.Message;
                 catchMensaje.ShowDialog();
             }
         }
 
-        private void cmbPadre_SelectedIndexChanged(object sender, EventArgs e)
+        private void cmbCategorias_SelectedIndexChanged(object sender, EventArgs e)
         {
-            extraerIdProductoPadre();
-            llenarGrid(0);            
+            if (Convert.ToInt32(cmbCategorias.SelectedValue) == 0)
+            {
+                dgvDatos.Rows.Clear();
+                cmbCategorias.Focus();
+                sCodigoCategoria = "0";
+                return;
+            }
+
+            DataRow[] dFila = dtCategorias.Select("id_producto = " + Convert.ToInt32(cmbCategorias.SelectedValue));
+
+            if (dFila.Length != 0)
+            {
+                sCodigoCategoria = dFila[0][2].ToString().Trim();
+                llenarGrid();
+            }
         }
 
-        private void cmbInsumos_SelectedIndexChanged(object sender, EventArgs e)
+        private void txtCodigo_KeyPress(object sender, KeyPressEventArgs e)
         {
-            LLenarComboCategorias();            
+            caracter = new Clases.ClaseValidarCaracteres();
+            caracter.soloNumeros(e);
         }
-
     }
 }
