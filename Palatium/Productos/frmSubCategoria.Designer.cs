@@ -28,9 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
             this.Grb_listReCajero = new System.Windows.Forms.GroupBox();
             this.btnBuscar = new System.Windows.Forms.Button();
             this.txtBuscar = new System.Windows.Forms.TextBox();
@@ -61,11 +61,13 @@
             this.cmbCategorias = new System.Windows.Forms.ComboBox();
             this.cmbCodigoOrigen = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
+            this.chkMenuPos = new System.Windows.Forms.CheckBox();
             this.id_producto = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.modificable = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.precio_modificable = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.paga_iva = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.is_active = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.menu_pos = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.codigo = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.nombre = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.secuencia = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -125,6 +127,7 @@
             this.precio_modificable,
             this.paga_iva,
             this.is_active,
+            this.menu_pos,
             this.codigo,
             this.nombre,
             this.secuencia,
@@ -190,6 +193,7 @@
             // 
             // grupoDatos
             // 
+            this.grupoDatos.Controls.Add(this.chkMenuPos);
             this.grupoDatos.Controls.Add(this.chkHabilitado);
             this.grupoDatos.Controls.Add(this.lblSecuencia);
             this.grupoDatos.Controls.Add(this.txtSecuencia);
@@ -442,6 +446,17 @@
             this.label2.TabIndex = 18;
             this.label2.Text = "Código Origen:";
             // 
+            // chkMenuPos
+            // 
+            this.chkMenuPos.AutoSize = true;
+            this.chkMenuPos.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.chkMenuPos.Location = new System.Drawing.Point(21, 165);
+            this.chkMenuPos.Name = "chkMenuPos";
+            this.chkMenuPos.Size = new System.Drawing.Size(82, 19);
+            this.chkMenuPos.TabIndex = 17;
+            this.chkMenuPos.Text = "Menú Pos";
+            this.chkMenuPos.UseVisualStyleBackColor = true;
+            // 
             // id_producto
             // 
             this.id_producto.HeaderText = "ID_PRODUCTO";
@@ -477,10 +492,17 @@
             this.is_active.ReadOnly = true;
             this.is_active.Visible = false;
             // 
+            // menu_pos
+            // 
+            this.menu_pos.HeaderText = "MENU_POS";
+            this.menu_pos.Name = "menu_pos";
+            this.menu_pos.ReadOnly = true;
+            this.menu_pos.Visible = false;
+            // 
             // codigo
             // 
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.codigo.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.codigo.DefaultCellStyle = dataGridViewCellStyle4;
             this.codigo.HeaderText = "CÓDIGO";
             this.codigo.Name = "codigo";
             this.codigo.ReadOnly = true;
@@ -495,8 +517,8 @@
             // 
             // secuencia
             // 
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.secuencia.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.secuencia.DefaultCellStyle = dataGridViewCellStyle5;
             this.secuencia.HeaderText = "SECUENCIA";
             this.secuencia.Name = "secuencia";
             this.secuencia.ReadOnly = true;
@@ -504,8 +526,8 @@
             // 
             // estado
             // 
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.estado.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.estado.DefaultCellStyle = dataGridViewCellStyle6;
             this.estado.HeaderText = "ESTADO";
             this.estado.Name = "estado";
             this.estado.ReadOnly = true;
@@ -571,11 +593,13 @@
         private System.Windows.Forms.ComboBox cmbEmpresa;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.CheckBox chkHabilitado;
+        private System.Windows.Forms.CheckBox chkMenuPos;
         private System.Windows.Forms.DataGridViewTextBoxColumn id_producto;
         private System.Windows.Forms.DataGridViewTextBoxColumn modificable;
         private System.Windows.Forms.DataGridViewTextBoxColumn precio_modificable;
         private System.Windows.Forms.DataGridViewTextBoxColumn paga_iva;
         private System.Windows.Forms.DataGridViewTextBoxColumn is_active;
+        private System.Windows.Forms.DataGridViewTextBoxColumn menu_pos;
         private System.Windows.Forms.DataGridViewTextBoxColumn codigo;
         private System.Windows.Forms.DataGridViewTextBoxColumn nombre;
         private System.Windows.Forms.DataGridViewTextBoxColumn secuencia;

@@ -271,9 +271,8 @@ namespace Palatium.Inicio
 
         private void button1_Click(object sender, EventArgs e)
         {
-            AsistenteConfiguracion.frmCrearParametrosGenerales crear = new AsistenteConfiguracion.frmCrearParametrosGenerales();
-            crear.ShowInTaskbar = false;
-            crear.ShowDialog();
+            Reportes_Formas.frmHistorialClientePorProducto historial = new Reportes_Formas.frmHistorialClientePorProducto(0);
+            historial.ShowDialog();
         }
     }
 }

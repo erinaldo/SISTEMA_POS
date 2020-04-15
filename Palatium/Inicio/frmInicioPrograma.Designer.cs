@@ -34,6 +34,8 @@
             this.lblSitioWeb = new System.Windows.Forms.LinkLabel();
             this.btnOficina = new System.Windows.Forms.Button();
             this.grupoDatos = new System.Windows.Forms.GroupBox();
+            this.lblNombreEquipo = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
             this.lblEstadoCaja = new System.Windows.Forms.Label();
             this.lblCajeroApertura = new System.Windows.Forms.Label();
             this.lblJornada = new System.Windows.Forms.Label();
@@ -48,8 +50,6 @@
             this.logo = new System.Windows.Forms.PictureBox();
             this.button1 = new System.Windows.Forms.Button();
             this.lblVersionDemo = new System.Windows.Forms.Label();
-            this.lblNombreEquipo = new System.Windows.Forms.Label();
-            this.label7 = new System.Windows.Forms.Label();
             this.grupoDatos.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.logo)).BeginInit();
@@ -135,6 +135,25 @@
             this.grupoDatos.TabStop = false;
             this.grupoDatos.Text = "DATOS DE LA CAJA VIGENTE";
             this.grupoDatos.Visible = false;
+            // 
+            // lblNombreEquipo
+            // 
+            this.lblNombreEquipo.AutoSize = true;
+            this.lblNombreEquipo.Font = new System.Drawing.Font("Maiandra GD", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblNombreEquipo.Location = new System.Drawing.Point(514, 85);
+            this.lblNombreEquipo.Name = "lblNombreEquipo";
+            this.lblNombreEquipo.Size = new System.Drawing.Size(140, 22);
+            this.lblNombreEquipo.TabIndex = 11;
+            this.lblNombreEquipo.Text = "Fecha Apertura:";
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(349, 85);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(149, 22);
+            this.label7.TabIndex = 10;
+            this.label7.Text = "Nombre Equipo:";
             // 
             // lblEstadoCaja
             // 
@@ -284,25 +303,6 @@
             this.lblVersionDemo.Size = new System.Drawing.Size(195, 32);
             this.lblVersionDemo.TabIndex = 80;
             this.lblVersionDemo.Text = "Versión Demo";
-            // 
-            // lblNombreEquipo
-            // 
-            this.lblNombreEquipo.AutoSize = true;
-            this.lblNombreEquipo.Font = new System.Drawing.Font("Maiandra GD", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblNombreEquipo.Location = new System.Drawing.Point(514, 85);
-            this.lblNombreEquipo.Name = "lblNombreEquipo";
-            this.lblNombreEquipo.Size = new System.Drawing.Size(140, 22);
-            this.lblNombreEquipo.TabIndex = 11;
-            this.lblNombreEquipo.Text = "Fecha Apertura:";
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(349, 85);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(149, 22);
-            this.label7.TabIndex = 10;
-            this.label7.Text = "Nombre Equipo:";
             // 
             // frmInicioPrograma
             // 

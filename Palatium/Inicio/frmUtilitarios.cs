@@ -604,5 +604,11 @@ namespace Palatium.Inicio
             ComandaNueva.frmComandasCuentasPorCobrar cobrar = new ComandaNueva.frmComandasCuentasPorCobrar();
             cobrar.ShowDialog();
         }
+
+        private void btnHistoríalCliente_Click(object sender, EventArgs e)
+        {
+            Reportes_Formas.frmVistaHistoriales historial = new Reportes_Formas.frmVistaHistoriales();
+            historial.ShowDialog();
+        }
     }
 }

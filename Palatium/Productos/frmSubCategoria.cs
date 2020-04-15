@@ -29,12 +29,13 @@ namespace Palatium.Productos
         int iModificable;
         int iPrecioModificable;
         int iPagaIva;
-        int iSubcategoria = 1;
+        int iSubcategoria = 0;
         int iUltimo;
         int cg_tipoNombre = 5076;
         int nombInterno;
         int iCambioCompra;
         int iCambioConsumo;
+        int iMenuPos;
 
         string sCodigoSeparado;
         string sNombreOriginal;
@@ -278,6 +279,7 @@ namespace Palatium.Productos
             cmbCodigoOrigen.Enabled = true;
             chkHabilitado.Checked = true;
             chkHabilitado.Enabled = false;
+            chkMenuPos.Checked = false;
             BtnEliminar.Enabled = false;
 
             btnAgregar.Text = "Nuevo";
@@ -307,6 +309,7 @@ namespace Palatium.Productos
             chkPrecioModificable.Checked = false;
             chkHabilitado.Checked = true;
             chkHabilitado.Enabled = false;
+            chkMenuPos.Checked = false;
             BtnEliminar.Enabled = false;
 
             btnAgregar.Text = "Nuevo";
@@ -460,7 +463,7 @@ namespace Palatium.Productos
 
                 sSql = "";
                 sSql += "select P.id_producto, P.modificable, P.precio_modificable, P.paga_iva," + Environment.NewLine;
-                sSql += "P.is_active, P.codigo, NP.nombre, P.secuencia," + Environment.NewLine;
+                sSql += "P.is_active, P.codigo, NP.nombre, P.secuencia, P.menu_pos," + Environment.NewLine;
                 sSql += "case P.is_active when 1 then 'ACTIVO' else 'INACTIVO' end estado" + Environment.NewLine;
                 sSql += "from cv401_productos P INNER JOIN" + Environment.NewLine;
                 sSql += "cv401_nombre_productos NP ON P.id_producto = NP.id_producto" + Environment.NewLine;
@@ -515,7 +518,7 @@ namespace Palatium.Productos
                 parametro[b] = new SqlParameter();
                 parametro[b].ParameterName = "@subcategoria";
                 parametro[b].SqlDbType = SqlDbType.Int;
-                parametro[b].Value = 1;
+                parametro[b].Value = 0;
                 b++;
 
                 //parametro[b] = new SqlParameter();
@@ -552,6 +555,7 @@ namespace Palatium.Productos
                                       dtConsulta.Rows[i]["precio_modificable"].ToString(),
                                       dtConsulta.Rows[i]["paga_iva"].ToString(),
                                       dtConsulta.Rows[i]["is_active"].ToString(),
+                                      dtConsulta.Rows[i]["menu_pos"].ToString(),
                                       dtConsulta.Rows[i]["codigo"].ToString(),
                                       dtConsulta.Rows[i]["nombre"].ToString(),
                                       dtConsulta.Rows[i]["secuencia"].ToString(),
@@ -639,16 +643,16 @@ namespace Palatium.Productos
                 sSql += "insert into cv401_productos (" + Environment.NewLine;
                 sSql += "idempresa, codigo, id_producto_padre, estado, nivel, modificable," + Environment.NewLine;
                 sSql += "precio_modificable, paga_iva, secuencia, modificador, subcategoria," + Environment.NewLine;
-                sSql += "ultimo_nivel, is_active, fecha_ingreso, usuario_ingreso,terminal_ingreso)" + Environment.NewLine;
+                sSql += "ultimo_nivel, is_active, menu_pos, fecha_ingreso, usuario_ingreso,terminal_ingreso)" + Environment.NewLine;
                 sSql += "values(" + Environment.NewLine;
                 sSql += "@idempresa, @codigo, @id_producto_padre, @estado, @nivel, @modificable," + Environment.NewLine;
                 sSql += "@precio_modificable, @paga_iva, @secuencia, @modificador, @subcategoria," + Environment.NewLine;
-                sSql += "@ultimo_nivel, @is_active, getdate(), @usuario_ingreso, @terminal_ingreso)";
+                sSql += "@ultimo_nivel, @is_active, @menu_pos, getdate(), @usuario_ingreso, @terminal_ingreso)";
 
                 #region PARAMETROS
 
                 a = 0;
-                parametro = new SqlParameter[15];
+                parametro = new SqlParameter[16];
                 parametro[a] = new SqlParameter();
                 parametro[a].ParameterName = "@idempresa";
                 parametro[a].SqlDbType = SqlDbType.Int;
@@ -725,6 +729,12 @@ namespace Palatium.Productos
                 parametro[a].ParameterName = "@is_active";
                 parametro[a].SqlDbType = SqlDbType.Int;
                 parametro[a].Value = 1;
+                a++;
+
+                parametro[a] = new SqlParameter();
+                parametro[a].ParameterName = "@menu_pos";
+                parametro[a].SqlDbType = SqlDbType.Int;
+                parametro[a].Value = iMenuPos;
                 a++;
 
                 parametro[a] = new SqlParameter();
@@ -1071,13 +1081,14 @@ namespace Palatium.Productos
                 sSql += "paga_iva = @paga_iva," + Environment.NewLine;
                 sSql += "modificable = @modificable," + Environment.NewLine;
                 sSql += "precio_modificable = @precio_modificable," + Environment.NewLine;
-                sSql += "is_active = @is_active" + Environment.NewLine;
+                sSql += "is_active = @is_active," + Environment.NewLine;
+                sSql += "menu_pos = @menu_pos" + Environment.NewLine;
                 sSql += "where id_producto = @id_producto";
 
                 #region PARAMETROS
 
                 a = 0;
-                parametro = new SqlParameter[6];
+                parametro = new SqlParameter[7];
                 parametro[a] = new SqlParameter();
                 parametro[a].ParameterName = "@secuencia";
                 parametro[a].SqlDbType = SqlDbType.Int;
@@ -1106,6 +1117,12 @@ namespace Palatium.Productos
                 parametro[a].ParameterName = "@is_active";
                 parametro[a].SqlDbType = SqlDbType.Int;
                 parametro[a].Value = iHabilitado;
+                a++;
+
+                parametro[a] = new SqlParameter();
+                parametro[a].ParameterName = "@menu_pos";
+                parametro[a].SqlDbType = SqlDbType.Int;
+                parametro[a].Value = iMenuPos;
                 a++;
 
                 parametro[a] = new SqlParameter();
@@ -1766,6 +1783,11 @@ namespace Palatium.Productos
             else
                 iHabilitado = 0;
 
+            if (chkMenuPos.Checked == true)
+                iMenuPos = 1;
+            else
+                iMenuPos = 0;
+
             NuevoSiNo = new VentanasMensajes.frmMensajeNuevoSiNo();
 
             if (btnAgregar.Text == "Guardar")
@@ -1875,6 +1897,11 @@ namespace Palatium.Productos
                     chkHabilitado.Checked = true;
                 else
                     chkHabilitado.Checked = false;
+
+                if (Convert.ToInt32(dgvDatos.CurrentRow.Cells["menu_pos"].Value) == 1)
+                    chkMenuPos.Checked = true;
+                else
+                    chkMenuPos.Checked = false;
 
                 chkHabilitado.Enabled = true;
                 txtDescripcion.Focus();

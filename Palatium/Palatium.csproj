@@ -1387,6 +1387,24 @@
     <Compile Include="ReportesTextBox\frmVistaFactura.Designer.cs">
       <DependentUpon>frmVistaFactura.cs</DependentUpon>
     </Compile>
+    <Compile Include="Reportes_Formas\frmHistorialClientePorProducto.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Reportes_Formas\frmHistorialClientePorProducto.Designer.cs">
+      <DependentUpon>frmHistorialClientePorProducto.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Reportes_Formas\frmHistorialClientePorOrigen.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Reportes_Formas\frmHistorialClientePorOrigen.Designer.cs">
+      <DependentUpon>frmHistorialClientePorOrigen.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Reportes_Formas\frmVistaHistoriales.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Reportes_Formas\frmVistaHistoriales.Designer.cs">
+      <DependentUpon>frmVistaHistoriales.cs</DependentUpon>
+    </Compile>
     <Compile Include="Revisar\frmAyudaRevisar.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -3695,6 +3713,15 @@
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>rptPrueba_Impresion.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="Reportes_Formas\frmHistorialClientePorProducto.resx">
+      <DependentUpon>frmHistorialClientePorProducto.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reportes_Formas\frmHistorialClientePorOrigen.resx">
+      <DependentUpon>frmHistorialClientePorOrigen.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reportes_Formas\frmVistaHistoriales.resx">
+      <DependentUpon>frmVistaHistoriales.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Revisar\frmAyudaRevisar.resx">
       <DependentUpon>frmAyudaRevisar.cs</DependentUpon>
     </EmbeddedResource>
@@ -4218,6 +4245,7 @@
     <None Include="Resources\icono_menu_actualizacion_masiva_servicio.png" />
     <None Include="Resources\icono_menu_publicidad.png" />
     <None Include="Resources\icono_menu_info_publicitaria.png" />
+    <None Include="Resources\icono_boton_historial_cliente.png" />
     <Content Include="Resources\icono_sri_2.png" />
     <None Include="Resources\impresoras_menu.png" />
     <None Include="Resources\impresiones_nuevo.png" />

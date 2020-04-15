@@ -20,7 +20,9 @@ namespace Palatium.ComandaNueva
         VentanasMensajes.frmMensajeNuevoSiNo NuevoSiNo;
 
         Clases.ClaseLimpiarArreglos limpiar = new Clases.ClaseLimpiarArreglos();
-        Clases.ClaseAbrirCajon abrir = new Clases.ClaseAbrirCajon();        
+        Clases.ClaseAbrirCajon abrir = new Clases.ClaseAbrirCajon();
+
+        ToolTip ttMensajeMesas = new ToolTip();
 
         DataTable dtCategorias;
         DataTable dtProductos;
@@ -69,6 +71,7 @@ namespace Palatium.ComandaNueva
         int iBanderaSubCategorias;
         int iBanderaModificadores;
         int iIdProductoPadreModificador;
+        int iNivelGeneral;
 
         string sDescripcionOrigen;
         string sNombreMesero;
@@ -658,7 +661,7 @@ namespace Palatium.ComandaNueva
         }
 
         //FUNCION PARA CARGAR LOS BOTONES DE CATEGORIA
-        private void cargarCategorias()
+        private void cargarCategorias(int iNivel_P, int iIdProductoPadre_P)
         {
             try
             {
@@ -673,9 +676,13 @@ namespace Palatium.ComandaNueva
                 sSql += "cv401_nombre_productos NP ON P.id_Producto = NP.id_Producto" + Environment.NewLine;
                 sSql += "and P.estado ='A'" + Environment.NewLine;
                 sSql += "and NP.estado = 'A'" + Environment.NewLine;
-                sSql += "where P.nivel = 2" + Environment.NewLine;
+                sSql += "where P.nivel = " + iNivel_P + Environment.NewLine;
                 sSql += "and P.menu_pos = 1" + Environment.NewLine;
-                sSql += "and modificador = 0" + Environment.NewLine;
+                sSql += "and P.modificador = 0" + Environment.NewLine;
+
+                if (iNivel_P == 3)
+                    sSql += "and P.id_producto_padre = " + iIdProductoPadre_P + Environment.NewLine;
+
                 sSql += "order by P.secuencia";
 
                 dtCategorias = new DataTable();
@@ -706,8 +713,15 @@ namespace Palatium.ComandaNueva
 
                 if (dtCategorias.Rows.Count > 0)
                 {
+                    if (iNivel_P == 3)
+                    {
+                        iNivelGeneral = 4;
+                        btnRegresar.Visible = true;
+                    }
+
                     if (dtCategorias.Rows.Count > 8)
                     {
+                        
                         btnSiguiente.Enabled = true;
                         btnAnterior.Visible = true;
                         btnSiguiente.Visible = true;
@@ -715,6 +729,7 @@ namespace Palatium.ComandaNueva
 
                     else
                     {
+                        //btnRegresar.Visible = false;
                         btnSiguiente.Enabled = false;
                         btnAnterior.Visible = false;
                         btnSiguiente.Visible = false;
@@ -762,7 +777,6 @@ namespace Palatium.ComandaNueva
                         boton[i, j].Click += boton_clic_categorias;
                         boton[i, j].Size = new Size(115, 71);
                         boton[i, j].Location = new Point(iPosXCategorias, iPosYCategorias);                        
-                        boton[i, j].BackColor = Color.Lime;
                         boton[i, j].Font = new Font("Maiandra GD", 8.25F, FontStyle.Bold);
                         boton[i, j].Tag = dtCategorias.Rows[iCuentaCategorias]["id_producto"].ToString();
                         boton[i, j].Text = dtCategorias.Rows[iCuentaCategorias]["nombre"].ToString();
@@ -770,6 +784,18 @@ namespace Palatium.ComandaNueva
                         boton[i, j].FlatStyle = FlatStyle.Flat;
                         boton[i, j].FlatAppearance.BorderSize = 1;
                         boton[i, j].FlatAppearance.MouseOverBackColor = Color.FromArgb(255, 128, 255);
+
+                        if (Convert.ToInt32(dtCategorias.Rows[iCuentaCategorias]["subcategoria"].ToString()) == 1)
+                        {
+                            ttMensajeMesas.SetToolTip(boton[i, j], dtCategorias.Rows[iCuentaCategorias]["nombre"].ToString().Trim().ToUpper() + " CONTIENE SUBCATEGORÍAS");
+                            boton[i, j].BackColor = Color.Fuchsia;
+                        }
+
+                        else
+                        {
+                            ttMensajeMesas.SetToolTip(boton[i, j], "CATEGORÍA: " + dtCategorias.Rows[iCuentaCategorias]["nombre"].ToString());
+                            boton[i, j].BackColor = Color.Lime;
+                        }
                                                 
                         pnlCategorias.Controls.Add(boton[i, j]);
                         iCuentaCategorias++;
@@ -823,11 +849,12 @@ namespace Palatium.ComandaNueva
 
                 if (Convert.ToInt32(botonSeleccionadoCategoria.AccessibleDescription) == 0)
                 {
-                    cargarProductos(Convert.ToInt32(botonSeleccionadoCategoria.Tag), 3, botonSeleccionadoCategoria.Text.Trim().ToUpper());
+                    cargarProductos(Convert.ToInt32(botonSeleccionadoCategoria.Tag), botonSeleccionadoCategoria.Text.Trim().ToUpper());
                 }
                 else
                 {
-                    cargarProductos(Convert.ToInt32(botonSeleccionadoCategoria.Tag), 4, botonSeleccionadoCategoria.Text.Trim().ToUpper());
+                    //cargarProductos(Convert.ToInt32(botonSeleccionadoCategoria.Tag), 4, botonSeleccionadoCategoria.Text.Trim().ToUpper());
+                    cargarCategorias(3, Convert.ToInt32(botonSeleccionadoCategoria.Tag));
                 }
 
                 this.Cursor = Cursors.Default;
@@ -843,7 +870,7 @@ namespace Palatium.ComandaNueva
         }
 
         //FUNCION PARA CARGAR LOS BOTONES DE PRODUCTOS
-        private void cargarProductos(int iIdProducto_P, int iNivel_P, string sNombreCategoria_P)
+        private void cargarProductos(int iIdProducto_P, string sNombreCategoria_P)
         {
             try
             {
@@ -857,7 +884,7 @@ namespace Palatium.ComandaNueva
                 sSql += "and PP.estado = 'A' INNER JOIN" + Environment.NewLine;
                 sSql += "pos_clase_producto CP ON CP.id_pos_clase_producto = P.id_pos_clase_producto" + Environment.NewLine;
                 sSql += "and CP.estado = 'A'" + Environment.NewLine;
-                sSql += "where P.nivel = " + iNivel_P + Environment.NewLine;
+                sSql += "where P.nivel = " + iNivelGeneral + Environment.NewLine;
                 sSql += "and P.is_active = 1" + Environment.NewLine;
                 sSql += "and PP.id_lista_precio = 4" + Environment.NewLine;
                 sSql += "and P.id_producto_padre = " + iIdProducto_P + Environment.NewLine;
@@ -1971,7 +1998,8 @@ namespace Palatium.ComandaNueva
                 }
             }
 
-            cargarCategorias();
+            iNivelGeneral = 3;
+            cargarCategorias(2, 0);
             llenarDatosInformativosComanda();
         }
 
@@ -2204,7 +2232,8 @@ namespace Palatium.ComandaNueva
                 lblProductos.Text = "PRODUCTOS";
                 btnModificadores.BackColor = Color.FromArgb(192, 255, 192);
                 pnlProductos.Controls.Clear();
-                cargarCategorias();
+                iNivelGeneral = 3;
+                cargarCategorias(2, 0);
             }
         }
 
@@ -2872,7 +2901,8 @@ namespace Palatium.ComandaNueva
             lblProductos.Text = "PRODUCTOS";
             btnModificadores.BackColor = Color.FromArgb(192, 255, 192);
             pnlProductos.Controls.Clear();
-            cargarCategorias();
+            iNivelGeneral = 3;
+            cargarCategorias(2, 0);
         }
     }
 }

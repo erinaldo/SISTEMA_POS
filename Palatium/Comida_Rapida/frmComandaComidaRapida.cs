@@ -24,6 +24,8 @@ namespace Palatium.Comida_Rapida
 
         ValidarCedula validarCedula = new ValidarCedula();
 
+        ToolTip ttMensajeMesas = new ToolTip();
+
         string sSql;
         string sNombreProducto_P;
         string sFecha;
@@ -78,6 +80,7 @@ namespace Palatium.Comida_Rapida
         int iBanderaInsertarLote;
         int iPagaIva_P;
         int iIdSriFormaPago_P;
+        int iNivelGeneral;
 
         int idTipoIdentificacion;
         int idTipoPersona;
@@ -217,7 +220,7 @@ namespace Palatium.Comida_Rapida
         }
 
         //FUNCION PARA CARGAR LAS CATEGORIAS
-        private void cargarCategorias()
+        private void cargarCategorias(int iNivel_P, int iIdProductoPadre_P)
         {
             try
             {
@@ -228,11 +231,14 @@ namespace Palatium.Comida_Rapida
                 sSql += "cv401_nombre_productos NP ON P.id_Producto = NP.id_Producto" + Environment.NewLine;
                 sSql += "and P.estado ='A'" + Environment.NewLine;
                 sSql += "and NP.estado = 'A'" + Environment.NewLine;
-                sSql += "where P.nivel = 2" + Environment.NewLine;
-                sSql += "and id_producto_padre in" + Environment.NewLine;
-                sSql += "(select id_producto from cv401_productos where codigo ='2')" + Environment.NewLine;
+                sSql += "where P.nivel = " + iNivel_P + Environment.NewLine;
+                //sSql += "and id_producto_padre in" + Environment.NewLine;
+                //sSql += "(select id_producto from cv401_productos where codigo ='2')" + Environment.NewLine;
                 sSql += "and modificador = 0" + Environment.NewLine;
                 sSql += "and P.menu_pos = 1" + Environment.NewLine;
+
+                if (iNivel_P == 3)
+                    sSql += "and P.id_producto_padre = " + iIdProductoPadre_P + Environment.NewLine;
 
                 if (iBanderaExpressTarjeta == 1)
                 {
@@ -264,6 +270,12 @@ namespace Palatium.Comida_Rapida
 
                 if (dtCategorias.Rows.Count > 0)
                 {
+                    if (iNivel_P == 3)
+                    {
+                        iNivelGeneral = 4;
+                        btnRegresar.Visible = true;
+                    }
+
                     if (dtCategorias.Rows.Count > 8)
                     {
                         btnSiguiente.Enabled = true;
@@ -320,11 +332,23 @@ namespace Palatium.Comida_Rapida
                         botonFamilias[i, j].Click += new EventHandler(boton_clic_categorias);
                         botonFamilias[i, j].Size = new Size(130, 71);
                         botonFamilias[i, j].Location = new Point(iPosXCategorias, iPosYCategorias);
-                        botonFamilias[i, j].BackColor = Color.Lime;
                         botonFamilias[i, j].Font = new Font("Maiandra GD", 9.75f, FontStyle.Bold);
                         botonFamilias[i, j].Tag = dtCategorias.Rows[iCuentaCategorias]["id_producto"].ToString();
                         botonFamilias[i, j].Text = dtCategorias.Rows[iCuentaCategorias]["nombre"].ToString();
                         botonFamilias[i, j].AccessibleDescription = dtCategorias.Rows[iCuentaCategorias]["subcategoria"].ToString();
+
+                        if (Convert.ToInt32(dtCategorias.Rows[iCuentaCategorias]["subcategoria"].ToString()) == 1)
+                        {
+                            ttMensajeMesas.SetToolTip(botonFamilias[i, j], dtCategorias.Rows[iCuentaCategorias]["nombre"].ToString().Trim().ToUpper() + " CONTIENE SUBCATEGORÍAS");
+                            botonFamilias[i, j].BackColor = Color.Fuchsia;
+                        }
+
+                        else
+                        {
+                            ttMensajeMesas.SetToolTip(botonFamilias[i, j], "CATEGORÍA: " + dtCategorias.Rows[iCuentaCategorias]["nombre"].ToString());
+                            botonFamilias[i, j].BackColor = Color.Lime;
+                        }
+
                         pnlCategorias.Controls.Add(botonFamilias[i, j]);
 
                         iCuentaCategorias++;
@@ -380,12 +404,13 @@ namespace Palatium.Comida_Rapida
 
                 if (Convert.ToInt32(botonSeleccionadoCategoria.AccessibleDescription) == 0)
                 {
-                    cargarProductos(Convert.ToInt32(botonSeleccionadoCategoria.Tag), 3);
+                    cargarProductos(Convert.ToInt32(botonSeleccionadoCategoria.Tag));
                 }
 
                 else
                 {
-                    cargarProductos(Convert.ToInt32(botonSeleccionadoCategoria.Tag), 4);
+                    //cargarProductos(Convert.ToInt32(botonSeleccionadoCategoria.Tag), 4);
+                    cargarCategorias(3, Convert.ToInt32(botonSeleccionadoCategoria.Tag));
                 }
 
                 Cursor = Cursors.Default;
@@ -400,7 +425,7 @@ namespace Palatium.Comida_Rapida
         }
 
         //FUNCION PARA CARGAR LOS PRODUCTOS
-        private void cargarProductos(int iIdProducto_P, int iNivel_P)
+        private void cargarProductos(int iIdProducto_P)
         {
             try
             {
@@ -414,7 +439,7 @@ namespace Palatium.Comida_Rapida
                 sSql += "and PP.estado = 'A' INNER JOIN" + Environment.NewLine;
                 sSql += "pos_clase_producto CP ON CP.id_pos_clase_producto = P.id_pos_clase_producto" + Environment.NewLine;
                 sSql += "and CP.estado = 'A'" + Environment.NewLine;
-                sSql += "where P.nivel = " + iNivel_P + Environment.NewLine;
+                sSql += "where P.nivel = " + iNivelGeneral + Environment.NewLine;
                 sSql += "and P.is_active = 1" + Environment.NewLine;
                 sSql += "and PP.id_lista_precio = 4" + Environment.NewLine;
                 sSql += "and P.id_producto_padre = " + iIdProducto_P + Environment.NewLine;
@@ -1652,7 +1677,7 @@ namespace Palatium.Comida_Rapida
                 }
             }
 
-            cargarCategorias();
+            cargarCategorias(2, 0);
 
             if (iBanderaExpressTarjeta == 1)
             {
@@ -2036,6 +2061,15 @@ namespace Palatium.Comida_Rapida
             }
 
             crearPrecuentaRapida();        
+        }
+
+        private void btnRegresar_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            btnRegresar.Visible = false;
+            lblProductos.Text = "PRODUCTOS";
+            pnlProductos.Controls.Clear();
+            iNivelGeneral = 3;
+            cargarCategorias(2, 0);
         }
     }
 }

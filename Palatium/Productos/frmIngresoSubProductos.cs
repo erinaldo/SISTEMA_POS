@@ -998,6 +998,8 @@ namespace Palatium.Productos
         {
             try
             {
+                this.Cursor = Cursors.WaitCursor;
+
                 fechaSistema();
 
                 if (sFechaInicio == "0001/01/01")
@@ -1012,6 +1014,7 @@ namespace Palatium.Productos
                 //SE INICIA UNA TRANSACCION
                 if (!conexion.GFun_Lo_Maneja_Transaccion(Program.G_INICIA_TRANSACCION))
                 {
+                    this.Cursor = Cursors.Default;
                     ok = new VentanasMensajes.frmMensajeNuevoOk();
                     ok.lblMensaje.Text = "Error al iniciar la transacción para guardar el registro.";
                     ok.ShowDialog();
@@ -1389,7 +1392,7 @@ namespace Palatium.Productos
                     goto reversa;
                 }
 
-                //INSTRUCCION PARA NSERTAR EN LA TABLA CV403_PRECIOS_PRODUCTOS CON LISTA MINORISTA
+                //INSTRUCCION PARA INSERTAR EN LA TABLA CV403_PRECIOS_PRODUCTOS CON LISTA MINORISTA
                 if (Program.iCobrarConSinProductos == 1)
                 {
                     if (chkPagaServicio.Checked == true)
@@ -1688,8 +1691,9 @@ namespace Palatium.Productos
 
                 conexion.GFun_Lo_Maneja_Transaccion(Program.G_TERMINA_TRANSACCION);
 
+                this.Cursor = Cursors.Default;
                 ok = new VentanasMensajes.frmMensajeNuevoOk();
-                ok.lblMensaje.Text = "Registro ingresado éxitosamente.";
+                ok.lblMensaje.Text = "Registro agregado éxitosamente.";
                 ok.ShowDialog();
                 limpiar();
                 return;
@@ -1703,7 +1707,7 @@ namespace Palatium.Productos
                 goto reversa;
             }
 
-        reversa: { conexion.GFun_Lo_Maneja_Transaccion(Program.G_REVERSA_TRANSACCION); return; }
+        reversa: { this.Cursor = Cursors.Default; conexion.GFun_Lo_Maneja_Transaccion(Program.G_REVERSA_TRANSACCION); return; }
         }
 
         //FUNCION PARA ACTUALIZAR EN LA BASE DE DATOS
@@ -1711,9 +1715,25 @@ namespace Palatium.Productos
         {
             try
             {
+                this.Cursor = Cursors.WaitCursor;
+
+                int a;
+
+                fechaSistema();
+
+                if (sFechaInicio == "0001/01/01")
+                {
+                    this.Cursor = Cursors.Default;
+                    ok = new VentanasMensajes.frmMensajeNuevoOk();
+                    ok.lblMensaje.Text = "Se ha encontrado una fecha inválida. Favor reinicie la aplicación para solucionar el inconveniente. Si el problema persiste, favor comuníquese con el administrador del sistema.";
+                    ok.ShowDialog();
+                    return;
+                }
+
                 //AQUI INICIA PROCESO DE ACTUALIZACION
                 if (!conexion.GFun_Lo_Maneja_Transaccion(Program.G_INICIA_TRANSACCION))
                 {
+                    this.Cursor = Cursors.Default;
                     ok = new VentanasMensajes.frmMensajeNuevoOk();
                     ok.lblMensaje.Text = "Error al iniciar la transacción para actualizar el registro.";
                     ok.ShowDialog();
@@ -1729,22 +1749,101 @@ namespace Palatium.Productos
 
                 sSql = "";
                 sSql += "update cv401_productos set" + Environment.NewLine;
-                sSql += "secuencia = " + Convert.ToInt32(txtSecuencia.Text.ToString().Trim()) + "," + Environment.NewLine;
-                sSql += "paga_iva = " + iPagaIva + "," + Environment.NewLine;
-                sSql += "paga_servicio = " + iPagaServicio + "," + Environment.NewLine;
-                sSql += "is_active = " + iHabilitado + "," + Environment.NewLine;
-                sSql += "precio_modificable = " + iPrecioModificable + "," + Environment.NewLine;
-                sSql += "Expira = " + iExpira + "," + Environment.NewLine;
-                sSql += "id_pos_receta = " + iIdReceta + "," + Environment.NewLine;
-                sSql += "id_pos_tipo_producto = " + Convert.ToInt32(cmbTipoProducto.SelectedValue) + "," + Environment.NewLine;
-                sSql += "id_pos_clase_producto = " + Convert.ToInt32(cmbClaseProducto.SelectedValue) + "," + Environment.NewLine;
-                sSql += "id_pos_impresion_comanda = " + Convert.ToInt32(cmbDestinoImpresion.SelectedValue) + Environment.NewLine;
-                sSql += "where id_Producto = " + iIdProducto;
+                sSql += "secuencia = @secuencia," + Environment.NewLine;
+                sSql += "paga_iva = @paga_iva," + Environment.NewLine;
+                sSql += "paga_servicio = @paga_servicio," + Environment.NewLine;
+                sSql += "is_active = @is_active," + Environment.NewLine;
+                sSql += "precio_modificable = @precio_modificable," + Environment.NewLine;
+                sSql += "expira = @expira," + Environment.NewLine;
+                sSql += "id_pos_receta = @id_pos_receta," + Environment.NewLine;
+                sSql += "id_pos_tipo_producto = @id_pos_tipo_producto," + Environment.NewLine;
+                sSql += "id_pos_clase_producto = @id_pos_clase_producto," + Environment.NewLine;
+                sSql += "id_pos_impresion_comanda = @id_pos_impresion_comanda" + Environment.NewLine;
+                sSql += "where id_producto = @id_producto" + Environment.NewLine;
+                sSql += "and estado = @estado";
+
+                #region PARAMETROS
+
+                a = 0;
+                parametro = new SqlParameter[12];
+                parametro[a] = new SqlParameter();
+                parametro[a].ParameterName = "@secuencia";
+                parametro[a].SqlDbType = SqlDbType.Int;
+                parametro[a].Value = Convert.ToInt32(txtSecuencia.Text);
+                a++;
+
+                parametro[a] = new SqlParameter();
+                parametro[a].ParameterName = "@paga_iva";
+                parametro[a].SqlDbType = SqlDbType.Int;
+                parametro[a].Value = iPagaIva;
+                a++;
+
+                parametro[a] = new SqlParameter();
+                parametro[a].ParameterName = "@paga_servicio";
+                parametro[a].SqlDbType = SqlDbType.Int;
+                parametro[a].Value = iPagaServicio;
+                a++;
+
+                parametro[a] = new SqlParameter();
+                parametro[a].ParameterName = "@is_active";
+                parametro[a].SqlDbType = SqlDbType.Int;
+                parametro[a].Value = iHabilitado;
+                a++;
+
+                parametro[a] = new SqlParameter();
+                parametro[a].ParameterName = "@precio_modificable";
+                parametro[a].SqlDbType = SqlDbType.Int;
+                parametro[a].Value = iPrecioModificable;
+                a++;
+
+                parametro[a] = new SqlParameter();
+                parametro[a].ParameterName = "@expira";
+                parametro[a].SqlDbType = SqlDbType.Int;
+                parametro[a].Value = iExpira;
+                a++;
+
+                parametro[a] = new SqlParameter();
+                parametro[a].ParameterName = "@id_pos_receta";
+                parametro[a].SqlDbType = SqlDbType.Int;
+                parametro[a].Value = iIdReceta;
+                a++;
+
+                parametro[a] = new SqlParameter();
+                parametro[a].ParameterName = "@id_pos_tipo_producto";
+                parametro[a].SqlDbType = SqlDbType.Int;
+                parametro[a].Value = Convert.ToInt32(cmbTipoProducto.SelectedValue);
+                a++;
+
+                parametro[a] = new SqlParameter();
+                parametro[a].ParameterName = "@id_pos_clase_producto";
+                parametro[a].SqlDbType = SqlDbType.Int;
+                parametro[a].Value = Convert.ToInt32(cmbClaseProducto.SelectedValue);
+                a++;
+
+                parametro[a] = new SqlParameter();
+                parametro[a].ParameterName = "@id_pos_impresion_comanda";
+                parametro[a].SqlDbType = SqlDbType.Int;
+                parametro[a].Value = Convert.ToInt32(cmbDestinoImpresion.SelectedValue);
+                a++;
+
+                parametro[a] = new SqlParameter();
+                parametro[a].ParameterName = "@id_producto";
+                parametro[a].SqlDbType = SqlDbType.Int;
+                parametro[a].Value = iIdProducto;
+                a++;
+
+                parametro[a] = new SqlParameter();
+                parametro[a].ParameterName = "@estado";
+                parametro[a].SqlDbType = SqlDbType.VarChar;
+                parametro[a].Value = "A";
+
+                #endregion
 
                 //SI NO SE EJECUTA LA INSTRUCCION SALTA A REVERSA 
-                if (!conexion.GFun_Lo_Ejecuta_SQL(sSql))
+                if (!conexion.GFun_Lo_Ejecutar_SQL_Parametros(sSql, parametro))
                 {
-                    catchMensaje.lblMensaje.Text = "ERROR EN LA INSTRUCCIÓN:" + Environment.NewLine + sSql;
+                    catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
+                    catchMensaje.lblMensaje.Text = conexion.sMensajeError;
                     catchMensaje.ShowDialog();
                     goto reversa;
                 }
@@ -1755,124 +1854,385 @@ namespace Palatium.Productos
                     //CAMBIO DE ESTADO DE 'A' AL ESTADO 'E'
                     sSql = "";
                     sSql += "update cv401_nombre_productos set" + Environment.NewLine;
-                    sSql += "estado = 'E'," + Environment.NewLine;
-                    sSql += "fecha_anula = GETDATE()," + Environment.NewLine;
-                    sSql += "usuario_anula = '" + Program.sDatosMaximo[0] + "'," + Environment.NewLine;
-                    sSql += "terminal_anula = '" + Program.sDatosMaximo[1] + "'" + Environment.NewLine;
-                    sSql += "where id_Producto = " + iIdProducto;
+                    sSql += "estado = @estado_1" + Environment.NewLine;
+                    sSql += "fecha_anula = getdate()," + Environment.NewLine;
+                    sSql += "usuario_anula = @usuario_anula," + Environment.NewLine;
+                    sSql += "terminal_anula = @terminal_anula" + Environment.NewLine;
+                    sSql += "where id_Producto = @id_producto" + Environment.NewLine;
+                    sSql += "and estado = @estado_2";
+
+                    #region PARAMETROS
+
+                    parametro = new SqlParameter[5];
+                    parametro[0] = new SqlParameter();
+                    parametro[0].ParameterName = "@estado_1";
+                    parametro[0].SqlDbType = SqlDbType.Int;
+                    parametro[0].Value = "E";
+
+                    parametro[1] = new SqlParameter();
+                    parametro[1].ParameterName = "@usuario_anula";
+                    parametro[1].SqlDbType = SqlDbType.Int;
+                    parametro[1].Value = Program.sDatosMaximo[0];
+
+                    parametro[2] = new SqlParameter();
+                    parametro[2].ParameterName = "@terminal_anula";
+                    parametro[2].SqlDbType = SqlDbType.Int;
+                    parametro[2].Value = Program.sDatosMaximo[1];
+
+                    parametro[3] = new SqlParameter();
+                    parametro[3].ParameterName = "@id_producto";
+                    parametro[3].SqlDbType = SqlDbType.Int;
+                    parametro[3].Value = iIdProducto;
+
+                    parametro[4] = new SqlParameter();
+                    parametro[4].ParameterName = "@estado_2";
+                    parametro[4].SqlDbType = SqlDbType.Int;
+                    parametro[4].Value = "A";
+
+                    #endregion
 
                     //SI NO SE EJECUTA LA INSTRUCCION SALTA A REVERSA 
-                    if (!conexion.GFun_Lo_Ejecuta_SQL(sSql))
+                    if (!conexion.GFun_Lo_Ejecutar_SQL_Parametros(sSql, parametro))
                     {
-                        catchMensaje.lblMensaje.Text = "ERROR EN LA INSTRUCCIÓN:" + Environment.NewLine + sSql;
-                        catchMensaje.ShowDialog();
-                        goto reversa;
-                    }
-
-                    //INSTRUCCION PARA INSERTAR EN LA TABLA CV401_NOMBRE_PRODUCTOS
-                    sSql = "";
-                    sSql += "insert into cv401_nombre_productos (" + Environment.NewLine;
-                    sSql += "id_Producto, cg_tipo_nombre, nombre, nombre_interno, estado, numero_replica_trigger," + Environment.NewLine;
-                    sSql += "numero_control_replica, fecha_ingreso, usuario_ingreso, terminal_ingreso)" + Environment.NewLine;
-                    sSql += "values(" + Environment.NewLine;
-                    sSql += iIdProducto + "," + iCg_tipoNombre + ", '" + txtDescripcion.Text.Trim() + "'," + Environment.NewLine;
-                    sSql += "1, 'A', 1, 1, GETDATE(), '" + Program.sDatosMaximo[0] + "'," + Environment.NewLine;
-                    sSql += "'" + Program.sDatosMaximo[1] + "')";
-
-                    //SI NO SE EJECUTA LA INSTRUCCION SALTA A REVERSA 
-                    if (!conexion.GFun_Lo_Ejecuta_SQL(sSql))
-                    {
-                        catchMensaje.lblMensaje.Text = "ERROR EN LA INSTRUCCIÓN:" + Environment.NewLine + sSql;
+                        catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
+                        catchMensaje.lblMensaje.Text = conexion.sMensajeError;
                         catchMensaje.ShowDialog();
                         goto reversa;
                     }
                 }
 
                 //SI HUBO ALGUN CAMBIO EN EL PRECIO BASE, SE REALIZA LA ACTUALIZACION
-                if (txtPrecioCompra.Text.Trim() != sPrecioBase)
-                {
+                //if (txtPrecioCompra.Text.Trim() != sPrecioBase)
+                //{
                     //CAMBIO DE ESTADO DE 'A' AL ESTADO 'E'
                     sSql = "";
                     sSql += "update cv403_precios_productos set" + Environment.NewLine;
-                    sSql += "estado = 'E'," + Environment.NewLine;
-                    sSql += "fecha_anula = GETDATE()," + Environment.NewLine;
-                    sSql += "usuario_anula = '" + Program.sDatosMaximo[0] + "'," + Environment.NewLine;
-                    sSql += "terminal_anula = '" + Program.sDatosMaximo[1] + "'" + Environment.NewLine;
-                    sSql += "where id_Producto = " + iIdProducto + Environment.NewLine;
-                    sSql += "and id_Lista_Precio = 1";
+                    sSql += "estado = @estado_1," + Environment.NewLine;
+                    sSql += "fecha_anula = getdate()," + Environment.NewLine;
+                    sSql += "usuario_anula = @usuario_anula,"+ Environment.NewLine;
+                    sSql += "terminal_anula = @terminal_anula" + Environment.NewLine;
+                    sSql += "where id_producto = @id_producto" + Environment.NewLine;
+                    sSql += "and estado = @estado_2" + Environment.NewLine;
+                    sSql += "and id_lista_precio = @id_lista_precio";
+
+                    #region PARAMETROS
+
+                    parametro = new SqlParameter[6];
+                    parametro[0] = new SqlParameter();
+                    parametro[0].ParameterName = "@estado_1";
+                    parametro[0].SqlDbType = SqlDbType.VarChar;
+                    parametro[0].Value = "E";
+
+                    parametro[1] = new SqlParameter();
+                    parametro[1].ParameterName = "@usuario_anula";
+                    parametro[1].SqlDbType = SqlDbType.VarChar;
+                    parametro[1].Value = Program.sDatosMaximo[0];
+
+                    parametro[2] = new SqlParameter();
+                    parametro[2].ParameterName = "@terminal_anula";
+                    parametro[2].SqlDbType = SqlDbType.VarChar;
+                    parametro[2].Value = Program.sDatosMaximo[1];
+
+                    parametro[3] = new SqlParameter();
+                    parametro[3].ParameterName = "@id_producto";
+                    parametro[3].SqlDbType = SqlDbType.Int;
+                    parametro[3].Value = iIdProducto;
+
+                    parametro[4] = new SqlParameter();
+                    parametro[4].ParameterName = "@estado_2";
+                    parametro[4].SqlDbType = SqlDbType.VarChar;
+                    parametro[4].Value = "A";
+
+                    parametro[5] = new SqlParameter();
+                    parametro[5].ParameterName = "@id_lista_precio";
+                    parametro[5].SqlDbType = SqlDbType.Int;
+                    parametro[5].Value = iIdListaBase;
+
+                    #endregion
 
                     //SI NO SE EJECUTA LA INSTRUCCION SALTA A REVERSA 
-                    if (!conexion.GFun_Lo_Ejecuta_SQL(sSql))
+                    if (!conexion.GFun_Lo_Ejecutar_SQL_Parametros(sSql, parametro))
                     {
-                        catchMensaje.lblMensaje.Text = "ERROR EN LA INSTRUCCIÓN:" + Environment.NewLine + sSql;
+                        catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
+                        catchMensaje.lblMensaje.Text = conexion.sMensajeError;
                         catchMensaje.ShowDialog();
                         goto reversa;
                     }
 
                     //INSTRUCCION PARA INSERTAR EN LA TABLA CV403_PRECIOS_PRODUCTOS CON LISTA BASE
-                    dSubtotal = Convert.ToDouble(txtPrecioCompra.Text) / (1 + (Program.iva + Program.servicio));
+                    if (Program.iCobrarConSinProductos == 1)
+                        dSubtotal = Convert.ToDouble(txtPrecioCompra.Text) / (1 + Program.iva);
+                    else
+                        dSubtotal = Convert.ToDouble(txtPrecioCompra.Text);
 
                     sSql = "";
                     sSql += "insert into cv403_precios_productos (" + Environment.NewLine;
-                    sSql += "id_Lista_Precio, id_Producto, valor_Porcentaje, valor, fecha_inicio," + Environment.NewLine;
+                    sSql += "id_lista_precio, id_producto, valor_porcentaje, valor, fecha_inicio," + Environment.NewLine;
                     sSql += "fecha_final, estado, numero_replica_trigger, numero_control_replica," + Environment.NewLine;
                     sSql += "fecha_ingreso,usuario_ingreso,terminal_ingreso)" + Environment.NewLine;
                     sSql += "values(" + Environment.NewLine;
-                    sSql += "1, " + iIdProducto + ", 0, " + dSubtotal + ", GETDATE()," + Environment.NewLine;
-                    sSql += "GETDATE(), 'A', 1, 1, GETDATE(), '" + Program.sDatosMaximo[0] + "'," + Environment.NewLine;
-                    sSql += "'" + Program.sDatosMaximo[1] + "')";
+                    sSql += "@id_lista_precio, @id_producto, @valor_porcentaje, @valor, @fecha_inicio," + Environment.NewLine;
+                    sSql += "@fecha_final, @estado, @numero_replica_trigger, @numero_control_replica," + Environment.NewLine;
+                    sSql += "getdate(), @usuario_ingreso, @terminal_ingreso)";
 
-                    if (!conexion.GFun_Lo_Ejecuta_SQL(sSql))
+                    #region PARAMETROS
+
+                    a = 0;
+                    parametro = new SqlParameter[11];
+                    parametro[a] = new SqlParameter();
+                    parametro[a].ParameterName = "@id_lista_precio";
+                    parametro[a].SqlDbType = SqlDbType.Int;
+                    parametro[a].Value = iIdListaBase;
+                    a++;
+
+                    parametro[a] = new SqlParameter();
+                    parametro[a].ParameterName = "@id_producto";
+                    parametro[a].SqlDbType = SqlDbType.Int;
+                    parametro[a].Value = iIdProducto;
+                    a++;
+
+                    parametro[a] = new SqlParameter();
+                    parametro[a].ParameterName = "@valor_porcentaje";
+                    parametro[a].SqlDbType = SqlDbType.Decimal;
+                    parametro[a].Value = 0;
+                    a++;
+
+                    parametro[a] = new SqlParameter();
+                    parametro[a].ParameterName = "@valor";
+                    parametro[a].SqlDbType = SqlDbType.Decimal;
+                    parametro[a].Value = dSubtotal;
+                    a++;
+
+                    parametro[a] = new SqlParameter();
+                    parametro[a].ParameterName = "@fecha_inicio";
+                    parametro[a].SqlDbType = SqlDbType.VarChar;
+                    parametro[a].Value = sFechaInicio;
+                    a++;
+
+                    parametro[a] = new SqlParameter();
+                    parametro[a].ParameterName = "@fecha_final";
+                    parametro[a].SqlDbType = SqlDbType.VarChar;
+                    parametro[a].Value = sFechaListaBase;
+                    a++;
+
+                    parametro[a] = new SqlParameter();
+                    parametro[a].ParameterName = "@estado";
+                    parametro[a].SqlDbType = SqlDbType.VarChar;
+                    parametro[a].Value = "A";
+                    a++;
+
+                    parametro[a] = new SqlParameter();
+                    parametro[a].ParameterName = "@numero_replica_trigger";
+                    parametro[a].SqlDbType = SqlDbType.Int;
+                    parametro[a].Value = 0;
+                    a++;
+
+                    parametro[a] = new SqlParameter();
+                    parametro[a].ParameterName = "@numero_control_replica";
+                    parametro[a].SqlDbType = SqlDbType.Int;
+                    parametro[a].Value = 0;
+                    a++;
+
+                    parametro[a] = new SqlParameter();
+                    parametro[a].ParameterName = "@usuario_ingreso";
+                    parametro[a].SqlDbType = SqlDbType.VarChar;
+                    parametro[a].Value = Program.sDatosMaximo[0];
+                    a++;
+
+                    parametro[a] = new SqlParameter();
+                    parametro[a].ParameterName = "@terminal_ingreso";
+                    parametro[a].SqlDbType = SqlDbType.VarChar;
+                    parametro[a].Value = Program.sDatosMaximo[1];
+
+                    #endregion
+
+                    if (!conexion.GFun_Lo_Ejecutar_SQL_Parametros(sSql, parametro))
                     {
-                        catchMensaje.lblMensaje.Text = "ERROR EN LA INSTRUCCIÓN:" + Environment.NewLine + sSql;
+                        catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
+                        catchMensaje.lblMensaje.Text = conexion.sMensajeError;
                         catchMensaje.ShowDialog();
                         goto reversa;
                     }
-                }
+                //}
 
 
                 //SI HUBO ALGUN CAMBIO EN EL PRECIO MINORISTA, SE REALIZA LA ACTUALIZACION
-                if (txtPrecioMinorista.Text.Trim() != sPrecioMinorista)
-                {
+                //if (txtPrecioMinorista.Text.Trim() != sPrecioMinorista)
+                //{
                     //CAMBIO DE ESTADO DE 'A' AL ESTADO 'E'
                     sSql = "";
                     sSql += "update cv403_precios_productos set" + Environment.NewLine;
-                    sSql += "estado = 'E'," + Environment.NewLine;
-                    sSql += "fecha_anula = GETDATE()," + Environment.NewLine;
-                    sSql += "usuario_anula = '" + Program.sDatosMaximo[0] + "'," + Environment.NewLine;
-                    sSql += "terminal_anula = '" + Program.sDatosMaximo[1] + "'" + Environment.NewLine;
-                    sSql += "where id_Producto = " + iIdProducto + Environment.NewLine;
-                    sSql += "and id_Lista_Precio = 4";
+                    sSql += "estado = @estado_1," + Environment.NewLine;
+                    sSql += "fecha_anula = getdate()," + Environment.NewLine;
+                    sSql += "usuario_anula = @usuario_anula," + Environment.NewLine;
+                    sSql += "terminal_anula = @terminal_anula" + Environment.NewLine;
+                    sSql += "where id_producto = @id_producto" + Environment.NewLine;
+                    sSql += "and estado = @estado_2" + Environment.NewLine;
+                    sSql += "and id_lista_precio = @id_lista_precio";
 
-                    if (!conexion.GFun_Lo_Ejecuta_SQL(sSql))
+                    #region PARAMETROS
+
+                    parametro = new SqlParameter[6];
+                    parametro[0] = new SqlParameter();
+                    parametro[0].ParameterName = "@estado_1";
+                    parametro[0].SqlDbType = SqlDbType.VarChar;
+                    parametro[0].Value = "E";
+
+                    parametro[1] = new SqlParameter();
+                    parametro[1].ParameterName = "@usuario_anula";
+                    parametro[1].SqlDbType = SqlDbType.VarChar;
+                    parametro[1].Value = Program.sDatosMaximo[0];
+
+                    parametro[2] = new SqlParameter();
+                    parametro[2].ParameterName = "@terminal_anula";
+                    parametro[2].SqlDbType = SqlDbType.VarChar;
+                    parametro[2].Value = Program.sDatosMaximo[1];
+
+                    parametro[3] = new SqlParameter();
+                    parametro[3].ParameterName = "@id_producto";
+                    parametro[3].SqlDbType = SqlDbType.Int;
+                    parametro[3].Value = iIdProducto;
+
+                    parametro[4] = new SqlParameter();
+                    parametro[4].ParameterName = "@estado_2";
+                    parametro[4].SqlDbType = SqlDbType.VarChar;
+                    parametro[4].Value = "A";
+
+                    parametro[5] = new SqlParameter();
+                    parametro[5].ParameterName = "@id_lista_precio";
+                    parametro[5].SqlDbType = SqlDbType.Int;
+                    parametro[5].Value = iIdListaMinorista;
+
+                    #endregion
+
+                    //SI NO SE EJECUTA LA INSTRUCCION SALTA A REVERSA 
+                    if (!conexion.GFun_Lo_Ejecutar_SQL_Parametros(sSql, parametro))
                     {
-                        catchMensaje.lblMensaje.Text = "ERROR EN LA INSTRUCCIÓN:" + Environment.NewLine + sSql;
+                        catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
+                        catchMensaje.lblMensaje.Text = conexion.sMensajeError;
                         catchMensaje.ShowDialog();
                         goto reversa;
                     }
 
                     //INSTRUCCION PARA NSERTAR EN LA TABLA CV403_PRECIOS_PRODUCTOS CON LISTA MINORISTA
-                    dSubtotal = Convert.ToDouble(txtPrecioMinorista.Text) / (1 + (Program.iva + Program.servicio));
+                    if (Program.iCobrarConSinProductos == 1)
+                    {
+                        if (chkPagaServicio.Checked == true)
+                        {
+                            if (chkPagaIVA.Checked == true)
+                                dSubtotal = Convert.ToDouble(txtPrecioMinorista.Text) / (1 + Program.iva + Program.servicio);
+                            else
+                                dSubtotal = Convert.ToDouble(txtPrecioMinorista.Text) / (1 + Program.servicio);
+                        }
+
+                        else
+                        {
+                            if (chkPagaIVA.Checked == true)
+                                dSubtotal = Convert.ToDouble(txtPrecioMinorista.Text) / (1 + Program.iva);
+                            else
+                                dSubtotal = Convert.ToDouble(txtPrecioMinorista.Text);
+                        }
+                    }
+
+                    else
+                    {
+                        dSubtotal = Convert.ToDouble(txtPrecioMinorista.Text);
+                    }
 
                     sSql = "";
                     sSql += "insert into cv403_precios_productos (" + Environment.NewLine;
-                    sSql += "id_Lista_Precio, id_Producto, valor_Porcentaje, valor, fecha_inicio," + Environment.NewLine;
+                    sSql += "id_lista_precio, id_producto, valor_porcentaje, valor, fecha_inicio," + Environment.NewLine;
                     sSql += "fecha_final, estado, numero_replica_trigger, numero_control_replica," + Environment.NewLine;
                     sSql += "fecha_ingreso,usuario_ingreso,terminal_ingreso)" + Environment.NewLine;
                     sSql += "values(" + Environment.NewLine;
-                    sSql += "4, " + iIdProducto + ", 0, " + dSubtotal + ", GETDATE()," + Environment.NewLine;
-                    sSql += "GETDATE(), 'A', 1, 1, GETDATE(), '" + Program.sDatosMaximo[0] + "'," + Environment.NewLine;
-                    sSql += "'" + Program.sDatosMaximo[1] + "')";
+                    sSql += "@id_lista_precio, @id_producto, @valor_porcentaje, @valor, @fecha_inicio," + Environment.NewLine;
+                    sSql += "@fecha_final, @estado, @numero_replica_trigger, @numero_control_replica," + Environment.NewLine;
+                    sSql += "getdate(), @usuario_ingreso, @terminal_ingreso)";
 
-                    if (!conexion.GFun_Lo_Ejecuta_SQL(sSql))
+                    #region PARAMETROS
+
+                    a = 0;
+                    parametro = new SqlParameter[11];
+                    parametro[a] = new SqlParameter();
+                    parametro[a].ParameterName = "@id_lista_precio";
+                    parametro[a].SqlDbType = SqlDbType.Int;
+                    parametro[a].Value = iIdListaMinorista;
+                    a++;
+
+                    parametro[a] = new SqlParameter();
+                    parametro[a].ParameterName = "@id_producto";
+                    parametro[a].SqlDbType = SqlDbType.Int;
+                    parametro[a].Value = iIdProducto;
+                    a++;
+
+                    parametro[a] = new SqlParameter();
+                    parametro[a].ParameterName = "@valor_porcentaje";
+                    parametro[a].SqlDbType = SqlDbType.Decimal;
+                    parametro[a].Value = 0;
+                    a++;
+
+                    parametro[a] = new SqlParameter();
+                    parametro[a].ParameterName = "@valor";
+                    parametro[a].SqlDbType = SqlDbType.Decimal;
+                    parametro[a].Value = dSubtotal;
+                    a++;
+
+                    parametro[a] = new SqlParameter();
+                    parametro[a].ParameterName = "@fecha_inicio";
+                    parametro[a].SqlDbType = SqlDbType.VarChar;
+                    parametro[a].Value = sFechaInicio;
+                    a++;
+
+                    parametro[a] = new SqlParameter();
+                    parametro[a].ParameterName = "@fecha_final";
+                    parametro[a].SqlDbType = SqlDbType.VarChar;
+                    parametro[a].Value = sFechaListaMinorista;
+                    a++;
+
+                    parametro[a] = new SqlParameter();
+                    parametro[a].ParameterName = "@estado";
+                    parametro[a].SqlDbType = SqlDbType.VarChar;
+                    parametro[a].Value = "A";
+                    a++;
+
+                    parametro[a] = new SqlParameter();
+                    parametro[a].ParameterName = "@numero_replica_trigger";
+                    parametro[a].SqlDbType = SqlDbType.Int;
+                    parametro[a].Value = 0;
+                    a++;
+
+                    parametro[a] = new SqlParameter();
+                    parametro[a].ParameterName = "@numero_control_replica";
+                    parametro[a].SqlDbType = SqlDbType.Int;
+                    parametro[a].Value = 0;
+                    a++;
+
+                    parametro[a] = new SqlParameter();
+                    parametro[a].ParameterName = "@usuario_ingreso";
+                    parametro[a].SqlDbType = SqlDbType.VarChar;
+                    parametro[a].Value = Program.sDatosMaximo[0];
+                    a++;
+
+                    parametro[a] = new SqlParameter();
+                    parametro[a].ParameterName = "@terminal_ingreso";
+                    parametro[a].SqlDbType = SqlDbType.VarChar;
+                    parametro[a].Value = Program.sDatosMaximo[1];
+
+                    #endregion
+
+                    if (!conexion.GFun_Lo_Ejecutar_SQL_Parametros(sSql, parametro))
                     {
-                        catchMensaje.lblMensaje.Text = "ERROR EN LA INSTRUCCIÓN:" + Environment.NewLine + sSql;
+                        catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
+                        catchMensaje.lblMensaje.Text = conexion.sMensajeError;
                         catchMensaje.ShowDialog();
                         goto reversa;
                     }
-                }
+                //}
 
                 conexion.GFun_Lo_Maneja_Transaccion(Program.G_TERMINA_TRANSACCION);
+
+                this.Cursor = Cursors.Default;
+                ok = new VentanasMensajes.frmMensajeNuevoOk();
                 ok.lblMensaje.Text = "Registro actualizado éxitosamente.";
                 ok.ShowDialog();
                 limpiar();
@@ -1881,12 +2241,13 @@ namespace Palatium.Productos
 
             catch (Exception ex)
             {
+                catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
                 catchMensaje.lblMensaje.Text = ex.Message;
                 catchMensaje.ShowDialog();
                 goto reversa;
             }
 
-        reversa: { conexion.GFun_Lo_Maneja_Transaccion(Program.G_REVERSA_TRANSACCION); return; }
+        reversa: { this.Cursor = Cursors.Default; conexion.GFun_Lo_Maneja_Transaccion(Program.G_REVERSA_TRANSACCION); return; }
         }
 
         //FUNCION PARA ELIMINAR EL REGISTRO
@@ -1894,9 +2255,12 @@ namespace Palatium.Productos
         {
             try
             {
+                this.Cursor = Cursors.WaitCursor;
                 //AQUI INICIA PROCESO DE ACTUALIZACION
                 if (!conexion.GFun_Lo_Maneja_Transaccion(Program.G_INICIA_TRANSACCION))
                 {
+                    this.Cursor = Cursors.Default;
+                    ok = new VentanasMensajes.frmMensajeNuevoOk();
                     ok.lblMensaje.Text = "Error al iniciar la transacción para eliminar el registro.";
                     ok.ShowDialog();
                     limpiar();
@@ -1906,77 +2270,42 @@ namespace Palatium.Productos
                 //ELIMINACION DEL PRODUCTO EN CV401_PRODUCTOS
                 sSql = "";
                 sSql += "update cv401_productos set" + Environment.NewLine;
-                sSql += "codigo = '" + txtCodigo.Text.Trim().ToUpper() + "(" + iIdProducto + ")'," + Environment.NewLine;
-                sSql += "estado = 'E'," + Environment.NewLine;
-                sSql += "fecha_anula = GETDATE()," + Environment.NewLine;
-                sSql += "usuario_anula = '" + Program.sDatosMaximo[0] + "'," + Environment.NewLine;
-                sSql += "terminal_anula = '" + Program.sDatosMaximo[1] + "'" + Environment.NewLine;
-                sSql += "where id_producto = " + iIdProducto;
+                sSql += "is_active = @is_active" + Environment.NewLine;
+                sSql += "where id_producto = @id_producto" + Environment.NewLine;
+                sSql += "and estado = @estado";
 
-                if (!conexion.GFun_Lo_Ejecuta_SQL(sSql))
+                #region PARAMETROS
+
+                parametro = new SqlParameter[3];
+                parametro[0] = new SqlParameter();
+                parametro[0].ParameterName = "@is_active";
+                parametro[0].SqlDbType = SqlDbType.Int;
+                parametro[0].Value = 0;
+
+                parametro[1] = new SqlParameter();
+                parametro[1].ParameterName = "@id_producto";
+                parametro[1].SqlDbType = SqlDbType.Int;
+                parametro[1].Value = iIdProducto;
+
+                parametro[2] = new SqlParameter();
+                parametro[2].ParameterName = "@estado";
+                parametro[2].SqlDbType = SqlDbType.VarChar;
+                parametro[2].Value = "A";
+
+                #endregion
+
+                if (!conexion.GFun_Lo_Ejecutar_SQL_Parametros(sSql, parametro))
                 {
-                    catchMensaje.lblMensaje.Text = "ERROR EN LA INSTRUCCIÓN:" + Environment.NewLine + sSql;
+                    catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
+                    catchMensaje.lblMensaje.Text = conexion.sMensajeError;
                     catchMensaje.ShowDialog();
                     goto reversa;
                 }
 
-                //ELIMINACION DEL PRODUCTO EN CV401_NOMBRE_PRODUCTOS
-                sSql = "";
-                sSql += "update cv401_nombre_productos set" + Environment.NewLine;
-                sSql += "estado = 'E'," + Environment.NewLine;
-                sSql += "fecha_anula = GETDATE()," + Environment.NewLine;
-                sSql += "usuario_anula = '" + Program.sDatosMaximo[0] + "'," + Environment.NewLine;
-                sSql += " terminal_anula = '" + Program.sDatosMaximo[1] + "'" + Environment.NewLine;
-                sSql += "where id_Producto = " + iIdProducto + Environment.NewLine;
-                sSql += "and estado = 'A'";
-
-                if (!conexion.GFun_Lo_Ejecuta_SQL(sSql))
-                {
-                    catchMensaje.lblMensaje.Text = "ERROR EN LA INSTRUCCIÓN:" + Environment.NewLine + sSql;
-                    catchMensaje.ShowDialog();
-                    goto reversa;
-                }
-
-                //ELIMINACION DEL PRODUCTO EN CV401_UNIDADES_PRODUCTOS
-                sSql = "";
-                sSql += "update cv401_unidades_productos set" + Environment.NewLine;
-                sSql += "estado = 'E'," + Environment.NewLine;
-                sSql += "fecha_anula = GETDATE()," + Environment.NewLine;
-                sSql += "usuario_anula = '" + Program.sDatosMaximo[0] + "'," + Environment.NewLine;
-                sSql += "terminal_anula = '" + Program.sDatosMaximo[1] + "'," + Environment.NewLine;
-                sSql += "fecha_anulacion = GETDATE()," + Environment.NewLine;
-                sSql += "usuario_anulacion = '" + Program.sDatosMaximo[0] + "'," + Environment.NewLine;
-                sSql += "terminal_anulacion = '" + Program.sDatosMaximo[1] + "'" + Environment.NewLine;
-                sSql += "where id_Producto = " + iIdProducto + Environment.NewLine;
-                sSql += "and estado = 'A'";
-
-                if (!conexion.GFun_Lo_Ejecuta_SQL(sSql))
-                {
-                    catchMensaje.lblMensaje.Text = "ERROR EN LA INSTRUCCIÓN:" + Environment.NewLine + sSql;
-                    catchMensaje.ShowDialog();
-                    goto reversa;
-                }
-
-                //ELIMINACION DEL PRODUCTO EN CV403_PRECIOS_PRODUCTOS
-                sSql = "";
-                sSql += "update cv403_precios_productos set" + Environment.NewLine;
-                sSql += "estado = 'E'," + Environment.NewLine;
-                sSql += "fecha_anula = GETDATE()," + Environment.NewLine;
-                sSql += "usuario_anula = '" + Program.sDatosMaximo[0] + "'," + Environment.NewLine;
-                sSql += "terminal_anula = '" + Program.sDatosMaximo[1] + "'" + Environment.NewLine;
-                sSql += "where id_Producto = " + iIdProducto + Environment.NewLine;
-                sSql += "and estado = 'A'";
-
-                if (!conexion.GFun_Lo_Ejecuta_SQL(sSql))
-                {
-                    catchMensaje.lblMensaje.Text = "ERROR EN LA INSTRUCCIÓN:" + Environment.NewLine + sSql;
-                    catchMensaje.ShowDialog();
-                    goto reversa;
-                }
-
-                //si se ejecuta bien hara un commit
+                this.Cursor = Cursors.Default;
                 conexion.GFun_Lo_Maneja_Transaccion(Program.G_TERMINA_TRANSACCION);
-                ok.lblMensaje.Text = "El registro se ha eliminado con éxito.";
+                ok = new VentanasMensajes.frmMensajeNuevoOk();
+                ok.lblMensaje.Text = "El registro se ha inhabilitado con éxito.";
                 ok.ShowDialog();
                 limpiar();
                 return;
@@ -1984,12 +2313,13 @@ namespace Palatium.Productos
 
             catch (Exception ex)
             {
+                catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
                 catchMensaje.lblMensaje.Text = ex.Message;
                 catchMensaje.ShowDialog();
                 goto reversa;
             }
 
-        reversa: { conexion.GFun_Lo_Maneja_Transaccion(Program.G_REVERSA_TRANSACCION); return; }
+        reversa: { this.Cursor = Cursors.Default; conexion.GFun_Lo_Maneja_Transaccion(Program.G_REVERSA_TRANSACCION); return; }
         }
 
         #endregion

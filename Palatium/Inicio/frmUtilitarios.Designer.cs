@@ -47,6 +47,7 @@
             this.lblVersionDemo = new System.Windows.Forms.Label();
             this.lblNombreEquipo = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
+            this.btnHistoríalCliente = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.logo)).BeginInit();
             this.SuspendLayout();
             // 
@@ -127,13 +128,14 @@
             this.btnConsultarPrecios.ForeColor = System.Drawing.Color.White;
             this.btnConsultarPrecios.Image = global::Palatium.Properties.Resources.icono_boton_consulta_precios;
             this.btnConsultarPrecios.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.btnConsultarPrecios.Location = new System.Drawing.Point(730, 220);
+            this.btnConsultarPrecios.Location = new System.Drawing.Point(695, 9);
             this.btnConsultarPrecios.Name = "btnConsultarPrecios";
-            this.btnConsultarPrecios.Size = new System.Drawing.Size(192, 138);
+            this.btnConsultarPrecios.Size = new System.Drawing.Size(192, 55);
             this.btnConsultarPrecios.TabIndex = 26;
             this.btnConsultarPrecios.Text = "Consulta de Precios\r\n ";
             this.btnConsultarPrecios.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.btnConsultarPrecios.UseVisualStyleBackColor = false;
+            this.btnConsultarPrecios.Visible = false;
             this.btnConsultarPrecios.Click += new System.EventHandler(this.btnConsultarPrecios_Click);
             this.btnConsultarPrecios.MouseEnter += new System.EventHandler(this.btnConsultarPrecios_MouseEnter);
             this.btnConsultarPrecios.MouseLeave += new System.EventHandler(this.btnConsultarPrecios_MouseLeave);
@@ -399,6 +401,26 @@
             this.label7.TabIndex = 93;
             this.label7.Text = "Nombre Equipo:";
             // 
+            // btnHistoríalCliente
+            // 
+            this.btnHistoríalCliente.BackColor = System.Drawing.Color.Navy;
+            this.btnHistoríalCliente.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btnHistoríalCliente.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnHistoríalCliente.FlatAppearance.BorderSize = 2;
+            this.btnHistoríalCliente.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnHistoríalCliente.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold);
+            this.btnHistoríalCliente.ForeColor = System.Drawing.Color.White;
+            this.btnHistoríalCliente.Image = global::Palatium.Properties.Resources.icono_boton_historial_cliente;
+            this.btnHistoríalCliente.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.btnHistoríalCliente.Location = new System.Drawing.Point(730, 220);
+            this.btnHistoríalCliente.Name = "btnHistoríalCliente";
+            this.btnHistoríalCliente.Size = new System.Drawing.Size(192, 138);
+            this.btnHistoríalCliente.TabIndex = 95;
+            this.btnHistoríalCliente.Text = "Historial del Cliente\r\n ";
+            this.btnHistoríalCliente.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.btnHistoríalCliente.UseVisualStyleBackColor = false;
+            this.btnHistoríalCliente.Click += new System.EventHandler(this.btnHistoríalCliente_Click);
+            // 
             // frmUtilitarios
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -406,6 +428,7 @@
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
             this.ClientSize = new System.Drawing.Size(1360, 694);
+            this.Controls.Add(this.btnHistoríalCliente);
             this.Controls.Add(this.lblNombreEquipo);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.lblVersionDemo);
@@ -456,5 +479,6 @@
         private System.Windows.Forms.Label lblVersionDemo;
         private System.Windows.Forms.Label lblNombreEquipo;
         private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Button btnHistoríalCliente;
     }
 }
