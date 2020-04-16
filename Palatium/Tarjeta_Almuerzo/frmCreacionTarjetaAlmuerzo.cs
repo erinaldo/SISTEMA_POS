@@ -38,6 +38,7 @@ namespace Palatium.Tarjeta_Almuerzo
         string sNombreItem;
         string sNumeroComprobante;
         string sCodigoProducto;
+        string sCodigoMetodoPago;
 
         DataTable dtConsulta;
         DataTable dtTarjetas;
@@ -74,6 +75,7 @@ namespace Palatium.Tarjeta_Almuerzo
         int iCantidadReal;
         int iIdSriFormaPago_P;
         int iIdTipoComprobante;
+        int iIdDocumentoPorCobrar;
 
         Decimal dbPropina;
         Decimal dTotalDebido;
@@ -848,6 +850,8 @@ namespace Palatium.Tarjeta_Almuerzo
                     return false;
                 }
 
+                iIdDocumentoPorCobrar = comanda.iIdDocumentoCobrar;
+
                 return true;
             }
 
@@ -870,7 +874,7 @@ namespace Palatium.Tarjeta_Almuerzo
 
                 bRespuesta = comanda.insertarFactura(iIdPedido, iIdTipoComprobante, iFacturaElectronica_P,
                                                      iIdPersona, Program.iIdLocalidad, dtPagos, dTotalDebido, 0,
-                                                     0, 0, sFecha, conexion);
+                                                     0, 0, sFecha, iIdDocumentoPorCobrar, conexion);
 
                 if (bRespuesta == false)
                 {
@@ -952,9 +956,16 @@ namespace Palatium.Tarjeta_Almuerzo
                 dtPagos.Columns.Add("numero_lote");
                 dtPagos.Columns.Add("bandera_insertar_lote");
                 dtPagos.Columns.Add("propina");
+                dtPagos.Columns.Add("codigo_metodo_pago");
+                dtPagos.Columns.Add("numero_documento");
+                dtPagos.Columns.Add("fecha_vcto");
+                dtPagos.Columns.Add("cg_banco");
+                dtPagos.Columns.Add("numero_cuenta");
+                dtPagos.Columns.Add("titular");
 
                 dtPagos.Rows.Add(iIdTipoFormaCobro, sDescripcionFormaPago, dTotalDebido, iIdSriFormaPago_P, iConciliacion,
-                                 iOperadorTarjeta, iTipoTarjeta, sNumeroLote, iBanderaInsertarLote, dbPropina);
+                                 iOperadorTarjeta, iTipoTarjeta, sNumeroLote, iBanderaInsertarLote, dbPropina, sCodigoMetodoPago,
+                                 "", "", "0", "", "");
 
                 return true;
             }
@@ -1028,7 +1039,7 @@ namespace Palatium.Tarjeta_Almuerzo
                 iIdTipoFormaCobro = Convert.ToInt32(dtConsulta.Rows[0]["id_pos_tipo_forma_cobro"].ToString());
                 sDescripcionFormaPago = dtConsulta.Rows[0]["descripcion"].ToString().Trim().ToUpper();
                 iIdSriFormaPago_P = Convert.ToInt32(dtConsulta.Rows[0]["id_sri_forma_pago"].ToString());
-
+                sCodigoMetodoPago = dtConsulta.Rows[0]["codigo"].ToString().Trim().ToUpper();
 
                 return true;
             }

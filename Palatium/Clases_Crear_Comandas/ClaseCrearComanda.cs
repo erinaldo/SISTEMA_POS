@@ -33,7 +33,7 @@ namespace Palatium.Clases_Crear_Comandas
         int iIdDetPedido;
         int p, q;
 
-        int iIdDocumentoCobrar;
+        public int iIdDocumentoCobrar;
         int iCuenta;
         int iIdPago;
         int iIdDocumentoPagado;
@@ -42,6 +42,7 @@ namespace Palatium.Clases_Crear_Comandas
         int iOperadorTarjeta;
         int iTipoTarjeta;
         int iBanderaInsertarLote;
+        int iIdDocumentoPago;
         int iCgTipoCaja = 8906;
         int iCgUnidadMedida = 546;
 
@@ -76,6 +77,7 @@ namespace Palatium.Clases_Crear_Comandas
         string sNombreProducto_P;
         string sEstadoOrden;
         string sNumeroLote;
+        string sCodigoMetodoPago;
         string sCodigoTipoFormaCobro;
         string sClaveAcceso;
         public string sEstablecimiento;
@@ -1798,8 +1800,15 @@ namespace Palatium.Clases_Crear_Comandas
                 this.iIdPersona_o_Empresa = iIdPersona_P;
                 this.conexionM = conexionM_P;
 
+                int iIdEventoCobro_Rec;
+                int iNumeroDocumento_Rec;
+                int iIdFactura_Rec;
+                int iIdCaja_A;
+                int a;
+
                 sSql = "";
-                sSql += "select id_documento_cobrar" + Environment.NewLine;
+                sSql += "select id_documento_cobrar, id_evento_cobro, isnull(numero_documento, '0') numero_documento," + Environment.NewLine;
+                sSql += "isnull(id_factura, 0) id_factura" + Environment.NewLine;
                 sSql += "from cv403_dctos_por_cobrar" + Environment.NewLine;
                 sSql += "where id_pedido = " + iIdPedido_P + Environment.NewLine;
                 sSql += "and estado = 'A'";
@@ -1816,7 +1825,42 @@ namespace Palatium.Clases_Crear_Comandas
                 }
 
                 iIdDocumentoCobrar = Convert.ToInt32(dtConsulta.Rows[0]["id_documento_cobrar"].ToString());
+                iIdEventoCobro_Rec = Convert.ToInt32(dtConsulta.Rows[0]["id_evento_cobro"].ToString());
+                iNumeroDocumento_Rec = Convert.ToInt32(dtConsulta.Rows[0]["numero_documento"].ToString());
+                iIdFactura_Rec = Convert.ToInt32(dtConsulta.Rows[0]["id_factura"].ToString());
                 iCuenta = 0;
+
+                //FUNCION PARA EXTRAER EL ID DE CAJA
+                //----------------------------------------------------------------------------------------------------
+                sSql = "";
+                sSql += "select id_caja" + Environment.NewLine;
+                sSql += "from cv405_cajas" + Environment.NewLine;
+                sSql += "where id_localidad = @id_localidad" + Environment.NewLine;
+                sSql += "and estado = @estado";
+
+                parametro = new SqlParameter[2];
+                parametro[0] = new SqlParameter();
+                parametro[0].ParameterName = "@id_localidad";
+                parametro[0].SqlDbType = SqlDbType.Int;
+                parametro[0].Value = iIdLocalidad_P;
+
+                parametro[1] = new SqlParameter();
+                parametro[1].ParameterName = "@estado";
+                parametro[1].SqlDbType = SqlDbType.VarChar;
+                parametro[1].Value = "A";
+
+                dtConsulta = new DataTable();
+                dtConsulta.Clear();
+
+                bRespuesta = conexionM.GFun_Lo_Busca_Registro_Parametros(dtConsulta, sSql, parametro);
+
+                if (bRespuesta == false)
+                {
+                    sMensajeError = conexionM.sMensajeError;
+                    return false;
+                }
+
+                iIdCaja_A = Convert.ToInt32(dtConsulta.Rows[0]["id_caja"].ToString());
 
                 //FUNCION PARA ELIMINAR LOS MOVIMIENTOS DE CAJA
                 //--------------------------------------------------------------------------------------------------------
@@ -2048,13 +2092,13 @@ namespace Palatium.Clases_Crear_Comandas
                 sSql += "insert into cv403_pagos (" + Environment.NewLine;
                 sSql += "idempresa, id_persona, fecha_pago, cg_moneda, valor," + Environment.NewLine;
                 sSql += "propina, cg_empresa, id_localidad, cg_cajero, fecha_ingreso," + Environment.NewLine;
-                sSql += "usuario_ingreso, terminal_ingreso, estado, " + Environment.NewLine;
+                sSql += "usuario_ingreso, terminal_ingreso, id_caja, estado," + Environment.NewLine;
                 sSql += "numero_replica_trigger, numero_control_replica,cambio) " + Environment.NewLine;
                 sSql += "values(" + Environment.NewLine;
                 sSql += Program.iIdEmpresa + ", " + iIdPersona_o_Empresa + ", '" + sFecha_P + "', " + Program.iMoneda + "," + Environment.NewLine;
                 sSql += dbTotalDebido + ", " + dbPropina + ", " + Program.iCgEmpresa + "," + Environment.NewLine;
                 sSql += iIdLocalidad_P + ", 7799, GETDATE(), '" + Program.sDatosMaximo[0] + "'," + Environment.NewLine;
-                sSql += "'" + Program.sDatosMaximo[1] + "', 'A' , 0, 0, " + dbCambio + ")";
+                sSql += "'" + Program.sDatosMaximo[1] + "', " + iIdCaja_A + ", 'A', 0, 0, " + dbCambio + ")";
 
                 if (!conexionM.GFun_Lo_Ejecuta_SQL(sSql))
                 {
@@ -2144,75 +2188,331 @@ namespace Palatium.Clases_Crear_Comandas
                     iBanderaInsertarLote = Convert.ToInt32(dtPagos.Rows[i]["bandera_insertar_lote"].ToString());
                     sNumeroLote = dtPagos.Rows[i]["numero_lote"].ToString();
                     dbPropinaRecibidaFormaPago = Convert.ToDecimal(dtPagos.Rows[i]["propina"].ToString());
+                    sCodigoMetodoPago = dtPagos.Rows[i]["codigo_metodo_pago"].ToString();
 
-                    if (iConciliacion == 1)
+                    if (sCodigoMetodoPago == "CH")
                     {
-                        int iRespuestaNumeroLote = contarNumeroLote(iOperadorTarjeta);
+                        int iNumeroDocumento_REC = Convert.ToInt32(dtPagos.Rows[i]["numero_documento"].ToString());
+                        string sFecha_REC = dtPagos.Rows[i]["fecha_vcto"].ToString();
+                        string sNumeroCuenta = dtPagos.Rows[i]["numero_cuenta"].ToString();
+                        string sTitularCuenta = dtPagos.Rows[i]["titular"].ToString();
+                        int iCgBanco = Convert.ToInt32(dtPagos.Rows[i]["cg_banco"].ToString());
+                        int iIdPosTipoFormaCobro_REC = Convert.ToInt32(dtPagos.Rows[i]["id_pos_tipo_forma_cobro"].ToString());
+                        Decimal dbValorGuardar = Convert.ToDecimal(dtPagos.Rows[i]["valor"].ToString());
 
-                        if (iRespuestaNumeroLote == -1)
+                        sSql = "";
+                        sSql += "insert into cv403_documentos_pagos (" + Environment.NewLine;
+                        sSql += "id_pago, cg_tipo_documento, numero_documento, fecha_vcto, " + Environment.NewLine;
+                        sSql += "cg_moneda, cotizacion, valor, id_pos_tipo_forma_cobro," + Environment.NewLine;
+                        sSql += "estado, fecha_ingreso, usuario_ingreso, terminal_ingreso," + Environment.NewLine;
+                        sSql += "numero_replica_trigger, numero_control_replica, propina_recibida," + Environment.NewLine;
+                        sSql += "cg_banco, numero_cta, titular)" + Environment.NewLine;
+                        sSql += "values(" + Environment.NewLine;
+                        sSql += "@id_pago, @cg_tipo_documento, @numero_documento, @fecha_vcto, " + Environment.NewLine;
+                        sSql += "@cg_moneda, @cotizacion, @valor, @id_pos_tipo_forma_cobro," + Environment.NewLine;
+                        sSql += "@estado, getdate(), @usuario_ingreso, @terminal_ingreso," + Environment.NewLine;
+                        sSql += "@numero_replica_trigger, @numero_control_replica, @propina_recibida," + Environment.NewLine;
+                        sSql += "@cg_banco, @numero_cta, @titular)";
+
+                        #region PARAMETROS
+
+                        a = 0;
+                        parametro = new SqlParameter[17];
+                        parametro[a] = new SqlParameter();
+                        parametro[a].ParameterName = "@id_pago";
+                        parametro[a].SqlDbType = SqlDbType.Int;
+                        parametro[a].Value = iIdPago;
+                        a++;
+
+                        parametro[a] = new SqlParameter();
+                        parametro[a].ParameterName = "@cg_tipo_documento";
+                        parametro[a].SqlDbType = SqlDbType.Int;
+                        parametro[a].Value = iCgTipoDocumento;
+                        a++;
+
+                        parametro[a] = new SqlParameter();
+                        parametro[a].ParameterName = "@numero_documento";
+                        parametro[a].SqlDbType = SqlDbType.Int;
+                        parametro[a].Value = iNumeroDocumento_REC;
+                        a++;
+
+                        parametro[a] = new SqlParameter();
+                        parametro[a].ParameterName = "@fecha_vcto";
+                        parametro[a].SqlDbType = SqlDbType.VarChar;
+                        parametro[a].Value = sFecha_REC;
+                        a++;
+
+                        parametro[a] = new SqlParameter();
+                        parametro[a].ParameterName = "@cg_moneda";
+                        parametro[a].SqlDbType = SqlDbType.Int;
+                        parametro[a].Value = Program.iMoneda;
+                        a++;
+
+                        parametro[a] = new SqlParameter();
+                        parametro[a].ParameterName = "@cotizacion";
+                        parametro[a].SqlDbType = SqlDbType.Int;
+                        parametro[a].Value = 1;
+                        a++;
+
+                        parametro[a] = new SqlParameter();
+                        parametro[a].ParameterName = "@valor";
+                        parametro[a].SqlDbType = SqlDbType.Decimal;
+                        parametro[a].Value = dbValorGuardar;
+                        a++;
+
+                        parametro[a] = new SqlParameter();
+                        parametro[a].ParameterName = "@id_pos_tipo_forma_cobro";
+                        parametro[a].SqlDbType = SqlDbType.Int;
+                        parametro[a].Value = iIdPosTipoFormaCobro_REC;
+                        a++;
+
+                        parametro[a] = new SqlParameter();
+                        parametro[a].ParameterName = "@estado";
+                        parametro[a].SqlDbType = SqlDbType.VarChar;
+                        parametro[a].Value = "A";
+                        a++;
+
+                        parametro[a] = new SqlParameter();
+                        parametro[a].ParameterName = "@usuario_ingreso";
+                        parametro[a].SqlDbType = SqlDbType.VarChar;
+                        parametro[a].Value = Program.sDatosMaximo[0];
+                        a++;
+
+                        parametro[a] = new SqlParameter();
+                        parametro[a].ParameterName = "@terminal_ingreso";
+                        parametro[a].SqlDbType = SqlDbType.VarChar;
+                        parametro[a].Value = Program.sDatosMaximo[1];
+                        a++;
+
+                        parametro[a] = new SqlParameter();
+                        parametro[a].ParameterName = "@numero_replica_trigger";
+                        parametro[a].SqlDbType = SqlDbType.Int;
+                        parametro[a].Value = 0;
+                        a++;
+
+                        parametro[a] = new SqlParameter();
+                        parametro[a].ParameterName = "@numero_control_replica";
+                        parametro[a].SqlDbType = SqlDbType.Int;
+                        parametro[a].Value = 0;
+                        a++;
+
+                        parametro[a] = new SqlParameter();
+                        parametro[a].ParameterName = "@propina_recibida";
+                        parametro[a].SqlDbType = SqlDbType.Decimal;
+                        parametro[a].Value = dbPropinaRecibidaFormaPago;
+                        a++;
+
+                        parametro[a] = new SqlParameter();
+                        parametro[a].ParameterName = "@cg_banco";
+                        parametro[a].SqlDbType = SqlDbType.Int;
+                        parametro[a].Value = iCgBanco;
+                        a++;
+
+                        parametro[a] = new SqlParameter();
+                        parametro[a].ParameterName = "@numero_cta";
+                        parametro[a].SqlDbType = SqlDbType.VarChar;
+                        parametro[a].Value = sNumeroCuenta;
+                        a++;
+
+                        parametro[a] = new SqlParameter();
+                        parametro[a].ParameterName = "@titular";
+                        parametro[a].SqlDbType = SqlDbType.VarChar;
+                        parametro[a].Value = sTitularCuenta;
+                        
+                        #endregion
+
+                        if (!conexionM.GFun_Lo_Ejecutar_SQL_Parametros(sSql, parametro))
                         {
+                            sMensajeError = conexionM.sMensajeError;
                             return false;
                         }
 
-                        if (iRespuestaNumeroLote == 0)
+                        sTabla = "cv403_documentos_pagos";
+                        sCampo = "id_documento_pago";
+
+                        iMaximo = conexionM.GFun_Ln_Saca_Maximo_ID(sTabla, sCampo, "", Program.sDatosMaximo);
+
+                        if (iMaximo == -1)
                         {
-                            if (insertarNumeroLote(sNumeroLote, iOperadorTarjeta) == false)
-                            {
-                                return false;
-                            }
+                            sMensajeError = "No se pudo obtener el codigo de la tabla " + sTabla;
+                            return false;
+                        }
+
+                        iIdDocumentoPago = Convert.ToInt32(iMaximo);
+
+                        sSql = "";
+                        sSql += "insert into cv403_dctos_por_cobrar (" + Environment.NewLine;
+                        sSql += "id_evento_cobro, cg_tipo_documento, id_documento_pago," + Environment.NewLine;
+                        sSql += "numero_documento, fecha_vcto, cg_moneda, valor, cg_estado_dcto," + Environment.NewLine;
+                        sSql += "estado, fecha_ingreso, usuario_ingreso, terminal_ingreso," + Environment.NewLine;
+                        sSql += "numero_replica_trigger, numero_control_replica)" + Environment.NewLine;
+                        sSql += "values (" + Environment.NewLine;
+                        sSql += "@id_evento_cobro, @cg_tipo_documento, @id_documento_pago," + Environment.NewLine;
+                        sSql += "@numero_documento, @fecha_vcto, @cg_moneda, @valor, @cg_estado_dcto," + Environment.NewLine;
+                        sSql += "@estado, getdate(), @usuario_ingreso, @terminal_ingreso," + Environment.NewLine;
+                        sSql += "@numero_replica_trigger, @numero_control_replica)";
+
+                        #region PARAMETROS
+
+                        a = 0;
+                        parametro = new SqlParameter[13];
+                        parametro[a] = new SqlParameter();
+                        parametro[a].ParameterName = "@id_evento_cobro";
+                        parametro[a].SqlDbType = SqlDbType.Int;
+                        parametro[a].Value = iIdEventoCobro_Rec;
+                        a++;
+
+                        parametro[a] = new SqlParameter();
+                        parametro[a].ParameterName = "@cg_tipo_documento";
+                        parametro[a].SqlDbType = SqlDbType.Int;
+                        parametro[a].Value = iCgTipoDocumento;
+                        a++;
+
+                        parametro[a] = new SqlParameter();
+                        parametro[a].ParameterName = "@id_documento_pago";
+                        parametro[a].SqlDbType = SqlDbType.Int;
+                        parametro[a].Value = iIdDocumentoPago;
+                        a++;
+
+                        parametro[a] = new SqlParameter();
+                        parametro[a].ParameterName = "@numero_documento";
+                        parametro[a].SqlDbType = SqlDbType.Int;
+                        parametro[a].Value = iNumeroDocumento_REC;
+                        a++;
+
+                        parametro[a] = new SqlParameter();
+                        parametro[a].ParameterName = "@fecha_vcto";
+                        parametro[a].SqlDbType = SqlDbType.VarChar;
+                        parametro[a].Value = sFecha_REC;
+                        a++;
+
+                        parametro[a] = new SqlParameter();
+                        parametro[a].ParameterName = "@cg_moneda";
+                        parametro[a].SqlDbType = SqlDbType.Int;
+                        parametro[a].Value = Program.iMoneda;
+                        a++;
+
+                        parametro[a] = new SqlParameter();
+                        parametro[a].ParameterName = "@valor";
+                        parametro[a].SqlDbType = SqlDbType.Decimal;
+                        parametro[a].Value = dbValorGuardar;
+                        a++;
+
+                        parametro[a] = new SqlParameter();
+                        parametro[a].ParameterName = "@cg_estado_dcto";
+                        parametro[a].SqlDbType = SqlDbType.Int;
+                        parametro[a].Value = 7460;
+                        a++;
+
+                        parametro[a] = new SqlParameter();
+                        parametro[a].ParameterName = "@estado";
+                        parametro[a].SqlDbType = SqlDbType.VarChar;
+                        parametro[a].Value = "A";
+                        a++;
+
+                        parametro[a] = new SqlParameter();
+                        parametro[a].ParameterName = "@usuario_ingreso";
+                        parametro[a].SqlDbType = SqlDbType.VarChar;
+                        parametro[a].Value = Program.sDatosMaximo[0];
+                        a++;
+
+                        parametro[a] = new SqlParameter();
+                        parametro[a].ParameterName = "@terminal_ingreso";
+                        parametro[a].SqlDbType = SqlDbType.VarChar;
+                        parametro[a].Value = Program.sDatosMaximo[1];
+                        a++;
+
+                        parametro[a] = new SqlParameter();
+                        parametro[a].ParameterName = "@numero_replica_trigger";
+                        parametro[a].SqlDbType = SqlDbType.Int;
+                        parametro[a].Value = 0;
+                        a++;
+
+                        parametro[a] = new SqlParameter();
+                        parametro[a].ParameterName = "@numero_control_replica";
+                        parametro[a].SqlDbType = SqlDbType.Int;
+                        parametro[a].Value = 0;
+
+                        #endregion
+
+                        if (!conexionM.GFun_Lo_Ejecutar_SQL_Parametros(sSql, parametro))
+                        {
+                            sMensajeError = conexionM.sMensajeError;
+                            return false;
                         }
                     }
 
-                    sSql = "";
-                    sSql += "insert into cv403_documentos_pagos (" + Environment.NewLine;
-                    sSql += "id_pago, cg_tipo_documento, numero_documento, fecha_vcto, " + Environment.NewLine;
-                    sSql += "cg_moneda, cotizacion, valor, id_pos_tipo_forma_cobro," + Environment.NewLine;
-                    sSql += "estado, fecha_ingreso, usuario_ingreso, terminal_ingreso," + Environment.NewLine;
-                    sSql += "numero_replica_trigger, numero_control_replica, valor_recibido," + Environment.NewLine;
-                    sSql += "lote_tarjeta, id_pos_operador_tarjeta, id_pos_tipo_tarjeta, propina_recibida)" + Environment.NewLine;
-                    sSql += "values(" + Environment.NewLine;
-                    sSql += iIdPago + ", " + iCgTipoDocumento + ", 9999, '" + sFecha_P + "', " + Environment.NewLine;
-                    sSql += Program.iMoneda + ", 1, " + Convert.ToDecimal(dtPagos.Rows[i]["valor"].ToString()) + "," + Environment.NewLine;
-                    sSql += Convert.ToInt32(dtPagos.Rows[i]["id_pos_tipo_forma_cobro"].ToString()) + ", 'A', GETDATE()," + Environment.NewLine;
-                    sSql += "'" + Program.sDatosMaximo[0] + "', '" + Program.sDatosMaximo[1] + "', 1, 0,";
-
-                    if (sCodigoTipoFormaCobro == "01")
-                    {
-                        sSql += (Convert.ToDecimal(dtPagos.Rows[i]["valor"].ToString()) + dbCambio) + ", ";
-                    }
-
                     else
                     {
-                        sSql += "null, ";
-                    }
+                        if (iConciliacion == 1)
+                        {
+                            int iRespuestaNumeroLote = contarNumeroLote(iOperadorTarjeta);
 
-                    if (iConciliacion == 1)
-                    {
-                        sSql += "'" + sNumeroLote + "', " + iOperadorTarjeta + ", " + iTipoTarjeta + ", ";
-                    }
+                            if (iRespuestaNumeroLote == -1)
+                            {
+                                return false;
+                            }
 
-                    else
-                    {
-                        sSql += "null, null, null, ";
-                    }
+                            if (iRespuestaNumeroLote == 0)
+                            {
+                                if (insertarNumeroLote(sNumeroLote, iOperadorTarjeta) == false)
+                                {
+                                    return false;
+                                }
+                            }
+                        }
 
-                    sSql += dbPropinaRecibidaFormaPago + ")";
+                        sSql = "";
+                        sSql += "insert into cv403_documentos_pagos (" + Environment.NewLine;
+                        sSql += "id_pago, cg_tipo_documento, numero_documento, fecha_vcto, " + Environment.NewLine;
+                        sSql += "cg_moneda, cotizacion, valor, id_pos_tipo_forma_cobro," + Environment.NewLine;
+                        sSql += "estado, fecha_ingreso, usuario_ingreso, terminal_ingreso," + Environment.NewLine;
+                        sSql += "numero_replica_trigger, numero_control_replica, valor_recibido," + Environment.NewLine;
+                        sSql += "lote_tarjeta, id_pos_operador_tarjeta, id_pos_tipo_tarjeta, propina_recibida)" + Environment.NewLine;
+                        sSql += "values(" + Environment.NewLine;
+                        sSql += iIdPago + ", " + iCgTipoDocumento + ", 9999, '" + sFecha_P + "', " + Environment.NewLine;
+                        sSql += Program.iMoneda + ", 1, " + Convert.ToDecimal(dtPagos.Rows[i]["valor"].ToString()) + "," + Environment.NewLine;
+                        sSql += Convert.ToInt32(dtPagos.Rows[i]["id_pos_tipo_forma_cobro"].ToString()) + ", 'A', GETDATE()," + Environment.NewLine;
+                        sSql += "'" + Program.sDatosMaximo[0] + "', '" + Program.sDatosMaximo[1] + "', 1, 0,";
 
-                    if (!conexionM.GFun_Lo_Ejecuta_SQL(sSql))
-                    {
-                        sMensajeError = conexionM.sMensajeError;
-                        return false;
+                        if (sCodigoTipoFormaCobro == "01")
+                        {
+                            sSql += (Convert.ToDecimal(dtPagos.Rows[i]["valor"].ToString()) + dbCambio) + ", ";
+                        }
+
+                        else
+                        {
+                            sSql += "null, ";
+                        }
+
+                        if (iConciliacion == 1)
+                        {
+                            sSql += "'" + sNumeroLote + "', " + iOperadorTarjeta + ", " + iTipoTarjeta + ", ";
+                        }
+
+                        else
+                        {
+                            sSql += "null, null, null, ";
+                        }
+
+                        sSql += dbPropinaRecibidaFormaPago + ")";
+
+                        if (!conexionM.GFun_Lo_Ejecuta_SQL(sSql))
+                        {
+                            sMensajeError = conexionM.sMensajeError;
+                            return false;
+                        }
                     }
                 }
 
                 sSql = "";
                 sSql += "insert into cv403_documentos_pagados (" + Environment.NewLine;
-                sSql += "id_documento_cobrar, id_pago, valor," + Environment.NewLine;
+                sSql += "id_documento_cobrar, id_pago, valor, numero_documento," + Environment.NewLine;
                 sSql += "estado, numero_replica_trigger,numero_control_replica," + Environment.NewLine;
                 sSql += "fecha_ingreso, usuario_ingreso, terminal_ingreso)" + Environment.NewLine;
                 sSql += "values (" + Environment.NewLine;
-                sSql += iIdDocumentoCobrar + ", " + iIdPago + ", " + dbTotalDebido + ", 'A', 0, 0, " + Environment.NewLine;
-                sSql += "GETDATE(), '" + Program.sDatosMaximo[0] + "', '" + Program.sDatosMaximo[1] + "')";
+                sSql += iIdDocumentoCobrar + ", " + iIdPago + ", " + dbTotalDebido + ", " + iNumeroDocumento_Rec + "," + Environment.NewLine;
+                sSql += "'A', 0, 0, GETDATE(), '" + Program.sDatosMaximo[0] + "', '" + Program.sDatosMaximo[1] + "')";
 
                 if (!conexionM.GFun_Lo_Ejecuta_SQL(sSql))
                 {
@@ -2234,7 +2534,7 @@ namespace Palatium.Clases_Crear_Comandas
         public bool insertarFactura(int iIdPedido_P, int iIdTipoComprobante_P, int iFacturaElectronica_P,
                                     int iIdPersona_P, int iIdLocalidad_P,  DataTable dtPagos_P, Decimal dbTotalDebido_P, 
                                     int iBanderaRecargoBoton_P, int iBanderaRemoverIvaBoton_P, int iBanderaComandaPendiente_P, 
-                                    string sFecha_P, ConexionBD.ConexionBD conexionM_P)
+                                    string sFecha_P, int iIdDocumentoPorCobrar_P, ConexionBD.ConexionBD conexionM_P)
         {
             try
             {
@@ -2496,6 +2796,38 @@ namespace Palatium.Clases_Crear_Comandas
                     sMensajeError = conexionM.sMensajeError;
                     return false;
                 }
+                //-------------------------------------------------------------------------------------------
+
+                //INSTRUCCION PARA ACTUALIZAR EL NUMERO DE COMPROBANTE
+                //-------------------------------------------------------------------------------------------
+                sSql = "";
+                sSql += "update cv403_documentos_pagados set" + Environment.NewLine;
+                sSql += "numero_documento = @numero_documento" + Environment.NewLine;
+                sSql += "where id_documento_cobrar = @id_documento_cobrar" + Environment.NewLine;
+                sSql += "and estado = @estado";
+
+                parametro = new SqlParameter[3];
+                parametro[0] = new SqlParameter();
+                parametro[0].ParameterName = "@numero_documento";
+                parametro[0].SqlDbType = SqlDbType.Int;
+                parametro[0].Value = Convert.ToInt32(sNumeroComprobante);
+
+                parametro[1] = new SqlParameter();
+                parametro[1].ParameterName = "@id_documento_cobrar";
+                parametro[1].SqlDbType = SqlDbType.Int;
+                parametro[1].Value = iIdDocumentoPorCobrar_P;
+
+                parametro[2] = new SqlParameter();
+                parametro[2].ParameterName = "@estado";
+                parametro[2].SqlDbType = SqlDbType.VarChar;
+                parametro[2].Value = "A";
+
+                if (!conexionM.GFun_Lo_Ejecutar_SQL_Parametros(sSql, parametro))
+                {
+                    sMensajeError = conexionM.sMensajeError;
+                    return false;
+                }
+
                 //-------------------------------------------------------------------------------------------
 
                 //INSTRUCCION PARA ACTUALIZAR DATOS EN LA TABLA CV403_CAB_PEDIDOS
@@ -3059,6 +3391,383 @@ namespace Palatium.Clases_Crear_Comandas
                     sMensajeError = conexionM.sMensajeError;
                     return false;
                 }
+
+                return true;
+            }
+
+            catch (Exception ex)
+            {
+                sMensajeError = ex.Message;
+                return false;
+            }
+        }
+
+        //FUNCION PARA INSERTAR LOS CHEQUES
+        private bool insertarDocumentoCheque(int iIdLocalidad_P, int iNumeroPago_P, int iIdPersona_P, string sFecha_P,
+                                             Decimal dbValor_P, string sUsuario_P, string sTerminal_P, int iIdFactura_P,
+                                             DataTable dtPagos_P, ConexionBD.ConexionBD conexionM_P)
+        {
+            try
+            {
+                this.conexionM = conexionM_P;
+                int iNumeroPago_A;
+                int iIdPago_Rec;
+                int iIdCaja_A;
+                int iIdPago_Nuevo;
+                int iIdDocumentoCobrar_Rec;
+                int iIdEventoCobro_Rec;
+                int iNumeroDocumento_Rec;
+                int iIdFactura_Rec;
+                int a;
+
+                sSql = "";
+                sSql += "select numero_pago" + Environment.NewLine;
+                sSql += "from tp_localidades_impresoras" + Environment.NewLine;
+                sSql += "where id_localidad = @id_localidad" + Environment.NewLine;
+                sSql += "and estado = @estado";
+
+                parametro = new SqlParameter[2];
+                parametro[0] = new SqlParameter();
+                parametro[0].ParameterName = "@id_localidad";
+                parametro[0].SqlDbType = SqlDbType.Int;
+                parametro[0].Value = iIdLocalidad_P;
+
+                parametro[1] = new SqlParameter();
+                parametro[1].ParameterName = "@estado";
+                parametro[1].SqlDbType = SqlDbType.VarChar;
+                parametro[1].Value = "A";
+
+                bRespuesta = conexionM.GFun_Lo_Busca_Registro_Parametros(dtConsulta, sSql, parametro);
+
+                if (bRespuesta == false)
+                {
+                    sMensajeError = conexionM.sMensajeError;
+                    return false;
+                }
+
+                iNumeroPago_A = Convert.ToInt32(dtConsulta.Rows[0]["numero_pago"].ToString());
+
+                sSql = "";
+                sSql += "select NP.id_pago " + Environment.NewLine;
+                sSql += "from cv403_pagos P INNER JOIN" + Environment.NewLine;
+                sSql += "cv403_numeros_pagos NP ON P.id_pago = NP.id_pago" + Environment.NewLine;
+                sSql += "and P.estado = @estado_1" + Environment.NewLine;
+                sSql += "and NP.estado = @estado_2" + Environment.NewLine;
+                sSql += "where NP.serie = @serie" + Environment.NewLine;
+                sSql += "and P.id_localidad = @id_localidad" + Environment.NewLine;
+                sSql += "and NP.numero_pago = @numero_pago";
+
+                parametro = new SqlParameter[5];
+                parametro[0] = new SqlParameter();
+                parametro[0].ParameterName = "@estado_1";
+                parametro[0].SqlDbType = SqlDbType.VarChar;
+                parametro[0].Value = "A";
+
+                parametro[1] = new SqlParameter();
+                parametro[1].ParameterName = "@estado_2";
+                parametro[1].SqlDbType = SqlDbType.VarChar;
+                parametro[1].Value = "A";
+
+                parametro[2] = new SqlParameter();
+                parametro[2].ParameterName = "@serie";
+                parametro[2].SqlDbType = SqlDbType.VarChar;
+                parametro[2].Value = "A";
+
+                parametro[3] = new SqlParameter();
+                parametro[3].ParameterName = "@id_localidad";
+                parametro[3].SqlDbType = SqlDbType.Int;
+                parametro[3].Value = iIdLocalidad_P;
+
+                parametro[4] = new SqlParameter();
+                parametro[4].ParameterName = "@numero_pago";
+                parametro[4].SqlDbType = SqlDbType.Int;
+                parametro[4].Value = iNumeroPago_P;
+
+                bRespuesta = conexionM.GFun_Lo_Busca_Registro_Parametros(dtConsulta, sSql, parametro);
+
+                if (bRespuesta == false)
+                {
+                    sMensajeError = conexionM.sMensajeError;
+                    return false;
+                }
+
+                iIdPago_Rec = Convert.ToInt32(dtConsulta.Rows[0]["id_pago"].ToString());
+
+                sSql = "";
+                sSql += "update tp_localidades_impresoras set" + Environment.NewLine;
+                sSql += "numero_pago = numero_pago + 1" + Environment.NewLine;
+                sSql += "where id_localidad = @id_localidad";
+
+                parametro = new SqlParameter[1];
+                parametro[0] = new SqlParameter();
+                parametro[0].ParameterName = "@id_localidad";
+                parametro[0].SqlDbType = SqlDbType.Int;
+                parametro[0].Value = iIdLocalidad_P;
+
+                if (!conexionM.GFun_Lo_Ejecutar_SQL_Parametros(sSql, parametro))
+                {
+                    sMensajeError = conexionM.sMensajeError;
+                    return false;
+                }
+
+                sSql = "";
+                sSql += "select id_caja" + Environment.NewLine;
+                sSql += "from cv405_cajas" + Environment.NewLine;
+                sSql += "where id_localidad = @id_localidad" + Environment.NewLine;
+                sSql += "and estado = @estado";
+
+                parametro = new SqlParameter[2];
+                parametro[0] = new SqlParameter();
+                parametro[0].ParameterName = "@id_localidad";
+                parametro[0].SqlDbType = SqlDbType.Int;
+                parametro[0].Value = iIdLocalidad_P;
+
+                parametro[1] = new SqlParameter();
+                parametro[1].ParameterName = "@estado";
+                parametro[1].SqlDbType = SqlDbType.VarChar;
+                parametro[1].Value = "A";
+
+                bRespuesta = conexionM.GFun_Lo_Busca_Registro_Parametros(dtConsulta, sSql, parametro);
+
+                if (bRespuesta == false)
+                {
+                    sMensajeError = conexionM.sMensajeError;
+                    return false;
+                }
+
+                iIdCaja_A = Convert.ToInt32(dtConsulta.Rows[0]["id_caja"].ToString());
+
+                sSql = "";
+                sSql += "insert into cv403_pagos (" + Environment.NewLine;
+                sSql += "idempresa, cg_empresa, id_persona, fecha_pago, cg_moneda, valor," + Environment.NewLine;
+                sSql += "id_localidad, id_caja, cg_cajero, comentarios, fecha_ingreso," + Environment.NewLine;
+                sSql += "usuario_ingreso, terminal_ingreso, estado, numero_replica_trigger," + Environment.NewLine;
+                sSql += "numero_control_replica)" + Environment.NewLine;
+                sSql += "values (" + Environment.NewLine;
+                sSql += "@idempresa, @cg_empresa, @id_persona, @fecha_pago, @cg_moneda, @valor," + Environment.NewLine;
+                sSql += "@id_localidad, @id_caja, @cg_cajero, @comentarios, getdate()," + Environment.NewLine;
+                sSql += "@usuario_ingreso, @terminal_ingreso, @estado, @numero_replica_trigger," + Environment.NewLine;
+                sSql += "@numero_control_replica)";
+
+                #region PARAMETROS
+                a = 0;
+                parametro = new SqlParameter[15];
+                parametro[a] = new SqlParameter();
+                parametro[a].ParameterName = "@idempresa";
+                parametro[a].SqlDbType = SqlDbType.Int;
+                parametro[a].Value = Program.iIdEmpresa;
+                a++;
+
+                parametro[a] = new SqlParameter();
+                parametro[a].ParameterName = "@cg_empresa";
+                parametro[a].SqlDbType = SqlDbType.Int;
+                parametro[a].Value = Program.iCgEmpresa;
+                a++;
+
+                parametro[a] = new SqlParameter();
+                parametro[a].ParameterName = "@id_persona";
+                parametro[a].SqlDbType = SqlDbType.Int;
+                parametro[a].Value = iIdPersona_P;
+                a++;
+
+                parametro[a] = new SqlParameter();
+                parametro[a].ParameterName = "@fecha_pago";
+                parametro[a].SqlDbType = SqlDbType.VarChar;
+                parametro[a].Value = sFecha_P;
+                a++;
+
+                parametro[a] = new SqlParameter();
+                parametro[a].ParameterName = "@cg_moneda";
+                parametro[a].SqlDbType = SqlDbType.Int;
+                parametro[a].Value = Program.iMoneda;
+                a++;
+
+                parametro[a] = new SqlParameter();
+                parametro[a].ParameterName = "@valor";
+                parametro[a].SqlDbType = SqlDbType.Decimal;
+                parametro[a].Value = dbValor_P;
+                a++;
+
+                parametro[a] = new SqlParameter();
+                parametro[a].ParameterName = "@id_localidad";
+                parametro[a].SqlDbType = SqlDbType.Int;
+                parametro[a].Value = iIdLocalidad_P;
+                a++;
+
+                parametro[a] = new SqlParameter();
+                parametro[a].ParameterName = "@id_caja";
+                parametro[a].SqlDbType = SqlDbType.Int;
+                parametro[a].Value = iIdCaja_A;
+                a++;
+
+                parametro[a] = new SqlParameter();
+                parametro[a].ParameterName = "@cg_cajero";
+                parametro[a].SqlDbType = SqlDbType.Int;
+                parametro[a].Value = 7799;
+                a++;
+
+                parametro[a] = new SqlParameter();
+                parametro[a].ParameterName = "@comentarios";
+                parametro[a].SqlDbType = SqlDbType.VarChar;
+                parametro[a].Value = "";
+                a++;
+
+                parametro[a] = new SqlParameter();
+                parametro[a].ParameterName = "@usuario_ingreso";
+                parametro[a].SqlDbType = SqlDbType.VarChar;
+                parametro[a].Value = sUsuario_P;
+                a++;
+
+                parametro[a] = new SqlParameter();
+                parametro[a].ParameterName = "@terminal_ingreso";
+                parametro[a].SqlDbType = SqlDbType.VarChar;
+                parametro[a].Value = sTerminal_P;
+                a++;
+
+                parametro[a] = new SqlParameter();
+                parametro[a].ParameterName = "@estado";
+                parametro[a].SqlDbType = SqlDbType.VarChar;
+                parametro[a].Value = "A";
+                a++;
+
+                parametro[a] = new SqlParameter();
+                parametro[a].ParameterName = "@numero_replica_trigger";
+                parametro[a].SqlDbType = SqlDbType.Int;
+                parametro[a].Value = 0;
+                a++;
+
+                parametro[a] = new SqlParameter();
+                parametro[a].ParameterName = "@numero_control_replica";
+                parametro[a].SqlDbType = SqlDbType.Int;
+                parametro[a].Value = 0;
+
+                #endregion
+
+                if (!conexionM.GFun_Lo_Ejecutar_SQL_Parametros(sSql, parametro))
+                {
+                    sMensajeError = conexionM.sMensajeError;
+                    return false;
+                }
+
+                sTabla = "cv403_pagos";
+                sCampo = "id_pago";
+
+                iMaximo = conexionM.GFun_Ln_Saca_Maximo_ID(sTabla, sCampo, "", Program.sDatosMaximo);
+
+                if (iMaximo == -1)
+                {
+                    sMensajeError = "No se pudo obtener el codigo de la tabla " + sTabla;
+                    return false;
+                }
+
+                iIdPago_Nuevo = Convert.ToInt32(iMaximo);
+
+                sSql = "";
+                sSql += "select id_documento_cobrar, id_evento_cobro, numero_documento, isnull(id_factura,0) id_factura" + Environment.NewLine;
+                sSql += "FROM cv403_dctos_por_cobrar" + Environment.NewLine;
+                sSql += "where (cg_estado_dcto = @cg_estado_dcto_1" + Environment.NewLine;
+                sSql += "or cg_estado_dcto = @cg_estado_dcto_2)" + Environment.NewLine;
+                sSql += "and estado = @estado" + Environment.NewLine;
+                sSql += "and id_factura = @id_factura";
+
+                parametro = new SqlParameter[4];
+                parametro[0] = new SqlParameter();
+                parametro[0].ParameterName = "@cg_estado_dcto_1";
+                parametro[0].SqlDbType = SqlDbType.Int;
+                parametro[0].Value = 7460;
+
+                parametro[1] = new SqlParameter();
+                parametro[1].ParameterName = "@cg_estado_dcto_2";
+                parametro[1].SqlDbType = SqlDbType.Int;
+                parametro[1].Value = 7460;
+
+                parametro[2] = new SqlParameter();
+                parametro[2].ParameterName = "@estado";
+                parametro[2].SqlDbType = SqlDbType.VarChar;
+                parametro[2].Value = "A";
+
+                parametro[3] = new SqlParameter();
+                parametro[3].ParameterName = "@id_factura";
+                parametro[3].SqlDbType = SqlDbType.Int;
+                parametro[3].Value = iIdFactura_P;
+
+                bRespuesta = conexionM.GFun_Lo_Busca_Registro_Parametros(dtConsulta, sSql, parametro);
+
+                if (bRespuesta == false)
+                {
+                    sMensajeError = conexionM.sMensajeError;
+                    return false;
+                }
+
+                iIdDocumentoCobrar_Rec = Convert.ToInt32(dtConsulta.Rows[0]["id_documento_cobrar"].ToString());
+                iIdEventoCobro_Rec = Convert.ToInt32(dtConsulta.Rows[0]["id_evento_cobro"].ToString());
+                iNumeroDocumento_Rec = Convert.ToInt32(dtConsulta.Rows[0]["numero_documento"].ToString());
+                iIdFactura_Rec = Convert.ToInt32(dtConsulta.Rows[0]["id_factura"].ToString());
+
+                sSql = "";
+                sSql += "insert into cv403_documentos_pagados (" + Environment.NewLine;
+                sSql += "id_pago, id_documento_cobrar, valor, numero_documento, estado," + Environment.NewLine;
+                sSql += "fecha_ingreso, usuario_ingreso, terminal_ingreso," + Environment.NewLine;
+                sSql += "numero_replica_trigger, numero_control_replica)" + Environment.NewLine;
+                sSql += "Values (" + Environment.NewLine;
+                sSql += "@id_pago, @id_documento_cobrar, @valor, @numero_documento, @estado," + Environment.NewLine;
+                sSql += "getdate(), @usuario_ingreso, @terminal_ingreso," + Environment.NewLine;
+                sSql += "@numero_replica_trigger, @numero_control_replica)";
+
+                a = 0;
+                parametro = new SqlParameter[9];
+                parametro[a] = new SqlParameter();
+                parametro[a].ParameterName = "@id_pago";
+                parametro[a].SqlDbType = SqlDbType.Int;
+                parametro[a].Value = iIdPago_Rec;
+                a++;
+
+                parametro[a] = new SqlParameter();
+                parametro[a].ParameterName = "@id_documento_cobrar";
+                parametro[a].SqlDbType = SqlDbType.Int;
+                parametro[a].Value = iIdDocumentoCobrar_Rec;
+                a++;
+
+                parametro[a] = new SqlParameter();
+                parametro[a].ParameterName = "@valor";
+                parametro[a].SqlDbType = SqlDbType.Decimal;
+                parametro[a].Value = dbValor_P;
+                a++;
+
+                parametro[a] = new SqlParameter();
+                parametro[a].ParameterName = "@numero_documento";
+                parametro[a].SqlDbType = SqlDbType.Int;
+                parametro[a].Value = iNumeroDocumento_Rec;
+                a++;
+
+                parametro[a] = new SqlParameter();
+                parametro[a].ParameterName = "@estado";
+                parametro[a].SqlDbType = SqlDbType.Int;
+                parametro[a].Value = "A";
+                a++;
+
+                parametro[a] = new SqlParameter();
+                parametro[a].ParameterName = "@usuario_ingreso";
+                parametro[a].SqlDbType = SqlDbType.VarChar;
+                parametro[a].Value = sUsuario_P;
+                a++;
+
+                parametro[a] = new SqlParameter();
+                parametro[a].ParameterName = "@terminal_ingreso";
+                parametro[a].SqlDbType = SqlDbType.VarChar;
+                parametro[a].Value = sTerminal_P;
+                a++;
+
+                parametro[a] = new SqlParameter();
+                parametro[a].ParameterName = "@numero_replica_trigger";
+                parametro[a].SqlDbType = SqlDbType.Int;
+                parametro[a].Value = 0;
+                a++;
+
+                parametro[a] = new SqlParameter();
+                parametro[a].ParameterName = "@numero_control_replica";
+                parametro[a].SqlDbType = SqlDbType.Int;
+                parametro[a].Value = 0;
 
                 return true;
             }

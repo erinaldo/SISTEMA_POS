@@ -75,16 +75,6 @@
             this.btnRemoverIVA = new System.Windows.Forms.Button();
             this.btnPagoCompleto = new System.Windows.Forms.Button();
             this.dgvPagos = new System.Windows.Forms.DataGridView();
-            this.ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.fpago = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.valor = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.id_sri = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.conciliacion = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.id_operador_tarjeta = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.id_tipo_tarjeta = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.numero_lote = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.bandera_insertar_lote = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.propina = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.btnFacturar = new System.Windows.Forms.Button();
             this.btnSalir = new System.Windows.Forms.Button();
             this.btnImprimir = new System.Windows.Forms.Button();
@@ -95,6 +85,22 @@
             this.btnDividirPrecio = new System.Windows.Forms.Button();
             this.btnPropina = new System.Windows.Forms.Button();
             this.btnCuentaPorCobrar = new System.Windows.Forms.Button();
+            this.ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.fpago = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.valor = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.id_sri = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.conciliacion = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.id_operador_tarjeta = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.id_tipo_tarjeta = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.numero_lote = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.bandera_insertar_lote = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.propina = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.codigo_metodo_pago = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.numero_documento = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.fecha_vcto = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.cg_banco = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.numero_cuenta = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.titular = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.grupoEncabezadoFactura.SuspendLayout();
             this.grupoComprobantes.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvDetalleDeuda)).BeginInit();
@@ -590,7 +596,13 @@
             this.id_tipo_tarjeta,
             this.numero_lote,
             this.bandera_insertar_lote,
-            this.propina});
+            this.propina,
+            this.codigo_metodo_pago,
+            this.numero_documento,
+            this.fecha_vcto,
+            this.cg_banco,
+            this.numero_cuenta,
+            this.titular});
             dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle8.BackColor = System.Drawing.SystemColors.Window;
             dataGridViewCellStyle8.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -612,88 +624,6 @@
             this.dgvPagos.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvPagos.Size = new System.Drawing.Size(390, 280);
             this.dgvPagos.TabIndex = 139;
-            // 
-            // ID
-            // 
-            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle5.Font = new System.Drawing.Font("Maiandra GD", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ID.DefaultCellStyle = dataGridViewCellStyle5;
-            this.ID.FillWeight = 60.9137F;
-            this.ID.HeaderText = "ID";
-            this.ID.Name = "ID";
-            this.ID.ReadOnly = true;
-            this.ID.Width = 53;
-            // 
-            // fpago
-            // 
-            this.fpago.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle6.Font = new System.Drawing.Font("Maiandra GD", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.fpago.DefaultCellStyle = dataGridViewCellStyle6;
-            this.fpago.FillWeight = 168.8291F;
-            this.fpago.HeaderText = "FORMA DE PAGO";
-            this.fpago.Name = "fpago";
-            this.fpago.ReadOnly = true;
-            // 
-            // valor
-            // 
-            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle7.Font = new System.Drawing.Font("Maiandra GD", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.valor.DefaultCellStyle = dataGridViewCellStyle7;
-            this.valor.FillWeight = 70.25717F;
-            this.valor.HeaderText = "VALOR";
-            this.valor.Name = "valor";
-            this.valor.ReadOnly = true;
-            this.valor.Width = 62;
-            // 
-            // id_sri
-            // 
-            this.id_sri.HeaderText = "ID_SRI";
-            this.id_sri.Name = "id_sri";
-            this.id_sri.ReadOnly = true;
-            this.id_sri.Visible = false;
-            // 
-            // conciliacion
-            // 
-            this.conciliacion.HeaderText = "CONCILIACION";
-            this.conciliacion.Name = "conciliacion";
-            this.conciliacion.ReadOnly = true;
-            this.conciliacion.Visible = false;
-            // 
-            // id_operador_tarjeta
-            // 
-            this.id_operador_tarjeta.HeaderText = "ID_OPERADOR_TARJETA";
-            this.id_operador_tarjeta.Name = "id_operador_tarjeta";
-            this.id_operador_tarjeta.ReadOnly = true;
-            this.id_operador_tarjeta.Visible = false;
-            // 
-            // id_tipo_tarjeta
-            // 
-            this.id_tipo_tarjeta.HeaderText = "ID_TIPO_TARJETA";
-            this.id_tipo_tarjeta.Name = "id_tipo_tarjeta";
-            this.id_tipo_tarjeta.ReadOnly = true;
-            this.id_tipo_tarjeta.Visible = false;
-            // 
-            // numero_lote
-            // 
-            this.numero_lote.HeaderText = "NUMERO_LOTE";
-            this.numero_lote.Name = "numero_lote";
-            this.numero_lote.ReadOnly = true;
-            this.numero_lote.Visible = false;
-            // 
-            // bandera_insertar_lote
-            // 
-            this.bandera_insertar_lote.HeaderText = "BANDERA INSERTAR LOTE";
-            this.bandera_insertar_lote.Name = "bandera_insertar_lote";
-            this.bandera_insertar_lote.ReadOnly = true;
-            this.bandera_insertar_lote.Visible = false;
-            // 
-            // propina
-            // 
-            this.propina.HeaderText = "PROPINA";
-            this.propina.Name = "propina";
-            this.propina.ReadOnly = true;
-            this.propina.Visible = false;
             // 
             // btnFacturar
             // 
@@ -833,6 +763,130 @@
             this.btnCuentaPorCobrar.UseVisualStyleBackColor = false;
             this.btnCuentaPorCobrar.Click += new System.EventHandler(this.btnCuentaPorCobrar_Click);
             // 
+            // ID
+            // 
+            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle5.Font = new System.Drawing.Font("Maiandra GD", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ID.DefaultCellStyle = dataGridViewCellStyle5;
+            this.ID.FillWeight = 60.9137F;
+            this.ID.HeaderText = "ID";
+            this.ID.Name = "ID";
+            this.ID.ReadOnly = true;
+            this.ID.Width = 53;
+            // 
+            // fpago
+            // 
+            this.fpago.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle6.Font = new System.Drawing.Font("Maiandra GD", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.fpago.DefaultCellStyle = dataGridViewCellStyle6;
+            this.fpago.FillWeight = 168.8291F;
+            this.fpago.HeaderText = "FORMA DE PAGO";
+            this.fpago.Name = "fpago";
+            this.fpago.ReadOnly = true;
+            // 
+            // valor
+            // 
+            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle7.Font = new System.Drawing.Font("Maiandra GD", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.valor.DefaultCellStyle = dataGridViewCellStyle7;
+            this.valor.FillWeight = 70.25717F;
+            this.valor.HeaderText = "VALOR";
+            this.valor.Name = "valor";
+            this.valor.ReadOnly = true;
+            this.valor.Width = 62;
+            // 
+            // id_sri
+            // 
+            this.id_sri.HeaderText = "ID_SRI";
+            this.id_sri.Name = "id_sri";
+            this.id_sri.ReadOnly = true;
+            this.id_sri.Visible = false;
+            // 
+            // conciliacion
+            // 
+            this.conciliacion.HeaderText = "CONCILIACION";
+            this.conciliacion.Name = "conciliacion";
+            this.conciliacion.ReadOnly = true;
+            this.conciliacion.Visible = false;
+            // 
+            // id_operador_tarjeta
+            // 
+            this.id_operador_tarjeta.HeaderText = "ID_OPERADOR_TARJETA";
+            this.id_operador_tarjeta.Name = "id_operador_tarjeta";
+            this.id_operador_tarjeta.ReadOnly = true;
+            this.id_operador_tarjeta.Visible = false;
+            // 
+            // id_tipo_tarjeta
+            // 
+            this.id_tipo_tarjeta.HeaderText = "ID_TIPO_TARJETA";
+            this.id_tipo_tarjeta.Name = "id_tipo_tarjeta";
+            this.id_tipo_tarjeta.ReadOnly = true;
+            this.id_tipo_tarjeta.Visible = false;
+            // 
+            // numero_lote
+            // 
+            this.numero_lote.HeaderText = "NUMERO_LOTE";
+            this.numero_lote.Name = "numero_lote";
+            this.numero_lote.ReadOnly = true;
+            this.numero_lote.Visible = false;
+            // 
+            // bandera_insertar_lote
+            // 
+            this.bandera_insertar_lote.HeaderText = "BANDERA INSERTAR LOTE";
+            this.bandera_insertar_lote.Name = "bandera_insertar_lote";
+            this.bandera_insertar_lote.ReadOnly = true;
+            this.bandera_insertar_lote.Visible = false;
+            // 
+            // propina
+            // 
+            this.propina.HeaderText = "PROPINA";
+            this.propina.Name = "propina";
+            this.propina.ReadOnly = true;
+            this.propina.Visible = false;
+            // 
+            // codigo_metodo_pago
+            // 
+            this.codigo_metodo_pago.HeaderText = "CODIGO_METODO_PAGO";
+            this.codigo_metodo_pago.Name = "codigo_metodo_pago";
+            this.codigo_metodo_pago.ReadOnly = true;
+            this.codigo_metodo_pago.Visible = false;
+            // 
+            // numero_documento
+            // 
+            this.numero_documento.HeaderText = "NUMERO_DOCUMENTO";
+            this.numero_documento.Name = "numero_documento";
+            this.numero_documento.ReadOnly = true;
+            this.numero_documento.Visible = false;
+            // 
+            // fecha_vcto
+            // 
+            this.fecha_vcto.HeaderText = "FECHA_VCTO";
+            this.fecha_vcto.Name = "fecha_vcto";
+            this.fecha_vcto.ReadOnly = true;
+            this.fecha_vcto.Visible = false;
+            // 
+            // cg_banco
+            // 
+            this.cg_banco.HeaderText = "CG_BANCO";
+            this.cg_banco.Name = "cg_banco";
+            this.cg_banco.ReadOnly = true;
+            this.cg_banco.Visible = false;
+            // 
+            // numero_cuenta
+            // 
+            this.numero_cuenta.HeaderText = "NUMERO_CUENTA";
+            this.numero_cuenta.Name = "numero_cuenta";
+            this.numero_cuenta.ReadOnly = true;
+            this.numero_cuenta.Visible = false;
+            // 
+            // titular
+            // 
+            this.titular.HeaderText = "TITULAR";
+            this.titular.Name = "titular";
+            this.titular.ReadOnly = true;
+            this.titular.Visible = false;
+            // 
             // frmCobros
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -929,6 +983,7 @@
         private System.Windows.Forms.Button btnCorreoElectronicoDefault;
         private System.Windows.Forms.Button btnDividirPrecio;
         private System.Windows.Forms.Button btnPropina;
+        private System.Windows.Forms.Button btnCuentaPorCobrar;
         private System.Windows.Forms.DataGridViewTextBoxColumn ID;
         private System.Windows.Forms.DataGridViewTextBoxColumn fpago;
         private System.Windows.Forms.DataGridViewTextBoxColumn valor;
@@ -939,6 +994,11 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn numero_lote;
         private System.Windows.Forms.DataGridViewTextBoxColumn bandera_insertar_lote;
         private System.Windows.Forms.DataGridViewTextBoxColumn propina;
-        private System.Windows.Forms.Button btnCuentaPorCobrar;
+        private System.Windows.Forms.DataGridViewTextBoxColumn codigo_metodo_pago;
+        private System.Windows.Forms.DataGridViewTextBoxColumn numero_documento;
+        private System.Windows.Forms.DataGridViewTextBoxColumn fecha_vcto;
+        private System.Windows.Forms.DataGridViewTextBoxColumn cg_banco;
+        private System.Windows.Forms.DataGridViewTextBoxColumn numero_cuenta;
+        private System.Windows.Forms.DataGridViewTextBoxColumn titular;
     }
 }

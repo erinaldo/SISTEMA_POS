@@ -8,8 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 
 namespace Palatium
-{
-    
+{    
     public partial class Efectivo : Form
     {
         ConexionBD.ConexionBD conexion = new ConexionBD.ConexionBD();
@@ -375,7 +374,7 @@ namespace Palatium
 
         private void button20_Click(object sender, EventArgs e)
         {
-            txt_valor.Text = btnOp2.Text; cargarPrecios();
+            txt_valor.Text = btnOp2.Text;
         }
 
         private void button21_Click(object sender, EventArgs e)

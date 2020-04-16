@@ -73,6 +73,7 @@ namespace Palatium.ComandaNueva
         DataTable dtPagos;
         
         bool bRespuesta;
+
         int iCuentaFormasPagos;
         int iCuentaAyudaFormasPagos;
         int iPosXFormasPagos;
@@ -212,7 +213,7 @@ namespace Palatium.ComandaNueva
                     conexion.GFun_Lo_Maneja_Transaccion(Program.G_REVERSA_TRANSACCION);
                     Cursor = Cursors.Default;
                     return false;
-                }
+                }                
 
                 if (insertarMovimientosCaja_V2() == false)
                 {
@@ -347,6 +348,12 @@ namespace Palatium.ComandaNueva
                 dtPagos.Columns.Add("numero_lote");
                 dtPagos.Columns.Add("bandera_insertar_lote");
                 dtPagos.Columns.Add("propina");
+                dtPagos.Columns.Add("codigo_metodo_pago");
+                dtPagos.Columns.Add("numero_documento");
+                dtPagos.Columns.Add("fecha_vcto");
+                dtPagos.Columns.Add("cg_banco");
+                dtPagos.Columns.Add("numero_cuenta");
+                dtPagos.Columns.Add("titular");
 
                 for (int i = 0; i < dgvPagos.Rows.Count; i++)
                 {
@@ -359,7 +366,14 @@ namespace Palatium.ComandaNueva
                                      dgvPagos.Rows[i].Cells["id_tipo_tarjeta"].Value,
                                      dgvPagos.Rows[i].Cells["numero_lote"].Value,
                                      dgvPagos.Rows[i].Cells["bandera_insertar_lote"].Value,
-                                     dgvPagos.Rows[i].Cells["propina"].Value
+                                     dgvPagos.Rows[i].Cells["propina"].Value,
+                                     dgvPagos.Rows[i].Cells["codigo_metodo_pago"].Value,
+
+                                     dgvPagos.Rows[i].Cells["numero_documento"].Value,
+                                     dgvPagos.Rows[i].Cells["fecha_vcto"].Value,
+                                     dgvPagos.Rows[i].Cells["cg_banco"].Value,
+                                     dgvPagos.Rows[i].Cells["numero_cuenta"].Value,
+                                     dgvPagos.Rows[i].Cells["titular"].Value
                                     );
                 }
 
@@ -397,6 +411,8 @@ namespace Palatium.ComandaNueva
                     return false;
                 }
 
+                iIdDocumentoCobrar = comanda.iIdDocumentoCobrar;
+
                 return true;
             }
 
@@ -419,7 +435,8 @@ namespace Palatium.ComandaNueva
 
                 bRespuesta = comanda.insertarFactura(Convert.ToInt32(sIdOrden), iIdTipoComprobante, iFacturaElectronica_P,
                                                      iIdPersona, Program.iIdLocalidad, dtPagos, dTotal, iBanderaRecargoBoton,
-                                                     iBanderaRemoverIvaBoton, iBanderaComandaPendiente, sFecha, conexion);
+                                                     iBanderaRemoverIvaBoton, iBanderaComandaPendiente, sFecha,
+                                                     iIdDocumentoCobrar, conexion);
 
                 if (bRespuesta == false)
                 {
@@ -1519,14 +1536,37 @@ namespace Palatium.ComandaNueva
 
              else
              {
-                 //if (Convert.ToInt32(bpagar.Tag) == 1)
-                 //{
 
-                 //}
+                 if (bpagar.AccessibleName == "CH")
+                 {
+                    ComandaNueva.frmCobroCheques cheque = new frmCobroCheques(bpagar.Name.ToString(), dgvDetalleDeuda.Rows[1].Cells[1].Value.ToString(), "", bpagar.Text.ToString());
+                    cheque.ShowDialog();
 
-                 //else
-                 //{
-                     //Efectivo efectivo = new Efectivo(bpagar.Tag.ToString(), dgvDetalleDeuda.Rows[1].Cells[1].Value.ToString(), "", bpagar.Text.ToString(), bpagar.AccessibleName.Trim());
+                    if (cheque.DialogResult == DialogResult.OK)
+                    {
+                        string sNumeroCheque = cheque.sNumeroCheque;
+                        string sFechaVcto = cheque.sFechaVcto;
+                        int iCgBanco = cheque.iCgBanco;
+                        string sNumeroCuenta = cheque.sNumeroCuenta;
+                        string sTitular = cheque.sTitular;
+                        dbValorGrid = cheque.dbValorGrid;
+                        dbValorRecuperado = cheque.dbValorIngresado;
+                        dbPropina = 0;
+
+                        dgvPagos.Rows.Add(cheque.sIdPago, cheque.sNombrePago, dbValorGrid.ToString("N2"),
+                                           bpagar.AccessibleDescription, "0", "0", "0", "", "0", "0",
+                                           bpagar.AccessibleName.ToString(), sNumeroCheque, sFechaVcto, iCgBanco.ToString(),
+                                           sNumeroCuenta, sTitular);
+
+                        dgvDetalleDeuda.Rows[3].Cells[1].Value = dbPropina.ToString("N2");
+                        dgvPagos.ClearSelection();
+                        cheque.Close();
+                        recalcularValores();
+                    }
+                 }
+                 
+                 else
+                 { 
                      Efectivo efectivo = new Efectivo(bpagar.Name.ToString(), dgvDetalleDeuda.Rows[1].Cells[1].Value.ToString(), "", bpagar.Text.ToString(), bpagar.AccessibleName.Trim());
                      efectivo.ShowDialog();
 
@@ -1544,14 +1584,14 @@ namespace Palatium.ComandaNueva
                          dgvPagos.Rows.Add(efectivo.sIdPago, efectivo.sNombrePago, dbValorGrid.ToString("N2"),
                                            bpagar.AccessibleDescription, iConciliacion.ToString(), iOperadorTarjeta.ToString(),
                                            iTipoTarjeta.ToString(), sNumeroLote, iBanderaInsertarLote.ToString(),
-                                           dbPropina.ToString("N2"));
+                                           dbPropina.ToString("N2"), bpagar.AccessibleName.ToString(), "", "", "0", "", "");
 
                          dgvDetalleDeuda.Rows[3].Cells[1].Value = dbPropina.ToString("N2");
                          dgvPagos.ClearSelection();
                          efectivo.Close();
                          recalcularValores();
                      }
-                 //}                 
+                 }                 
              }
          }
 

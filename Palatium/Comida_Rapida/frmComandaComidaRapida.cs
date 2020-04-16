@@ -36,6 +36,7 @@ namespace Palatium.Comida_Rapida
         string sNumeroComprobante;
         string sCiudad;
         string sCorreoAyuda;
+        string sCodigoMetodoPago;
 
         long iMaximo;
 
@@ -81,10 +82,10 @@ namespace Palatium.Comida_Rapida
         int iPagaIva_P;
         int iIdSriFormaPago_P;
         int iNivelGeneral;
-
         int idTipoIdentificacion;
         int idTipoPersona;
         int iTercerDigito;
+        int iIdDocumentoPorCobrar;
 
         Decimal dTotalDebido;
         Decimal dbCantidadRecalcular;
@@ -1430,6 +1431,8 @@ namespace Palatium.Comida_Rapida
                     return false;
                 }
 
+                iIdDocumentoPorCobrar = comanda.iIdDocumentoCobrar;
+
                 return true;
             }
 
@@ -1452,7 +1455,7 @@ namespace Palatium.Comida_Rapida
 
                 bRespuesta = comanda.insertarFactura(iIdPedido, iIdTipoComprobante, iFacturaElectronica_P,
                                                      iIdPersona, Program.iIdLocalidad, dtPagos, dTotalDebido, 0,
-                                                     0, 0, sFecha, conexion);
+                                                     0, 0, sFecha, iIdDocumentoPorCobrar, conexion);
 
                 if (bRespuesta == false)
                 {
@@ -1534,9 +1537,16 @@ namespace Palatium.Comida_Rapida
                 dtPagos.Columns.Add("numero_lote");
                 dtPagos.Columns.Add("bandera_insertar_lote");
                 dtPagos.Columns.Add("propina");
+                dtPagos.Columns.Add("codigo_metodo_pago");
+                dtPagos.Columns.Add("numero_documento");
+                dtPagos.Columns.Add("fecha_vcto");
+                dtPagos.Columns.Add("cg_banco");
+                dtPagos.Columns.Add("numero_cuenta");
+                dtPagos.Columns.Add("titular");
 
                 dtPagos.Rows.Add(iIdTipoFormaCobro, sDescripcionFormaPago, dTotalDebido, iIdSriFormaPago_P, iConciliacion,
-                                 iOperadorTarjeta, iTipoTarjeta, sNumeroLote, iBanderaInsertarLote, dbPropina);
+                                 iOperadorTarjeta, iTipoTarjeta, sNumeroLote, iBanderaInsertarLote, dbPropina,
+                                 sCodigoMetodoPago, "", "", "0", "", "");
 
                 return true;
             }
@@ -1610,7 +1620,7 @@ namespace Palatium.Comida_Rapida
                 iIdTipoFormaCobro = Convert.ToInt32(dtConsulta.Rows[0]["id_pos_tipo_forma_cobro"].ToString());
                 sDescripcionFormaPago = dtConsulta.Rows[0]["descripcion"].ToString().Trim().ToUpper();
                 iIdSriFormaPago_P = Convert.ToInt32(dtConsulta.Rows[0]["id_sri_forma_pago"].ToString());
-
+                sCodigoMetodoPago = dtConsulta.Rows[0]["codigo"].ToString().Trim().ToUpper();
 
                 return true;
             }

@@ -39,6 +39,7 @@ namespace Palatium.ValesConsumos
         string sEstablecimiento;
         string sPuntoEmision;
         string sNumeroComprobante;
+        string sCodigoMetodoPago;
 
         bool bRespuesta;
 
@@ -71,6 +72,7 @@ namespace Palatium.ValesConsumos
         int iPagaServicio_P;
         int iIdTipoComprobante;
         int iIdSriFormaPago_P;
+        int iIdDocumentoPorCobrar;
 
         Decimal dTotalDebido;
         Decimal dbCantidadRecalcular;
@@ -835,6 +837,8 @@ namespace Palatium.ValesConsumos
                     return false;
                 }
 
+                iIdDocumentoPorCobrar = comanda.iIdDocumentoCobrar;
+
                 return true;
             }
 
@@ -857,7 +861,7 @@ namespace Palatium.ValesConsumos
 
                 bRespuesta = comanda.insertarFactura(iIdPedido, iIdTipoComprobante, iFacturaElectronica_P,
                                                      iIdPersona, Program.iIdLocalidad, dtPagos, dTotalDebido, 0,
-                                                     0, 0, sFecha, conexion);
+                                                     0, 0, sFecha, iIdDocumentoPorCobrar, conexion);
 
                 if (bRespuesta == false)
                 {
@@ -904,9 +908,15 @@ namespace Palatium.ValesConsumos
                 dtPagos.Columns.Add("numero_lote");
                 dtPagos.Columns.Add("bandera_insertar_lote");
                 dtPagos.Columns.Add("propina");
+                dtPagos.Columns.Add("codigo_metodo_pago");
+                dtPagos.Columns.Add("numero_documento");
+                dtPagos.Columns.Add("fecha_vcto");
+                dtPagos.Columns.Add("cg_banco");
+                dtPagos.Columns.Add("numero_cuenta");
+                dtPagos.Columns.Add("titular");
 
                 dtPagos.Rows.Add(iIdTipoFormaCobro, sDescripcionFormaPago, dTotalDebido, iIdSriFormaPago_P, 0,
-                                 0, 0, "", 0, 0);
+                                 0, 0, "", 0, 0, sCodigoMetodoPago, "", "", "0", "" , "");
 
                 return true;
             }
@@ -965,7 +975,7 @@ namespace Palatium.ValesConsumos
                 iIdTipoFormaCobro = Convert.ToInt32(dtConsulta.Rows[0]["id_pos_tipo_forma_cobro"].ToString());
                 sDescripcionFormaPago = dtConsulta.Rows[0]["descripcion"].ToString().Trim().ToUpper();
                 iIdSriFormaPago_P = Convert.ToInt32(dtConsulta.Rows[0]["id_sri_forma_pago"].ToString());
-
+                sCodigoMetodoPago = dtConsulta.Rows[0]["codigo"].ToString().Trim().ToUpper();
 
                 return true;
             }
