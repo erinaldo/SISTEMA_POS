@@ -1405,6 +1405,12 @@
     <Compile Include="Reportes_Formas\frmHistorialClientePorOrigen.Designer.cs">
       <DependentUpon>frmHistorialClientePorOrigen.cs</DependentUpon>
     </Compile>
+    <Compile Include="Reportes_Formas\frmListadoResumidoConsumo.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Reportes_Formas\frmListadoResumidoConsumo.Designer.cs">
+      <DependentUpon>frmListadoResumidoConsumo.cs</DependentUpon>
+    </Compile>
     <Compile Include="Reportes_Formas\frmVistaHistoriales.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -3727,6 +3733,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Reportes_Formas\frmHistorialClientePorOrigen.resx">
       <DependentUpon>frmHistorialClientePorOrigen.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reportes_Formas\frmListadoResumidoConsumo.resx">
+      <DependentUpon>frmListadoResumidoConsumo.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Reportes_Formas\frmVistaHistoriales.resx">
       <DependentUpon>frmVistaHistoriales.cs</DependentUpon>

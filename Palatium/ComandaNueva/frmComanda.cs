@@ -983,22 +983,25 @@ namespace Palatium.ComandaNueva
                             boton[i, j].BackColor = Color.White;
                         }
 
-                        if (dtCategorias.Rows[iCuentaCategorias]["imagen_categoria"].ToString().Trim() != "")
+                        if (Program.iUsarIconosCategorias == 1)
                         {
-                            Image foto;
-                            byte[] imageBytes;
-
-                            imageBytes = Convert.FromBase64String(dtCategorias.Rows[iCuentaCategorias]["imagen_categoria"].ToString().Trim());
-
-                            using (var ms = new MemoryStream(imageBytes, 0, imageBytes.Length))
+                            if (dtCategorias.Rows[iCuentaCategorias]["imagen_categoria"].ToString().Trim() != "")
                             {
-                                foto = Image.FromStream(ms, true);
-                            }
+                                Image foto;
+                                byte[] imageBytes;
 
-                            boton[i, j].TextAlign = ContentAlignment.BottomCenter;
-                            boton[i, j].Image = foto;
-                            boton[i, j].ImageAlign = ContentAlignment.TopCenter;
-                            boton[i, j].BackgroundImageLayout = ImageLayout.Stretch;
+                                imageBytes = Convert.FromBase64String(dtCategorias.Rows[iCuentaCategorias]["imagen_categoria"].ToString().Trim());
+
+                                using (var ms = new MemoryStream(imageBytes, 0, imageBytes.Length))
+                                {
+                                    foto = Image.FromStream(ms, true);
+                                }
+
+                                boton[i, j].TextAlign = ContentAlignment.BottomCenter;
+                                boton[i, j].Image = foto;
+                                boton[i, j].ImageAlign = ContentAlignment.TopCenter;
+                                boton[i, j].BackgroundImageLayout = ImageLayout.Stretch;
+                            }
                         }
                                                 
                         pnlCategorias.Controls.Add(boton[i, j]);

@@ -271,7 +271,7 @@ namespace Palatium.Inicio
 
         private void button1_Click(object sender, EventArgs e)
         {
-            Reportes_Formas.frmHistorialClientePorProducto historial = new Reportes_Formas.frmHistorialClientePorProducto(0);
+            Reportes_Formas.frmListadoResumidoConsumo historial = new Reportes_Formas.frmListadoResumidoConsumo(0);
             historial.ShowDialog();
         }
     }

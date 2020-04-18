@@ -411,22 +411,25 @@ namespace Palatium.Comida_Rapida
                             botonFamilias[i, j].BackColor = Color.White;
                         }
 
-                        if (dtCategorias.Rows[iCuentaCategorias]["imagen_categoria"].ToString().Trim() != "")
+                        if (Program.iUsarIconosCategorias == 1)
                         {
-                            Image foto;
-                            byte[] imageBytes;
-
-                            imageBytes = Convert.FromBase64String(dtCategorias.Rows[iCuentaCategorias]["imagen_categoria"].ToString().Trim());
-
-                            using (var ms = new MemoryStream(imageBytes, 0, imageBytes.Length))
+                            if (dtCategorias.Rows[iCuentaCategorias]["imagen_categoria"].ToString().Trim() != "")
                             {
-                                foto = Image.FromStream(ms, true);
-                            }
+                                Image foto;
+                                byte[] imageBytes;
 
-                            botonFamilias[i, j].TextAlign = ContentAlignment.BottomCenter;
-                            botonFamilias[i, j].Image = foto;
-                            botonFamilias[i, j].ImageAlign = ContentAlignment.TopCenter;
-                            botonFamilias[i, j].BackgroundImageLayout = ImageLayout.Stretch;
+                                imageBytes = Convert.FromBase64String(dtCategorias.Rows[iCuentaCategorias]["imagen_categoria"].ToString().Trim());
+
+                                using (var ms = new MemoryStream(imageBytes, 0, imageBytes.Length))
+                                {
+                                    foto = Image.FromStream(ms, true);
+                                }
+
+                                botonFamilias[i, j].TextAlign = ContentAlignment.BottomCenter;
+                                botonFamilias[i, j].Image = foto;
+                                botonFamilias[i, j].ImageAlign = ContentAlignment.TopCenter;
+                                botonFamilias[i, j].BackgroundImageLayout = ImageLayout.Stretch;
+                            }
                         }
 
                         pnlCategorias.Controls.Add(botonFamilias[i, j]);
@@ -2362,6 +2365,11 @@ namespace Palatium.Comida_Rapida
             pnlProductos.Controls.Clear();
             iNivelGeneral = 3;
             cargarCategorias(2, 0);
+        }
+
+        private void pnlCategorias_Paint(object sender, PaintEventArgs e)
+        {
+
         }
     }
 }

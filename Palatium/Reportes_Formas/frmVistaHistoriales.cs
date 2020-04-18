@@ -61,9 +61,11 @@ namespace Palatium.Reportes_Formas
             abrirFormularioHijo(new Reportes_Formas.frmHistorialClientePorOrigen(1), 0);
             btnHistorialComanda.BackColor = Color.FromArgb(0, 192, 0);
             btnHistorialProducto.BackColor = Color.Blue;
+            btnDetallarProductos.BackColor = Color.Blue;
 
             btnHistorialComanda.AccessibleDescription = "1";
             btnHistorialProducto.AccessibleDescription = "0";
+            btnDetallarProductos.AccessibleDescription = "0";
         }
 
         private void btnHistorialComanda_Click(object sender, EventArgs e)
@@ -73,9 +75,11 @@ namespace Palatium.Reportes_Formas
                 abrirFormularioHijo(new Reportes_Formas.frmHistorialClientePorOrigen(1), 0);
                 btnHistorialComanda.BackColor = Color.FromArgb(0, 192, 0);
                 btnHistorialProducto.BackColor = Color.Blue;
+                btnDetallarProductos.BackColor = Color.Blue;
 
                 btnHistorialComanda.AccessibleDescription = "1";
                 btnHistorialProducto.AccessibleDescription = "0";
+                btnDetallarProductos.AccessibleDescription = "0";
             }
         }
 
@@ -86,9 +90,11 @@ namespace Palatium.Reportes_Formas
                 abrirFormularioHijo(new Reportes_Formas.frmHistorialClientePorProducto(1), 0);
                 btnHistorialProducto.BackColor = Color.FromArgb(0, 192, 0);
                 btnHistorialComanda.BackColor = Color.Blue;
+                btnDetallarProductos.BackColor = Color.Blue;
 
                 btnHistorialProducto.AccessibleDescription = "1";
                 btnHistorialComanda.AccessibleDescription = "0";
+                btnDetallarProductos.AccessibleDescription = "0";
             }
         }
 
@@ -97,6 +103,21 @@ namespace Palatium.Reportes_Formas
             if (e.KeyCode == Keys.Escape)
             {
                 this.Close();
+            }
+        }
+
+        private void btnDetallarProductos_Click(object sender, EventArgs e)
+        {
+            if (btnDetallarProductos.AccessibleDescription == "0")
+            {
+                abrirFormularioHijo(new Reportes_Formas.frmListadoResumidoConsumo(1), 0);
+                btnDetallarProductos.BackColor = Color.FromArgb(0, 192, 0);
+                btnHistorialComanda.BackColor = Color.Blue;
+                btnHistorialProducto.BackColor = Color.Blue;
+
+                btnHistorialProducto.AccessibleDescription = "0";
+                btnHistorialComanda.AccessibleDescription = "0";
+                btnDetallarProductos.AccessibleDescription = "1";
             }
         }
     }
