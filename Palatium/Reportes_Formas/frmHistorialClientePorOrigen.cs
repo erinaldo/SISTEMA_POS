@@ -17,9 +17,11 @@ namespace Palatium.Reportes_Formas
 
         VentanasMensajes.frmMensajeNuevoCatch catchMensaje;
         VentanasMensajes.frmMensajeNuevoOk ok;
+        VentanasMensajes.frmMensajeNuevoSiNo SiNo;
 
         string sSql;
         string sFecha;
+        string sCodigoOrigen;
 
         bool bRespuesta;
 
@@ -29,6 +31,7 @@ namespace Palatium.Reportes_Formas
 
         int iIdPersona;
         int iHabilitarEscape;
+        int iIdPedido;
 
         public frmHistorialClientePorOrigen(int iHabilitarEscape_P)
         {
@@ -108,7 +111,7 @@ namespace Palatium.Reportes_Formas
                 dgvDatos.Rows.Clear();
 
                 sSql = "";
-                sSql += "select id_pedido, numero_pedido, fecha_pedido," + Environment.NewLine;
+                sSql += "select id_pedido, codigo_origen, numero_pedido, fecha_pedido," + Environment.NewLine;
                 sSql += "ltrim(str(isnull(sum(cantidad * (precio_unitario - valor_dscto + valor_iva + valor_otro)), 0), 10, 2)) valor" + Environment.NewLine;
                 sSql += "from pos_vw_det_pedido" + Environment.NewLine;
                 sSql += "where id_persona = @id_persona" + Environment.NewLine;
@@ -120,7 +123,7 @@ namespace Palatium.Reportes_Formas
                     a++;
                     sSql += "and id_pos_origen_orden = @id_pos_origen_orden" + Environment.NewLine;
                 }
-                sSql += "group by id_pedido, numero_pedido, fecha_pedido" + Environment.NewLine;
+                sSql += "group by id_pedido, codigo_origen, numero_pedido, fecha_pedido" + Environment.NewLine;
                 sSql += "order by numero_pedido";
 
                 parametro = new SqlParameter[a];
@@ -171,6 +174,7 @@ namespace Palatium.Reportes_Formas
                 for (int i = 0; i < dtConsulta.Rows.Count; i++)
                 {
                     dgvDatos.Rows.Add(dtConsulta.Rows[i]["id_pedido"].ToString(),
+                                      dtConsulta.Rows[i]["codigo_origen"].ToString(),
                                       dtConsulta.Rows[i]["numero_pedido"].ToString(),
                                       Convert.ToDateTime(dtConsulta.Rows[i]["fecha_pedido"].ToString()).ToString("dd-MM-yyyy"),
                                       dtConsulta.Rows[i]["valor"].ToString());
@@ -193,6 +197,8 @@ namespace Palatium.Reportes_Formas
         {
             try
             {
+                btnDuplicar.Enabled = false;
+
                 sSql = "";
                 sSql += "select * from pos_vw_det_pedido" + Environment.NewLine;
                 sSql += "where id_pedido = @id_pedido";
@@ -231,6 +237,7 @@ namespace Palatium.Reportes_Formas
                 if (crearReporte() == false)
                     return false;
 
+                btnDuplicar.Enabled = true;
                 return true;
             }
 
@@ -423,6 +430,9 @@ namespace Palatium.Reportes_Formas
 
             dgvDatos.Rows.Clear();
 
+            btnDuplicar.Enabled = false;
+            iIdPedido = 0;
+
             lblSubtotal.Text = "0.00";
             lblImpuestos.Text = "0.00";
             lblTotal.Text = "0.00";
@@ -510,11 +520,14 @@ namespace Palatium.Reportes_Formas
         {
             try
             {
-                consultarPedido(Convert.ToInt32(dgvDatos.CurrentRow.Cells["id_pedido"].Value));
+                iIdPedido = Convert.ToInt32(dgvDatos.CurrentRow.Cells["id_pedido"].Value);
+                sCodigoOrigen = dgvDatos.CurrentRow.Cells["codigo_origen"].Value.ToString();
+                consultarPedido(iIdPedido);
             }
 
             catch (Exception ex)
             {
+                iIdPedido = 0;
                 catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
                 catchMensaje.lblMensaje.Text = ex.Message;
                 catchMensaje.ShowDialog();
@@ -550,6 +563,45 @@ namespace Palatium.Reportes_Formas
             if (e.KeyCode == Keys.Escape)
             {
                 this.Close();
+            }
+        }
+
+        private void btnDuplicar_Click(object sender, EventArgs e)
+        {
+            if (iIdPedido == 0)
+            {
+                ok = new VentanasMensajes.frmMensajeNuevoOk();
+                ok.lblMensaje.Text = "Favor seleccione el pedido a duplicar.";
+                ok.ShowDialog(); return;
+            }
+
+            SiNo = new VentanasMensajes.frmMensajeNuevoSiNo();
+            SiNo.lblMensaje.Text = "¿Está seguro que desea duplicar la comanda seleccionada?";
+            SiNo.ShowDialog();
+
+            if (SiNo.DialogResult == DialogResult.OK)
+            {
+                SiNo.Close();
+
+                if ((sCodigoOrigen == "01") || (sCodigoOrigen == "02") || (sCodigoOrigen == "03") || (sCodigoOrigen == "04") ||
+                    (sCodigoOrigen == "05") || (sCodigoOrigen == "06") || (sCodigoOrigen == "07") || (sCodigoOrigen == "08"))
+                {
+                    ComandaNueva.frmComanda comanda = new ComandaNueva.frmComanda(iIdPedido, "COPIAR");
+                    comanda.ShowDialog();
+                }
+
+                else if (sCodigoOrigen == "10")
+                {
+                    Comida_Rapida.frmComandaComidaRapida comanda = new Comida_Rapida.frmComandaComidaRapida(iIdPedido);
+                    comanda.ShowDialog();
+                }
+
+                else
+                {
+                    ok = new VentanasMensajes.frmMensajeNuevoOk();
+                    ok.lblMensaje.Text = "El sistema no permite duplicar este tipo de comandas.";
+                    ok.ShowDialog();
+                }
             }
         }
     }

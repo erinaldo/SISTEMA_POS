@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Data.SqlClient;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -64,6 +65,7 @@ namespace Palatium.Comida_Rapida
         int iPosXProductos;
         int iPosYProductos;
         int iCuentaAyudaProductos;
+        int iIdListaMinorista;
 
         int iIdPersona;
         int iIdOrigenOrden;
@@ -86,6 +88,7 @@ namespace Palatium.Comida_Rapida
         int idTipoPersona;
         int iTercerDigito;
         int iIdDocumentoPorCobrar;
+        int iBanderaReabrir;
 
         Decimal dTotalDebido;
         Decimal dbCantidadRecalcular;
@@ -107,7 +110,60 @@ namespace Palatium.Comida_Rapida
             InitializeComponent();
         }
 
+        public frmComandaComidaRapida(int iIdPedido_P)
+        {
+            this.iIdPedido = iIdPedido_P;
+            InitializeComponent();
+        }
+
         #region FUNCIONES DEL USUARIO
+
+        //FUNCION PARA OBTENER LOS DATOS DE LA LISTA BASE Y MINORISTA
+        private void datosListas()
+        {
+            try
+            {
+                sSql = "";
+                sSql += "select id_lista_precio" + Environment.NewLine;
+                sSql += "from cv403_listas_precios" + Environment.NewLine;
+                sSql += "where lista_minorista = @lista_minorista" + Environment.NewLine;
+                sSql += "and estado = @estado";
+
+                parametro = new SqlParameter[2];
+                parametro[0] = new SqlParameter();
+                parametro[0].ParameterName = "@lista_minorista";
+                parametro[0].SqlDbType = SqlDbType.Int;
+                parametro[0].Value = 1;
+
+                parametro[1] = new SqlParameter();
+                parametro[1].ParameterName = "@estado";
+                parametro[1].SqlDbType = SqlDbType.VarChar;
+                parametro[1].Value = "A";
+
+                dtConsulta = new DataTable();
+                dtConsulta.Clear();
+
+                bRespuesta = conexion.GFun_Lo_Busca_Registro_Parametros(dtConsulta, sSql, parametro);
+
+                if (bRespuesta == false)
+                {
+                    catchMensaje = new VentanasMensajes.frmMensajeCatch();
+                    catchMensaje.LblMensaje.Text = conexion.sMensajeError;
+                    catchMensaje.ShowDialog();
+                    return;
+                }
+
+                if (dtConsulta.Rows.Count > 0)
+                    iIdListaMinorista = Convert.ToInt32(dtConsulta.Rows[0]["id_lista_precio"]);
+            }
+
+            catch (Exception ex)
+            {
+                catchMensaje = new VentanasMensajes.frmMensajeCatch();
+                catchMensaje.LblMensaje.Text = ex.Message;
+                catchMensaje.ShowDialog();
+            }
+        }
 
         //FUNCION PARA CREAR UNA PRECUENTA RAPIDA
         private bool crearPrecuentaRapida()
@@ -227,7 +283,8 @@ namespace Palatium.Comida_Rapida
             {
                 sSql = "";
                 sSql += "select P.id_Producto, NP.nombre as Nombre, P.paga_iva," + Environment.NewLine;
-                sSql += "P.subcategoria, isnull(P.categoria_delivery, 0) categoria_delivery" + Environment.NewLine;
+                sSql += "P.subcategoria, isnull(P.categoria_delivery, 0) categoria_delivery," + Environment.NewLine;
+                sSql += "isnull(P.imagen_categoria, '') imagen_categoria" + Environment.NewLine;
                 sSql += "from cv401_productos P INNER JOIN" + Environment.NewLine;
                 sSql += "cv401_nombre_productos NP ON P.id_Producto = NP.id_Producto" + Environment.NewLine;
                 sSql += "and P.estado ='A'" + Environment.NewLine;
@@ -337,17 +394,39 @@ namespace Palatium.Comida_Rapida
                         botonFamilias[i, j].Tag = dtCategorias.Rows[iCuentaCategorias]["id_producto"].ToString();
                         botonFamilias[i, j].Text = dtCategorias.Rows[iCuentaCategorias]["nombre"].ToString();
                         botonFamilias[i, j].AccessibleDescription = dtCategorias.Rows[iCuentaCategorias]["subcategoria"].ToString();
+                        botonFamilias[i, j].FlatStyle = FlatStyle.Flat;
+                        botonFamilias[i, j].FlatAppearance.BorderSize = 1;
+                        botonFamilias[i, j].FlatAppearance.MouseOverBackColor = Color.FromArgb(128, 255, 128);
+                        botonFamilias[i, j].FlatAppearance.MouseDownBackColor = Color.Fuchsia;
 
                         if (Convert.ToInt32(dtCategorias.Rows[iCuentaCategorias]["subcategoria"].ToString()) == 1)
                         {
                             ttMensajeMesas.SetToolTip(botonFamilias[i, j], dtCategorias.Rows[iCuentaCategorias]["nombre"].ToString().Trim().ToUpper() + " CONTIENE SUBCATEGORÍAS");
-                            botonFamilias[i, j].BackColor = Color.Fuchsia;
+                            botonFamilias[i, j].BackColor = Color.LightSalmon;
                         }
 
                         else
                         {
                             ttMensajeMesas.SetToolTip(botonFamilias[i, j], "CATEGORÍA: " + dtCategorias.Rows[iCuentaCategorias]["nombre"].ToString());
-                            botonFamilias[i, j].BackColor = Color.Lime;
+                            botonFamilias[i, j].BackColor = Color.White;
+                        }
+
+                        if (dtCategorias.Rows[iCuentaCategorias]["imagen_categoria"].ToString().Trim() != "")
+                        {
+                            Image foto;
+                            byte[] imageBytes;
+
+                            imageBytes = Convert.FromBase64String(dtCategorias.Rows[iCuentaCategorias]["imagen_categoria"].ToString().Trim());
+
+                            using (var ms = new MemoryStream(imageBytes, 0, imageBytes.Length))
+                            {
+                                foto = Image.FromStream(ms, true);
+                            }
+
+                            botonFamilias[i, j].TextAlign = ContentAlignment.BottomCenter;
+                            botonFamilias[i, j].Image = foto;
+                            botonFamilias[i, j].ImageAlign = ContentAlignment.TopCenter;
+                            botonFamilias[i, j].BackgroundImageLayout = ImageLayout.Stretch;
                         }
 
                         pnlCategorias.Controls.Add(botonFamilias[i, j]);
@@ -521,6 +600,10 @@ namespace Palatium.Comida_Rapida
                         botonProductos[i, j].Tag = dtProductos.Rows[iCuentaProductos]["paga_iva"].ToString();
                         botonProductos[i, j].AccessibleDescription = dtProductos.Rows[iCuentaProductos]["codigo"].ToString();
                         botonProductos[i, j].AccessibleName = dtProductos.Rows[iCuentaProductos]["valor"].ToString();
+                        botonProductos[i, j].FlatStyle = FlatStyle.Flat;
+                        botonProductos[i, j].FlatAppearance.BorderSize = 1;
+                        botonProductos[i, j].FlatAppearance.MouseOverBackColor = Color.FromArgb(128, 255, 128);
+                        botonProductos[i, j].FlatAppearance.MouseDownBackColor = Color.Fuchsia;
                         pnlProductos.Controls.Add(botonProductos[i, j]);
 
                         iCuentaProductos++;
@@ -701,8 +784,8 @@ namespace Palatium.Comida_Rapida
 
             Decimal dSubtotalConIva = 0;
             Decimal dSubtotalCero = 0;
-            Decimal dbValorIva;
-            Decimal dbValorServicio;
+            Decimal dbValorIva = 0;
+            Decimal dbValorServicio = 0;
             Decimal dbSumaIva = 0;
             Decimal dbSumaServicio = 0;
             dTotalDebido = 0;
@@ -712,7 +795,7 @@ namespace Palatium.Comida_Rapida
                 iPagaIva = Convert.ToInt32(dgvPedido.Rows[i].Cells["pagaIva"].Value);
                 iPagaServicio = Convert.ToInt32(dgvPedido.Rows[i].Cells["paga_servicio"].Value);
 
-                if (dgvPedido.Rows[i].Cells["pagaIva"].Value.ToString() == "0")
+                if (iPagaIva == 0)
                     dSubtotalCero += Convert.ToDecimal(dgvPedido.Rows[i].Cells["cantidad"].Value.ToString()) * Convert.ToDecimal(dgvPedido.Rows[i].Cells["valuni"].Value.ToString());
 
                 else
@@ -727,6 +810,17 @@ namespace Palatium.Comida_Rapida
                     dbValorServicio = Convert.ToDecimal(dgvPedido.Rows[i].Cells["cantidad"].Value) * Convert.ToDecimal(dgvPedido.Rows[i].Cells["valuni"].Value) * Convert.ToDecimal(Program.servicio);
                     dbSumaServicio += dbValorServicio;
                 }
+
+                if (iIdPedido != 0)
+                {
+                    Decimal dbTotalLinea_P;
+
+                    dbTotalLinea_P = Convert.ToDecimal(dgvPedido.Rows[i].Cells["cantidad"].Value.ToString()) * Convert.ToDecimal(dgvPedido.Rows[i].Cells["valuni"].Value.ToString());
+                    dbTotalLinea_P += dbValorIva + dbValorServicio;
+
+                    dgvPedido.Rows[i].Cells["valor"].Value = dbTotalLinea_P.ToString("N2");
+                }
+
             }
 
             //dTotalDebido = num1 + num2 - num3 - num4 + (num1 - num3) * Convert.ToDecimal(Program.iva) + num7;
@@ -1634,57 +1728,245 @@ namespace Palatium.Comida_Rapida
             }
         }
 
+        //CONSULTA DE DATOS PARA LLENAR LAS CAJAS DE TEXTO
+        private bool consultarDatosOrden()
+        {
+            try
+            {
+                sSql = "";
+                sSql += "select * from pos_vw_cabecera_pedido" + Environment.NewLine;
+                sSql += "where id_pedido = " + iIdPedido;
+
+                dtConsulta = new DataTable();
+                dtConsulta.Clear();
+
+                bRespuesta = conexion.GFun_Lo_Busca_Registro(dtConsulta, sSql);
+
+                if (bRespuesta == false)
+                {
+                    catchMensaje = new VentanasMensajes.frmMensajeCatch();
+                    catchMensaje.LblMensaje.Text = conexion.sMensajeError;
+                    catchMensaje.ShowDialog();
+                    return false;
+                }
+
+                iIdOrigenOrden = Convert.ToInt32(dtConsulta.Rows[0]["id_pos_origen_orden"].ToString());
+                iIdPersona = Convert.ToInt32(dtConsulta.Rows[0]["id_persona"].ToString());
+                txtIdentificacion.Text = dtConsulta.Rows[0]["identificacion"].ToString();
+                //txtRazonSocial.Text = dtConsulta.Rows[0]["cliente"].ToString();
+
+                if (dtConsulta.Rows[0]["identificacion"].ToString().Trim() == "9999999999999")
+                    cargarDatosConsumidorFinal();
+                else
+                    consultarRegistro();
+
+                if (iIdPedido != 0)
+                {
+                    if (cargarDetalleGridCopiar() == false)
+                        return false;
+                }
+
+                else
+                {
+                    if (cargarDetalleGrid() == false)
+                        return false;
+                }
+
+                calcularTotales();
+                dgvPedido.ClearSelection();
+
+                return true;
+            }
+
+            catch (Exception ex)
+            {
+                catchMensaje = new VentanasMensajes.frmMensajeCatch();
+                catchMensaje.LblMensaje.Text = ex.Message;
+                catchMensaje.ShowDialog();
+                return false;
+            }
+        }
+
+        //FUNCION PARA CARGAR EL DETALLE DE LA ORDEN EN EL DATAGRID
+        private bool cargarDetalleGrid()
+        {
+            try
+            {
+                sSql = "";
+                sSql += "select * from pos_vw_detalle_comanda" + Environment.NewLine;
+                sSql += "where id_pedido = " + iIdPedido + Environment.NewLine;
+                sSql += "order by id_det_pedido";
+
+                dtConsulta = new DataTable();
+                dtConsulta.Clear();
+
+                bRespuesta = conexion.GFun_Lo_Busca_Registro(dtConsulta, sSql);
+
+                if (bRespuesta == false)
+                {
+                    catchMensaje = new VentanasMensajes.frmMensajeCatch();
+                    catchMensaje.LblMensaje.Text = conexion.sMensajeError;
+                    catchMensaje.ShowDialog();
+                    return false;
+                }
+
+                for (int i = 0; i < dtConsulta.Rows.Count; i++)
+                {
+                    dgvPedido.Rows.Add(Convert.ToDouble(dtConsulta.Rows[i]["cantidad"].ToString()).ToString(),
+                                       dtConsulta.Rows[i]["nombre"].ToString().Trim().ToUpper(),
+                                       dtConsulta.Rows[i]["precio_unitario"].ToString().Trim(),
+                                       dtConsulta.Rows[i]["precio_total"].ToString().Trim(),
+                                       Convert.ToDecimal(dtConsulta.Rows[i]["cantidad"].ToString()) * Convert.ToDecimal(dtConsulta.Rows[i]["precio_unitario"].ToString().Trim()),
+                                       dtConsulta.Rows[i]["paga_iva"].ToString().Trim(),
+                                       dtConsulta.Rows[i]["id_producto"].ToString().Trim(),                                       
+                                       dtConsulta.Rows[i]["codigo_producto"].ToString().Trim(),
+                                       dtConsulta.Rows[i]["paga_servicio"].ToString().Trim()
+                                       );
+                }
+
+                return true;
+            }
+
+            catch (Exception ex)
+            {
+                catchMensaje = new VentanasMensajes.frmMensajeCatch();
+                catchMensaje.LblMensaje.Text = ex.Message;
+                catchMensaje.ShowDialog();
+                return false;
+            }
+        }
+
+        //FUNCION PARA CARGAR EL DETALLE DE LA ORDEN EN EL DATAGRID
+        private bool cargarDetalleGridCopiar()
+        {
+            try
+            {
+                sSql = "";
+                sSql += "select PP.valor valor_nuevo, * " + Environment.NewLine;
+                sSql += "from pos_vw_detalle_comanda DC INNER JOIN" + Environment.NewLine;
+                sSql += "cv403_precios_productos PP ON DC.id_producto = PP.id_producto" + Environment.NewLine;
+                sSql += "and PP.estado = @estado" + Environment.NewLine;
+                sSql += "where DC.id_pedido = @id_pedido" + Environment.NewLine;
+                sSql += "and PP.id_lista_precio = @id_lista_precio" + Environment.NewLine;
+                sSql += "order by id_det_pedido";
+
+                parametro = new SqlParameter[3];
+                parametro[0] = new SqlParameter();
+                parametro[0].ParameterName = "@estado";
+                parametro[0].SqlDbType = SqlDbType.VarChar;
+                parametro[0].Value = "A";
+
+                parametro[1] = new SqlParameter();
+                parametro[1].ParameterName = "@id_pedido";
+                parametro[1].SqlDbType = SqlDbType.Int;
+                parametro[1].Value = iIdPedido;
+
+                parametro[2] = new SqlParameter();
+                parametro[2].ParameterName = "@id_lista_precio";
+                parametro[2].SqlDbType = SqlDbType.Int;
+                parametro[2].Value = iIdListaMinorista;
+
+                dtConsulta = new DataTable();
+                dtConsulta.Clear();
+
+                bRespuesta = conexion.GFun_Lo_Busca_Registro_Parametros(dtConsulta, sSql, parametro);
+
+                if (bRespuesta == false)
+                {
+                    catchMensaje = new VentanasMensajes.frmMensajeCatch();
+                    catchMensaje.LblMensaje.Text = conexion.sMensajeError;
+                    catchMensaje.ShowDialog();
+                    return false;
+                }
+
+                for (int i = 0; i < dtConsulta.Rows.Count; i++)
+                {
+                    dgvPedido.Rows.Add(Convert.ToDouble(dtConsulta.Rows[i]["cantidad"].ToString()).ToString(),
+                                       dtConsulta.Rows[i]["nombre"].ToString().Trim().ToUpper(),
+                                       dtConsulta.Rows[i]["valor_nuevo"].ToString().Trim(),
+                                       dtConsulta.Rows[i]["precio_total"].ToString().Trim(),
+                                       Convert.ToDecimal(dtConsulta.Rows[i]["cantidad"].ToString()) * Convert.ToDecimal(dtConsulta.Rows[i]["precio_unitario"].ToString().Trim()),
+                                       dtConsulta.Rows[i]["paga_iva"].ToString().Trim(),
+                                       dtConsulta.Rows[i]["id_producto"].ToString().Trim(),
+                                       dtConsulta.Rows[i]["codigo_producto"].ToString().Trim(),
+                                       dtConsulta.Rows[i]["paga_servicio"].ToString().Trim()
+                                       );
+                }
+
+                return true;
+            }
+
+            catch (Exception ex)
+            {
+                catchMensaje = new VentanasMensajes.frmMensajeCatch();
+                catchMensaje.LblMensaje.Text = ex.Message;
+                catchMensaje.ShowDialog();
+                return false;
+            }
+        }
+
         #endregion
 
         private void frmComandaComidaRapida_Load(object sender, EventArgs e)
         {
+            datosListas();
             datosFactura();
-            cargarDatosConsumidorFinal();
+            iNivelGeneral = 3;
 
-            if (iBanderaExpressTarjeta == 1)
+            if (iIdPedido == 0)
             {
-                iIdTipoComprobante = Program.iComprobanteNotaEntrega;
-                consultarFacturaNotaEntrega(Program.iComprobanteNotaEntrega);
-                iIdTipoComprobante = Program.iComprobanteNotaEntrega;
-                btnSeleccionFactura.BackColor = Color.FromArgb(255, 255, 192);
-                btnSeleccionFactura.ForeColor = Color.Black;
-                btnSeleccionNotaEntrega.BackColor = Color.Red;
-                btnSeleccionNotaEntrega.ForeColor = Color.White;
+                cargarDatosConsumidorFinal();
 
-                btnSeleccionFactura.Visible = false;
-                txtIdentificacion.ReadOnly = true;
-                btnEditar.Visible = false;
-                btnBuscar.Visible = false;
-                btnConsumidorFinal.Visible = false;
-                chkPasaporte.Visible = false;
-            }
-
-            else
-            {
-                //iIdTipoComprobante = 1;
-                //consultarFacturaNotaEntrega(1);
-                //iIdTipoComprobante = Program.iComprobanteNotaEntrega;
-                //consultarFacturaNotaEntrega(Program.iComprobanteNotaEntrega);
-
-                if (Program.iTipoComprobantePorDefaultComanda == 1)
+                if (iBanderaExpressTarjeta == 1)
                 {
-                    iIdTipoComprobante = 1;
-                    consultarFacturaNotaEntrega(1);
-                    btnSeleccionFactura.BackColor = Color.Red;
-                    btnSeleccionFactura.ForeColor = Color.White;
-                    btnSeleccionNotaEntrega.BackColor = Color.FromArgb(255, 255, 192);
-                    btnSeleccionNotaEntrega.ForeColor = Color.Black;
-                }
-
-                else if (Program.iTipoComprobantePorDefaultComanda == Program.iComprobanteNotaEntrega)
-                {
+                    iIdTipoComprobante = Program.iComprobanteNotaEntrega;
                     consultarFacturaNotaEntrega(Program.iComprobanteNotaEntrega);
                     iIdTipoComprobante = Program.iComprobanteNotaEntrega;
                     btnSeleccionFactura.BackColor = Color.FromArgb(255, 255, 192);
                     btnSeleccionFactura.ForeColor = Color.Black;
                     btnSeleccionNotaEntrega.BackColor = Color.Red;
                     btnSeleccionNotaEntrega.ForeColor = Color.White;
+
+                    btnSeleccionFactura.Visible = false;
+                    txtIdentificacion.ReadOnly = true;
+                    btnEditar.Visible = false;
+                    btnBuscar.Visible = false;
+                    btnConsumidorFinal.Visible = false;
+                    chkPasaporte.Visible = false;
                 }
+
+                else
+                {
+                    //iIdTipoComprobante = 1;
+                    //consultarFacturaNotaEntrega(1);
+                    //iIdTipoComprobante = Program.iComprobanteNotaEntrega;
+                    //consultarFacturaNotaEntrega(Program.iComprobanteNotaEntrega);
+
+                    if (Program.iTipoComprobantePorDefaultComanda == 1)
+                    {
+                        iIdTipoComprobante = 1;
+                        consultarFacturaNotaEntrega(1);
+                        btnSeleccionFactura.BackColor = Color.Red;
+                        btnSeleccionFactura.ForeColor = Color.White;
+                        btnSeleccionNotaEntrega.BackColor = Color.FromArgb(255, 255, 192);
+                        btnSeleccionNotaEntrega.ForeColor = Color.Black;
+                    }
+
+                    else if (Program.iTipoComprobantePorDefaultComanda == Program.iComprobanteNotaEntrega)
+                    {
+                        consultarFacturaNotaEntrega(Program.iComprobanteNotaEntrega);
+                        iIdTipoComprobante = Program.iComprobanteNotaEntrega;
+                        btnSeleccionFactura.BackColor = Color.FromArgb(255, 255, 192);
+                        btnSeleccionFactura.ForeColor = Color.Black;
+                        btnSeleccionNotaEntrega.BackColor = Color.Red;
+                        btnSeleccionNotaEntrega.ForeColor = Color.White;
+                    }
+                }
+            }
+
+            else
+            {
+                consultarDatosOrden();
             }
 
             cargarCategorias(2, 0);

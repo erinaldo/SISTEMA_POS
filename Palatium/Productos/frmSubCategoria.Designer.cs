@@ -28,18 +28,29 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle12 = new System.Windows.Forms.DataGridViewCellStyle();
             this.Grb_listReCajero = new System.Windows.Forms.GroupBox();
             this.btnBuscar = new System.Windows.Forms.Button();
             this.txtBuscar = new System.Windows.Forms.TextBox();
             this.dgvDatos = new System.Windows.Forms.DataGridView();
+            this.id_producto = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.modificable = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.precio_modificable = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.paga_iva = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.is_active = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.menu_pos = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.codigo = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.nombre = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.secuencia = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.estado = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Grb_opcioCategori = new System.Windows.Forms.GroupBox();
             this.btnLimpiar = new System.Windows.Forms.Button();
             this.BtnEliminar = new System.Windows.Forms.Button();
             this.btnAgregar = new System.Windows.Forms.Button();
             this.grupoDatos = new System.Windows.Forms.GroupBox();
+            this.chkMenuPos = new System.Windows.Forms.CheckBox();
             this.chkHabilitado = new System.Windows.Forms.CheckBox();
             this.lblSecuencia = new System.Windows.Forms.Label();
             this.txtSecuencia = new System.Windows.Forms.TextBox();
@@ -61,22 +72,18 @@
             this.cmbCategorias = new System.Windows.Forms.ComboBox();
             this.cmbCodigoOrigen = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
-            this.chkMenuPos = new System.Windows.Forms.CheckBox();
-            this.id_producto = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.modificable = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.precio_modificable = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.paga_iva = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.is_active = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.menu_pos = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.codigo = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.nombre = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.secuencia = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.estado = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.lblEtiquetaImagen = new System.Windows.Forms.Label();
+            this.btnClear = new System.Windows.Forms.Button();
+            this.btnExaminar = new System.Windows.Forms.Button();
+            this.imgLogo = new System.Windows.Forms.PictureBox();
+            this.txtRuta = new System.Windows.Forms.TextBox();
+            this.txtBase64 = new System.Windows.Forms.TextBox();
             this.Grb_listReCajero.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvDatos)).BeginInit();
             this.Grb_opcioCategori.SuspendLayout();
             this.grupoDatos.SuspendLayout();
             this.groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.imgLogo)).BeginInit();
             this.SuspendLayout();
             // 
             // Grb_listReCajero
@@ -142,6 +149,81 @@
             this.dgvDatos.TabIndex = 0;
             this.dgvDatos.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvProductos_CellDoubleClick);
             // 
+            // id_producto
+            // 
+            this.id_producto.HeaderText = "ID_PRODUCTO";
+            this.id_producto.Name = "id_producto";
+            this.id_producto.ReadOnly = true;
+            this.id_producto.Visible = false;
+            // 
+            // modificable
+            // 
+            this.modificable.HeaderText = "MODIFICABLE";
+            this.modificable.Name = "modificable";
+            this.modificable.ReadOnly = true;
+            this.modificable.Visible = false;
+            // 
+            // precio_modificable
+            // 
+            this.precio_modificable.HeaderText = "PRECIO_MODIFICABLE";
+            this.precio_modificable.Name = "precio_modificable";
+            this.precio_modificable.ReadOnly = true;
+            this.precio_modificable.Visible = false;
+            // 
+            // paga_iva
+            // 
+            this.paga_iva.HeaderText = "PAGA_IVA";
+            this.paga_iva.Name = "paga_iva";
+            this.paga_iva.ReadOnly = true;
+            this.paga_iva.Visible = false;
+            // 
+            // is_active
+            // 
+            this.is_active.HeaderText = "IS_ACTIVE";
+            this.is_active.Name = "is_active";
+            this.is_active.ReadOnly = true;
+            this.is_active.Visible = false;
+            // 
+            // menu_pos
+            // 
+            this.menu_pos.HeaderText = "MENU_POS";
+            this.menu_pos.Name = "menu_pos";
+            this.menu_pos.ReadOnly = true;
+            this.menu_pos.Visible = false;
+            // 
+            // codigo
+            // 
+            dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.codigo.DefaultCellStyle = dataGridViewCellStyle10;
+            this.codigo.HeaderText = "CÓDIGO";
+            this.codigo.Name = "codigo";
+            this.codigo.ReadOnly = true;
+            this.codigo.Width = 80;
+            // 
+            // nombre
+            // 
+            this.nombre.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.nombre.HeaderText = "DESCRIPCIÓN";
+            this.nombre.Name = "nombre";
+            this.nombre.ReadOnly = true;
+            // 
+            // secuencia
+            // 
+            dataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.secuencia.DefaultCellStyle = dataGridViewCellStyle11;
+            this.secuencia.HeaderText = "SECUENCIA";
+            this.secuencia.Name = "secuencia";
+            this.secuencia.ReadOnly = true;
+            this.secuencia.Width = 80;
+            // 
+            // estado
+            // 
+            dataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.estado.DefaultCellStyle = dataGridViewCellStyle12;
+            this.estado.HeaderText = "ESTADO";
+            this.estado.Name = "estado";
+            this.estado.ReadOnly = true;
+            // 
             // Grb_opcioCategori
             // 
             this.Grb_opcioCategori.Controls.Add(this.btnLimpiar);
@@ -193,6 +275,10 @@
             // 
             // grupoDatos
             // 
+            this.grupoDatos.Controls.Add(this.lblEtiquetaImagen);
+            this.grupoDatos.Controls.Add(this.btnClear);
+            this.grupoDatos.Controls.Add(this.btnExaminar);
+            this.grupoDatos.Controls.Add(this.imgLogo);
             this.grupoDatos.Controls.Add(this.chkMenuPos);
             this.grupoDatos.Controls.Add(this.chkHabilitado);
             this.grupoDatos.Controls.Add(this.lblSecuencia);
@@ -215,6 +301,17 @@
             this.grupoDatos.TabIndex = 6;
             this.grupoDatos.TabStop = false;
             this.grupoDatos.Text = "Datos del Registro";
+            // 
+            // chkMenuPos
+            // 
+            this.chkMenuPos.AutoSize = true;
+            this.chkMenuPos.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.chkMenuPos.Location = new System.Drawing.Point(21, 165);
+            this.chkMenuPos.Name = "chkMenuPos";
+            this.chkMenuPos.Size = new System.Drawing.Size(82, 19);
+            this.chkMenuPos.TabIndex = 17;
+            this.chkMenuPos.Text = "Menú Pos";
+            this.chkMenuPos.UseVisualStyleBackColor = true;
             // 
             // chkHabilitado
             // 
@@ -446,91 +543,73 @@
             this.label2.TabIndex = 18;
             this.label2.Text = "Código Origen:";
             // 
-            // chkMenuPos
+            // lblEtiquetaImagen
             // 
-            this.chkMenuPos.AutoSize = true;
-            this.chkMenuPos.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.chkMenuPos.Location = new System.Drawing.Point(21, 165);
-            this.chkMenuPos.Name = "chkMenuPos";
-            this.chkMenuPos.Size = new System.Drawing.Size(82, 19);
-            this.chkMenuPos.TabIndex = 17;
-            this.chkMenuPos.Text = "Menú Pos";
-            this.chkMenuPos.UseVisualStyleBackColor = true;
+            this.lblEtiquetaImagen.BackColor = System.Drawing.Color.Transparent;
+            this.lblEtiquetaImagen.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblEtiquetaImagen.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.lblEtiquetaImagen.Location = new System.Drawing.Point(275, 93);
+            this.lblEtiquetaImagen.Name = "lblEtiquetaImagen";
+            this.lblEtiquetaImagen.Size = new System.Drawing.Size(60, 18);
+            this.lblEtiquetaImagen.TabIndex = 65;
+            this.lblEtiquetaImagen.Text = "Imagen:";
+            this.lblEtiquetaImagen.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // id_producto
+            // btnClear
             // 
-            this.id_producto.HeaderText = "ID_PRODUCTO";
-            this.id_producto.Name = "id_producto";
-            this.id_producto.ReadOnly = true;
-            this.id_producto.Visible = false;
+            this.btnClear.BackColor = System.Drawing.Color.Red;
+            this.btnClear.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Fuchsia;
+            this.btnClear.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnClear.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnClear.Location = new System.Drawing.Point(306, 159);
+            this.btnClear.Name = "btnClear";
+            this.btnClear.Size = new System.Drawing.Size(29, 21);
+            this.btnClear.TabIndex = 64;
+            this.btnClear.Text = "X";
+            this.btnClear.UseVisualStyleBackColor = false;
+            this.btnClear.Click += new System.EventHandler(this.btnClear_Click);
             // 
-            // modificable
+            // btnExaminar
             // 
-            this.modificable.HeaderText = "MODIFICABLE";
-            this.modificable.Name = "modificable";
-            this.modificable.ReadOnly = true;
-            this.modificable.Visible = false;
+            this.btnExaminar.BackColor = System.Drawing.Color.Yellow;
+            this.btnExaminar.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Fuchsia;
+            this.btnExaminar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnExaminar.Location = new System.Drawing.Point(275, 159);
+            this.btnExaminar.Name = "btnExaminar";
+            this.btnExaminar.Size = new System.Drawing.Size(29, 21);
+            this.btnExaminar.TabIndex = 63;
+            this.btnExaminar.Text = "...";
+            this.btnExaminar.UseVisualStyleBackColor = false;
+            this.btnExaminar.Click += new System.EventHandler(this.btnExaminar_Click);
             // 
-            // precio_modificable
+            // imgLogo
             // 
-            this.precio_modificable.HeaderText = "PRECIO_MODIFICABLE";
-            this.precio_modificable.Name = "precio_modificable";
-            this.precio_modificable.ReadOnly = true;
-            this.precio_modificable.Visible = false;
+            this.imgLogo.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.imgLogo.Location = new System.Drawing.Point(275, 114);
+            this.imgLogo.Name = "imgLogo";
+            this.imgLogo.Size = new System.Drawing.Size(60, 44);
+            this.imgLogo.TabIndex = 62;
+            this.imgLogo.TabStop = false;
             // 
-            // paga_iva
+            // txtRuta
             // 
-            this.paga_iva.HeaderText = "PAGA_IVA";
-            this.paga_iva.Name = "paga_iva";
-            this.paga_iva.ReadOnly = true;
-            this.paga_iva.Visible = false;
+            this.txtRuta.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.txtRuta.Location = new System.Drawing.Point(387, 465);
+            this.txtRuta.MaxLength = 20;
+            this.txtRuta.Name = "txtRuta";
+            this.txtRuta.ReadOnly = true;
+            this.txtRuta.Size = new System.Drawing.Size(202, 20);
+            this.txtRuta.TabIndex = 67;
             // 
-            // is_active
+            // txtBase64
             // 
-            this.is_active.HeaderText = "IS_ACTIVE";
-            this.is_active.Name = "is_active";
-            this.is_active.ReadOnly = true;
-            this.is_active.Visible = false;
-            // 
-            // menu_pos
-            // 
-            this.menu_pos.HeaderText = "MENU_POS";
-            this.menu_pos.Name = "menu_pos";
-            this.menu_pos.ReadOnly = true;
-            this.menu_pos.Visible = false;
-            // 
-            // codigo
-            // 
-            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.codigo.DefaultCellStyle = dataGridViewCellStyle4;
-            this.codigo.HeaderText = "CÓDIGO";
-            this.codigo.Name = "codigo";
-            this.codigo.ReadOnly = true;
-            this.codigo.Width = 80;
-            // 
-            // nombre
-            // 
-            this.nombre.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.nombre.HeaderText = "DESCRIPCIÓN";
-            this.nombre.Name = "nombre";
-            this.nombre.ReadOnly = true;
-            // 
-            // secuencia
-            // 
-            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.secuencia.DefaultCellStyle = dataGridViewCellStyle5;
-            this.secuencia.HeaderText = "SECUENCIA";
-            this.secuencia.Name = "secuencia";
-            this.secuencia.ReadOnly = true;
-            this.secuencia.Width = 80;
-            // 
-            // estado
-            // 
-            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.estado.DefaultCellStyle = dataGridViewCellStyle6;
-            this.estado.HeaderText = "ESTADO";
-            this.estado.Name = "estado";
-            this.estado.ReadOnly = true;
+            this.txtBase64.Enabled = false;
+            this.txtBase64.Location = new System.Drawing.Point(12, 478);
+            this.txtBase64.MaxLength = 20;
+            this.txtBase64.Multiline = true;
+            this.txtBase64.Name = "txtBase64";
+            this.txtBase64.Size = new System.Drawing.Size(875, 74);
+            this.txtBase64.TabIndex = 66;
             // 
             // frmSubCategoria
             // 
@@ -538,7 +617,9 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
-            this.ClientSize = new System.Drawing.Size(892, 452);
+            this.ClientSize = new System.Drawing.Size(892, 459);
+            this.Controls.Add(this.txtRuta);
+            this.Controls.Add(this.txtBase64);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.Grb_listReCajero);
             this.Controls.Add(this.Grb_opcioCategori);
@@ -557,7 +638,9 @@
             this.grupoDatos.PerformLayout();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.imgLogo)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -604,5 +687,11 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn nombre;
         private System.Windows.Forms.DataGridViewTextBoxColumn secuencia;
         private System.Windows.Forms.DataGridViewTextBoxColumn estado;
+        private System.Windows.Forms.Label lblEtiquetaImagen;
+        private System.Windows.Forms.Button btnClear;
+        private System.Windows.Forms.Button btnExaminar;
+        private System.Windows.Forms.PictureBox imgLogo;
+        private System.Windows.Forms.TextBox txtRuta;
+        private System.Windows.Forms.TextBox txtBase64;
     }
 }

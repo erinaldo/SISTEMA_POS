@@ -118,7 +118,7 @@ namespace Palatium.Oficina
 
         private void submenuFormasCobros_Click(object sender, EventArgs e)
         {
-            Formularios.FInformacionPosTipForPag cobros = new Formularios.FInformacionPosTipForPag();
+            Formularios.frmFormasPagos cobros = new Formularios.frmFormasPagos();
             verificarFormularios(cobros, this);
         }
 

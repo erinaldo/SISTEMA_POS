@@ -37,6 +37,7 @@ namespace Palatium.Parametros
         int iOpcionLogin;
         int iManejaNomina;
         int iIncluirImpuesto;
+        int iUsarIconosCategorias;
 
         public frmNuevoParametro()
         {
@@ -63,6 +64,7 @@ namespace Palatium.Parametros
 
             catch (Exception ex)
             {
+                catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
                 catchMensaje.lblMensaje.Text = ex.Message;
                 catchMensaje.ShowDialog();
             }
@@ -108,6 +110,9 @@ namespace Palatium.Parametros
 
             if (iBanderaTab == 3)
                 cargarTabParametros();
+
+            if (iBanderaTab == 4)
+                cargarTabComanda();
         }
 
         //FUNCION PARA VALIDAR LOS DATOS ANTES DE ENVIAR A LA BASE DE DATOS
@@ -279,6 +284,16 @@ namespace Palatium.Parametros
                 else if (iBanderaTab == 3)
                 {
                     actualizarTabParametros();
+                }
+
+                else if (iBanderaTab == 4)
+                {
+                    if (chkUsarIconosCategorias.Checked == true)
+                        iUsarIconosCategorias = 1;
+                    else
+                        iUsarIconosCategorias = 0;
+
+                    actualizarTabComanda();
                 }
             }
         }
@@ -596,7 +611,7 @@ namespace Palatium.Parametros
                 {
                     conexion.GFun_Lo_Maneja_Transaccion(Program.G_REVERSA_TRANSACCION);
                     catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
-                    catchMensaje.lblMensaje.Text = "ERROR EN LA INSTRUCCIÓN:" + Environment.NewLine + sSql;
+                    catchMensaje.lblMensaje.Text = conexion.sMensajeError;
                     catchMensaje.ShowDialog();
                     return;
                 }
@@ -726,7 +741,110 @@ namespace Palatium.Parametros
                 {
                     conexion.GFun_Lo_Maneja_Transaccion(Program.G_REVERSA_TRANSACCION);
                     catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
-                    catchMensaje.lblMensaje.Text = "ERROR EN LA INSTRUCCIÓN:" + Environment.NewLine + sSql;
+                    catchMensaje.lblMensaje.Text = conexion.sMensajeError;
+                    catchMensaje.ShowDialog();
+                    return;
+                }
+
+                //SI SE EJECUTA TODO REALIZA EL COMMIT
+                conexion.GFun_Lo_Maneja_Transaccion(Program.G_TERMINA_TRANSACCION);
+
+                ok = new VentanasMensajes.frmMensajeNuevoOk();
+                ok.lblMensaje.Text = "Registro actualizado éxitosamente. Los cambios se aplicarán al reiniciar el programa.";
+                ok.ShowDialog();
+                parametros.cargarParametros();
+                cargarParametros();
+                enviarParametro();
+                return;
+            }
+
+            catch (Exception ex)
+            {
+                conexion.GFun_Lo_Maneja_Transaccion(Program.G_REVERSA_TRANSACCION);
+                catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
+                catchMensaje.lblMensaje.Text = ex.Message;
+                catchMensaje.ShowDialog();
+            }
+        }
+
+        #endregion
+
+        #region FUNCIONES DEL TAB PARA COMANDAS
+
+        //FUNCION PARA CARGAR LOS PARAMETROS DEL TAB
+        private void cargarTabComanda()
+        {
+            try
+            {
+                if (dtConsulta.Rows.Count == 0)
+                {
+                    iIdParametro = 0;
+
+                    chkUsarIconosCategorias.Checked = false;
+                }
+
+                else
+                {
+                    iIdParametro = Convert.ToInt32(dtConsulta.Rows[0]["id_pos_parametro"].ToString());
+
+                    if (Convert.ToInt32(dtConsulta.Rows[0]["usar_iconos_categorias"].ToString()) == 1)
+                        chkUsarIconosCategorias.Checked = true;
+                    else
+                        chkUsarIconosCategorias.Checked = false;
+                }
+            }
+
+            catch (Exception ex)
+            {
+                catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
+                catchMensaje.lblMensaje.Text = ex.Message;
+                catchMensaje.ShowDialog();
+            }
+        }
+
+        //FUNCION PARA ACTUALIZAR EL REGISTRO
+        private void actualizarTabComanda()
+        {
+            try
+            {
+                //SE INICIA UNA TRANSACCION
+                if (!conexion.GFun_Lo_Maneja_Transaccion(Program.G_INICIA_TRANSACCION))
+                {
+                    ok = new VentanasMensajes.frmMensajeNuevoOk();
+                    ok.lblMensaje.Text = "Error al abrir transacción.";
+                    ok.ShowDialog();
+                    enviarParametro();
+                    return;
+                }
+
+                sSql = "";
+                sSql += "update pos_parametro set" + Environment.NewLine;
+                sSql += "usar_iconos_categorias = @usar_iconos_categorias" + Environment.NewLine;
+                sSql += "where id_pos_parametro = @id_pos_parametro" + Environment.NewLine;
+                sSql += "and estado = @estado";
+
+                parametro = new SqlParameter[3];
+                parametro[0] = new SqlParameter();
+                parametro[0].ParameterName = "@usar_iconos_categorias";
+                parametro[0].SqlDbType = SqlDbType.Int;
+                parametro[0].Value = iUsarIconosCategorias;
+
+                parametro[1] = new SqlParameter();
+                parametro[1].ParameterName = "@id_pos_parametro";
+                parametro[1].SqlDbType = SqlDbType.Int;
+                parametro[1].Value = iIdParametro;
+
+                parametro[2] = new SqlParameter();
+                parametro[2].ParameterName = "@estado";
+                parametro[2].SqlDbType = SqlDbType.VarChar;
+                parametro[2].Value = "A";
+
+                //EJECUTAR LA INSTRUCCIÓN SQL
+                if (!conexion.GFun_Lo_Ejecutar_SQL_Parametros(sSql, parametro))
+                {
+                    conexion.GFun_Lo_Maneja_Transaccion(Program.G_REVERSA_TRANSACCION);
+                    catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
+                    catchMensaje.lblMensaje.Text = conexion.sMensajeError;
                     catchMensaje.ShowDialog();
                     return;
                 }
@@ -781,6 +899,13 @@ namespace Palatium.Parametros
             if (tbControl.SelectedTab == tbControl.TabPages["tabParametros"])
             {
                 iBanderaTab = 3;
+                enviarParametro();
+                return;
+            }
+
+            if (tbControl.SelectedTab == tbControl.TabPages["tabComanda"])
+            {
+                iBanderaTab = 4;
                 enviarParametro();
                 return;
             }

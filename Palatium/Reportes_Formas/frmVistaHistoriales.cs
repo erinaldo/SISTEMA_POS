@@ -58,7 +58,12 @@ namespace Palatium.Reportes_Formas
 
         private void frmVistaHistoriales_Load(object sender, EventArgs e)
         {
+            abrirFormularioHijo(new Reportes_Formas.frmHistorialClientePorOrigen(1), 0);
+            btnHistorialComanda.BackColor = Color.FromArgb(0, 192, 0);
+            btnHistorialProducto.BackColor = Color.Blue;
 
+            btnHistorialComanda.AccessibleDescription = "1";
+            btnHistorialProducto.AccessibleDescription = "0";
         }
 
         private void btnHistorialComanda_Click(object sender, EventArgs e)

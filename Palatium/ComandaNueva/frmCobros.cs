@@ -1320,54 +1320,64 @@ namespace Palatium.ComandaNueva
          {
              try
              {
+                 //sSql = "";
+                 //sSql += "select FC.id_pos_tipo_forma_cobro, MP.codigo, FC.descripcion," + Environment.NewLine;
+                 //sSql += "isnull(FC.imagen, '') imagen, MP.id_sri_forma_pago," + Environment.NewLine;
+                 //sSql += "isnull(FC.aplica_retencion, 0) aplica_retencion" + Environment.NewLine;
+                 //sSql += "from pos_tipo_forma_cobro FC INNER JOIN" + Environment.NewLine;
+                 //sSql += "pos_metodo_pago MP ON MP.id_pos_metodo_pago = FC.id_pos_metodo_pago" + Environment.NewLine;
+                 //sSql += "and FC.estado = 'A'" + Environment.NewLine;
+                 //sSql += "and MP.estado = 'A'" + Environment.NewLine;
+                 //sSql += "where FC.is_active = 1";
+
                  sSql = "";
-                 sSql += "select FC.id_pos_tipo_forma_cobro, MP.codigo, FC.descripcion," + Environment.NewLine;
-                 sSql += "isnull(FC.imagen, '') imagen, MP.id_sri_forma_pago," + Environment.NewLine;
+                 sSql += "select FC.id_pos_tipo_forma_cobro, MP.codigo, FC.texto_visualizar_boton descripcion," + Environment.NewLine;
+                 sSql += "isnull(FC.imagen_base_64, '') imagen_base_64, MP.id_sri_forma_pago," + Environment.NewLine;
                  sSql += "isnull(FC.aplica_retencion, 0) aplica_retencion" + Environment.NewLine;
                  sSql += "from pos_tipo_forma_cobro FC INNER JOIN" + Environment.NewLine;
                  sSql += "pos_metodo_pago MP ON MP.id_pos_metodo_pago = FC.id_pos_metodo_pago" + Environment.NewLine;
                  sSql += "and FC.estado = 'A'" + Environment.NewLine;
-                 sSql += "and MP.estado = 'A'";
+                 sSql += "and MP.estado = 'A'" + Environment.NewLine;
+                 sSql += "and FC.is_active = 1" + Environment.NewLine;
+                 sSql += "and mostrar_seccion_cobros = 1";
 
                  dtFormasPago = new DataTable();
                  dtFormasPago.Clear();
 
                  bRespuesta = conexion.GFun_Lo_Busca_Registro(dtFormasPago, sSql);
 
-                 if (!bRespuesta)
+                 if (bRespuesta == false)
                  {
                      catchMensaje = new VentanasMensajes.frmMensajeCatch();
-                     catchMensaje.LblMensaje.Text = "ERROR EN LA INSTRUCCIÓN SQL:" + Environment.NewLine + sSql;
+                     catchMensaje.LblMensaje.Text = conexion.sMensajeError;
                      catchMensaje.ShowDialog();
+                     return;
                  }
 
-                 else
+                 iCuentaFormasPagos = 0;
+
+                 if (dtFormasPago.Rows.Count > 0)
                  {
-                     iCuentaFormasPagos = 0;
-
-                     if (dtFormasPago.Rows.Count > 0)
+                     if (dtFormasPago.Rows.Count > 8)
                      {
-                         if (dtFormasPago.Rows.Count > 8)
-                         {
-                             btnSiguiente.Enabled = true;
-                         }
-
-                         else
-                         {
-                             btnSiguiente.Enabled = false;
-                         }
-
-                         if (crearBotonesFormasPagos() == true)
-                         { }
-
+                         btnSiguiente.Enabled = true;
                      }
 
                      else
                      {
-                         ok = new VentanasMensajes.frmMensajeOK();
-                         ok.LblMensaje.Text = "No se encuentras ítems de categorías en el sistema.";
-                         ok.ShowDialog();
+                         btnSiguiente.Enabled = false;
                      }
+
+                     if (crearBotonesFormasPagos() == true)
+                     { }
+
+                 }
+
+                 else
+                 {
+                     ok = new VentanasMensajes.frmMensajeOK();
+                     ok.LblMensaje.Text = "No se encuentras ítems de categorías en el sistema.";
+                     ok.ShowDialog();
                  }
              }
 
@@ -1384,15 +1394,28 @@ namespace Palatium.ComandaNueva
          {
              try
              {
+                 //sSql = "";
+                 //sSql += "select FC.id_pos_tipo_forma_cobro, MP.codigo, FC.descripcion," + Environment.NewLine;
+                 //sSql += "isnull(FC.imagen, '') imagen, MP.id_sri_forma_pago," + Environment.NewLine;
+                 //sSql += "isnull(FC.aplica_retencion, 0) aplica_retencion" + Environment.NewLine;
+                 //sSql += "from pos_tipo_forma_cobro FC INNER JOIN" + Environment.NewLine;
+                 //sSql += "pos_metodo_pago MP ON MP.id_pos_metodo_pago = FC.id_pos_metodo_pago" + Environment.NewLine;
+                 //sSql += "and FC.estado = 'A'" + Environment.NewLine;
+                 //sSql += "and MP.estado = 'A'" + Environment.NewLine;
+                 //sSql += "where MP.codigo in ('TC', 'TD')" + Environment.NewLine;
+                 //sSql += "and FC.is_active = 1";
+
                  sSql = "";
-                 sSql += "select FC.id_pos_tipo_forma_cobro, MP.codigo, FC.descripcion," + Environment.NewLine;
-                 sSql += "isnull(FC.imagen, '') imagen, MP.id_sri_forma_pago," + Environment.NewLine;
+                 sSql += "select FC.id_pos_tipo_forma_cobro, MP.codigo, FC.texto_visualizar_boton descripcion," + Environment.NewLine;
+                 sSql += "isnull(FC.imagen_base_64, '') imagen_base_64, MP.id_sri_forma_pago," + Environment.NewLine;
                  sSql += "isnull(FC.aplica_retencion, 0) aplica_retencion" + Environment.NewLine;
                  sSql += "from pos_tipo_forma_cobro FC INNER JOIN" + Environment.NewLine;
                  sSql += "pos_metodo_pago MP ON MP.id_pos_metodo_pago = FC.id_pos_metodo_pago" + Environment.NewLine;
                  sSql += "and FC.estado = 'A'" + Environment.NewLine;
                  sSql += "and MP.estado = 'A'" + Environment.NewLine;
-                 sSql += "where MP.codigo in ('TC', 'TD')";
+                 sSql += "where MP.codigo in ('TC', 'TD')" + Environment.NewLine;
+                 sSql += "and FC.is_active = 1" + Environment.NewLine;
+                 sSql += "and mostrar_seccion_cobros = 1";
 
                  dtFormasPago = new DataTable();
                  dtFormasPago.Clear();
@@ -1402,7 +1425,7 @@ namespace Palatium.ComandaNueva
                  if (bRespuesta == false)
                  {
                      catchMensaje = new VentanasMensajes.frmMensajeCatch();
-                     catchMensaje.LblMensaje.Text = "ERROR EN LA INSTRUCCIÓN SQL:" + Environment.NewLine + sSql;
+                     catchMensaje.LblMensaje.Text = conexion.sMensajeError;
                      catchMensaje.ShowDialog();
                      return;
                  }
@@ -1461,9 +1484,8 @@ namespace Palatium.ComandaNueva
                          boton[i, j].Click += new EventHandler(boton_clic);
                          boton[i, j].Size = new Size(153, 71);
                          boton[i, j].Location = new Point(iPosXFormasPagos, iPosYFormasPagos);
-                         boton[i, j].BackColor = Color.Lime;
+                         boton[i, j].BackColor = Color.White;
                          boton[i, j].Font = new Font("Maiandra GD", 9.75f, FontStyle.Bold);
-                         //boton[i, j].Tag = dtFormasPago.Rows[iCuentaFormasPagos]["id_pos_tipo_forma_cobro"].ToString();
                          boton[i, j].Name = dtFormasPago.Rows[iCuentaFormasPagos]["id_pos_tipo_forma_cobro"].ToString();
                          boton[i, j].Tag = dtFormasPago.Rows[iCuentaFormasPagos]["aplica_retencion"].ToString();
                          boton[i, j].Text = dtFormasPago.Rows[iCuentaFormasPagos]["descripcion"].ToString();
@@ -1472,15 +1494,35 @@ namespace Palatium.ComandaNueva
                          boton[i, j].TextAlign = ContentAlignment.MiddleCenter;
                          boton[i, j].FlatStyle = FlatStyle.Flat;
                          boton[i, j].FlatAppearance.BorderSize = 1;
-                         boton[i, j].FlatAppearance.MouseOverBackColor = Color.FromArgb(255, 128, 255);
+                         boton[i, j].FlatAppearance.MouseOverBackColor = Color.FromArgb(128, 255, 128);
+                         boton[i, j].FlatAppearance.MouseDownBackColor = Color.Fuchsia;
 
-                         if (dtFormasPago.Rows[iCuentaFormasPagos]["imagen"].ToString().Trim() != "" && File.Exists(dtFormasPago.Rows[iCuentaFormasPagos]["imagen"].ToString().Trim()))
+                         //if (dtFormasPago.Rows[iCuentaFormasPagos]["imagen"].ToString().Trim() != "" && File.Exists(dtFormasPago.Rows[iCuentaFormasPagos]["imagen"].ToString().Trim()))
+                         //{
+                         //    boton[i, j].TextAlign = ContentAlignment.MiddleRight;
+                         //    boton[i, j].Image = Image.FromFile(dtFormasPago.Rows[iCuentaFormasPagos]["imagen"].ToString().Trim());
+                         //    boton[i, j].ImageAlign = ContentAlignment.MiddleLeft;
+                         //    boton[i, j].BackgroundImageLayout = ImageLayout.Stretch;
+                         //}
+
+                         if (dtFormasPago.Rows[iCuentaFormasPagos]["imagen_base_64"].ToString().Trim() != "")
                          {
+                             Image foto;
+                             byte[] imageBytes;
+
+                             imageBytes = Convert.FromBase64String(dtFormasPago.Rows[iCuentaFormasPagos]["imagen_base_64"].ToString().Trim());
+                             
+                             using (var ms = new MemoryStream(imageBytes, 0, imageBytes.Length))
+                             {
+                                 foto = Image.FromStream(ms, true);
+                             }
+
                              boton[i, j].TextAlign = ContentAlignment.MiddleRight;
-                             boton[i, j].Image = Image.FromFile(dtFormasPago.Rows[iCuentaFormasPagos]["imagen"].ToString().Trim());
+                             boton[i, j].Image = foto;
                              boton[i, j].ImageAlign = ContentAlignment.MiddleLeft;
                              boton[i, j].BackgroundImageLayout = ImageLayout.Stretch;
                          }
+
 
                          pnlFormasCobros.Controls.Add(boton[i, j]);
                          ++iCuentaFormasPagos;

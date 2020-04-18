@@ -29,15 +29,15 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle17 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle18 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle12 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle13 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle14 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle15 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle16 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle26 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle27 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle19 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle20 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle21 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle22 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle23 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle24 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle25 = new System.Windows.Forms.DataGridViewCellStyle();
             this.panel1 = new System.Windows.Forms.Panel();
             this.lblTotal = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
@@ -84,8 +84,8 @@
             this.btnTarjetas = new System.Windows.Forms.Button();
             this.btnCobroTarjetaAlmuerzo = new System.Windows.Forms.Button();
             this.ttMensaje = new System.Windows.Forms.ToolTip(this.components);
-            this.btnImprimirPrecuenta = new System.Windows.Forms.Button();
             this.btnRegresar = new System.Windows.Forms.LinkLabel();
+            this.btnImprimirPrecuenta = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvPedido)).BeginInit();
@@ -169,6 +169,9 @@
             // btnSeleccionNotaEntrega
             // 
             this.btnSeleccionNotaEntrega.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
+            this.btnSeleccionNotaEntrega.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
+            this.btnSeleccionNotaEntrega.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Fuchsia;
+            this.btnSeleccionNotaEntrega.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnSeleccionNotaEntrega.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnSeleccionNotaEntrega.ForeColor = System.Drawing.SystemColors.ControlText;
             this.btnSeleccionNotaEntrega.Location = new System.Drawing.Point(95, 11);
@@ -182,6 +185,9 @@
             // btnSeleccionFactura
             // 
             this.btnSeleccionFactura.BackColor = System.Drawing.Color.Red;
+            this.btnSeleccionFactura.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
+            this.btnSeleccionFactura.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Fuchsia;
+            this.btnSeleccionFactura.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnSeleccionFactura.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnSeleccionFactura.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.btnSeleccionFactura.Location = new System.Drawing.Point(14, 11);
@@ -379,6 +385,9 @@
             // 
             this.btnAceptar.BackColor = System.Drawing.Color.Lime;
             this.btnAceptar.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnAceptar.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
+            this.btnAceptar.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Fuchsia;
+            this.btnAceptar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnAceptar.Font = new System.Drawing.Font("Maiandra GD", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnAceptar.Location = new System.Drawing.Point(685, 548);
             this.btnAceptar.Name = "btnAceptar";
@@ -410,14 +419,14 @@
             this.idProducto,
             this.tipoProducto,
             this.paga_servicio});
-            dataGridViewCellStyle17.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle17.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle17.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle17.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle17.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle17.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle17.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dgvPedido.DefaultCellStyle = dataGridViewCellStyle17;
+            dataGridViewCellStyle26.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle26.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle26.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle26.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle26.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle26.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle26.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgvPedido.DefaultCellStyle = dataGridViewCellStyle26;
             this.dgvPedido.EnableHeadersVisualStyles = false;
             this.dgvPedido.GridColor = System.Drawing.SystemColors.ControlLight;
             this.dgvPedido.Location = new System.Drawing.Point(685, 196);
@@ -426,8 +435,8 @@
             this.dgvPedido.ReadOnly = true;
             this.dgvPedido.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
             this.dgvPedido.RowHeadersVisible = false;
-            dataGridViewCellStyle18.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dgvPedido.RowsDefaultCellStyle = dataGridViewCellStyle18;
+            dataGridViewCellStyle27.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgvPedido.RowsDefaultCellStyle = dataGridViewCellStyle27;
             this.dgvPedido.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvPedido.Size = new System.Drawing.Size(420, 294);
             this.dgvPedido.TabIndex = 137;
@@ -435,9 +444,9 @@
             // 
             // cantidad
             // 
-            dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle10.Font = new System.Drawing.Font("Maiandra GD", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cantidad.DefaultCellStyle = dataGridViewCellStyle10;
+            dataGridViewCellStyle19.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle19.Font = new System.Drawing.Font("Maiandra GD", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cantidad.DefaultCellStyle = dataGridViewCellStyle19;
             this.cantidad.FillWeight = 60.9137F;
             this.cantidad.HeaderText = "CANT.";
             this.cantidad.Name = "cantidad";
@@ -447,8 +456,8 @@
             // producto
             // 
             this.producto.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            dataGridViewCellStyle11.Font = new System.Drawing.Font("Maiandra GD", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.producto.DefaultCellStyle = dataGridViewCellStyle11;
+            dataGridViewCellStyle20.Font = new System.Drawing.Font("Maiandra GD", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.producto.DefaultCellStyle = dataGridViewCellStyle20;
             this.producto.FillWeight = 168.8291F;
             this.producto.HeaderText = "PRODUCTO";
             this.producto.Name = "producto";
@@ -456,8 +465,8 @@
             // 
             // valuni
             // 
-            dataGridViewCellStyle12.Font = new System.Drawing.Font("Maiandra GD", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.valuni.DefaultCellStyle = dataGridViewCellStyle12;
+            dataGridViewCellStyle21.Font = new System.Drawing.Font("Maiandra GD", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.valuni.DefaultCellStyle = dataGridViewCellStyle21;
             this.valuni.HeaderText = "V. UNITARIO";
             this.valuni.Name = "valuni";
             this.valuni.ReadOnly = true;
@@ -465,9 +474,9 @@
             // 
             // valor
             // 
-            dataGridViewCellStyle13.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle13.Font = new System.Drawing.Font("Maiandra GD", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.valor.DefaultCellStyle = dataGridViewCellStyle13;
+            dataGridViewCellStyle22.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle22.Font = new System.Drawing.Font("Maiandra GD", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.valor.DefaultCellStyle = dataGridViewCellStyle22;
             this.valor.FillWeight = 70.25717F;
             this.valor.HeaderText = "VALOR";
             this.valor.Name = "valor";
@@ -476,9 +485,9 @@
             // 
             // subtotal
             // 
-            dataGridViewCellStyle14.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle14.Font = new System.Drawing.Font("Maiandra GD", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.subtotal.DefaultCellStyle = dataGridViewCellStyle14;
+            dataGridViewCellStyle23.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle23.Font = new System.Drawing.Font("Maiandra GD", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.subtotal.DefaultCellStyle = dataGridViewCellStyle23;
             this.subtotal.FillWeight = 70.25717F;
             this.subtotal.HeaderText = "SUBTOTAL";
             this.subtotal.Name = "subtotal";
@@ -488,8 +497,8 @@
             // 
             // pagaIva
             // 
-            dataGridViewCellStyle15.Font = new System.Drawing.Font("Maiandra GD", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.pagaIva.DefaultCellStyle = dataGridViewCellStyle15;
+            dataGridViewCellStyle24.Font = new System.Drawing.Font("Maiandra GD", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.pagaIva.DefaultCellStyle = dataGridViewCellStyle24;
             this.pagaIva.HeaderText = "PAGA IVA";
             this.pagaIva.Name = "pagaIva";
             this.pagaIva.ReadOnly = true;
@@ -497,8 +506,8 @@
             // 
             // idProducto
             // 
-            dataGridViewCellStyle16.Font = new System.Drawing.Font("Maiandra GD", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.idProducto.DefaultCellStyle = dataGridViewCellStyle16;
+            dataGridViewCellStyle25.Font = new System.Drawing.Font("Maiandra GD", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.idProducto.DefaultCellStyle = dataGridViewCellStyle25;
             this.idProducto.HeaderText = "ID PRODUCTO";
             this.idProducto.Name = "idProducto";
             this.idProducto.ReadOnly = true;
@@ -522,8 +531,11 @@
             // 
             this.btnRemoverItem.BackColor = System.Drawing.Color.Orange;
             this.btnRemoverItem.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnRemoverItem.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
+            this.btnRemoverItem.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Fuchsia;
+            this.btnRemoverItem.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnRemoverItem.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnRemoverItem.Location = new System.Drawing.Point(249, 562);
+            this.btnRemoverItem.Location = new System.Drawing.Point(257, 560);
             this.btnRemoverItem.Name = "btnRemoverItem";
             this.btnRemoverItem.Size = new System.Drawing.Size(130, 71);
             this.btnRemoverItem.TabIndex = 141;
@@ -535,6 +547,9 @@
             // 
             this.btnSalir.BackColor = System.Drawing.Color.OrangeRed;
             this.btnSalir.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnSalir.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
+            this.btnSalir.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Fuchsia;
+            this.btnSalir.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnSalir.Font = new System.Drawing.Font("Maiandra GD", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnSalir.Location = new System.Drawing.Point(515, 560);
             this.btnSalir.Name = "btnSalir";
@@ -559,6 +574,9 @@
             // 
             this.btnAnteriorProducto.BackColor = System.Drawing.Color.OrangeRed;
             this.btnAnteriorProducto.Enabled = false;
+            this.btnAnteriorProducto.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
+            this.btnAnteriorProducto.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Fuchsia;
+            this.btnAnteriorProducto.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnAnteriorProducto.Font = new System.Drawing.Font("Maiandra GD", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnAnteriorProducto.Image = global::Palatium.Properties.Resources.izquierda;
             this.btnAnteriorProducto.Location = new System.Drawing.Point(12, 560);
@@ -573,6 +591,9 @@
             // 
             this.btnSiguienteProducto.BackColor = System.Drawing.Color.Yellow;
             this.btnSiguienteProducto.Enabled = false;
+            this.btnSiguienteProducto.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
+            this.btnSiguienteProducto.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Fuchsia;
+            this.btnSiguienteProducto.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnSiguienteProducto.Font = new System.Drawing.Font("Maiandra GD", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnSiguienteProducto.Image = global::Palatium.Properties.Resources.derecha;
             this.btnSiguienteProducto.Location = new System.Drawing.Point(113, 560);
@@ -594,6 +615,9 @@
             // btnSiguiente
             // 
             this.btnSiguiente.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(192)))));
+            this.btnSiguiente.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
+            this.btnSiguiente.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Fuchsia;
+            this.btnSiguiente.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnSiguiente.Image = global::Palatium.Properties.Resources.derecha;
             this.btnSiguiente.Location = new System.Drawing.Point(532, 84);
             this.btnSiguiente.Name = "btnSiguiente";
@@ -606,8 +630,11 @@
             // 
             this.btnAnterior.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
             this.btnAnterior.Enabled = false;
+            this.btnAnterior.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
+            this.btnAnterior.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Fuchsia;
+            this.btnAnterior.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnAnterior.Image = global::Palatium.Properties.Resources.izquierda;
-            this.btnAnterior.Location = new System.Drawing.Point(532, 13);
+            this.btnAnterior.Location = new System.Drawing.Point(532, 12);
             this.btnAnterior.Name = "btnAnterior";
             this.btnAnterior.Size = new System.Drawing.Size(131, 71);
             this.btnAnterior.TabIndex = 145;
@@ -626,6 +653,9 @@
             // 
             this.btnTarjetas.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(192)))));
             this.btnTarjetas.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnTarjetas.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
+            this.btnTarjetas.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Fuchsia;
+            this.btnTarjetas.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnTarjetas.Font = new System.Drawing.Font("Maiandra GD", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnTarjetas.Location = new System.Drawing.Point(917, 548);
             this.btnTarjetas.Name = "btnTarjetas";
@@ -639,6 +669,9 @@
             // 
             this.btnCobroTarjetaAlmuerzo.BackColor = System.Drawing.Color.Lime;
             this.btnCobroTarjetaAlmuerzo.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnCobroTarjetaAlmuerzo.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
+            this.btnCobroTarjetaAlmuerzo.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Fuchsia;
+            this.btnCobroTarjetaAlmuerzo.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnCobroTarjetaAlmuerzo.Font = new System.Drawing.Font("Maiandra GD", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnCobroTarjetaAlmuerzo.Location = new System.Drawing.Point(791, 549);
             this.btnCobroTarjetaAlmuerzo.Name = "btnCobroTarjetaAlmuerzo";
@@ -647,19 +680,6 @@
             this.btnCobroTarjetaAlmuerzo.Text = "Cerrar Comanda";
             this.btnCobroTarjetaAlmuerzo.UseVisualStyleBackColor = false;
             this.btnCobroTarjetaAlmuerzo.Click += new System.EventHandler(this.btnCobroTarjetaAlmuerzo_Click);
-            // 
-            // btnImprimirPrecuenta
-            // 
-            this.btnImprimirPrecuenta.BackColor = System.Drawing.Color.Aqua;
-            this.btnImprimirPrecuenta.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnImprimirPrecuenta.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnImprimirPrecuenta.Location = new System.Drawing.Point(383, 560);
-            this.btnImprimirPrecuenta.Name = "btnImprimirPrecuenta";
-            this.btnImprimirPrecuenta.Size = new System.Drawing.Size(130, 71);
-            this.btnImprimirPrecuenta.TabIndex = 153;
-            this.btnImprimirPrecuenta.Text = "Imprimir Precuenta";
-            this.btnImprimirPrecuenta.UseVisualStyleBackColor = false;
-            this.btnImprimirPrecuenta.Click += new System.EventHandler(this.btnImprimirPrecuenta_Click);
             // 
             // btnRegresar
             // 
@@ -675,6 +695,22 @@
             this.ttMensaje.SetToolTip(this.btnRegresar, "Clic aquí para cargar las categorías");
             this.btnRegresar.Visible = false;
             this.btnRegresar.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.btnRegresar_LinkClicked);
+            // 
+            // btnImprimirPrecuenta
+            // 
+            this.btnImprimirPrecuenta.BackColor = System.Drawing.Color.Aqua;
+            this.btnImprimirPrecuenta.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnImprimirPrecuenta.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
+            this.btnImprimirPrecuenta.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Fuchsia;
+            this.btnImprimirPrecuenta.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnImprimirPrecuenta.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnImprimirPrecuenta.Location = new System.Drawing.Point(386, 560);
+            this.btnImprimirPrecuenta.Name = "btnImprimirPrecuenta";
+            this.btnImprimirPrecuenta.Size = new System.Drawing.Size(130, 71);
+            this.btnImprimirPrecuenta.TabIndex = 153;
+            this.btnImprimirPrecuenta.Text = "Imprimir Precuenta";
+            this.btnImprimirPrecuenta.UseVisualStyleBackColor = false;
+            this.btnImprimirPrecuenta.Click += new System.EventHandler(this.btnImprimirPrecuenta_Click);
             // 
             // frmComandaComidaRapida
             // 

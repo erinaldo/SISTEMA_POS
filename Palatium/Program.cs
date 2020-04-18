@@ -237,6 +237,7 @@ namespace Palatium
                     if (iVistaAplicacion == 1)
                     {
                         Application.Run(new Inicio.frmMenuTab());
+                        //Application.Run(new frmGrid());
                     }
 
                     else
@@ -354,6 +355,7 @@ namespace Palatium
         public static int iAplicaRecargoTarjeta;
         public static decimal dbPorcentajeRecargoTarjeta;
         public static int iComprobanteNotaEntrega;
+        public static int iUsarIconosCategorias;
         public static string sCorreoElectronicoDefault;
         public static int iUsarLectorHuellas;
         public static int iUsarLectorPantallaEspere;

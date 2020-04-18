@@ -60,6 +60,7 @@ namespace Palatium.Clases
                     Program.iCobrarConSinProductos = Convert.ToInt32(dtConsulta.Rows[0]["precio_incluye_impuesto"].ToString());
                     Program.iManejaNomina = Convert.ToInt32(dtConsulta.Rows[0]["maneja_nomina"].ToString());
                     Program.iComprobanteNotaEntrega = Convert.ToInt32(dtConsulta.Rows[0]["idtipocomprobante"].ToString());
+                    Program.iUsarIconosCategorias = Convert.ToInt32(dtConsulta.Rows[0]["usar_iconos_categorias"].ToString());
 
                     fechaSistema();
                     return "";

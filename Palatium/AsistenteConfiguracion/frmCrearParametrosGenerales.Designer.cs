@@ -49,6 +49,7 @@
             this.dBAyudaModificadores = new Controles.Auxiliares.DB_Ayuda();
             this.tbControl = new System.Windows.Forms.TabControl();
             this.tabPorcentajes = new System.Windows.Forms.TabPage();
+            this.chkIncluirImpuestos = new System.Windows.Forms.CheckBox();
             this.chkMostrarNombreMesa = new System.Windows.Forms.CheckBox();
             this.chkUsuariosLogin = new System.Windows.Forms.CheckBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
@@ -65,13 +66,15 @@
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.chkIncluirImpuestos = new System.Windows.Forms.CheckBox();
+            this.tabComanda = new System.Windows.Forms.TabPage();
+            this.chkUsarIconosCategorias = new System.Windows.Forms.CheckBox();
             this.tabParametros.SuspendLayout();
             this.tbControl.SuspendLayout();
             this.tabPorcentajes.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.tabValores.SuspendLayout();
+            this.tabComanda.SuspendLayout();
             this.SuspendLayout();
             // 
             // BtnLimpiarMovilizacion
@@ -301,6 +304,7 @@
             this.tbControl.Controls.Add(this.tabPorcentajes);
             this.tbControl.Controls.Add(this.tabValores);
             this.tbControl.Controls.Add(this.tabParametros);
+            this.tbControl.Controls.Add(this.tabComanda);
             this.tbControl.Location = new System.Drawing.Point(0, 44);
             this.tbControl.Name = "tbControl";
             this.tbControl.SelectedIndex = 0;
@@ -322,6 +326,17 @@
             this.tabPorcentajes.Size = new System.Drawing.Size(584, 158);
             this.tabPorcentajes.TabIndex = 0;
             this.tabPorcentajes.Text = "Porcentajes del Sistema";
+            // 
+            // chkIncluirImpuestos
+            // 
+            this.chkIncluirImpuestos.AutoSize = true;
+            this.chkIncluirImpuestos.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F);
+            this.chkIncluirImpuestos.Location = new System.Drawing.Point(284, 133);
+            this.chkIncluirImpuestos.Name = "chkIncluirImpuestos";
+            this.chkIncluirImpuestos.Size = new System.Drawing.Size(198, 19);
+            this.chkIncluirImpuestos.TabIndex = 120;
+            this.chkIncluirImpuestos.Text = "Incluir impuestos en los precios";
+            this.chkIncluirImpuestos.UseVisualStyleBackColor = true;
             // 
             // chkMostrarNombreMesa
             // 
@@ -507,16 +522,27 @@
             this.label2.TabIndex = 91;
             this.label2.Text = "Modificadores:";
             // 
-            // chkIncluirImpuestos
+            // tabComanda
             // 
-            this.chkIncluirImpuestos.AutoSize = true;
-            this.chkIncluirImpuestos.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F);
-            this.chkIncluirImpuestos.Location = new System.Drawing.Point(284, 133);
-            this.chkIncluirImpuestos.Name = "chkIncluirImpuestos";
-            this.chkIncluirImpuestos.Size = new System.Drawing.Size(198, 19);
-            this.chkIncluirImpuestos.TabIndex = 120;
-            this.chkIncluirImpuestos.Text = "Incluir impuestos en los precios";
-            this.chkIncluirImpuestos.UseVisualStyleBackColor = true;
+            this.tabComanda.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.tabComanda.Controls.Add(this.chkUsarIconosCategorias);
+            this.tabComanda.Location = new System.Drawing.Point(4, 22);
+            this.tabComanda.Name = "tabComanda";
+            this.tabComanda.Padding = new System.Windows.Forms.Padding(3);
+            this.tabComanda.Size = new System.Drawing.Size(584, 158);
+            this.tabComanda.TabIndex = 3;
+            this.tabComanda.Text = "Configurar Comanda";
+            // 
+            // chkUsarIconosCategorias
+            // 
+            this.chkUsarIconosCategorias.AutoSize = true;
+            this.chkUsarIconosCategorias.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F);
+            this.chkUsarIconosCategorias.Location = new System.Drawing.Point(24, 19);
+            this.chkUsarIconosCategorias.Name = "chkUsarIconosCategorias";
+            this.chkUsarIconosCategorias.Size = new System.Drawing.Size(274, 19);
+            this.chkUsarIconosCategorias.TabIndex = 119;
+            this.chkUsarIconosCategorias.Text = "Usar íconos en las categorías de la Comanda";
+            this.chkUsarIconosCategorias.UseVisualStyleBackColor = true;
             // 
             // frmCrearParametrosGenerales
             // 
@@ -545,6 +571,8 @@
             this.groupBox2.PerformLayout();
             this.tabValores.ResumeLayout(false);
             this.tabValores.PerformLayout();
+            this.tabComanda.ResumeLayout(false);
+            this.tabComanda.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -590,5 +618,7 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.CheckBox chkIncluirImpuestos;
+        private System.Windows.Forms.TabPage tabComanda;
+        private System.Windows.Forms.CheckBox chkUsarIconosCategorias;
     }
 }

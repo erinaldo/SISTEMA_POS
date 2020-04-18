@@ -28,9 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle15 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle13 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle14 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmGrid));
             this.button1 = new System.Windows.Forms.Button();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.txtDecimal = new System.Windows.Forms.TextBox();
@@ -67,12 +68,15 @@
             this.colEliminar = new System.Windows.Forms.DataGridViewButtonColumn();
             this.metroButton1 = new MetroFramework.Controls.MetroButton();
             this.reportViewer1 = new Microsoft.Reporting.WinForms.ReportViewer();
+            this.button15 = new System.Windows.Forms.Button();
+            this.button16 = new System.Windows.Forms.Button();
+            this.button17 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgv_DetallePago)).BeginInit();
             this.SuspendLayout();
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(763, 76);
+            this.button1.Location = new System.Drawing.Point(939, 83);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(111, 37);
             this.button1.TabIndex = 2;
@@ -82,14 +86,14 @@
             // 
             // textBox1
             // 
-            this.textBox1.Location = new System.Drawing.Point(763, 50);
+            this.textBox1.Location = new System.Drawing.Point(939, 57);
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(182, 20);
             this.textBox1.TabIndex = 3;
             // 
             // txtDecimal
             // 
-            this.txtDecimal.Location = new System.Drawing.Point(763, 119);
+            this.txtDecimal.Location = new System.Drawing.Point(939, 126);
             this.txtDecimal.Name = "txtDecimal";
             this.txtDecimal.Size = new System.Drawing.Size(134, 20);
             this.txtDecimal.TabIndex = 4;
@@ -99,7 +103,7 @@
             // 
             this.btnVer.BackColor = System.Drawing.Color.Lime;
             this.btnVer.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnVer.Location = new System.Drawing.Point(763, 246);
+            this.btnVer.Location = new System.Drawing.Point(939, 253);
             this.btnVer.Name = "btnVer";
             this.btnVer.Size = new System.Drawing.Size(103, 37);
             this.btnVer.TabIndex = 5;
@@ -109,7 +113,7 @@
             // BtnPunto
             // 
             this.BtnPunto.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.BtnPunto.Location = new System.Drawing.Point(814, 154);
+            this.BtnPunto.Location = new System.Drawing.Point(990, 161);
             this.BtnPunto.Name = "BtnPunto";
             this.BtnPunto.Size = new System.Drawing.Size(33, 43);
             this.BtnPunto.TabIndex = 6;
@@ -120,7 +124,7 @@
             // Btn3
             // 
             this.Btn3.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Btn3.Location = new System.Drawing.Point(853, 154);
+            this.Btn3.Location = new System.Drawing.Point(1029, 161);
             this.Btn3.Name = "Btn3";
             this.Btn3.Size = new System.Drawing.Size(33, 43);
             this.Btn3.TabIndex = 7;
@@ -132,7 +136,7 @@
             // 
             this.button2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(128)))));
             this.button2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button2.Location = new System.Drawing.Point(763, 203);
+            this.button2.Location = new System.Drawing.Point(939, 210);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(103, 37);
             this.button2.TabIndex = 8;
@@ -142,7 +146,7 @@
             // btnProbar
             // 
             this.btnProbar.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnProbar.Location = new System.Drawing.Point(584, 421);
+            this.btnProbar.Location = new System.Drawing.Point(760, 428);
             this.btnProbar.Name = "btnProbar";
             this.btnProbar.Size = new System.Drawing.Size(172, 43);
             this.btnProbar.TabIndex = 9;
@@ -153,7 +157,7 @@
             // Txt1
             // 
             this.Txt1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Txt1.Location = new System.Drawing.Point(584, 341);
+            this.Txt1.Location = new System.Drawing.Point(760, 348);
             this.Txt1.Name = "Txt1";
             this.Txt1.Size = new System.Drawing.Size(172, 26);
             this.Txt1.TabIndex = 10;
@@ -161,7 +165,7 @@
             // txt2
             // 
             this.txt2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txt2.Location = new System.Drawing.Point(584, 376);
+            this.txt2.Location = new System.Drawing.Point(760, 383);
             this.txt2.Name = "txt2";
             this.txt2.Size = new System.Drawing.Size(172, 26);
             this.txt2.TabIndex = 11;
@@ -169,7 +173,7 @@
             // btnImprimir
             // 
             this.btnImprimir.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnImprimir.Location = new System.Drawing.Point(584, 494);
+            this.btnImprimir.Location = new System.Drawing.Point(760, 501);
             this.btnImprimir.Name = "btnImprimir";
             this.btnImprimir.Size = new System.Drawing.Size(172, 43);
             this.btnImprimir.TabIndex = 12;
@@ -179,7 +183,7 @@
             // 
             // txtAreaImprimir1
             // 
-            this.txtAreaImprimir1.Location = new System.Drawing.Point(480, 50);
+            this.txtAreaImprimir1.Location = new System.Drawing.Point(656, 57);
             this.txtAreaImprimir1.Multiline = true;
             this.txtAreaImprimir1.Name = "txtAreaImprimir1";
             this.txtAreaImprimir1.Size = new System.Drawing.Size(230, 69);
@@ -188,7 +192,7 @@
             // 
             // txtAreaImprimir2
             // 
-            this.txtAreaImprimir2.Location = new System.Drawing.Point(480, 125);
+            this.txtAreaImprimir2.Location = new System.Drawing.Point(656, 132);
             this.txtAreaImprimir2.Multiline = true;
             this.txtAreaImprimir2.Name = "txtAreaImprimir2";
             this.txtAreaImprimir2.Size = new System.Drawing.Size(230, 69);
@@ -197,7 +201,7 @@
             // 
             // txtAreaImprimir3
             // 
-            this.txtAreaImprimir3.Location = new System.Drawing.Point(480, 200);
+            this.txtAreaImprimir3.Location = new System.Drawing.Point(656, 207);
             this.txtAreaImprimir3.Multiline = true;
             this.txtAreaImprimir3.Name = "txtAreaImprimir3";
             this.txtAreaImprimir3.Size = new System.Drawing.Size(230, 69);
@@ -208,7 +212,7 @@
             // 
             this.btnRide.BackColor = System.Drawing.Color.Lime;
             this.btnRide.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnRide.Location = new System.Drawing.Point(480, 288);
+            this.btnRide.Location = new System.Drawing.Point(656, 295);
             this.btnRide.Name = "btnRide";
             this.btnRide.Size = new System.Drawing.Size(103, 37);
             this.btnRide.TabIndex = 16;
@@ -220,7 +224,7 @@
             // 
             this.btnTeclado.BackColor = System.Drawing.Color.Lime;
             this.btnTeclado.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnTeclado.Location = new System.Drawing.Point(607, 287);
+            this.btnTeclado.Location = new System.Drawing.Point(783, 294);
             this.btnTeclado.Name = "btnTeclado";
             this.btnTeclado.Size = new System.Drawing.Size(103, 37);
             this.btnTeclado.TabIndex = 17;
@@ -232,7 +236,7 @@
             // 
             this.btnCerrarTeclado.BackColor = System.Drawing.Color.Lime;
             this.btnCerrarTeclado.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnCerrarTeclado.Location = new System.Drawing.Point(726, 288);
+            this.btnCerrarTeclado.Location = new System.Drawing.Point(902, 295);
             this.btnCerrarTeclado.Name = "btnCerrarTeclado";
             this.btnCerrarTeclado.Size = new System.Drawing.Size(103, 37);
             this.btnCerrarTeclado.TabIndex = 18;
@@ -244,7 +248,7 @@
             // 
             this.button3.BackColor = System.Drawing.Color.LightSalmon;
             this.button3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button3.Location = new System.Drawing.Point(16, 459);
+            this.button3.Location = new System.Drawing.Point(192, 466);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(103, 61);
             this.button3.TabIndex = 19;
@@ -255,7 +259,7 @@
             // 
             this.button4.BackColor = System.Drawing.Color.LightSalmon;
             this.button4.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button4.Location = new System.Drawing.Point(125, 392);
+            this.button4.Location = new System.Drawing.Point(301, 399);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(103, 61);
             this.button4.TabIndex = 20;
@@ -266,7 +270,7 @@
             // 
             this.button5.BackColor = System.Drawing.Color.LightSalmon;
             this.button5.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button5.Location = new System.Drawing.Point(125, 459);
+            this.button5.Location = new System.Drawing.Point(301, 466);
             this.button5.Name = "button5";
             this.button5.Size = new System.Drawing.Size(103, 61);
             this.button5.TabIndex = 22;
@@ -277,7 +281,7 @@
             // 
             this.button6.BackColor = System.Drawing.Color.LightSalmon;
             this.button6.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button6.Location = new System.Drawing.Point(14, 392);
+            this.button6.Location = new System.Drawing.Point(190, 399);
             this.button6.Name = "button6";
             this.button6.Size = new System.Drawing.Size(103, 61);
             this.button6.TabIndex = 21;
@@ -289,7 +293,7 @@
             this.button7.BackColor = System.Drawing.Color.Magenta;
             this.button7.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button7.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.button7.Location = new System.Drawing.Point(125, 325);
+            this.button7.Location = new System.Drawing.Point(301, 332);
             this.button7.Name = "button7";
             this.button7.Size = new System.Drawing.Size(103, 61);
             this.button7.TabIndex = 24;
@@ -300,7 +304,7 @@
             // 
             this.button8.BackColor = System.Drawing.Color.LightSalmon;
             this.button8.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button8.Location = new System.Drawing.Point(16, 325);
+            this.button8.Location = new System.Drawing.Point(192, 332);
             this.button8.Name = "button8";
             this.button8.Size = new System.Drawing.Size(103, 61);
             this.button8.TabIndex = 23;
@@ -311,7 +315,7 @@
             // 
             this.button9.BackColor = System.Drawing.Color.RoyalBlue;
             this.button9.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button9.Location = new System.Drawing.Point(400, 325);
+            this.button9.Location = new System.Drawing.Point(576, 332);
             this.button9.Name = "button9";
             this.button9.Size = new System.Drawing.Size(103, 61);
             this.button9.TabIndex = 30;
@@ -322,7 +326,7 @@
             // 
             this.button10.BackColor = System.Drawing.Color.RoyalBlue;
             this.button10.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button10.Location = new System.Drawing.Point(291, 325);
+            this.button10.Location = new System.Drawing.Point(467, 332);
             this.button10.Name = "button10";
             this.button10.Size = new System.Drawing.Size(103, 61);
             this.button10.TabIndex = 29;
@@ -333,7 +337,7 @@
             // 
             this.button11.BackColor = System.Drawing.Color.RoyalBlue;
             this.button11.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button11.Location = new System.Drawing.Point(400, 459);
+            this.button11.Location = new System.Drawing.Point(576, 466);
             this.button11.Name = "button11";
             this.button11.Size = new System.Drawing.Size(103, 61);
             this.button11.TabIndex = 28;
@@ -344,7 +348,7 @@
             // 
             this.button12.BackColor = System.Drawing.Color.RoyalBlue;
             this.button12.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button12.Location = new System.Drawing.Point(289, 392);
+            this.button12.Location = new System.Drawing.Point(465, 399);
             this.button12.Name = "button12";
             this.button12.Size = new System.Drawing.Size(103, 61);
             this.button12.TabIndex = 27;
@@ -355,7 +359,7 @@
             // 
             this.button13.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
             this.button13.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button13.Location = new System.Drawing.Point(400, 392);
+            this.button13.Location = new System.Drawing.Point(576, 399);
             this.button13.Name = "button13";
             this.button13.Size = new System.Drawing.Size(103, 61);
             this.button13.TabIndex = 26;
@@ -366,7 +370,7 @@
             // 
             this.button14.BackColor = System.Drawing.Color.RoyalBlue;
             this.button14.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button14.Location = new System.Drawing.Point(291, 459);
+            this.button14.Location = new System.Drawing.Point(467, 466);
             this.button14.Name = "button14";
             this.button14.Size = new System.Drawing.Size(103, 61);
             this.button14.TabIndex = 25;
@@ -384,15 +388,15 @@
             this.fpago,
             this.valor,
             this.colEliminar});
-            dataGridViewCellStyle15.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle15.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle15.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle15.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle15.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle15.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle15.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgv_DetallePago.DefaultCellStyle = dataGridViewCellStyle15;
-            this.dgv_DetallePago.Location = new System.Drawing.Point(30, 50);
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgv_DetallePago.DefaultCellStyle = dataGridViewCellStyle3;
+            this.dgv_DetallePago.Location = new System.Drawing.Point(206, 57);
             this.dgv_DetallePago.Name = "dgv_DetallePago";
             this.dgv_DetallePago.ReadOnly = true;
             this.dgv_DetallePago.RowTemplate.Height = 28;
@@ -403,8 +407,8 @@
             // 
             // ID
             // 
-            dataGridViewCellStyle13.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ID.DefaultCellStyle = dataGridViewCellStyle13;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ID.DefaultCellStyle = dataGridViewCellStyle1;
             this.ID.HeaderText = "ID";
             this.ID.Name = "ID";
             this.ID.ReadOnly = true;
@@ -418,8 +422,8 @@
             // 
             // valor
             // 
-            dataGridViewCellStyle14.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.valor.DefaultCellStyle = dataGridViewCellStyle14;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.valor.DefaultCellStyle = dataGridViewCellStyle2;
             this.valor.HeaderText = "VALOR";
             this.valor.Name = "valor";
             this.valor.ReadOnly = true;
@@ -433,7 +437,7 @@
             // 
             // metroButton1
             // 
-            this.metroButton1.Location = new System.Drawing.Point(307, 4);
+            this.metroButton1.Location = new System.Drawing.Point(483, 11);
             this.metroButton1.Name = "metroButton1";
             this.metroButton1.Size = new System.Drawing.Size(127, 40);
             this.metroButton1.TabIndex = 32;
@@ -443,16 +447,64 @@
             // reportViewer1
             // 
             this.reportViewer1.LocalReport.ReportEmbeddedResource = "Palatium.Cajero.rptCierreCajero.rdlc";
-            this.reportViewer1.Location = new System.Drawing.Point(313, 13);
+            this.reportViewer1.Location = new System.Drawing.Point(489, 20);
             this.reportViewer1.Name = "reportViewer1";
             this.reportViewer1.Size = new System.Drawing.Size(396, 246);
             this.reportViewer1.TabIndex = 33;
+            // 
+            // button15
+            // 
+            this.button15.BackColor = System.Drawing.Color.White;
+            this.button15.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button15.Font = new System.Drawing.Font("Maiandra GD", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button15.Image = ((System.Drawing.Image)(resources.GetObject("button15.Image")));
+            this.button15.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.button15.Location = new System.Drawing.Point(12, 13);
+            this.button15.Name = "button15";
+            this.button15.Size = new System.Drawing.Size(153, 71);
+            this.button15.TabIndex = 34;
+            this.button15.Text = "DINNERS\r\nCLUB";
+            this.button15.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.button15.UseVisualStyleBackColor = false;
+            // 
+            // button16
+            // 
+            this.button16.BackColor = System.Drawing.Color.White;
+            this.button16.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button16.Font = new System.Drawing.Font("Maiandra GD", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button16.Image = ((System.Drawing.Image)(resources.GetObject("button16.Image")));
+            this.button16.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.button16.Location = new System.Drawing.Point(12, 83);
+            this.button16.Name = "button16";
+            this.button16.Size = new System.Drawing.Size(153, 71);
+            this.button16.TabIndex = 35;
+            this.button16.Text = "DISCOVER";
+            this.button16.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.button16.UseVisualStyleBackColor = false;
+            // 
+            // button17
+            // 
+            this.button17.BackColor = System.Drawing.Color.White;
+            this.button17.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button17.Font = new System.Drawing.Font("Agency FB", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button17.Image = ((System.Drawing.Image)(resources.GetObject("button17.Image")));
+            this.button17.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.button17.Location = new System.Drawing.Point(12, 153);
+            this.button17.Name = "button17";
+            this.button17.Size = new System.Drawing.Size(153, 71);
+            this.button17.TabIndex = 36;
+            this.button17.Text = "MASTER\r\nCARD";
+            this.button17.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.button17.UseVisualStyleBackColor = false;
             // 
             // frmGrid
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(950, 557);
+            this.ClientSize = new System.Drawing.Size(1114, 557);
+            this.Controls.Add(this.button17);
+            this.Controls.Add(this.button16);
+            this.Controls.Add(this.button15);
             this.Controls.Add(this.reportViewer1);
             this.Controls.Add(this.metroButton1);
             this.Controls.Add(this.dgv_DetallePago);
@@ -533,5 +585,8 @@
         private System.Windows.Forms.DataGridViewButtonColumn colEliminar;
         private MetroFramework.Controls.MetroButton metroButton1;
         private Microsoft.Reporting.WinForms.ReportViewer reportViewer1;
+        private System.Windows.Forms.Button button15;
+        private System.Windows.Forms.Button button16;
+        private System.Windows.Forms.Button button17;
     }
 }

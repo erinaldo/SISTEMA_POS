@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Data.SqlClient;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
@@ -55,6 +56,98 @@ namespace Palatium.Productos
         }
 
         #region FUNCIONES DEL USUARIO
+
+        //FUNCION PARA EXTRAER LA IMAGEN DE LA BASE DE DATOS
+        private bool extraerImagenBDD(int iIdRegistro_P)
+        {
+            try
+            {
+                sSql = "";
+                sSql += "select isnull(imagen_categoria, '') imagen_categoria" + Environment.NewLine;
+                sSql += "from cv401_productos" + Environment.NewLine;
+                sSql += "where estado = @estado" + Environment.NewLine;
+                sSql += "and id_producto = @id_producto";
+
+                #region PARAMETROS
+
+                parametro = new SqlParameter[2];
+                parametro[0] = new SqlParameter();
+                parametro[0].ParameterName = "@estado";
+                parametro[0].SqlDbType = SqlDbType.VarChar;
+                parametro[0].Value = "A";
+
+                parametro[1] = new SqlParameter();
+                parametro[1].ParameterName = "@id_producto";
+                parametro[1].SqlDbType = SqlDbType.Int;
+                parametro[1].Value = iIdRegistro_P;
+
+                #endregion
+
+                dtConsulta = new DataTable();
+                dtConsulta.Clear();
+
+                bRespuesta = conexion.GFun_Lo_Busca_Registro_Parametros(dtConsulta, sSql, parametro);
+
+                if (bRespuesta == false)
+                {
+                    catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
+                    catchMensaje.lblMensaje.Text = conexion.sMensajeError;
+                    catchMensaje.ShowDialog();
+                    return false;
+                }
+
+                if (dtConsulta.Rows.Count == 0)
+                {
+                    txtBase64.Text = "";
+                    imgLogo.Image = null;
+                }
+
+                else
+                {
+                    txtBase64.Text = dtConsulta.Rows[0]["imagen_categoria"].ToString();
+
+                    if (txtBase64.Text.Trim() == "")
+                    {
+                        imgLogo.Image = null;
+                    }
+
+                    else
+                    {
+                        byte[] imageBytes;
+                        Image foto = null;
+
+                        imageBytes = Convert.FromBase64String(txtBase64.Text.Trim());
+
+                        using (var ms = new MemoryStream(imageBytes, 0, imageBytes.Length))
+                        {
+                            foto = Image.FromStream(ms, true);
+                        }
+
+                        imgLogo.Image = foto;
+                    }
+                }
+
+                return true;
+            }
+
+            catch (Exception ex)
+            {
+                catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
+                catchMensaje.lblMensaje.Text = ex.Message;
+                catchMensaje.ShowDialog();
+                return false;
+            }
+        }
+
+        private string ConvertirImagenToBase64(Image file)
+        {
+            using (MemoryStream memoryStream = new MemoryStream())
+            {
+                file.Save(memoryStream, file.RawFormat);
+                byte[] imageBytes = memoryStream.ToArray();
+                return Convert.ToBase64String(imageBytes);
+            }
+        }
 
         //llenar comboBox de Empresa
         private void LLenarComboEmpresa()
@@ -271,6 +364,10 @@ namespace Palatium.Productos
             txtDescripcion.Clear();
             txtSecuencia.Clear();
             txtSecuencia.Clear();
+            txtRuta.Clear();
+            txtBase64.Clear();
+
+            imgLogo.Image = null;
 
             chkModificable.Checked = false;
             chkPagaIva.Checked = false;
@@ -297,6 +394,10 @@ namespace Palatium.Productos
             txtDescripcion.Clear();
             txtBuscar.Clear();            
             txtSecuencia.Clear();
+            txtRuta.Clear();
+            txtBase64.Clear();
+
+            imgLogo.Image = null;
 
             llenarGrid();
 
@@ -643,16 +744,18 @@ namespace Palatium.Productos
                 sSql += "insert into cv401_productos (" + Environment.NewLine;
                 sSql += "idempresa, codigo, id_producto_padre, estado, nivel, modificable," + Environment.NewLine;
                 sSql += "precio_modificable, paga_iva, secuencia, modificador, subcategoria," + Environment.NewLine;
-                sSql += "ultimo_nivel, is_active, menu_pos, fecha_ingreso, usuario_ingreso,terminal_ingreso)" + Environment.NewLine;
+                sSql += "ultimo_nivel, is_active, menu_pos, fecha_ingreso, usuario_ingreso," + Environment.NewLine;
+                sSql += "terminal_ingreso, imagen_categoria)" + Environment.NewLine;
                 sSql += "values(" + Environment.NewLine;
                 sSql += "@idempresa, @codigo, @id_producto_padre, @estado, @nivel, @modificable," + Environment.NewLine;
                 sSql += "@precio_modificable, @paga_iva, @secuencia, @modificador, @subcategoria," + Environment.NewLine;
-                sSql += "@ultimo_nivel, @is_active, @menu_pos, getdate(), @usuario_ingreso, @terminal_ingreso)";
+                sSql += "@ultimo_nivel, @is_active, @menu_pos, getdate(), @usuario_ingreso," + Environment.NewLine;
+                sSql += "@terminal_ingreso, @imagen_categoria)";
 
                 #region PARAMETROS
 
                 a = 0;
-                parametro = new SqlParameter[16];
+                parametro = new SqlParameter[17];
                 parametro[a] = new SqlParameter();
                 parametro[a].ParameterName = "@idempresa";
                 parametro[a].SqlDbType = SqlDbType.Int;
@@ -747,6 +850,12 @@ namespace Palatium.Productos
                 parametro[a].ParameterName = "@terminal_ingreso";
                 parametro[a].SqlDbType = SqlDbType.VarChar;
                 parametro[a].Value = Program.sDatosMaximo[1];
+                a++;
+
+                parametro[a] = new SqlParameter();
+                parametro[a].ParameterName = "@imagen_categoria";
+                parametro[a].SqlDbType = SqlDbType.VarChar;
+                parametro[a].Value = txtBase64.Text.Trim();
 
                 #endregion                
 
@@ -1082,13 +1191,14 @@ namespace Palatium.Productos
                 sSql += "modificable = @modificable," + Environment.NewLine;
                 sSql += "precio_modificable = @precio_modificable," + Environment.NewLine;
                 sSql += "is_active = @is_active," + Environment.NewLine;
-                sSql += "menu_pos = @menu_pos" + Environment.NewLine;
+                sSql += "menu_pos = @menu_pos," + Environment.NewLine;
+                sSql += "imagen_categoria = @imagen_categoria" + Environment.NewLine;
                 sSql += "where id_producto = @id_producto";
 
                 #region PARAMETROS
 
                 a = 0;
-                parametro = new SqlParameter[7];
+                parametro = new SqlParameter[8];
                 parametro[a] = new SqlParameter();
                 parametro[a].ParameterName = "@secuencia";
                 parametro[a].SqlDbType = SqlDbType.Int;
@@ -1126,10 +1236,15 @@ namespace Palatium.Productos
                 a++;
 
                 parametro[a] = new SqlParameter();
+                parametro[a].ParameterName = "@imagen_categoria";
+                parametro[a].SqlDbType = SqlDbType.VarChar;
+                parametro[a].Value = txtBase64.Text.Trim();
+                a++;
+
+                parametro[a] = new SqlParameter();
                 parametro[a].ParameterName = "@id_producto";
                 parametro[a].SqlDbType = SqlDbType.Int;
                 parametro[a].Value = iIdProducto;
-                a++;
 
                 #endregion
 
@@ -1761,7 +1876,18 @@ namespace Palatium.Productos
                 ok.ShowDialog();
                 txtSecuencia.Focus();
                 return;
-            }            
+            }
+
+            if (txtBase64.Text.Trim().Length > 8000)
+            {
+                ok = new VentanasMensajes.frmMensajeNuevoOk();
+                ok.lblMensaje.Text = "El ícono para el botón supera el tamaño permitido. Favor seleccione un nuevo ícono.";
+                ok.ShowDialog();
+                imgLogo.Image = null;
+                txtBase64.Clear();
+                txtRuta.Clear();
+                return;
+            }
 
             if (chkModificable.Checked == true)
                 iModificable = 1;
@@ -1856,14 +1982,10 @@ namespace Palatium.Productos
         {
             try
             {
-                btnAgregar.Text = "Actualizar";
-                BtnEliminar.Enabled = true;
-                grupoDatos.Enabled = true;
-                cmbCategorias.Enabled = false;
-                cmbCodigoOrigen.Enabled = false;
-                txtCodigo.Enabled = false;
-
                 iIdProducto = Convert.ToInt32(dgvDatos.CurrentRow.Cells["id_producto"].Value);
+
+                if (extraerImagenBDD(iIdProducto) == false)
+                    return;
 
                 if (seleccionarDatosCombobox() == false)
                     return;
@@ -1904,6 +2026,12 @@ namespace Palatium.Productos
                     chkMenuPos.Checked = false;
 
                 chkHabilitado.Enabled = true;
+                btnAgregar.Text = "Actualizar";
+                BtnEliminar.Enabled = true;
+                grupoDatos.Enabled = true;
+                cmbCategorias.Enabled = false;
+                cmbCodigoOrigen.Enabled = false;
+                txtCodigo.Enabled = false;
                 txtDescripcion.Focus();
             }
 
@@ -1938,6 +2066,30 @@ namespace Palatium.Productos
         {
             caracter = new Clases.ClaseValidarCaracteres();
             caracter.soloNumeros(e);
+        }
+
+        private void btnExaminar_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog abrir = new OpenFileDialog();
+            abrir.Filter = "Archivos imagen (*.jpg; *.png; *.jpeg)|*.jpg;*.png;*.jpeg";
+            abrir.Title = "Seleccionar archivo";
+
+            if (abrir.ShowDialog() == DialogResult.OK)
+            {
+                txtRuta.Text = abrir.FileName;
+                imgLogo.Image = Image.FromFile(txtRuta.Text.Trim());
+                imgLogo.SizeMode = PictureBoxSizeMode.Zoom;
+                txtBase64.Text = ConvertirImagenToBase64(imgLogo.Image);
+            }
+
+            abrir.Dispose();
+        }
+
+        private void btnClear_Click(object sender, EventArgs e)
+        {
+            txtRuta.Clear();
+            txtBase64.Clear();
+            imgLogo.Image = null;
         }
     }
 }

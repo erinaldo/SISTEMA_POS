@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.SqlClient;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,6 +25,8 @@ namespace Palatium.ComandaNueva
         Clases.ClaseAbrirCajon abrir = new Clases.ClaseAbrirCajon();
 
         ToolTip ttMensajeMesas = new ToolTip();
+
+        SqlParameter[] parametro;
 
         DataTable dtCategorias;
         DataTable dtProductos;
@@ -72,6 +76,7 @@ namespace Palatium.ComandaNueva
         int iBanderaModificadores;
         int iIdProductoPadreModificador;
         int iNivelGeneral;
+        int iIdListaMinorista;
 
         string sDescripcionOrigen;
         string sNombreMesero;
@@ -128,6 +133,53 @@ namespace Palatium.ComandaNueva
         }
 
         #region FUNCIONES DEL USUARIO
+
+        //FUNCION PARA OBTENER LOS DATOS DE LA LISTA BASE Y MINORISTA
+        private void datosListas()
+        {
+            try
+            {
+                sSql = "";
+                sSql += "select id_lista_precio" + Environment.NewLine;
+                sSql += "from cv403_listas_precios" + Environment.NewLine;
+                sSql += "where lista_minorista = @lista_minorista" + Environment.NewLine;
+                sSql += "and estado = @estado";
+
+                parametro = new SqlParameter[2];
+                parametro[0] = new SqlParameter();
+                parametro[0].ParameterName = "@lista_minorista";
+                parametro[0].SqlDbType = SqlDbType.Int;
+                parametro[0].Value = 1;
+
+                parametro[1] = new SqlParameter();
+                parametro[1].ParameterName = "@estado";
+                parametro[1].SqlDbType = SqlDbType.VarChar;
+                parametro[1].Value = "A";
+
+                dtConsulta = new DataTable();
+                dtConsulta.Clear();
+
+                bRespuesta = conexion.GFun_Lo_Busca_Registro_Parametros(dtConsulta, sSql, parametro);
+
+                if (bRespuesta == false)
+                {
+                    catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
+                    catchMensaje.lblMensaje.Text = conexion.sMensajeError;
+                    catchMensaje.ShowDialog();
+                    return;
+                }
+
+                if (dtConsulta.Rows.Count > 0)
+                    iIdListaMinorista = Convert.ToInt32(dtConsulta.Rows[0]["id_lista_precio"]);
+            }
+
+            catch (Exception ex)
+            {
+                catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
+                catchMensaje.lblMensaje.Text = ex.Message;
+                catchMensaje.ShowDialog();
+            }
+        }
 
         //FUNCION PARA VERIFICAR SI ES UN DESCUENTO DE EMPLEADOS
         private void descuentoEmpleados()
@@ -322,9 +374,16 @@ namespace Palatium.ComandaNueva
                 iIdPersona = Convert.ToInt32(dtConsulta.Rows[0]["id_persona"].ToString());
                 lblCliente.Text = dtConsulta.Rows[0]["cliente"].ToString();
 
-                if (cargarDetalleGrid() == false)
+                if (reabrir == "COPIAR")
                 {
-                    return false;
+                    if (cargarDetalleGridCopiar() == false)
+                        return false;
+                }
+
+                else
+                { 
+                    if (cargarDetalleGrid() == false)
+                        return false;
                 }
 
                 recalcularValores();
@@ -395,7 +454,132 @@ namespace Palatium.ComandaNueva
                     sSql += "from pos_det_pedido_detalle PD, cv403_det_pedidos DP, cv401_productos P" + Environment.NewLine;
                     sSql += "where PD.id_det_pedido = DP.id_det_pedido " + Environment.NewLine;
                     sSql += "and DP.id_producto = P.id_producto " + Environment.NewLine;
-                    sSql += "and PD.id_det_pedido = " + Convert.ToInt32(dtConsulta.Rows[i][0].ToString()) + Environment.NewLine;
+                    sSql += "and PD.id_det_pedido = " + Convert.ToInt32(dtConsulta.Rows[i]["id_det_pedido"].ToString()) + Environment.NewLine;
+                    sSql += "and P.estado = 'A'" + Environment.NewLine;
+                    sSql += "and DP.estado = 'A'" + Environment.NewLine;
+                    sSql += "and PD.estado = 'A'";
+
+                    dtItems = new DataTable();
+                    dtItems.Clear();
+
+                    bRespuesta = conexion.GFun_Lo_Busca_Registro(dtItems, sSql);
+
+                    if (bRespuesta == false)
+                    {
+                        catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
+                        catchMensaje.lblMensaje.Text = conexion.sMensajeError;
+                        catchMensaje.ShowDialog();
+                        return false;
+                    }
+
+                    if (dtItems.Rows.Count > 0)
+                    {
+                        Program.sDetallesItems[Program.iContadorDetalle, 0] = dtItems.Rows[0][1].ToString();
+
+                        for (int j = 1; j <= dtItems.Rows.Count; j++)
+                        {
+                            Program.sDetallesItems[Program.iContadorDetalle, j] = dtItems.Rows[j - 1][0].ToString();
+                        }
+
+                        Program.iContadorDetalle++;
+                    }
+                }
+
+                if (Program.iReimprimirCocina == 0)
+                {
+                    chkImprimirCocina.Checked = false;
+                }
+
+                else
+                {
+                    chkImprimirCocina.Checked = true;
+                }
+
+                return true;
+            }
+
+            catch (Exception ex)
+            {
+                catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
+                catchMensaje.lblMensaje.Text = ex.Message;
+                catchMensaje.ShowDialog();
+                return false;
+            }
+        }
+
+        //FUNCION PARA CARGAR EL DETALLE DE LA ORDEN EN EL DATAGRID
+        private bool cargarDetalleGridCopiar()
+        {
+            try
+            {
+                sSql = "";
+                sSql += "select PP.valor valor_nuevo, * " + Environment.NewLine;
+                sSql += "from pos_vw_detalle_comanda DC INNER JOIN" + Environment.NewLine;
+                sSql += "cv403_precios_productos PP ON DC.id_producto = PP.id_producto" + Environment.NewLine;
+                sSql += "and PP.estado = @estado" + Environment.NewLine;
+                sSql += "where DC.id_pedido = @id_pedido" + Environment.NewLine;
+                sSql += "and PP.id_lista_precio = @id_lista_precio" + Environment.NewLine;
+                sSql += "order by id_det_pedido";
+
+                parametro = new SqlParameter[3];
+                parametro[0] = new SqlParameter();
+                parametro[0].ParameterName = "@estado";
+                parametro[0].SqlDbType = SqlDbType.VarChar;
+                parametro[0].Value = "A";
+
+                parametro[1] = new SqlParameter();
+                parametro[1].ParameterName = "@id_pedido";
+                parametro[1].SqlDbType = SqlDbType.Int;
+                parametro[1].Value = iIdPedido;
+
+                parametro[2] = new SqlParameter();
+                parametro[2].ParameterName = "@id_lista_precio";
+                parametro[2].SqlDbType = SqlDbType.Int;
+                parametro[2].Value = iIdListaMinorista;
+
+                dtConsulta = new DataTable();
+                dtConsulta.Clear();
+
+                bRespuesta = conexion.GFun_Lo_Busca_Registro_Parametros(dtConsulta, sSql, parametro);
+
+                if (bRespuesta == false)
+                {
+                    catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
+                    catchMensaje.lblMensaje.Text = conexion.sMensajeError;
+                    catchMensaje.ShowDialog();
+                    return false;
+                }
+
+                for (int i = 0; i < dtConsulta.Rows.Count; i++)
+                {
+                    dgvPedido.Rows.Add(Convert.ToDouble(dtConsulta.Rows[i]["cantidad"].ToString()).ToString(),
+                                       dtConsulta.Rows[i]["nombre"].ToString().Trim().ToUpper(),
+                                       dtConsulta.Rows[i]["valor_nuevo"].ToString().Trim(),
+                                       dtConsulta.Rows[i]["precio_total"].ToString().Trim(),
+                                       dtConsulta.Rows[i]["id_producto"].ToString().Trim(),
+                                       dtConsulta.Rows[i]["paga_iva"].ToString().Trim(),
+                                       dtConsulta.Rows[i]["codigo_producto"].ToString().Trim(),
+                                       dtConsulta.Rows[i]["secuencia"].ToString().Trim(),
+                                       dtConsulta.Rows[i]["bandera_cortesia"].ToString().Trim(),
+                                       dtConsulta.Rows[i]["motivo_cortesia"].ToString().Trim(),
+                                       dtConsulta.Rows[i]["bandera_descuento"].ToString().Trim(),
+                                       dtConsulta.Rows[i]["motivo_descuento"].ToString().Trim(),
+                                       dtConsulta.Rows[i]["id_pos_mascara_item"].ToString().Trim(),
+                                       dtConsulta.Rows[i]["id_pos_secuencia_entrega"].ToString().Trim(),
+                                       dtConsulta.Rows[i]["ordenamiento"].ToString().Trim(),
+                                       dtConsulta.Rows[i]["porcentaje_descuento_info"].ToString().Trim(),
+                                       dtConsulta.Rows[i]["bandera_comentario"].ToString().Trim(),
+                                       dtConsulta.Rows[i]["valor_dscto"].ToString().Trim(),
+                                       dtConsulta.Rows[i]["paga_servicio"].ToString().Trim()
+                                       );
+
+                    //LLENAR LA MATRIZ DE DETALLE ITEMS CON LOS DATOS INGRESADOS EN LOS DETALLES EN CASO DE QUE SI HAYA
+                    sSql = "";
+                    sSql += "select PD.detalle, P.id_producto" + Environment.NewLine;
+                    sSql += "from pos_det_pedido_detalle PD, cv403_det_pedidos DP, cv401_productos P" + Environment.NewLine;
+                    sSql += "where PD.id_det_pedido = DP.id_det_pedido " + Environment.NewLine;
+                    sSql += "and DP.id_producto = P.id_producto " + Environment.NewLine;
+                    sSql += "and PD.id_det_pedido = " + Convert.ToInt32(dtConsulta.Rows[i]["id_det_pedido"].ToString()) + Environment.NewLine;
                     sSql += "and P.estado = 'A'" + Environment.NewLine;
                     sSql += "and DP.estado = 'A'" + Environment.NewLine;
                     sSql += "and PD.estado = 'A'";
@@ -671,7 +855,8 @@ namespace Palatium.ComandaNueva
 
                 sSql = "";
                 sSql += "select P.id_Producto, NP.nombre as Nombre, P.paga_iva," + Environment.NewLine;
-                sSql += "P.subcategoria, isnull(P.categoria_delivery, 0) categoria_delivery" + Environment.NewLine;
+                sSql += "P.subcategoria, isnull(P.categoria_delivery, 0) categoria_delivery," + Environment.NewLine;
+                sSql += "isnull(P.imagen_categoria, '') imagen_categoria" + Environment.NewLine;
                 sSql += "from cv401_productos P INNER JOIN" + Environment.NewLine;
                 sSql += "cv401_nombre_productos NP ON P.id_Producto = NP.id_Producto" + Environment.NewLine;
                 sSql += "and P.estado ='A'" + Environment.NewLine;
@@ -783,18 +968,37 @@ namespace Palatium.ComandaNueva
                         boton[i, j].AccessibleDescription = dtCategorias.Rows[iCuentaCategorias]["subcategoria"].ToString();
                         boton[i, j].FlatStyle = FlatStyle.Flat;
                         boton[i, j].FlatAppearance.BorderSize = 1;
-                        boton[i, j].FlatAppearance.MouseOverBackColor = Color.FromArgb(255, 128, 255);
+                        boton[i, j].FlatAppearance.MouseOverBackColor = Color.FromArgb(128, 255, 128);
+                        boton[i, j].FlatAppearance.MouseDownBackColor = Color.Fuchsia;
 
                         if (Convert.ToInt32(dtCategorias.Rows[iCuentaCategorias]["subcategoria"].ToString()) == 1)
                         {
                             ttMensajeMesas.SetToolTip(boton[i, j], dtCategorias.Rows[iCuentaCategorias]["nombre"].ToString().Trim().ToUpper() + " CONTIENE SUBCATEGORÍAS");
-                            boton[i, j].BackColor = Color.Fuchsia;
+                            boton[i, j].BackColor = Color.LightSalmon;
                         }
 
                         else
                         {
                             ttMensajeMesas.SetToolTip(boton[i, j], "CATEGORÍA: " + dtCategorias.Rows[iCuentaCategorias]["nombre"].ToString());
-                            boton[i, j].BackColor = Color.Lime;
+                            boton[i, j].BackColor = Color.White;
+                        }
+
+                        if (dtCategorias.Rows[iCuentaCategorias]["imagen_categoria"].ToString().Trim() != "")
+                        {
+                            Image foto;
+                            byte[] imageBytes;
+
+                            imageBytes = Convert.FromBase64String(dtCategorias.Rows[iCuentaCategorias]["imagen_categoria"].ToString().Trim());
+
+                            using (var ms = new MemoryStream(imageBytes, 0, imageBytes.Length))
+                            {
+                                foto = Image.FromStream(ms, true);
+                            }
+
+                            boton[i, j].TextAlign = ContentAlignment.BottomCenter;
+                            boton[i, j].Image = foto;
+                            boton[i, j].ImageAlign = ContentAlignment.TopCenter;
+                            boton[i, j].BackgroundImageLayout = ImageLayout.Stretch;
                         }
                                                 
                         pnlCategorias.Controls.Add(boton[i, j]);
@@ -839,6 +1043,7 @@ namespace Palatium.ComandaNueva
         }
 
         //EVENTO CLIC DE LOS BOTONES DE LAS CATEGORÍAS
+
         private void boton_clic_categorias(object sender, EventArgs e)
         {
             try
@@ -970,8 +1175,8 @@ namespace Palatium.ComandaNueva
                         botonProductos[i, j].Tag = dtProductos.Rows[iCuentaProductos]["paga_iva"].ToString();
                         botonProductos[i, j].FlatStyle = FlatStyle.Flat;
                         botonProductos[i, j].FlatAppearance.BorderSize = 1;
-                        botonProductos[i, j].FlatAppearance.MouseOverBackColor = Color.FromArgb(255, 128, 255);
-
+                        botonProductos[i, j].FlatAppearance.MouseOverBackColor = Color.FromArgb(128, 255, 128);
+                        botonProductos[i, j].FlatAppearance.MouseDownBackColor = Color.Fuchsia;
                         pnlProductos.Controls.Add(botonProductos[i, j]);
                         iCuentaProductos++;
                         iCuentaAyudaProductos++;
@@ -1953,6 +2158,7 @@ namespace Palatium.ComandaNueva
         private void frmComanda_Load(object sender, EventArgs e)
         {
             //this.Text = Program.sEtiqueta;
+            datosListas();
 
             if (Program.iManejaMitad == 1)
             {
@@ -1962,9 +2168,9 @@ namespace Palatium.ComandaNueva
             else
             {
                 btnMitad.Enabled = false;
-            }          
+            }
 
-            if (reabrir == "OK" || reabrir == "DIVIDIDO")
+            if (reabrir == "OK" || reabrir == "DIVIDIDO" || reabrir == "COPIAR")
             {
                 if (consultarDatosOrden() == false)
                 {
@@ -1972,9 +2178,19 @@ namespace Palatium.ComandaNueva
                     return;
                 }
 
-                consultarGeneraFactura();
-                versionImpresion();
-            }
+                if (reabrir == "COPIAR")
+                {
+                    reabrir = "";
+                    iVersionImpresionComanda = 1;
+                    extraerNumeroOrden();
+                }
+
+                else
+                {
+                    consultarGeneraFactura();
+                    versionImpresion();
+                }
+            }            
 
             else
             {

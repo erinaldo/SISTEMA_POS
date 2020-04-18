@@ -36,7 +36,7 @@ namespace Palatium.AsistenteConfiguracion
         int iOpcionLogin;
         int iIncluyeImpuesto;
         int iManejaNomina;
-
+        int iUsarIconosCategorias;
 
         public frmCrearParametrosGenerales()
         {
@@ -150,6 +150,7 @@ namespace Palatium.AsistenteConfiguracion
                     chkMostrarNombreMesa.Checked = false;
                     chkNomina.Checked = false;
                     chkIncluirImpuestos.Checked = false;
+                    chkUsarIconosCategorias.Checked = false;
 
                     txtPorcentajeServicio.ReadOnly = true;
                     txtPorcentajeServicio.Text = "0";
@@ -206,6 +207,11 @@ namespace Palatium.AsistenteConfiguracion
                     else
                         chkIncluirImpuestos.Checked = false;
 
+                    if (Convert.ToInt32(dtConsulta.Rows[0]["usar_iconos_categorias"].ToString()) == 1)
+                        chkUsarIconosCategorias.Checked = true;
+                    else
+                        chkUsarIconosCategorias.Checked = false;
+
                     dBAyudaModificadores.iId = Convert.ToInt32(dtConsulta.Rows[0]["id_producto_modificador"].ToString());
                     dBAyudaModificadores.txtIdentificacion.Text = dtConsulta.Rows[0]["codigo_modificador"].ToString();
                     dBAyudaModificadores.txtDatos.Text = dtConsulta.Rows[0]["nombre_modificador"].ToString();
@@ -258,16 +264,18 @@ namespace Palatium.AsistenteConfiguracion
                 sSql += "id_producto_modificador, id_producto_domicilio, id_producto_item, iva," + Environment.NewLine;
                 sSql += "ice, servicio, maneja_servicio, etiqueta_mesa, opcion_login, contacto_fabricante," + Environment.NewLine;
                 sSql += "sitio_web_fabricante, url_contabilidad, precio_incluye_impuesto, maneja_nomina," + Environment.NewLine;
-                sSql += "idtipocomprobante, estado, fecha_ingreso, usuario_ingreso, terminal_ingreso)" + Environment.NewLine;
+                sSql += "idtipocomprobante, usar_iconos_categorias, estado, fecha_ingreso," + Environment.NewLine;
+                sSql += "usuario_ingreso, terminal_ingreso)" + Environment.NewLine;
                 sSql += "values (" + Environment.NewLine;
                 sSql += "@id_producto_modificador, @id_producto_domicilio, @id_producto_item, @iva," + Environment.NewLine;
                 sSql += "@ice, @servicio, @maneja_servicio, @etiqueta_mesa, @opcion_login, @contacto_fabricante," + Environment.NewLine;
                 sSql += "@sitio_web_fabricante, @url_contabilidad, @precio_incluye_impuesto, @maneja_nomina," + Environment.NewLine;
-                sSql += "@idtipocomprobante, @estado, getdate(), @usuario_ingreso, @terminal_ingreso)";
+                sSql += "@idtipocomprobante, @usar_iconos_categorias, @estado, getdate()," + Environment.NewLine;
+                sSql += "@usuario_ingreso, @terminal_ingreso)";
 
                 int i = 0;
 
-                parametro = new SqlParameter[18];
+                parametro = new SqlParameter[19];
                 parametro[i] = new SqlParameter();
                 parametro[i].ParameterName = "@id_producto_modificador";
                 parametro[i].SqlDbType = SqlDbType.Int;
@@ -356,6 +364,12 @@ namespace Palatium.AsistenteConfiguracion
                 parametro[i].ParameterName = "@idtipocomprobante";
                 parametro[i].SqlDbType = SqlDbType.Int;
                 parametro[i].Value = cmbTipoComprobante.SelectedValue;
+                i++;
+
+                parametro[i] = new SqlParameter();
+                parametro[i].ParameterName = "@usar_iconos_categorias";
+                parametro[i].SqlDbType = SqlDbType.Int;
+                parametro[i].Value = iUsarIconosCategorias;
                 i++;
 
                 parametro[i] = new SqlParameter();
@@ -524,6 +538,11 @@ namespace Palatium.AsistenteConfiguracion
                     iIncluyeImpuesto = 1;
                 else
                     iIncluyeImpuesto = 0;
+
+                if (chkUsarIconosCategorias.Checked == true)
+                    iUsarIconosCategorias = 1;
+                else
+                    iUsarIconosCategorias = 0;
 
                 insertarRegistro();
             }

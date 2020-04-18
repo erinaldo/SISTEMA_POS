@@ -1925,11 +1925,11 @@
     <Compile Include="Formularios\FInformacionPosSecMes.designer.cs">
       <DependentUpon>FInformacionPosSecMes.cs</DependentUpon>
     </Compile>
-    <Compile Include="Formularios\FInformacionPosTipForPag.cs">
+    <Compile Include="Formularios\frmFormasPagos.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Formularios\FInformacionPosTipForPag.designer.cs">
-      <DependentUpon>FInformacionPosTipForPag.cs</DependentUpon>
+    <Compile Include="Formularios\frmFormasPagos.designer.cs">
+      <DependentUpon>frmFormasPagos.cs</DependentUpon>
     </Compile>
     <Compile Include="Formularios\FInformacionPrecProduc.cs">
       <SubType>Form</SubType>
@@ -3358,8 +3358,8 @@
     <EmbeddedResource Include="Formularios\FInformacionPosSecMes.resx">
       <DependentUpon>FInformacionPosSecMes.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Formularios\FInformacionPosTipForPag.resx">
-      <DependentUpon>FInformacionPosTipForPag.cs</DependentUpon>
+    <EmbeddedResource Include="Formularios\frmFormasPagos.resx">
+      <DependentUpon>frmFormasPagos.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Formularios\FInformacionPrecProduc.resx">
       <DependentUpon>FInformacionPrecProduc.cs</DependentUpon>

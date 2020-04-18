@@ -71,12 +71,15 @@
             this.btnGuardar = new System.Windows.Forms.Button();
             this.label6 = new System.Windows.Forms.Label();
             this.fbRuta = new System.Windows.Forms.FolderBrowserDialog();
+            this.tabComanda = new System.Windows.Forms.TabPage();
+            this.chkUsarIconosCategorias = new System.Windows.Forms.CheckBox();
             this.tbControl.SuspendLayout();
             this.tabPorcentajes.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.tabValores.SuspendLayout();
             this.tabParametros.SuspendLayout();
+            this.tabComanda.SuspendLayout();
             this.SuspendLayout();
             // 
             // tbControl
@@ -84,6 +87,7 @@
             this.tbControl.Controls.Add(this.tabPorcentajes);
             this.tbControl.Controls.Add(this.tabValores);
             this.tbControl.Controls.Add(this.tabParametros);
+            this.tbControl.Controls.Add(this.tabComanda);
             this.tbControl.Location = new System.Drawing.Point(0, 44);
             this.tbControl.Name = "tbControl";
             this.tbControl.SelectedIndex = 0;
@@ -581,6 +585,28 @@
             this.label6.TabIndex = 7;
             this.label6.Text = "CONFIGURACIÓN GENERAL DEL SISTEMA";
             // 
+            // tabComanda
+            // 
+            this.tabComanda.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.tabComanda.Controls.Add(this.chkUsarIconosCategorias);
+            this.tabComanda.Location = new System.Drawing.Point(4, 22);
+            this.tabComanda.Name = "tabComanda";
+            this.tabComanda.Padding = new System.Windows.Forms.Padding(3);
+            this.tabComanda.Size = new System.Drawing.Size(584, 158);
+            this.tabComanda.TabIndex = 3;
+            this.tabComanda.Text = "Configurar Comanda";
+            // 
+            // chkUsarIconosCategorias
+            // 
+            this.chkUsarIconosCategorias.AutoSize = true;
+            this.chkUsarIconosCategorias.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F);
+            this.chkUsarIconosCategorias.Location = new System.Drawing.Point(24, 19);
+            this.chkUsarIconosCategorias.Name = "chkUsarIconosCategorias";
+            this.chkUsarIconosCategorias.Size = new System.Drawing.Size(274, 19);
+            this.chkUsarIconosCategorias.TabIndex = 118;
+            this.chkUsarIconosCategorias.Text = "Usar íconos en las categorías de la Comanda";
+            this.chkUsarIconosCategorias.UseVisualStyleBackColor = true;
+            // 
             // frmNuevoParametro
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -607,6 +633,8 @@
             this.tabValores.PerformLayout();
             this.tabParametros.ResumeLayout(false);
             this.tabParametros.PerformLayout();
+            this.tabComanda.ResumeLayout(false);
+            this.tabComanda.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -657,5 +685,7 @@
         private System.Windows.Forms.Button btnExaminarDirectorio;
         private System.Windows.Forms.TextBox txtUrlRespaldoBDD;
         private System.Windows.Forms.FolderBrowserDialog fbRuta;
+        private System.Windows.Forms.TabPage tabComanda;
+        private System.Windows.Forms.CheckBox chkUsarIconosCategorias;
     }
 }

@@ -67,13 +67,15 @@ namespace Palatium.Comida_Rapida
             try
             {
                 sSql = "";
-                sSql += "select FC.id_pos_tipo_forma_cobro, FC.codigo, FC.descripcion," + Environment.NewLine;
-                sSql += "isnull(FC.imagen, '') imagen, MP.id_sri_forma_pago" + Environment.NewLine;
+                sSql += "select FC.id_pos_tipo_forma_cobro, FC.codigo, FC.texto_visualizar_boton descripcion," + Environment.NewLine;
+                sSql += "isnull(FC.imagen_base_64, '') imagen_base_64, MP.id_sri_forma_pago" + Environment.NewLine;
                 sSql += "from pos_tipo_forma_cobro FC INNER JOIN" + Environment.NewLine;
                 sSql += "pos_metodo_pago MP ON MP.id_pos_metodo_pago = FC.id_pos_metodo_pago" + Environment.NewLine;
                 sSql += "and FC.estado = 'A'" + Environment.NewLine;
                 sSql += "and MP.estado = 'A'" + Environment.NewLine;
-                sSql += "where MP.codigo in ('TC', 'TD')";
+                sSql += "where MP.codigo in ('TC', 'TD')" + Environment.NewLine;
+                sSql += "and FC.is_active = 1" + Environment.NewLine;
+                sSql += "and mostrar_seccion_cobros = 1";
 
                 dtFormasPago = new DataTable();
                 dtFormasPago.Clear();
@@ -83,7 +85,7 @@ namespace Palatium.Comida_Rapida
                 if (bRespuesta == false)
                 {
                     catchMensaje = new VentanasMensajes.frmMensajeCatch();
-                    catchMensaje.LblMensaje.Text = "ERROR EN LA INSTRUCCIÓN SQL:" + Environment.NewLine + sSql;
+                    catchMensaje.LblMensaje.Text = conexion.sMensajeError;
                     catchMensaje.ShowDialog();
                     return;
                 }
@@ -92,7 +94,7 @@ namespace Palatium.Comida_Rapida
 
                 if (dtFormasPago.Rows.Count > 0)
                 {
-                    if (dtFormasPago.Rows.Count > 8)
+                    if (dtFormasPago.Rows.Count > 6)
                     {
                         btnSiguiente.Enabled = true;
                     }
@@ -142,17 +144,39 @@ namespace Palatium.Comida_Rapida
                         boton[i, j].Click += new EventHandler(boton_clic);
                         boton[i, j].Size = new Size(153, 71);
                         boton[i, j].Location = new Point(iPosXFormasPagos, iPosYFormasPagos);
-                        boton[i, j].BackColor = Color.Lime;
+                        boton[i, j].BackColor = Color.White;
                         boton[i, j].Font = new Font("Maiandra GD", 9.75f, FontStyle.Bold);
                         boton[i, j].Tag = dtFormasPago.Rows[iCuentaFormasPagos]["id_pos_tipo_forma_cobro"].ToString();
                         boton[i, j].Text = dtFormasPago.Rows[iCuentaFormasPagos]["descripcion"].ToString();
                         boton[i, j].AccessibleDescription = dtFormasPago.Rows[iCuentaFormasPagos]["id_sri_forma_pago"].ToString();
                         boton[i, j].TextAlign = ContentAlignment.MiddleCenter;
+                        boton[i, j].FlatStyle = FlatStyle.Flat;
+                        boton[i, j].FlatAppearance.BorderSize = 1;
+                        boton[i, j].FlatAppearance.MouseOverBackColor = Color.FromArgb(128, 255, 128);
+                        boton[i, j].FlatAppearance.MouseDownBackColor = Color.Fuchsia;
 
-                        if (dtFormasPago.Rows[iCuentaFormasPagos]["imagen"].ToString().Trim() != "" && File.Exists(dtFormasPago.Rows[iCuentaFormasPagos]["imagen"].ToString().Trim()))
+                        //if (dtFormasPago.Rows[iCuentaFormasPagos]["imagen"].ToString().Trim() != "" && File.Exists(dtFormasPago.Rows[iCuentaFormasPagos]["imagen"].ToString().Trim()))
+                        //{
+                        //    boton[i, j].TextAlign = ContentAlignment.MiddleRight;
+                        //    boton[i, j].Image = Image.FromFile(dtFormasPago.Rows[iCuentaFormasPagos]["imagen"].ToString().Trim());
+                        //    boton[i, j].ImageAlign = ContentAlignment.MiddleLeft;
+                        //    boton[i, j].BackgroundImageLayout = ImageLayout.Stretch;
+                        //}
+
+                        if (dtFormasPago.Rows[iCuentaFormasPagos]["imagen_base_64"].ToString().Trim() != "")
                         {
+                            Image foto;
+                            byte[] imageBytes;
+
+                            imageBytes = Convert.FromBase64String(dtFormasPago.Rows[iCuentaFormasPagos]["imagen_base_64"].ToString().Trim());
+
+                            using (var ms = new MemoryStream(imageBytes, 0, imageBytes.Length))
+                            {
+                                foto = Image.FromStream(ms, true);
+                            }
+
                             boton[i, j].TextAlign = ContentAlignment.MiddleRight;
-                            boton[i, j].Image = Image.FromFile(dtFormasPago.Rows[iCuentaFormasPagos]["imagen"].ToString().Trim());
+                            boton[i, j].Image = foto;
                             boton[i, j].ImageAlign = ContentAlignment.MiddleLeft;
                             boton[i, j].BackgroundImageLayout = ImageLayout.Stretch;
                         }
@@ -306,7 +330,7 @@ namespace Palatium.Comida_Rapida
                 if (bRespuesta == false)
                 {
                     catchMensaje = new VentanasMensajes.frmMensajeCatch();
-                    catchMensaje.LblMensaje.Text = "ERROR EN LA SIGUIENTE INSTRUCCIÓN:" + Environment.NewLine + sSql;
+                    catchMensaje.LblMensaje.Text = conexion.sMensajeError;
                     catchMensaje.ShowDialog();
                     return;
                 }
@@ -388,7 +412,7 @@ namespace Palatium.Comida_Rapida
                 if (bRespuesta == false)
                 {
                     catchMensaje = new VentanasMensajes.frmMensajeCatch();
-                    catchMensaje.LblMensaje.Text = "ERROR EN LA SIGUIENTE INSTRUCCIÓN:" + Environment.NewLine + sSql;
+                    catchMensaje.LblMensaje.Text = conexion.sMensajeError;
                     catchMensaje.ShowDialog();
                     return;
                 }
@@ -440,7 +464,7 @@ namespace Palatium.Comida_Rapida
                 if (bRespuesta == false)
                 {
                     catchMensaje = new VentanasMensajes.frmMensajeCatch();
-                    catchMensaje.LblMensaje.Text = "ERROR EN LA SIGUIENTE INSTRUCCIÓN:" + Environment.NewLine + sSql;
+                    catchMensaje.LblMensaje.Text = conexion.sMensajeError;
                     catchMensaje.ShowDialog();
                     return;
                 }
@@ -488,7 +512,7 @@ namespace Palatium.Comida_Rapida
             if (bRespuesta == false)
             {
                 catchMensaje = new VentanasMensajes.frmMensajeCatch();
-                catchMensaje.LblMensaje.Text = "ERROR EN LA SIGUIENTE INSTRUCCIÓN:" + Environment.NewLine + sSql;
+                catchMensaje.LblMensaje.Text = conexion.sMensajeError;
                 catchMensaje.ShowDialog();
                 return;
             }

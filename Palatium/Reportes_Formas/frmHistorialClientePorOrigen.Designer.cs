@@ -43,11 +43,9 @@
             this.btnSalir = new System.Windows.Forms.Button();
             this.txtReporte = new System.Windows.Forms.TextBox();
             this.dgvDatos = new System.Windows.Forms.DataGridView();
-            this.id_pedido = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.numero_pedido = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.fecha_pedido = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.total = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.cmbTipoComanda = new System.Windows.Forms.ComboBox();
+            this.label7 = new System.Windows.Forms.Label();
             this.btnFiltrar = new System.Windows.Forms.Button();
             this.dtFechaHasta = new System.Windows.Forms.DateTimePicker();
             this.dtFechaDesde = new System.Windows.Forms.DateTimePicker();
@@ -60,8 +58,12 @@
             this.txtApellidos = new System.Windows.Forms.TextBox();
             this.txtIdentificacion = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.label7 = new System.Windows.Forms.Label();
-            this.cmbTipoComanda = new System.Windows.Forms.ComboBox();
+            this.btnDuplicar = new System.Windows.Forms.Button();
+            this.id_pedido = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.codigo_origen = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.numero_pedido = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.fecha_pedido = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.total = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.panel4.SuspendLayout();
             this.panel3.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -177,7 +179,7 @@
             this.btnLimpiar.Font = new System.Drawing.Font("Maiandra GD", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnLimpiar.Location = new System.Drawing.Point(7, 464);
             this.btnLimpiar.Name = "btnLimpiar";
-            this.btnLimpiar.Size = new System.Drawing.Size(130, 57);
+            this.btnLimpiar.Size = new System.Drawing.Size(106, 57);
             this.btnLimpiar.TabIndex = 204;
             this.btnLimpiar.Text = "LIMPIAR";
             this.btnLimpiar.UseVisualStyleBackColor = false;
@@ -190,9 +192,9 @@
             this.btnSalir.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
             this.btnSalir.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnSalir.Font = new System.Drawing.Font("Maiandra GD", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnSalir.Location = new System.Drawing.Point(242, 464);
+            this.btnSalir.Location = new System.Drawing.Point(112, 464);
             this.btnSalir.Name = "btnSalir";
-            this.btnSalir.Size = new System.Drawing.Size(130, 57);
+            this.btnSalir.Size = new System.Drawing.Size(106, 57);
             this.btnSalir.TabIndex = 203;
             this.btnSalir.Text = "SALIR";
             this.btnSalir.UseVisualStyleBackColor = false;
@@ -221,6 +223,7 @@
             this.dgvDatos.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             this.dgvDatos.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.id_pedido,
+            this.codigo_origen,
             this.numero_pedido,
             this.fecha_pedido,
             this.total});
@@ -233,36 +236,6 @@
             this.dgvDatos.Size = new System.Drawing.Size(365, 270);
             this.dgvDatos.TabIndex = 201;
             this.dgvDatos.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvDatos_CellDoubleClick);
-            // 
-            // id_pedido
-            // 
-            this.id_pedido.HeaderText = "ID_PEDIDO";
-            this.id_pedido.Name = "id_pedido";
-            this.id_pedido.ReadOnly = true;
-            this.id_pedido.Visible = false;
-            // 
-            // numero_pedido
-            // 
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.numero_pedido.DefaultCellStyle = dataGridViewCellStyle1;
-            this.numero_pedido.HeaderText = "N° PEDIDO";
-            this.numero_pedido.Name = "numero_pedido";
-            this.numero_pedido.ReadOnly = true;
-            // 
-            // fecha_pedido
-            // 
-            this.fecha_pedido.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.fecha_pedido.HeaderText = "FECHA PEDIDO";
-            this.fecha_pedido.Name = "fecha_pedido";
-            this.fecha_pedido.ReadOnly = true;
-            // 
-            // total
-            // 
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.total.DefaultCellStyle = dataGridViewCellStyle2;
-            this.total.HeaderText = "TOTAL";
-            this.total.Name = "total";
-            this.total.ReadOnly = true;
             // 
             // panel1
             // 
@@ -285,6 +258,26 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(365, 179);
             this.panel1.TabIndex = 200;
+            // 
+            // cmbTipoComanda
+            // 
+            this.cmbTipoComanda.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbTipoComanda.FormattingEnabled = true;
+            this.cmbTipoComanda.Location = new System.Drawing.Point(110, 103);
+            this.cmbTipoComanda.Name = "cmbTipoComanda";
+            this.cmbTipoComanda.Size = new System.Drawing.Size(246, 21);
+            this.cmbTipoComanda.TabIndex = 198;
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F);
+            this.label7.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.label7.Location = new System.Drawing.Point(5, 104);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(101, 16);
+            this.label7.TabIndex = 197;
+            this.label7.Text = "Tipo Comanda:";
             // 
             // btnFiltrar
             // 
@@ -422,25 +415,59 @@
             this.label1.TabIndex = 184;
             this.label1.Text = "Identificación:";
             // 
-            // label7
+            // btnDuplicar
             // 
-            this.label7.AutoSize = true;
-            this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F);
-            this.label7.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.label7.Location = new System.Drawing.Point(5, 104);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(101, 16);
-            this.label7.TabIndex = 197;
-            this.label7.Text = "Tipo Comanda:";
+            this.btnDuplicar.AccessibleDescription = "";
+            this.btnDuplicar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
+            this.btnDuplicar.Enabled = false;
+            this.btnDuplicar.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
+            this.btnDuplicar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnDuplicar.Font = new System.Drawing.Font("Maiandra GD", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnDuplicar.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.btnDuplicar.Location = new System.Drawing.Point(242, 464);
+            this.btnDuplicar.Name = "btnDuplicar";
+            this.btnDuplicar.Size = new System.Drawing.Size(130, 57);
+            this.btnDuplicar.TabIndex = 208;
+            this.btnDuplicar.Text = "DUPLICAR COMANDA";
+            this.btnDuplicar.UseVisualStyleBackColor = false;
+            this.btnDuplicar.Click += new System.EventHandler(this.btnDuplicar_Click);
             // 
-            // cmbTipoComanda
+            // id_pedido
             // 
-            this.cmbTipoComanda.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbTipoComanda.FormattingEnabled = true;
-            this.cmbTipoComanda.Location = new System.Drawing.Point(110, 103);
-            this.cmbTipoComanda.Name = "cmbTipoComanda";
-            this.cmbTipoComanda.Size = new System.Drawing.Size(246, 21);
-            this.cmbTipoComanda.TabIndex = 198;
+            this.id_pedido.HeaderText = "ID_PEDIDO";
+            this.id_pedido.Name = "id_pedido";
+            this.id_pedido.ReadOnly = true;
+            this.id_pedido.Visible = false;
+            // 
+            // codigo_origen
+            // 
+            this.codigo_origen.HeaderText = "CODIGO";
+            this.codigo_origen.Name = "codigo_origen";
+            this.codigo_origen.ReadOnly = true;
+            this.codigo_origen.Visible = false;
+            // 
+            // numero_pedido
+            // 
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.numero_pedido.DefaultCellStyle = dataGridViewCellStyle1;
+            this.numero_pedido.HeaderText = "N° PEDIDO";
+            this.numero_pedido.Name = "numero_pedido";
+            this.numero_pedido.ReadOnly = true;
+            // 
+            // fecha_pedido
+            // 
+            this.fecha_pedido.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.fecha_pedido.HeaderText = "FECHA PEDIDO";
+            this.fecha_pedido.Name = "fecha_pedido";
+            this.fecha_pedido.ReadOnly = true;
+            // 
+            // total
+            // 
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.total.DefaultCellStyle = dataGridViewCellStyle2;
+            this.total.HeaderText = "TOTAL";
+            this.total.Name = "total";
+            this.total.ReadOnly = true;
             // 
             // frmHistorialClientePorOrigen
             // 
@@ -449,6 +476,7 @@
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackColor = System.Drawing.Color.SpringGreen;
             this.ClientSize = new System.Drawing.Size(732, 531);
+            this.Controls.Add(this.btnDuplicar);
             this.Controls.Add(this.panel4);
             this.Controls.Add(this.panel3);
             this.Controls.Add(this.panel2);
@@ -495,10 +523,6 @@
         private System.Windows.Forms.Button btnSalir;
         private System.Windows.Forms.TextBox txtReporte;
         private System.Windows.Forms.DataGridView dgvDatos;
-        private System.Windows.Forms.DataGridViewTextBoxColumn id_pedido;
-        private System.Windows.Forms.DataGridViewTextBoxColumn numero_pedido;
-        private System.Windows.Forms.DataGridViewTextBoxColumn fecha_pedido;
-        private System.Windows.Forms.DataGridViewTextBoxColumn total;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Button btnFiltrar;
         private System.Windows.Forms.DateTimePicker dtFechaHasta;
@@ -514,6 +538,12 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ComboBox cmbTipoComanda;
         private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Button btnDuplicar;
+        private System.Windows.Forms.DataGridViewTextBoxColumn id_pedido;
+        private System.Windows.Forms.DataGridViewTextBoxColumn codigo_origen;
+        private System.Windows.Forms.DataGridViewTextBoxColumn numero_pedido;
+        private System.Windows.Forms.DataGridViewTextBoxColumn fecha_pedido;
+        private System.Windows.Forms.DataGridViewTextBoxColumn total;
 
     }
 }
