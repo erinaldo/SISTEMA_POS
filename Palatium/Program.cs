@@ -237,7 +237,7 @@ namespace Palatium
                     if (iVistaAplicacion == 1)
                     {
                         Application.Run(new Inicio.frmMenuTab());
-                        //Application.Run(new frmGrid());
+                        //Application.Run(new Registros_Dactilares.frmPantallaRegistroEmpleadosEmpresas());
                     }
 
                     else

@@ -214,7 +214,7 @@ namespace Palatium.Oficina
 
         private void submenuTipoOrdenes_Click(object sender, EventArgs e)
         {
-            Formularios.FInformacionPosOriOrd tipoOrden = new Formularios.FInformacionPosOriOrd();
+            Oficina.frmOrigenOrden tipoOrden = new Oficina.frmOrigenOrden();
             verificarFormularios(tipoOrden, this);
         }
 
@@ -710,13 +710,13 @@ namespace Palatium.Oficina
 
         private void submenuCrearEmpresa_Click(object sender, EventArgs e)
         {
-            Empresa.frmClienteEmpresarial clienteEmpresarial = new Empresa.frmClienteEmpresarial();
+            Registros_Dactilares.frmClienteEmpresarial clienteEmpresarial = new Registros_Dactilares.frmClienteEmpresarial();
             verificarFormularios(clienteEmpresarial, this);
         }
 
         private void submenuCrearEmpleados_Click(object sender, EventArgs e)
         {
-            Empresa.frmEmpleadosEmpresas empleadosEmpresas = new Empresa.frmEmpleadosEmpresas();
+            Registros_Dactilares.frmEmpleadosEmpresas empleadosEmpresas = new Registros_Dactilares.frmEmpleadosEmpresas();
             verificarFormularios(empleadosEmpresas, this);
         }
 
@@ -874,6 +874,12 @@ namespace Palatium.Oficina
         {
             Oficina.frmInfoPublicitaria info = new frmInfoPublicitaria();
             verificarFormularios(info, this);
+        }
+
+        private void subMenuClienteEmpresarial_Click(object sender, EventArgs e)
+        {
+            Registros_Dactilares.frmPantallaRegistroEmpleadosEmpresas crear = new Registros_Dactilares.frmPantallaRegistroEmpleadosEmpresas();
+            verificarFormularios(crear, this);
         }
     }
 }

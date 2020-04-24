@@ -62,10 +62,12 @@ namespace Palatium.Reportes_Formas
             btnHistorialComanda.BackColor = Color.FromArgb(0, 192, 0);
             btnHistorialProducto.BackColor = Color.Blue;
             btnDetallarProductos.BackColor = Color.Blue;
+            btnDetallePedidoPorItem.BackColor = Color.Blue;
 
             btnHistorialComanda.AccessibleDescription = "1";
             btnHistorialProducto.AccessibleDescription = "0";
             btnDetallarProductos.AccessibleDescription = "0";
+            btnDetallePedidoPorItem.AccessibleDescription = "0";
         }
 
         private void btnHistorialComanda_Click(object sender, EventArgs e)
@@ -76,10 +78,12 @@ namespace Palatium.Reportes_Formas
                 btnHistorialComanda.BackColor = Color.FromArgb(0, 192, 0);
                 btnHistorialProducto.BackColor = Color.Blue;
                 btnDetallarProductos.BackColor = Color.Blue;
+                btnDetallePedidoPorItem.BackColor = Color.Blue;
 
                 btnHistorialComanda.AccessibleDescription = "1";
                 btnHistorialProducto.AccessibleDescription = "0";
                 btnDetallarProductos.AccessibleDescription = "0";
+                btnDetallePedidoPorItem.AccessibleDescription = "0";
             }
         }
 
@@ -91,10 +95,12 @@ namespace Palatium.Reportes_Formas
                 btnHistorialProducto.BackColor = Color.FromArgb(0, 192, 0);
                 btnHistorialComanda.BackColor = Color.Blue;
                 btnDetallarProductos.BackColor = Color.Blue;
+                btnDetallePedidoPorItem.BackColor = Color.Blue;
 
                 btnHistorialProducto.AccessibleDescription = "1";
                 btnHistorialComanda.AccessibleDescription = "0";
                 btnDetallarProductos.AccessibleDescription = "0";
+                btnDetallePedidoPorItem.AccessibleDescription = "0";
             }
         }
 
@@ -114,10 +120,29 @@ namespace Palatium.Reportes_Formas
                 btnDetallarProductos.BackColor = Color.FromArgb(0, 192, 0);
                 btnHistorialComanda.BackColor = Color.Blue;
                 btnHistorialProducto.BackColor = Color.Blue;
+                btnDetallePedidoPorItem.BackColor = Color.Blue;
 
                 btnHistorialProducto.AccessibleDescription = "0";
                 btnHistorialComanda.AccessibleDescription = "0";
                 btnDetallarProductos.AccessibleDescription = "1";
+                btnDetallePedidoPorItem.AccessibleDescription = "0";
+            }
+        }
+
+        private void btnDetallePedidoPorItem_Click(object sender, EventArgs e)
+        {
+            if (btnDetallePedidoPorItem.AccessibleDescription == "0")
+            {
+                abrirFormularioHijo(new Reportes_Formas.frmReporteVentasPorItems(1), 0);
+                btnDetallePedidoPorItem.BackColor = Color.FromArgb(0, 192, 0);
+                btnHistorialComanda.BackColor = Color.Blue;
+                btnHistorialProducto.BackColor = Color.Blue;
+                btnDetallarProductos.BackColor = Color.Blue;
+
+                btnHistorialProducto.AccessibleDescription = "0";
+                btnHistorialComanda.AccessibleDescription = "0";
+                btnDetallarProductos.AccessibleDescription = "0";
+                btnDetallePedidoPorItem.AccessibleDescription = "1";
             }
         }
     }

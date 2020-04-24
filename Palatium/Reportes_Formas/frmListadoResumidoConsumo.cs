@@ -86,6 +86,9 @@ namespace Palatium.Reportes_Formas
             try
             {
                 dgvDatos.Rows.Clear();
+                btnDetallarTodos.Visible = false;
+                txtTotalValor.Text = "0.00";
+                txtCantidadTotal.Text = "0";
 
                 int a = 2;
 
@@ -131,9 +134,6 @@ namespace Palatium.Reportes_Formas
 
                 if (bRespuesta == false)
                 {
-                    btnDetallarTodos.Visible = false;
-                    txtTotalValor.Text = "0.00";
-                    txtCantidadTotal.Text = "0";
                     catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
                     catchMensaje.lblMensaje.Text = conexion.sMensajeError;
                     catchMensaje.ShowDialog();
@@ -186,18 +186,21 @@ namespace Palatium.Reportes_Formas
             try
             {
                 dgvDetalle.Rows.Clear();
+                btnDetallarTodos.Visible = false;
+                txtTotalValor.Text = "0.00";
+                txtCantidadTotal.Text = "0";
 
                 int a = 2;
 
                 sSql = "";
                 sSql += "select * from pos_vw_detallar_items_reporte_consumo" + Environment.NewLine;
-                sSql += "where fecha_pedido between '2020-04-01'" + Environment.NewLine;
-                sSql += "and '2020-04-18'" + Environment.NewLine;
+                sSql += "where fecha_pedido between @fecha_desde" + Environment.NewLine;
+                sSql += "and @fecha_hasta" + Environment.NewLine;
 
                 if (iIdLocalidad != 0)
                 {
                     a++;
-                    sSql += "where id_localidad = @id_localidad" + Environment.NewLine;
+                    sSql += "and id_localidad = @id_localidad" + Environment.NewLine;
                 }
 
                 if (iIdProducto_P != 0)
@@ -246,9 +249,6 @@ namespace Palatium.Reportes_Formas
 
                 if (bRespuesta == false)
                 {
-                    btnDetallarTodos.Visible = false;
-                    txtTotalValor.Text = "0.00";
-                    txtCantidadTotal.Text = "0";
                     catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
                     catchMensaje.lblMensaje.Text = conexion.sMensajeError;
                     catchMensaje.ShowDialog();

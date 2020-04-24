@@ -36,7 +36,13 @@
             this.btnSalir = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.btnConfiguracion = new System.Windows.Forms.Button();
+            this.dgvDatos = new System.Windows.Forms.DataGridView();
+            this.lblDispositivoConectado = new System.Windows.Forms.Label();
+            this.lblDispositivo = new System.Windows.Forms.Label();
+            this.lblMensajeRespuesta = new System.Windows.Forms.Label();
+            this.lblMensaje = new System.Windows.Forms.Label();
             this.panel2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvDatos)).BeginInit();
             this.SuspendLayout();
             // 
             // panel2
@@ -74,6 +80,9 @@
             // 
             this.btnAceptar.BackColor = System.Drawing.Color.Lime;
             this.btnAceptar.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnAceptar.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
+            this.btnAceptar.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
+            this.btnAceptar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnAceptar.Font = new System.Drawing.Font("Maiandra GD", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnAceptar.Location = new System.Drawing.Point(315, 12);
             this.btnAceptar.Name = "btnAceptar";
@@ -87,6 +96,9 @@
             // 
             this.btnLimpiar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
             this.btnLimpiar.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnLimpiar.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
+            this.btnLimpiar.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
+            this.btnLimpiar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnLimpiar.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnLimpiar.Location = new System.Drawing.Point(109, 189);
             this.btnLimpiar.Name = "btnLimpiar";
@@ -100,6 +112,9 @@
             // 
             this.btnSalir.BackColor = System.Drawing.Color.OrangeRed;
             this.btnSalir.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnSalir.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
+            this.btnSalir.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
+            this.btnSalir.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnSalir.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnSalir.Location = new System.Drawing.Point(245, 189);
             this.btnSalir.Name = "btnSalir";
@@ -129,12 +144,71 @@
             this.btnConfiguracion.Font = new System.Drawing.Font("Maiandra GD", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnConfiguracion.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.btnConfiguracion.Image = global::Palatium.Properties.Resources.icono_boton_ajustes;
-            this.btnConfiguracion.Location = new System.Drawing.Point(423, 218);
+            this.btnConfiguracion.Location = new System.Drawing.Point(423, 262);
             this.btnConfiguracion.Name = "btnConfiguracion";
             this.btnConfiguracion.Size = new System.Drawing.Size(69, 55);
             this.btnConfiguracion.TabIndex = 131;
             this.btnConfiguracion.UseVisualStyleBackColor = false;
             this.btnConfiguracion.Click += new System.EventHandler(this.btnConfiguracion_Click);
+            // 
+            // dgvDatos
+            // 
+            this.dgvDatos.AllowUserToAddRows = false;
+            this.dgvDatos.AllowUserToDeleteRows = false;
+            this.dgvDatos.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvDatos.Location = new System.Drawing.Point(12, 318);
+            this.dgvDatos.Name = "dgvDatos";
+            this.dgvDatos.ReadOnly = true;
+            this.dgvDatos.Size = new System.Drawing.Size(457, 150);
+            this.dgvDatos.TabIndex = 132;
+            // 
+            // lblDispositivoConectado
+            // 
+            this.lblDispositivoConectado.AutoSize = true;
+            this.lblDispositivoConectado.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblDispositivoConectado.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.lblDispositivoConectado.Location = new System.Drawing.Point(122, 276);
+            this.lblDispositivoConectado.Name = "lblDispositivoConectado";
+            this.lblDispositivoConectado.Size = new System.Drawing.Size(71, 16);
+            this.lblDispositivoConectado.TabIndex = 134;
+            this.lblDispositivoConectado.Text = "NINGUNO";
+            this.lblDispositivoConectado.Visible = false;
+            // 
+            // lblDispositivo
+            // 
+            this.lblDispositivo.AutoSize = true;
+            this.lblDispositivo.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblDispositivo.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.lblDispositivo.Location = new System.Drawing.Point(9, 276);
+            this.lblDispositivo.Name = "lblDispositivo";
+            this.lblDispositivo.Size = new System.Drawing.Size(107, 16);
+            this.lblDispositivo.TabIndex = 133;
+            this.lblDispositivo.Text = "DISPOSITIVO:";
+            this.lblDispositivo.Visible = false;
+            // 
+            // lblMensajeRespuesta
+            // 
+            this.lblMensajeRespuesta.AutoSize = true;
+            this.lblMensajeRespuesta.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblMensajeRespuesta.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.lblMensajeRespuesta.Location = new System.Drawing.Point(122, 296);
+            this.lblMensajeRespuesta.Name = "lblMensajeRespuesta";
+            this.lblMensajeRespuesta.Size = new System.Drawing.Size(85, 16);
+            this.lblMensajeRespuesta.TabIndex = 136;
+            this.lblMensajeRespuesta.Text = "Sin acciones";
+            this.lblMensajeRespuesta.Visible = false;
+            // 
+            // lblMensaje
+            // 
+            this.lblMensaje.AutoSize = true;
+            this.lblMensaje.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblMensaje.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.lblMensaje.Location = new System.Drawing.Point(9, 296);
+            this.lblMensaje.Name = "lblMensaje";
+            this.lblMensaje.Size = new System.Drawing.Size(114, 16);
+            this.lblMensaje.TabIndex = 135;
+            this.lblMensaje.Text = "RESPUESTAS:";
+            this.lblMensaje.Visible = false;
             // 
             // frmPantallaEspereAlmuerzos
             // 
@@ -142,7 +216,12 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackColor = System.Drawing.Color.SkyBlue;
-            this.ClientSize = new System.Drawing.Size(493, 274);
+            this.ClientSize = new System.Drawing.Size(493, 318);
+            this.Controls.Add(this.lblMensajeRespuesta);
+            this.Controls.Add(this.lblMensaje);
+            this.Controls.Add(this.lblDispositivoConectado);
+            this.Controls.Add(this.lblDispositivo);
+            this.Controls.Add(this.dgvDatos);
             this.Controls.Add(this.btnConfiguracion);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.btnLimpiar);
@@ -154,10 +233,12 @@
             this.Name = "frmPantallaEspereAlmuerzos";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Esperar Información";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmPantallaEspereAlmuerzos_FormClosing);
             this.Load += new System.EventHandler(this.frmPantallaEspereAlmuerzos_Load);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.frmPantallaEspereAlmuerzos_KeyDown);
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvDatos)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -173,5 +254,10 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox txtIdentificacion;
         private System.Windows.Forms.Button btnConfiguracion;
+        private System.Windows.Forms.DataGridView dgvDatos;
+        private System.Windows.Forms.Label lblDispositivoConectado;
+        private System.Windows.Forms.Label lblDispositivo;
+        private System.Windows.Forms.Label lblMensajeRespuesta;
+        private System.Windows.Forms.Label lblMensaje;
     }
 }

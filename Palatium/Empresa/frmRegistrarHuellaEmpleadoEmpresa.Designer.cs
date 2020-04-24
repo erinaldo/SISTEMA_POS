@@ -44,10 +44,10 @@
             this.btnRemover = new System.Windows.Forms.Button();
             this.btnLimpiar = new System.Windows.Forms.Button();
             this.btnVerificar = new System.Windows.Forms.Button();
-            this.txtBase64_1 = new System.Windows.Forms.TextBox();
             this.deviceSerial = new System.Windows.Forms.Label();
             this.txtMensajes = new System.Windows.Forms.TextBox();
             this.btnGuardar = new System.Windows.Forms.Button();
+            this.txtBase64_1 = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.dgvDatos)).BeginInit();
             this.grupoDatos.SuspendLayout();
             this.grupoRegistros.SuspendLayout();
@@ -246,15 +246,6 @@
             this.btnVerificar.Visible = false;
             this.btnVerificar.Click += new System.EventHandler(this.btnRegistrar_Click);
             // 
-            // txtBase64_1
-            // 
-            this.txtBase64_1.Location = new System.Drawing.Point(12, 495);
-            this.txtBase64_1.Multiline = true;
-            this.txtBase64_1.Name = "txtBase64_1";
-            this.txtBase64_1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtBase64_1.Size = new System.Drawing.Size(950, 48);
-            this.txtBase64_1.TabIndex = 51;
-            // 
             // deviceSerial
             // 
             this.deviceSerial.Location = new System.Drawing.Point(705, 447);
@@ -285,6 +276,15 @@
             this.btnGuardar.UseVisualStyleBackColor = false;
             this.btnGuardar.Visible = false;
             this.btnGuardar.Click += new System.EventHandler(this.btnGuardar_Click);
+            // 
+            // txtBase64_1
+            // 
+            this.txtBase64_1.Location = new System.Drawing.Point(12, 495);
+            this.txtBase64_1.Multiline = true;
+            this.txtBase64_1.Name = "txtBase64_1";
+            this.txtBase64_1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.txtBase64_1.Size = new System.Drawing.Size(950, 48);
+            this.txtBase64_1.TabIndex = 51;
             // 
             // frmRegistrarHuellaEmpleadoEmpresa
             // 
@@ -338,9 +338,9 @@
         private System.Windows.Forms.Button btnRemover;
         private System.Windows.Forms.Button btnLimpiar;
         private System.Windows.Forms.Button btnVerificar;
-        private System.Windows.Forms.TextBox txtBase64_1;
         private System.Windows.Forms.Label deviceSerial;
         private System.Windows.Forms.TextBox txtMensajes;
         private System.Windows.Forms.Button btnGuardar;
+        private System.Windows.Forms.TextBox txtBase64_1;
     }
 }

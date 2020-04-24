@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using AxZKFPEngXControl;
 
 namespace Palatium.Empresa
 {
@@ -15,24 +16,31 @@ namespace Palatium.Empresa
     {
         ConexionBD.ConexionBD conexion = new ConexionBD.ConexionBD();
 
+        private AxZKFPEngX lectorHuellas = new AxZKFPEngX();
+
         VentanasMensajes.frmMensajeNuevoCatch catchMensaje;
         VentanasMensajes.frmMensajeOK ok;
 
         string sSql;
         string sNombreProducto;
         string sCodigoClaseProducto;
+        string sIdentificacionEmpleado;
+        string sNombreEmpresa;
+        string sNombreEmpleado;
 
         DataTable dtConsulta;
         DataTable dtItems;
         DataTable dtDetalleItems;
 
         bool bRespuesta;
+        bool Check;
 
         int iIdOrigenOrden;
         int iIdListaMinorista;
         int iPagaIva;
         int iIdPersonaEmpresa;
         int iIdPersonaEmpleado;
+        int fpcHandle;
 
         Decimal dbValor;
         Decimal dbTotal;
@@ -63,6 +71,8 @@ namespace Palatium.Empresa
         {
             try
             {
+                this.Cursor = Cursors.WaitCursor;
+
                 sSql = "";
                 sSql += "select * from pos_vw_busqueda_huellas_empleados_empresa" + Environment.NewLine;
                 sSql += "where identificacion = @identificacion";
@@ -80,6 +90,7 @@ namespace Palatium.Empresa
 
                 if (bRespuesta == false)
                 {
+                    this.Cursor = Cursors.Default;
                     catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
                     catchMensaje.lblMensaje.Text = conexion.sMensajeError;
                     catchMensaje.ShowDialog();
@@ -88,6 +99,7 @@ namespace Palatium.Empresa
 
                 if (dtConsulta.Rows.Count == 0)
                 {
+                    this.Cursor = Cursors.Default;
                     ok = new VentanasMensajes.frmMensajeOK();
                     ok.LblMensaje.Text = "No se encuentra el registro en el sistema.";
                     ok.ShowDialog();
@@ -126,6 +138,7 @@ namespace Palatium.Empresa
                     precuenta.ShowDialog();
                 }
 
+                this.Cursor = Cursors.Default;
                 ok = new VentanasMensajes.frmMensajeOK();
                 ok.LblMensaje.Text = "Guardado en la orden: " + iNumeroPedidoOrden.ToString() + ".";
                 ok.ShowDialog();
@@ -146,6 +159,7 @@ namespace Palatium.Empresa
         //FUNCION PARA LIMPIAR
         private void limpiar()
         {
+            lblMensajeRespuesta.Text = "Sin acciones";
             txtIdentificacion.Clear();
             txtIdentificacion.Focus();
         }
@@ -314,9 +328,128 @@ namespace Palatium.Empresa
 
         #endregion
 
+        #region FUNCIONES PARA TRABAJAR CON EL LECTOR DE HUELLAS
+
+        //FUNCION PARA LLENAR EL GRID
+        private bool llenarGrid()
+        {
+            try
+            {
+                sSql = "";
+                sSql += "select * from pos_vw_busqueda_huellas_empleados_empresa" + Environment.NewLine;
+                sSql += "where is_active = @is_active" + Environment.NewLine;
+                sSql += "and is_active_huella = @is_active_huella" + Environment.NewLine;
+                sSql += "and huella_dactilar <> @huella_dactilar";
+
+                #region PARAMETROS
+
+                parametro = new SqlParameter[3];
+                parametro[0] = new SqlParameter();
+                parametro[0].ParameterName = "@is_active";
+                parametro[0].SqlDbType = SqlDbType.Int;
+                parametro[0].Value = 1;
+
+                parametro[1] = new SqlParameter();
+                parametro[1].ParameterName = "@is_active_huella";
+                parametro[1].SqlDbType = SqlDbType.Int;
+                parametro[1].Value = 1;
+
+                parametro[2] = new SqlParameter();
+                parametro[2].ParameterName = "@huella_dactilar";
+                parametro[2].SqlDbType = SqlDbType.VarChar;
+                parametro[2].Value = "";
+
+                #endregion
+
+                dtConsulta = new DataTable();
+                dtConsulta.Clear();
+
+                bRespuesta = conexion.GFun_Lo_Busca_Registro_Parametros(dtConsulta, sSql, parametro);
+
+                if (bRespuesta == false)
+                {
+                    catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
+                    catchMensaje.lblMensaje.Text = conexion.sMensajeError;
+                    catchMensaje.ShowDialog();
+                    return false;
+                }
+
+                dgvDatos.DataSource = dtConsulta;
+                return true;
+            }
+
+            catch (Exception ex)
+            {
+                catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
+                catchMensaje.lblMensaje.Text = ex.Message;
+                catchMensaje.ShowDialog();
+                return false;
+            }
+        }
+
+        //FUNCION PARA INICIALIZAR EL DISPOSITIVO
+        private void iniciarDispositivoReconocer()
+        {
+            try
+            {
+                Controls.Add(lectorHuellas);
+
+                if (lectorHuellas.InitEngine() == 0)
+                {
+                    lectorHuellas.FPEngineVersion = "9";
+                    lectorHuellas.EnrollCount = 3;
+                    lblDispositivoConectado.Text = "Dispositivo: " + lectorHuellas.SensorSN;
+                }
+            }
+
+            catch (Exception ex)
+            {
+                catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
+                catchMensaje.lblMensaje.Text = ex.Message;
+                catchMensaje.ShowDialog();
+            }
+        }
+
+        private void lectorHuellas_OnCapture(object sender, IZKFPEngXEvents_OnCaptureEvent e)
+        {
+            string template = lectorHuellas.EncodeTemplate1(e.aTemplate);
+            string regTemplateString = "";
+            int iBandera = 0;
+
+            foreach (DataGridViewRow row in dgvDatos.Rows)
+            {
+                sIdentificacionEmpleado = row.Cells["identificacion"].Value.ToString().Trim();
+                sNombreEmpresa = row.Cells["identificacion"].Value.ToString().Trim().ToUpper();
+                sNombreEmpleado = row.Cells["empleado"].Value.ToString().Trim().ToUpper();
+
+                regTemplateString = row.Cells["huella_dactilar"].Value.ToString();
+
+                if (lectorHuellas.VerFingerFromStr(ref template, regTemplateString, false, ref Check))
+                {
+                    iBandera = 1;
+                    break;
+                }
+            }
+
+            if (iBandera == 1)
+            {
+                txtIdentificacion.Text = sIdentificacionEmpleado;
+                lblMensajeRespuesta.Text = "EMPLEADO: " + sNombreEmpleado;
+                consultarEmpleadoIdentificacion();
+            }
+
+            else
+            {
+                lblMensajeRespuesta.Text = "Registro no encontrado. Favor reintente.";
+            }
+        }
+
+        #endregion
+
         private void frmPantallaEspereAlmuerzos_Load(object sender, EventArgs e)
         {
             obtenerIdListaMinorista();
+
             if (Program.iVistaAplicacion == 1)
             {
                 this.KeyPreview = true;
@@ -327,6 +460,50 @@ namespace Palatium.Empresa
             {
                 this.KeyPreview = false;
                 btnConfiguracion.Visible = true;
+            }
+
+            if ((Program.iUsarLectorHuellas == 1) && (Program.iUsarLectorPantallaEspere == 1))
+            {
+                //int initializeCallBackCode = lectorHuellas.
+
+
+                if (llenarGrid() == false)
+                    return;
+
+                lblDispositivo.Visible = true;
+                lblDispositivoConectado.Visible = true;
+                lblMensaje.Visible = true;
+                lblMensajeRespuesta.Visible = true;
+
+                iniciarDispositivoReconocer();
+                fpcHandle = lectorHuellas.CreateFPCacheDB();
+
+                string regTemplateString = "";
+                int FpId = 0;
+
+                foreach (DataGridViewRow row in dgvDatos.Rows)
+                {
+                    try
+                    {
+                        regTemplateString = row.Cells["huella_dactilar"].Value.ToString();
+
+                        lectorHuellas.AddRegTemplateStrToFPCacheDB(fpcHandle, FpId, regTemplateString);
+
+                        FpId = FpId + 1;
+                    }
+                    catch { }
+                }
+
+                lectorHuellas.OnCapture += lectorHuellas_OnCapture;
+                lectorHuellas.BeginCapture();
+            }
+
+            else
+            {
+                lblDispositivo.Visible = false;
+                lblDispositivoConectado.Visible = false;
+                lblMensaje.Visible = false;
+                lblMensajeRespuesta.Visible = false;
             }
 
             this.ActiveControl = txtIdentificacion;
@@ -393,6 +570,26 @@ namespace Palatium.Empresa
                 Oficina.frmNuevoMenuConfiguracion menuOficina = new Oficina.frmNuevoMenuConfiguracion();
                 menuOficina.ShowInTaskbar = true;
                 menuOficina.Show();
+            }
+        }
+
+        private void frmPantallaEspereAlmuerzos_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            try
+            {
+                if ((Program.iUsarLectorHuellas == 1) && (Program.iUsarLectorPantallaEspere == 1))
+                {
+                    lectorHuellas.OnCapture -= lectorHuellas_OnCapture;
+                    lectorHuellas.CancelEnroll();
+                    lectorHuellas.EndEngine();
+                }                
+            }
+
+            catch (Exception ex)
+            {
+                catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
+                catchMensaje.lblMensaje.Text = ex.Message;
+                catchMensaje.ShowDialog();
             }
         }
     }

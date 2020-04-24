@@ -32,8 +32,9 @@
             this.btnHistorialComanda = new System.Windows.Forms.Button();
             this.pnlContenedor = new System.Windows.Forms.Panel();
             this.panel2 = new System.Windows.Forms.Panel();
-            this.button1 = new System.Windows.Forms.Button();
             this.btnDetallarProductos = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
+            this.btnDetallePedidoPorItem = new System.Windows.Forms.Button();
             this.pnlContenedor.SuspendLayout();
             this.panel2.SuspendLayout();
             this.SuspendLayout();
@@ -85,6 +86,7 @@
             // panel2
             // 
             this.panel2.BackColor = System.Drawing.Color.Navy;
+            this.panel2.Controls.Add(this.btnDetallePedidoPorItem);
             this.panel2.Controls.Add(this.btnDetallarProductos);
             this.panel2.Controls.Add(this.btnHistorialProducto);
             this.panel2.Controls.Add(this.btnHistorialComanda);
@@ -94,6 +96,23 @@
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(734, 55);
             this.panel2.TabIndex = 0;
+            // 
+            // btnDetallarProductos
+            // 
+            this.btnDetallarProductos.AccessibleDescription = "0";
+            this.btnDetallarProductos.BackColor = System.Drawing.Color.Blue;
+            this.btnDetallarProductos.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+            this.btnDetallarProductos.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+            this.btnDetallarProductos.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnDetallarProductos.Font = new System.Drawing.Font("Maiandra GD", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnDetallarProductos.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.btnDetallarProductos.Location = new System.Drawing.Point(385, 0);
+            this.btnDetallarProductos.Name = "btnDetallarProductos";
+            this.btnDetallarProductos.Size = new System.Drawing.Size(141, 55);
+            this.btnDetallarProductos.TabIndex = 10;
+            this.btnDetallarProductos.Text = "Detallar por Productos";
+            this.btnDetallarProductos.UseVisualStyleBackColor = false;
+            this.btnDetallarProductos.Click += new System.EventHandler(this.btnDetallarProductos_Click);
             // 
             // button1
             // 
@@ -112,22 +131,22 @@
             this.button1.UseVisualStyleBackColor = false;
             this.button1.Visible = false;
             // 
-            // btnDetallarProductos
+            // btnDetallePedidoPorItem
             // 
-            this.btnDetallarProductos.AccessibleDescription = "0";
-            this.btnDetallarProductos.BackColor = System.Drawing.Color.Blue;
-            this.btnDetallarProductos.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
-            this.btnDetallarProductos.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
-            this.btnDetallarProductos.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnDetallarProductos.Font = new System.Drawing.Font("Maiandra GD", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnDetallarProductos.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.btnDetallarProductos.Location = new System.Drawing.Point(385, 0);
-            this.btnDetallarProductos.Name = "btnDetallarProductos";
-            this.btnDetallarProductos.Size = new System.Drawing.Size(141, 55);
-            this.btnDetallarProductos.TabIndex = 10;
-            this.btnDetallarProductos.Text = "Detallar por Productos";
-            this.btnDetallarProductos.UseVisualStyleBackColor = false;
-            this.btnDetallarProductos.Click += new System.EventHandler(this.btnDetallarProductos_Click);
+            this.btnDetallePedidoPorItem.AccessibleDescription = "0";
+            this.btnDetallePedidoPorItem.BackColor = System.Drawing.Color.Blue;
+            this.btnDetallePedidoPorItem.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+            this.btnDetallePedidoPorItem.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+            this.btnDetallePedidoPorItem.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnDetallePedidoPorItem.Font = new System.Drawing.Font("Maiandra GD", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnDetallePedidoPorItem.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.btnDetallePedidoPorItem.Location = new System.Drawing.Point(526, 0);
+            this.btnDetallePedidoPorItem.Name = "btnDetallePedidoPorItem";
+            this.btnDetallePedidoPorItem.Size = new System.Drawing.Size(141, 55);
+            this.btnDetallePedidoPorItem.TabIndex = 11;
+            this.btnDetallePedidoPorItem.Text = "Detalle del Pedido";
+            this.btnDetallePedidoPorItem.UseVisualStyleBackColor = false;
+            this.btnDetallePedidoPorItem.Click += new System.EventHandler(this.btnDetallePedidoPorItem_Click);
             // 
             // frmVistaHistoriales
             // 
@@ -160,5 +179,6 @@
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button btnDetallarProductos;
+        private System.Windows.Forms.Button btnDetallePedidoPorItem;
     }
 }

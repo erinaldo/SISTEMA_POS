@@ -54,7 +54,7 @@
             this.configuracionDeImpresorasToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.submenuImpresoras = new System.Windows.Forms.ToolStripMenuItem();
             this.submenuDestinoImpresion = new System.Windows.Forms.ToolStripMenuItem();
-            this.clienteEmpresarialToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.subMenuClienteEmpresarial = new System.Windows.Forms.ToolStripMenuItem();
             this.submenuCrearEmpresa = new System.Windows.Forms.ToolStripMenuItem();
             this.submenuCrearEmpleados = new System.Windows.Forms.ToolStripMenuItem();
             this.submenuCrearRegistrosRapidos = new System.Windows.Forms.ToolStripMenuItem();
@@ -246,7 +246,7 @@
             this.toolStripMenuItem2,
             this.formasDePagoToolStripMenuItem,
             this.configuracionDeImpresorasToolStripMenuItem,
-            this.clienteEmpresarialToolStripMenuItem,
+            this.subMenuClienteEmpresarial,
             this.subMenuReportesCierreCaja});
             this.ddlConfiguracion.Image = global::Palatium.Properties.Resources.ajustes_nuevo;
             this.ddlConfiguracion.ImageTransparentColor = System.Drawing.Color.Magenta;
@@ -492,20 +492,21 @@
             this.submenuDestinoImpresion.Text = "Destinos de Impresión";
             this.submenuDestinoImpresion.Click += new System.EventHandler(this.submenuDestinoImpresion_Click);
             // 
-            // clienteEmpresarialToolStripMenuItem
+            // subMenuClienteEmpresarial
             // 
-            this.clienteEmpresarialToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.subMenuClienteEmpresarial.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.submenuCrearEmpresa,
             this.submenuCrearEmpleados,
             this.submenuCrearRegistrosRapidos,
             this.subMenuCrearRegistrosMasivos,
             this.subMenuModificarComandasEmpresa,
             this.subMenuRegistroHuellasDactilares});
-            this.clienteEmpresarialToolStripMenuItem.Image = global::Palatium.Properties.Resources.icono_menu_cliente_empresarial;
-            this.clienteEmpresarialToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.clienteEmpresarialToolStripMenuItem.Name = "clienteEmpresarialToolStripMenuItem";
-            this.clienteEmpresarialToolStripMenuItem.Size = new System.Drawing.Size(250, 36);
-            this.clienteEmpresarialToolStripMenuItem.Text = "Cliente Empresarial";
+            this.subMenuClienteEmpresarial.Image = global::Palatium.Properties.Resources.icono_menu_cliente_empresarial;
+            this.subMenuClienteEmpresarial.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.subMenuClienteEmpresarial.Name = "subMenuClienteEmpresarial";
+            this.subMenuClienteEmpresarial.Size = new System.Drawing.Size(250, 36);
+            this.subMenuClienteEmpresarial.Text = "Cliente Empresarial";
+            this.subMenuClienteEmpresarial.Click += new System.EventHandler(this.subMenuClienteEmpresarial_Click);
             // 
             // submenuCrearEmpresa
             // 
@@ -514,6 +515,7 @@
             this.submenuCrearEmpresa.Name = "submenuCrearEmpresa";
             this.submenuCrearEmpresa.Size = new System.Drawing.Size(243, 36);
             this.submenuCrearEmpresa.Text = "Crear Empresa";
+            this.submenuCrearEmpresa.Visible = false;
             this.submenuCrearEmpresa.Click += new System.EventHandler(this.submenuCrearEmpresa_Click);
             // 
             // submenuCrearEmpleados
@@ -523,6 +525,7 @@
             this.submenuCrearEmpleados.Name = "submenuCrearEmpleados";
             this.submenuCrearEmpleados.Size = new System.Drawing.Size(243, 36);
             this.submenuCrearEmpleados.Text = "Crear Empleados";
+            this.submenuCrearEmpleados.Visible = false;
             this.submenuCrearEmpleados.Click += new System.EventHandler(this.submenuCrearEmpleados_Click);
             // 
             // submenuCrearRegistrosRapidos
@@ -532,6 +535,7 @@
             this.submenuCrearRegistrosRapidos.Name = "submenuCrearRegistrosRapidos";
             this.submenuCrearRegistrosRapidos.Size = new System.Drawing.Size(243, 36);
             this.submenuCrearRegistrosRapidos.Text = "Crear Registros Rápidos";
+            this.submenuCrearRegistrosRapidos.Visible = false;
             this.submenuCrearRegistrosRapidos.Click += new System.EventHandler(this.submenuCrearRegistrosRapidos_Click);
             // 
             // subMenuCrearRegistrosMasivos
@@ -541,6 +545,7 @@
             this.subMenuCrearRegistrosMasivos.Name = "subMenuCrearRegistrosMasivos";
             this.subMenuCrearRegistrosMasivos.Size = new System.Drawing.Size(243, 36);
             this.subMenuCrearRegistrosMasivos.Text = "Crear Registros Masivos";
+            this.subMenuCrearRegistrosMasivos.Visible = false;
             this.subMenuCrearRegistrosMasivos.Click += new System.EventHandler(this.subMenuCrearRegistrosMasivos_Click);
             // 
             // subMenuModificarComandasEmpresa
@@ -550,6 +555,7 @@
             this.subMenuModificarComandasEmpresa.Name = "subMenuModificarComandasEmpresa";
             this.subMenuModificarComandasEmpresa.Size = new System.Drawing.Size(243, 36);
             this.subMenuModificarComandasEmpresa.Text = "Modificar Comandas";
+            this.subMenuModificarComandasEmpresa.Visible = false;
             this.subMenuModificarComandasEmpresa.Click += new System.EventHandler(this.subMenuModificarComandasEmpresa_Click);
             // 
             // subMenuRegistroHuellasDactilares
@@ -558,6 +564,7 @@
             this.subMenuRegistroHuellasDactilares.Name = "subMenuRegistroHuellasDactilares";
             this.subMenuRegistroHuellasDactilares.Size = new System.Drawing.Size(243, 36);
             this.subMenuRegistroHuellasDactilares.Text = "Registro de Huellas Dactilares";
+            this.subMenuRegistroHuellasDactilares.Visible = false;
             this.subMenuRegistroHuellasDactilares.Click += new System.EventHandler(this.subMenuRegistroHuellasDactilares_Click);
             // 
             // subMenuReportesCierreCaja
@@ -2150,7 +2157,7 @@
         private System.Windows.Forms.ToolStripDropDownButton ddPalatiumContable;
         private System.Windows.Forms.ToolStripMenuItem subMenuCargos;
         private System.Windows.Forms.ToolStripMenuItem submenuMovimientoCaja;
-        private System.Windows.Forms.ToolStripMenuItem clienteEmpresarialToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem subMenuClienteEmpresarial;
         private System.Windows.Forms.ToolStripMenuItem submenuCrearEmpresa;
         private System.Windows.Forms.ToolStripMenuItem submenuCrearEmpleados;
         private System.Windows.Forms.ToolStripMenuItem submenuCrearRegistrosRapidos;

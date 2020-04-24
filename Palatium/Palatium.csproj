@@ -81,6 +81,22 @@
     <Reference Include="BarcodeLib">
       <HintPath>..\packages\BarcodeLib.1.0.0.20\lib\net20\BarcodeLib.dll</HintPath>
     </Reference>
+    <Reference Include="Bunifu.Core">
+      <HintPath>C:\Users\Usuario\Desktop\PROYECTOS GITHUB\InspirationDemo\InspirationDemo\bin\Debug\Bunifu.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Bunifu.UI.WinForms.BunifuButton">
+      <HintPath>C:\Users\Usuario\Desktop\PROYECTOS GITHUB\InspirationDemo\InspirationDemo\bin\Debug\Bunifu.UI.WinForms.BunifuButton.dll</HintPath>
+    </Reference>
+    <Reference Include="Bunifu.UI.WinForms.BunifuLabel">
+      <HintPath>C:\Users\Usuario\Desktop\PROYECTOS GITHUB\InspirationDemo\InspirationDemo\bin\Debug\Bunifu.UI.WinForms.BunifuLabel.dll</HintPath>
+    </Reference>
+    <Reference Include="Bunifu.UI.WinForms.BunifuTextbox">
+      <HintPath>C:\Users\Usuario\Desktop\PROYECTOS GITHUB\InspirationDemo\InspirationDemo\bin\Debug\Bunifu.UI.WinForms.BunifuTextbox.dll</HintPath>
+    </Reference>
+    <Reference Include="Bunifu_UI_v1.5.3, Version=1.5.3.0, Culture=neutral, PublicKeyToken=e8e24ccd28363fe9, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Users\Usuario\Desktop\PROYECTOS GITHUB\InspirationDemo\InspirationDemo\bin\Debug\Bunifu_UI_v1.5.3.dll</HintPath>
+    </Reference>
     <Reference Include="ConexionBD, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\MI_DLL\bin\Debug\ConexionBD.dll</HintPath>
@@ -134,6 +150,7 @@
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Design" />
     <Reference Include="System.IO.Compression.FileSystem" />
     <Reference Include="System.Management" />
     <Reference Include="System.Runtime.Serialization" />
@@ -599,10 +616,10 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Clases_Crear_Comandas\ClaseCrearComanda.cs" />
-    <Compile Include="Empresa\frmClienteEmpresarial.cs">
+    <Compile Include="Registros_Dactilares\frmClienteEmpresarial.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Empresa\frmClienteEmpresarial.Designer.cs">
+    <Compile Include="Registros_Dactilares\frmClienteEmpresarial.Designer.cs">
       <DependentUpon>frmClienteEmpresarial.cs</DependentUpon>
     </Compile>
     <Compile Include="Empresa\frmComandaClienteEmpresarial.cs">
@@ -629,10 +646,10 @@
     <Compile Include="Empresa\frmEditarComandaEmpresarial.designer.cs">
       <DependentUpon>frmEditarComandaEmpresarial.cs</DependentUpon>
     </Compile>
-    <Compile Include="Empresa\frmEmpleadosEmpresas.cs">
+    <Compile Include="Registros_Dactilares\frmEmpleadosEmpresas.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Empresa\frmEmpleadosEmpresas.Designer.cs">
+    <Compile Include="Registros_Dactilares\frmEmpleadosEmpresas.Designer.cs">
       <DependentUpon>frmEmpleadosEmpresas.cs</DependentUpon>
     </Compile>
     <Compile Include="Empresa\frmEspereHuellaDactilar.cs">
@@ -659,10 +676,10 @@
     <Compile Include="Empresa\frmModalClienteEmpresarial.Designer.cs">
       <DependentUpon>frmModalClienteEmpresarial.cs</DependentUpon>
     </Compile>
-    <Compile Include="Empresa\frmModalEmpleadoEmpresa.cs">
+    <Compile Include="Registros_Dactilares\frmModalEmpleadoEmpresa.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Empresa\frmModalEmpleadoEmpresa.Designer.cs">
+    <Compile Include="Registros_Dactilares\frmModalEmpleadoEmpresa.Designer.cs">
       <DependentUpon>frmModalEmpleadoEmpresa.cs</DependentUpon>
     </Compile>
     <Compile Include="Empresa\frmPantallaEspereAlmuerzos.cs">
@@ -1339,6 +1356,24 @@
       <DependentUpon>rptListaRecetas.rpt</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Registros_Dactilares\frmInactivarHuellas.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Registros_Dactilares\frmInactivarHuellas.Designer.cs">
+      <DependentUpon>frmInactivarHuellas.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Registros_Dactilares\frmLeerHuellas_V2.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Registros_Dactilares\frmLeerHuellas_V2.Designer.cs">
+      <DependentUpon>frmLeerHuellas_V2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Registros_Dactilares\frmPantallaRegistroEmpleadosEmpresas.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Registros_Dactilares\frmPantallaRegistroEmpleadosEmpresas.Designer.cs">
+      <DependentUpon>frmPantallaRegistroEmpleadosEmpresas.cs</DependentUpon>
+    </Compile>
     <Compile Include="ReportesTextBox\frmReporteCierreCaja.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -1410,6 +1445,12 @@
     </Compile>
     <Compile Include="Reportes_Formas\frmListadoResumidoConsumo.Designer.cs">
       <DependentUpon>frmListadoResumidoConsumo.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Reportes_Formas\frmReporteVentasPorItems.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Reportes_Formas\frmReporteVentasPorItems.Designer.cs">
+      <DependentUpon>frmReporteVentasPorItems.cs</DependentUpon>
     </Compile>
     <Compile Include="Reportes_Formas\frmVistaHistoriales.cs">
       <SubType>Form</SubType>
@@ -1919,11 +1960,11 @@
     <Compile Include="Formularios\FInformacionPosMesa.designer.cs">
       <DependentUpon>FInformacionPosMesa.cs</DependentUpon>
     </Compile>
-    <Compile Include="Formularios\FInformacionPosOriOrd.cs">
+    <Compile Include="Oficina\frmOrigenOrden.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Formularios\FInformacionPosOriOrd.designer.cs">
-      <DependentUpon>FInformacionPosOriOrd.cs</DependentUpon>
+    <Compile Include="Oficina\frmOrigenOrden.designer.cs">
+      <DependentUpon>frmOrigenOrden.cs</DependentUpon>
     </Compile>
     <Compile Include="Formularios\FInformacionPosSecMes.cs">
       <SubType>Form</SubType>
@@ -2921,7 +2962,7 @@
     <EmbeddedResource Include="Domicilios\frmSeleccionarRepartidor.resx">
       <DependentUpon>frmSeleccionarRepartidor.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Empresa\frmClienteEmpresarial.resx">
+    <EmbeddedResource Include="Registros_Dactilares\frmClienteEmpresarial.resx">
       <DependentUpon>frmClienteEmpresarial.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Empresa\frmComandaClienteEmpresarial.resx">
@@ -2936,7 +2977,7 @@
     <EmbeddedResource Include="Empresa\frmEditarComandaEmpresarial.resx">
       <DependentUpon>frmEditarComandaEmpresarial.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Empresa\frmEmpleadosEmpresas.resx">
+    <EmbeddedResource Include="Registros_Dactilares\frmEmpleadosEmpresas.resx">
       <DependentUpon>frmEmpleadosEmpresas.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Empresa\frmEspereHuellaDactilar.resx">
@@ -2951,7 +2992,7 @@
     <EmbeddedResource Include="Empresa\frmModalClienteEmpresarial.resx">
       <DependentUpon>frmModalClienteEmpresarial.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Empresa\frmModalEmpleadoEmpresa.resx">
+    <EmbeddedResource Include="Registros_Dactilares\frmModalEmpleadoEmpresa.resx">
       <DependentUpon>frmModalEmpleadoEmpresa.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Empresa\frmPantallaEspereAlmuerzos.resx">
@@ -3358,8 +3399,8 @@
     <EmbeddedResource Include="Formularios\FInformacionPosMesa.resx">
       <DependentUpon>FInformacionPosMesa.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Formularios\FInformacionPosOriOrd.resx">
-      <DependentUpon>FInformacionPosOriOrd.cs</DependentUpon>
+    <EmbeddedResource Include="Oficina\frmOrigenOrden.resx">
+      <DependentUpon>frmOrigenOrden.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Formularios\FInformacionPosSecMes.resx">
       <DependentUpon>FInformacionPosSecMes.cs</DependentUpon>
@@ -3475,6 +3516,15 @@
     <EmbeddedResource Include="Receta\rptListaRecetas.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>rptListaRecetas.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Registros_Dactilares\frmInactivarHuellas.resx">
+      <DependentUpon>frmInactivarHuellas.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Registros_Dactilares\frmLeerHuellas_V2.resx">
+      <DependentUpon>frmLeerHuellas_V2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Registros_Dactilares\frmPantallaRegistroEmpleadosEmpresas.resx">
+      <DependentUpon>frmPantallaRegistroEmpleadosEmpresas.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="RepartidorExterno\frmFacturaMenuExpress.resx">
       <DependentUpon>frmFacturaMenuExpress.cs</DependentUpon>
@@ -3736,6 +3786,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Reportes_Formas\frmListadoResumidoConsumo.resx">
       <DependentUpon>frmListadoResumidoConsumo.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reportes_Formas\frmReporteVentasPorItems.resx">
+      <DependentUpon>frmReporteVentasPorItems.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Reportes_Formas\frmVistaHistoriales.resx">
       <DependentUpon>frmVistaHistoriales.cs</DependentUpon>
