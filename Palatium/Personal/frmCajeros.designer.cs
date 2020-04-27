@@ -38,6 +38,7 @@
             this.btnEliminar = new System.Windows.Forms.Button();
             this.btnNuevo = new System.Windows.Forms.Button();
             this.Grb_DatoCajero = new System.Windows.Forms.GroupBox();
+            this.chkHabilitado = new System.Windows.Forms.CheckBox();
             this.label5 = new System.Windows.Forms.Label();
             this.dbAyudaPersonal = new Controles.Auxiliares.DB_Ayuda();
             this.chkPermisos = new System.Windows.Forms.CheckBox();
@@ -54,7 +55,6 @@
             this.txtCodigo = new System.Windows.Forms.TextBox();
             this.dataGridViewImageColumn1 = new System.Windows.Forms.DataGridViewImageColumn();
             this.dataGridViewImageColumn2 = new System.Windows.Forms.DataGridViewImageColumn();
-            this.chkHabilitado = new System.Windows.Forms.CheckBox();
             this.idPosCajero = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.idPersona = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.codigo = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -77,9 +77,9 @@
             this.Grb_listReCajero.Controls.Add(this.btnBuscar);
             this.Grb_listReCajero.Controls.Add(this.txtBuscar);
             this.Grb_listReCajero.Controls.Add(this.dgvCajero);
-            this.Grb_listReCajero.Location = new System.Drawing.Point(526, 71);
+            this.Grb_listReCajero.Location = new System.Drawing.Point(12, 191);
             this.Grb_listReCajero.Name = "Grb_listReCajero";
-            this.Grb_listReCajero.Size = new System.Drawing.Size(425, 267);
+            this.Grb_listReCajero.Size = new System.Drawing.Size(461, 267);
             this.Grb_listReCajero.TabIndex = 5;
             this.Grb_listReCajero.TabStop = false;
             this.Grb_listReCajero.Text = "Lista de Registros";
@@ -127,7 +127,7 @@
             this.dgvCajero.ReadOnly = true;
             this.dgvCajero.RowHeadersVisible = false;
             this.dgvCajero.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvCajero.Size = new System.Drawing.Size(387, 203);
+            this.dgvCajero.Size = new System.Drawing.Size(432, 203);
             this.dgvCajero.TabIndex = 0;
             this.dgvCajero.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvCajero_CellDoubleClick);
             // 
@@ -138,9 +138,9 @@
             this.Grb_opcioCajero.Controls.Add(this.btnLimpiar);
             this.Grb_opcioCajero.Controls.Add(this.btnEliminar);
             this.Grb_opcioCajero.Controls.Add(this.btnNuevo);
-            this.Grb_opcioCajero.Location = new System.Drawing.Point(12, 250);
+            this.Grb_opcioCajero.Location = new System.Drawing.Point(479, 191);
             this.Grb_opcioCajero.Name = "Grb_opcioCajero";
-            this.Grb_opcioCajero.Size = new System.Drawing.Size(508, 88);
+            this.Grb_opcioCajero.Size = new System.Drawing.Size(111, 267);
             this.Grb_opcioCajero.TabIndex = 4;
             this.Grb_opcioCajero.TabStop = false;
             this.Grb_opcioCajero.Text = "Opciones";
@@ -148,10 +148,14 @@
             // btnCerrar
             // 
             this.btnCerrar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
+            this.btnCerrar.FlatAppearance.BorderColor = System.Drawing.Color.Black;
+            this.btnCerrar.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
+            this.btnCerrar.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
+            this.btnCerrar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnCerrar.ForeColor = System.Drawing.Color.White;
-            this.btnCerrar.Location = new System.Drawing.Point(320, 29);
+            this.btnCerrar.Location = new System.Drawing.Point(17, 207);
             this.btnCerrar.Name = "btnCerrar";
-            this.btnCerrar.Size = new System.Drawing.Size(70, 39);
+            this.btnCerrar.Size = new System.Drawing.Size(70, 50);
             this.btnCerrar.TabIndex = 3;
             this.btnCerrar.Text = "Cerrar";
             this.btnCerrar.UseVisualStyleBackColor = false;
@@ -160,10 +164,14 @@
             // btnLimpiar
             // 
             this.btnLimpiar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+            this.btnLimpiar.FlatAppearance.BorderColor = System.Drawing.Color.Black;
+            this.btnLimpiar.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
+            this.btnLimpiar.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
+            this.btnLimpiar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnLimpiar.ForeColor = System.Drawing.Color.White;
-            this.btnLimpiar.Location = new System.Drawing.Point(244, 29);
+            this.btnLimpiar.Location = new System.Drawing.Point(17, 146);
             this.btnLimpiar.Name = "btnLimpiar";
-            this.btnLimpiar.Size = new System.Drawing.Size(70, 39);
+            this.btnLimpiar.Size = new System.Drawing.Size(70, 50);
             this.btnLimpiar.TabIndex = 2;
             this.btnLimpiar.Text = "Limpiar";
             this.btnLimpiar.UseVisualStyleBackColor = false;
@@ -172,10 +180,14 @@
             // btnEliminar
             // 
             this.btnEliminar.BackColor = System.Drawing.Color.Red;
+            this.btnEliminar.FlatAppearance.BorderColor = System.Drawing.Color.Black;
+            this.btnEliminar.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
+            this.btnEliminar.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
+            this.btnEliminar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnEliminar.ForeColor = System.Drawing.Color.White;
-            this.btnEliminar.Location = new System.Drawing.Point(168, 29);
+            this.btnEliminar.Location = new System.Drawing.Point(17, 85);
             this.btnEliminar.Name = "btnEliminar";
-            this.btnEliminar.Size = new System.Drawing.Size(70, 39);
+            this.btnEliminar.Size = new System.Drawing.Size(70, 50);
             this.btnEliminar.TabIndex = 1;
             this.btnEliminar.Text = "Eliminar";
             this.btnEliminar.UseVisualStyleBackColor = false;
@@ -184,10 +196,14 @@
             // btnNuevo
             // 
             this.btnNuevo.BackColor = System.Drawing.Color.Blue;
+            this.btnNuevo.FlatAppearance.BorderColor = System.Drawing.Color.Black;
+            this.btnNuevo.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
+            this.btnNuevo.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
+            this.btnNuevo.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnNuevo.ForeColor = System.Drawing.Color.White;
-            this.btnNuevo.Location = new System.Drawing.Point(92, 29);
+            this.btnNuevo.Location = new System.Drawing.Point(17, 24);
             this.btnNuevo.Name = "btnNuevo";
-            this.btnNuevo.Size = new System.Drawing.Size(70, 39);
+            this.btnNuevo.Size = new System.Drawing.Size(70, 50);
             this.btnNuevo.TabIndex = 0;
             this.btnNuevo.Text = "Nuevo";
             this.btnNuevo.UseVisualStyleBackColor = false;
@@ -212,12 +228,27 @@
             this.Grb_DatoCajero.Controls.Add(this.lblCodigoCajero);
             this.Grb_DatoCajero.Controls.Add(this.txtCodigo);
             this.Grb_DatoCajero.Enabled = false;
-            this.Grb_DatoCajero.Location = new System.Drawing.Point(12, 71);
+            this.Grb_DatoCajero.Location = new System.Drawing.Point(12, 12);
             this.Grb_DatoCajero.Name = "Grb_DatoCajero";
-            this.Grb_DatoCajero.Size = new System.Drawing.Size(508, 173);
+            this.Grb_DatoCajero.Size = new System.Drawing.Size(577, 173);
             this.Grb_DatoCajero.TabIndex = 3;
             this.Grb_DatoCajero.TabStop = false;
             this.Grb_DatoCajero.Text = "Datos del Registro";
+            // 
+            // chkHabilitado
+            // 
+            this.chkHabilitado.AutoSize = true;
+            this.chkHabilitado.Checked = true;
+            this.chkHabilitado.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkHabilitado.Enabled = false;
+            this.chkHabilitado.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.chkHabilitado.ForeColor = System.Drawing.Color.Red;
+            this.chkHabilitado.Location = new System.Drawing.Point(107, 133);
+            this.chkHabilitado.Name = "chkHabilitado";
+            this.chkHabilitado.Size = new System.Drawing.Size(83, 17);
+            this.chkHabilitado.TabIndex = 59;
+            this.chkHabilitado.Text = "Habilitado";
+            this.chkHabilitado.UseVisualStyleBackColor = true;
             // 
             // label5
             // 
@@ -238,7 +269,7 @@
             this.dbAyudaPersonal.Location = new System.Drawing.Point(107, 77);
             this.dbAyudaPersonal.Name = "dbAyudaPersonal";
             this.dbAyudaPersonal.sCodigo = null;
-            this.dbAyudaPersonal.Size = new System.Drawing.Size(392, 26);
+            this.dbAyudaPersonal.Size = new System.Drawing.Size(494, 26);
             this.dbAyudaPersonal.sNombre = null;
             this.dbAyudaPersonal.TabIndex = 57;
             // 
@@ -392,21 +423,6 @@
             this.dataGridViewImageColumn2.Name = "dataGridViewImageColumn2";
             this.dataGridViewImageColumn2.Width = 80;
             // 
-            // chkHabilitado
-            // 
-            this.chkHabilitado.AutoSize = true;
-            this.chkHabilitado.Checked = true;
-            this.chkHabilitado.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkHabilitado.Enabled = false;
-            this.chkHabilitado.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.chkHabilitado.ForeColor = System.Drawing.Color.Red;
-            this.chkHabilitado.Location = new System.Drawing.Point(107, 133);
-            this.chkHabilitado.Name = "chkHabilitado";
-            this.chkHabilitado.Size = new System.Drawing.Size(83, 17);
-            this.chkHabilitado.TabIndex = 59;
-            this.chkHabilitado.Text = "Habilitado";
-            this.chkHabilitado.UseVisualStyleBackColor = true;
-            // 
             // idPosCajero
             // 
             this.idPosCajero.HeaderText = "ID";
@@ -429,10 +445,10 @@
             // 
             // descripcion
             // 
+            this.descripcion.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.descripcion.HeaderText = "DESCRIPCIÓN";
             this.descripcion.Name = "descripcion";
             this.descripcion.ReadOnly = true;
-            this.descripcion.Width = 180;
             // 
             // clave
             // 
@@ -482,8 +498,8 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.BackColor = System.Drawing.Color.Silver;
-            this.ClientSize = new System.Drawing.Size(961, 356);
+            this.BackColor = System.Drawing.Color.White;
+            this.ClientSize = new System.Drawing.Size(598, 471);
             this.Controls.Add(this.Grb_listReCajero);
             this.Controls.Add(this.Grb_opcioCajero);
             this.Controls.Add(this.Grb_DatoCajero);
@@ -531,6 +547,7 @@
         private System.Windows.Forms.CheckBox chkPermisos;
         private Controles.Auxiliares.DB_Ayuda dbAyudaPersonal;
         private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.CheckBox chkHabilitado;
         private System.Windows.Forms.DataGridViewTextBoxColumn idPosCajero;
         private System.Windows.Forms.DataGridViewTextBoxColumn idPersona;
         private System.Windows.Forms.DataGridViewTextBoxColumn codigo;
@@ -541,6 +558,5 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn nombres;
         private System.Windows.Forms.DataGridViewTextBoxColumn colPermiso;
         private System.Windows.Forms.DataGridViewTextBoxColumn is_active;
-        private System.Windows.Forms.CheckBox chkHabilitado;
     }
 }

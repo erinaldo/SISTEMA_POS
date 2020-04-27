@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.SqlClient;
 using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using AxZKFPEngXControl;
 
 namespace Palatium.Inicio
 {
@@ -23,20 +25,151 @@ namespace Palatium.Inicio
         string sFechaCorta;
         string sHora;
         string sEstadoCaja;
+        string sNombreCajero;
+        string sClaveAcceso;
 
         DataTable dtConsulta;
 
         bool bRespuesta;
+        bool Check;
 
+        int fpcHandle;
         int IBanderaCaja;
 
         DateTime fechaSistema;
         DateTime fechaCaja;
 
+        private AxZKFPEngX lectorHuellas = new AxZKFPEngX();
+
+        SqlParameter[] parametro;
+
         public frmIniciarSesion()
         {
             InitializeComponent();
         }
+
+        #region FUNCIONES PARA TRABAJAR CON EL LECTOR DE HUELLAS
+
+        //FUNCION PARA LLENAR EL GRID
+        private bool llenarGrid()
+        {
+            try
+            {
+                sSql = "";
+                sSql += "select descripcion, claveacceso, huella_dactilar" + Environment.NewLine;
+                sSql += "from pos_cajero" + Environment.NewLine;
+                sSql += "where is_active = @is_active" + Environment.NewLine;
+                sSql += "and is_active_huella = @is_active_huella" + Environment.NewLine;
+                sSql += "and huella_dactilar <> @huella_dactilar" + Environment.NewLine;
+                sSql += "and estado = @estado";
+
+                #region PARAMETROS
+
+                parametro = new SqlParameter[4];
+                parametro[0] = new SqlParameter();
+                parametro[0].ParameterName = "@is_active";
+                parametro[0].SqlDbType = SqlDbType.Int;
+                parametro[0].Value = 1;
+
+                parametro[1] = new SqlParameter();
+                parametro[1].ParameterName = "@is_active_huella";
+                parametro[1].SqlDbType = SqlDbType.Int;
+                parametro[1].Value = 1;
+
+                parametro[2] = new SqlParameter();
+                parametro[2].ParameterName = "@huella_dactilar";
+                parametro[2].SqlDbType = SqlDbType.VarChar;
+                parametro[2].Value = "";
+
+                parametro[3] = new SqlParameter();
+                parametro[3].ParameterName = "@estado";
+                parametro[3].SqlDbType = SqlDbType.VarChar;
+                parametro[3].Value = "A";
+
+                #endregion
+
+                dtConsulta = new DataTable();
+                dtConsulta.Clear();
+
+                bRespuesta = conexion.GFun_Lo_Busca_Registro_Parametros(dtConsulta, sSql, parametro);
+
+                if (bRespuesta == false)
+                {
+                    catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
+                    catchMensaje.lblMensaje.Text = conexion.sMensajeError;
+                    catchMensaje.ShowDialog();
+                    return false;
+                }
+
+                dgvDatos.DataSource = dtConsulta;
+                return true;
+            }
+
+            catch (Exception ex)
+            {
+                catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
+                catchMensaje.lblMensaje.Text = ex.Message;
+                catchMensaje.ShowDialog();
+                return false;
+            }
+        }
+
+        //FUNCION PARA INICIALIZAR EL DISPOSITIVO
+        private void iniciarDispositivoReconocer()
+        {
+            try
+            {
+                Controls.Add(lectorHuellas);
+
+                if (lectorHuellas.InitEngine() == 0)
+                {
+                    lectorHuellas.FPEngineVersion = "9";
+                    lectorHuellas.EnrollCount = 3;
+                    lblMensajeRespuesta.Text = "Dispositivo: " + lectorHuellas.SensorSN;
+                }
+            }
+
+            catch (Exception ex)
+            {
+                catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
+                catchMensaje.lblMensaje.Text = ex.Message;
+                catchMensaje.ShowDialog();
+            }
+        }
+
+        private void lectorHuellas_OnCapture(object sender, IZKFPEngXEvents_OnCaptureEvent e)
+        {
+            string template = lectorHuellas.EncodeTemplate1(e.aTemplate);
+            string regTemplateString = "";
+            int iBandera = 0;
+
+            foreach (DataGridViewRow row in dgvDatos.Rows)
+            {
+                sNombreCajero = row.Cells["descripcion"].Value.ToString().Trim();
+                sClaveAcceso = row.Cells["claveacceso"].Value.ToString().Trim();
+                regTemplateString = row.Cells["huella_dactilar"].Value.ToString();
+
+                if (lectorHuellas.VerFingerFromStr(ref template, regTemplateString, false, ref Check))
+                {
+                    iBandera = 1;
+                    break;
+                }
+            }
+
+            if (iBandera == 1)
+            {
+                lblMensajeRespuesta.Text = sNombreCajero;
+                txtCodigo.Text = sClaveAcceso;
+                consultarRegistro();
+            }
+
+            else
+            {
+                lblMensajeRespuesta.Text = "Registro no encontrado";
+            }
+        }
+
+        #endregion
 
         #region FUNCIONES DE CONTROL DE BOTONES
 
@@ -925,6 +1058,43 @@ namespace Palatium.Inicio
         {
             txtFecha.Text = Program.sFechaSistema.ToString("dd-MM-yyyy");
             llenarComboLocalidad();
+
+            if (Program.iUsarHuellasCajeros == 1)
+            {                
+                if (llenarGrid() == false)
+                    return;
+
+                this.Size = new Size(333, 536);
+                lblMensajeRespuesta.Visible = true;
+
+                iniciarDispositivoReconocer();
+                fpcHandle = lectorHuellas.CreateFPCacheDB();
+
+                string regTemplateString = "";
+                int FpId = 0;
+
+                foreach (DataGridViewRow row in dgvDatos.Rows)
+                {
+                    try
+                    {
+                        regTemplateString = row.Cells["huella_dactilar"].Value.ToString();
+
+                        lectorHuellas.AddRegTemplateStrToFPCacheDB(fpcHandle, FpId, regTemplateString);
+
+                        FpId = FpId + 1;
+                    }
+                    catch { }
+                }
+
+                lectorHuellas.OnCapture += lectorHuellas_OnCapture;
+                lectorHuellas.BeginCapture();
+            }
+
+            else
+            {
+                this.Size = new Size(333, 515);
+                lblMensajeRespuesta.Visible = false;
+            }
         }
 
         private void frmIniciarSesion_KeyDown(object sender, KeyEventArgs e)
@@ -967,6 +1137,26 @@ namespace Palatium.Inicio
                 {
                     consultarRegistro();
                 }
+            }
+        }
+
+        private void frmIniciarSesion_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            try
+            {
+                if (Program.iUsarHuellasCajeros == 1)
+                {
+                    lectorHuellas.OnCapture -= lectorHuellas_OnCapture;
+                    lectorHuellas.CancelEnroll();
+                    lectorHuellas.EndEngine();
+                }
+            }
+
+            catch (Exception ex)
+            {
+                catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
+                catchMensaje.lblMensaje.Text = ex.Message;
+                catchMensaje.ShowDialog();
             }
         }
     }

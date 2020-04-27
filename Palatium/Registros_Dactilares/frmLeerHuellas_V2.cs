@@ -34,7 +34,7 @@ namespace Palatium.Registros_Dactilares
 
         SqlParameter[] parametro;
 
-        Byte[] imagen;
+        //Byte[] imagen;
 
         private AxZKFPEngX lectorHuellas = new AxZKFPEngX();
 
@@ -248,7 +248,7 @@ namespace Palatium.Registros_Dactilares
                     return;
                 }
 
-                imagen = imagenABytes(imgHuellaCapturada.Image);
+                //imagen = imagenABytes(imgHuellaCapturada.Image);
 
                 sSql = "";
                 sSql += "update pos_empleado_cliente set" + Environment.NewLine;

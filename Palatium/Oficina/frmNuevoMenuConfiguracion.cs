@@ -86,7 +86,8 @@ namespace Palatium.Oficina
 
         private void submenuCajeros_Click(object sender, EventArgs e)
         {
-            Personal.frmCajeros cajero = new Personal.frmCajeros();
+            //Personal.frmCajeros cajero = new Personal.frmCajeros();
+            Personal.frmRegistrosPersonal cajero = new Personal.frmRegistrosPersonal();
             verificarFormularios(cajero, this);
             //Personal.frmPruebaFormulario prueba = new Personal.frmPruebaFormulario();
             //verificarFormularios(prueba, this);

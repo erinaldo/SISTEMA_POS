@@ -68,11 +68,15 @@
             this.label5 = new System.Windows.Forms.Label();
             this.cmbTipoComprobante = new MisControles.ComboDatos();
             this.label30 = new System.Windows.Forms.Label();
+            this.tabComanda = new System.Windows.Forms.TabPage();
+            this.chkUsarIconosCategorias = new System.Windows.Forms.CheckBox();
             this.btnGuardar = new System.Windows.Forms.Button();
             this.label6 = new System.Windows.Forms.Label();
             this.fbRuta = new System.Windows.Forms.FolderBrowserDialog();
-            this.tabComanda = new System.Windows.Forms.TabPage();
-            this.chkUsarIconosCategorias = new System.Windows.Forms.CheckBox();
+            this.tabHuellas = new System.Windows.Forms.TabPage();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.chkHuellasMeseros = new System.Windows.Forms.CheckBox();
+            this.chkHuellasCajeros = new System.Windows.Forms.CheckBox();
             this.tbControl.SuspendLayout();
             this.tabPorcentajes.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -80,6 +84,8 @@
             this.tabValores.SuspendLayout();
             this.tabParametros.SuspendLayout();
             this.tabComanda.SuspendLayout();
+            this.tabHuellas.SuspendLayout();
+            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // tbControl
@@ -88,7 +94,8 @@
             this.tbControl.Controls.Add(this.tabValores);
             this.tbControl.Controls.Add(this.tabParametros);
             this.tbControl.Controls.Add(this.tabComanda);
-            this.tbControl.Location = new System.Drawing.Point(0, 44);
+            this.tbControl.Controls.Add(this.tabHuellas);
+            this.tbControl.Location = new System.Drawing.Point(0, 60);
             this.tbControl.Name = "tbControl";
             this.tbControl.SelectedIndex = 0;
             this.tbControl.Size = new System.Drawing.Size(592, 184);
@@ -560,31 +567,6 @@
             this.label30.TabIndex = 117;
             this.label30.Text = "Registro de Nota\r\nde Entrega";
             // 
-            // btnGuardar
-            // 
-            this.btnGuardar.BackColor = System.Drawing.Color.Blue;
-            this.btnGuardar.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
-            this.btnGuardar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnGuardar.ForeColor = System.Drawing.Color.White;
-            this.btnGuardar.Location = new System.Drawing.Point(508, 12);
-            this.btnGuardar.Name = "btnGuardar";
-            this.btnGuardar.Size = new System.Drawing.Size(70, 39);
-            this.btnGuardar.TabIndex = 6;
-            this.btnGuardar.Text = "Guardar";
-            this.btnGuardar.UseVisualStyleBackColor = false;
-            this.btnGuardar.Click += new System.EventHandler(this.btnGuardar_Click);
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Font = new System.Drawing.Font("Maiandra GD", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label6.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.label6.Location = new System.Drawing.Point(24, 12);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(353, 19);
-            this.label6.TabIndex = 7;
-            this.label6.Text = "CONFIGURACIÓN GENERAL DEL SISTEMA";
-            // 
             // tabComanda
             // 
             this.tabComanda.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
@@ -607,13 +589,85 @@
             this.chkUsarIconosCategorias.Text = "Usar íconos en las categorías de la Comanda";
             this.chkUsarIconosCategorias.UseVisualStyleBackColor = true;
             // 
+            // btnGuardar
+            // 
+            this.btnGuardar.BackColor = System.Drawing.Color.Blue;
+            this.btnGuardar.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
+            this.btnGuardar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnGuardar.ForeColor = System.Drawing.Color.White;
+            this.btnGuardar.Location = new System.Drawing.Point(508, 12);
+            this.btnGuardar.Name = "btnGuardar";
+            this.btnGuardar.Size = new System.Drawing.Size(70, 39);
+            this.btnGuardar.TabIndex = 6;
+            this.btnGuardar.Text = "Guardar";
+            this.btnGuardar.UseVisualStyleBackColor = false;
+            this.btnGuardar.Click += new System.EventHandler(this.btnGuardar_Click);
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Font = new System.Drawing.Font("Maiandra GD", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label6.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.label6.Location = new System.Drawing.Point(24, 21);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(353, 19);
+            this.label6.TabIndex = 7;
+            this.label6.Text = "CONFIGURACIÓN GENERAL DEL SISTEMA";
+            // 
+            // tabHuellas
+            // 
+            this.tabHuellas.BackColor = System.Drawing.Color.Teal;
+            this.tabHuellas.Controls.Add(this.groupBox1);
+            this.tabHuellas.Location = new System.Drawing.Point(4, 22);
+            this.tabHuellas.Name = "tabHuellas";
+            this.tabHuellas.Padding = new System.Windows.Forms.Padding(3);
+            this.tabHuellas.Size = new System.Drawing.Size(584, 158);
+            this.tabHuellas.TabIndex = 4;
+            this.tabHuellas.Text = "Huellas Dactilares";
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.chkHuellasMeseros);
+            this.groupBox1.Controls.Add(this.chkHuellasCajeros);
+            this.groupBox1.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.groupBox1.Location = new System.Drawing.Point(8, 15);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(225, 75);
+            this.groupBox1.TabIndex = 121;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Uso de lector de huellas";
+            // 
+            // chkHuellasMeseros
+            // 
+            this.chkHuellasMeseros.AutoSize = true;
+            this.chkHuellasMeseros.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F);
+            this.chkHuellasMeseros.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.chkHuellasMeseros.Location = new System.Drawing.Point(25, 45);
+            this.chkHuellasMeseros.Name = "chkHuellasMeseros";
+            this.chkHuellasMeseros.Size = new System.Drawing.Size(185, 19);
+            this.chkHuellasMeseros.TabIndex = 122;
+            this.chkHuellasMeseros.Text = "Acceso al sistema a meseros";
+            this.chkHuellasMeseros.UseVisualStyleBackColor = true;
+            // 
+            // chkHuellasCajeros
+            // 
+            this.chkHuellasCajeros.AutoSize = true;
+            this.chkHuellasCajeros.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F);
+            this.chkHuellasCajeros.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.chkHuellasCajeros.Location = new System.Drawing.Point(25, 20);
+            this.chkHuellasCajeros.Name = "chkHuellasCajeros";
+            this.chkHuellasCajeros.Size = new System.Drawing.Size(177, 19);
+            this.chkHuellasCajeros.TabIndex = 121;
+            this.chkHuellasCajeros.Text = "Acceso al sistema a cajeros";
+            this.chkHuellasCajeros.UseVisualStyleBackColor = true;
+            // 
             // frmNuevoParametro
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(64)))), ((int)(((byte)(0)))));
-            this.ClientSize = new System.Drawing.Size(590, 225);
+            this.ClientSize = new System.Drawing.Size(590, 244);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.btnGuardar);
             this.Controls.Add(this.tbControl);
@@ -635,6 +689,9 @@
             this.tabParametros.PerformLayout();
             this.tabComanda.ResumeLayout(false);
             this.tabComanda.PerformLayout();
+            this.tabHuellas.ResumeLayout(false);
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -687,5 +744,9 @@
         private System.Windows.Forms.FolderBrowserDialog fbRuta;
         private System.Windows.Forms.TabPage tabComanda;
         private System.Windows.Forms.CheckBox chkUsarIconosCategorias;
+        private System.Windows.Forms.TabPage tabHuellas;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.CheckBox chkHuellasMeseros;
+        private System.Windows.Forms.CheckBox chkHuellasCajeros;
     }
 }

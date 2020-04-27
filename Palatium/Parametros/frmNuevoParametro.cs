@@ -38,6 +38,8 @@ namespace Palatium.Parametros
         int iManejaNomina;
         int iIncluirImpuesto;
         int iUsarIconosCategorias;
+        int iUsarHuellaCajeros;
+        int iUsarHuellaMeseros;
 
         public frmNuevoParametro()
         {
@@ -113,6 +115,9 @@ namespace Palatium.Parametros
 
             if (iBanderaTab == 4)
                 cargarTabComanda();
+
+            if (iBanderaTab == 5)
+                cargarTabHuellas();
         }
 
         //FUNCION PARA VALIDAR LOS DATOS ANTES DE ENVIAR A LA BASE DE DATOS
@@ -294,6 +299,21 @@ namespace Palatium.Parametros
                         iUsarIconosCategorias = 0;
 
                     actualizarTabComanda();
+                }
+
+                else if (iBanderaTab == 5)
+                {
+                    if (chkHuellasCajeros.Checked == true)
+                        iUsarHuellaCajeros = 1;
+                    else
+                        iUsarHuellaCajeros = 0;
+
+                    if (chkHuellasMeseros.Checked == true)
+                        iUsarHuellaMeseros = 1;
+                    else
+                        iUsarHuellaMeseros = 0;
+
+                    actualizarTabHuellas();
                 }
             }
         }
@@ -872,6 +892,121 @@ namespace Palatium.Parametros
 
         #endregion
 
+        #region FUNCIONES DEL TAB PARA HUELLAS
+
+        //FUNCION PARA CARGAR LOS PARAMETROS DEL TAB
+        private void cargarTabHuellas()
+        {
+            try
+            {
+                if (dtConsulta.Rows.Count == 0)
+                {
+                    iIdParametro = 0;
+
+                    chkHuellasCajeros.Checked = false;
+                    chkHuellasMeseros.Checked = false;
+                }
+
+                else
+                {
+                    iIdParametro = Convert.ToInt32(dtConsulta.Rows[0]["id_pos_parametro"].ToString());
+
+                    if (Convert.ToInt32(dtConsulta.Rows[0]["usar_huella_cajeros"].ToString()) == 1)
+                        chkHuellasCajeros.Checked = true;
+                    else
+                        chkHuellasCajeros.Checked = false;
+
+                    if (Convert.ToInt32(dtConsulta.Rows[0]["usar_huella_meseros"].ToString()) == 1)
+                        chkHuellasMeseros.Checked = true;
+                    else
+                        chkHuellasMeseros.Checked = false;
+                }
+            }
+
+            catch (Exception ex)
+            {
+                catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
+                catchMensaje.lblMensaje.Text = ex.Message;
+                catchMensaje.ShowDialog();
+            }
+        }
+
+        //FUNCION PARA ACTUALIZAR EL REGISTRO
+        private void actualizarTabHuellas()
+        {
+            try
+            {
+                //SE INICIA UNA TRANSACCION
+                if (!conexion.GFun_Lo_Maneja_Transaccion(Program.G_INICIA_TRANSACCION))
+                {
+                    ok = new VentanasMensajes.frmMensajeNuevoOk();
+                    ok.lblMensaje.Text = "Error al abrir transacción.";
+                    ok.ShowDialog();
+                    enviarParametro();
+                    return;
+                }
+
+                sSql = "";
+                sSql += "update pos_parametro set" + Environment.NewLine;
+                sSql += "usar_huella_cajeros = @usar_huella_cajeros," + Environment.NewLine;
+                sSql += "usar_huella_meseros = @usar_huella_meseros" + Environment.NewLine;
+                sSql += "where id_pos_parametro = @id_pos_parametro" + Environment.NewLine;
+                sSql += "and estado = @estado";
+
+                parametro = new SqlParameter[4];
+                parametro[0] = new SqlParameter();
+                parametro[0].ParameterName = "@usar_huella_cajeros";
+                parametro[0].SqlDbType = SqlDbType.Int;
+                parametro[0].Value = iUsarHuellaCajeros;
+
+                parametro[1] = new SqlParameter();
+                parametro[1].ParameterName = "@usar_huella_meseros";
+                parametro[1].SqlDbType = SqlDbType.Int;
+                parametro[1].Value = iUsarHuellaMeseros;
+
+                parametro[2] = new SqlParameter();
+                parametro[2].ParameterName = "@id_pos_parametro";
+                parametro[2].SqlDbType = SqlDbType.Int;
+                parametro[2].Value = iIdParametro;
+
+                parametro[3] = new SqlParameter();
+                parametro[3].ParameterName = "@estado";
+                parametro[3].SqlDbType = SqlDbType.VarChar;
+                parametro[3].Value = "A";
+
+                //EJECUTAR LA INSTRUCCIÓN SQL
+                if (!conexion.GFun_Lo_Ejecutar_SQL_Parametros(sSql, parametro))
+                {
+                    conexion.GFun_Lo_Maneja_Transaccion(Program.G_REVERSA_TRANSACCION);
+                    catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
+                    catchMensaje.lblMensaje.Text = conexion.sMensajeError;
+                    catchMensaje.ShowDialog();
+                    return;
+                }
+
+                //SI SE EJECUTA TODO REALIZA EL COMMIT
+                conexion.GFun_Lo_Maneja_Transaccion(Program.G_TERMINA_TRANSACCION);
+
+                ok = new VentanasMensajes.frmMensajeNuevoOk();
+                ok.lblMensaje.Text = "Registro actualizado éxitosamente. Los cambios se aplicarán al reiniciar el programa.";
+                ok.ShowDialog();
+                parametros.cargarParametros();
+                cargarParametros();
+                enviarParametro();
+                return;
+            }
+
+            catch (Exception ex)
+            {
+                conexion.GFun_Lo_Maneja_Transaccion(Program.G_REVERSA_TRANSACCION);
+                catchMensaje = new VentanasMensajes.frmMensajeNuevoCatch();
+                catchMensaje.lblMensaje.Text = ex.Message;
+                catchMensaje.ShowDialog();
+            }
+        }
+
+        #endregion
+
         private void frmNuevoParametro_Load(object sender, EventArgs e)
         {
             cargarParametros();
@@ -906,6 +1041,13 @@ namespace Palatium.Parametros
             if (tbControl.SelectedTab == tbControl.TabPages["tabComanda"])
             {
                 iBanderaTab = 4;
+                enviarParametro();
+                return;
+            }
+
+            if (tbControl.SelectedTab == tbControl.TabPages["tabHuellas"])
+            {
+                iBanderaTab = 5;
                 enviarParametro();
                 return;
             }

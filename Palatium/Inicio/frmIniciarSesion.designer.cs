@@ -47,7 +47,10 @@
             this.lblFecha = new System.Windows.Forms.Label();
             this.cmbLocalidad = new MisControles.ComboDatos();
             this.lblLocalidad = new System.Windows.Forms.Label();
+            this.lblMensajeRespuesta = new System.Windows.Forms.Label();
+            this.dgvDatos = new System.Windows.Forms.DataGridView();
             this.panel2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvDatos)).BeginInit();
             this.SuspendLayout();
             // 
             // panel2
@@ -391,13 +394,37 @@
             this.lblLocalidad.TabIndex = 47;
             this.lblLocalidad.Text = "Localidad:";
             // 
+            // lblMensajeRespuesta
+            // 
+            this.lblMensajeRespuesta.AutoSize = true;
+            this.lblMensajeRespuesta.Font = new System.Drawing.Font("Maiandra GD", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblMensajeRespuesta.ForeColor = System.Drawing.Color.Red;
+            this.lblMensajeRespuesta.Location = new System.Drawing.Point(12, 471);
+            this.lblMensajeRespuesta.Name = "lblMensajeRespuesta";
+            this.lblMensajeRespuesta.Size = new System.Drawing.Size(251, 25);
+            this.lblMensajeRespuesta.TabIndex = 51;
+            this.lblMensajeRespuesta.Text = "Registro no encontrado";
+            // 
+            // dgvDatos
+            // 
+            this.dgvDatos.AllowUserToAddRows = false;
+            this.dgvDatos.AllowUserToDeleteRows = false;
+            this.dgvDatos.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvDatos.Location = new System.Drawing.Point(367, 25);
+            this.dgvDatos.Name = "dgvDatos";
+            this.dgvDatos.ReadOnly = true;
+            this.dgvDatos.Size = new System.Drawing.Size(457, 150);
+            this.dgvDatos.TabIndex = 133;
+            // 
             // frmIniciarSesion
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
-            this.ClientSize = new System.Drawing.Size(317, 479);
+            this.ClientSize = new System.Drawing.Size(317, 476);
+            this.Controls.Add(this.dgvDatos);
+            this.Controls.Add(this.lblMensajeRespuesta);
             this.Controls.Add(this.txtFecha);
             this.Controls.Add(this.lblFecha);
             this.Controls.Add(this.cmbLocalidad);
@@ -410,9 +437,11 @@
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Inicio de Sesión";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmIniciarSesion_FormClosing);
             this.Load += new System.EventHandler(this.frmIniciarSesion_Load);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.frmIniciarSesion_KeyDown);
             this.panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dgvDatos)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -439,5 +468,7 @@
         private System.Windows.Forms.Label lblFecha;
         private MisControles.ComboDatos cmbLocalidad;
         private System.Windows.Forms.Label lblLocalidad;
+        private System.Windows.Forms.Label lblMensajeRespuesta;
+        private System.Windows.Forms.DataGridView dgvDatos;
     }
 }

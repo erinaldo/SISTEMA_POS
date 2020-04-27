@@ -43,26 +43,27 @@
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.btnLimpiar = new System.Windows.Forms.Button();
+            this.cmbLocalidades = new System.Windows.Forms.ComboBox();
+            this.label5 = new System.Windows.Forms.Label();
             this.btnDetallarTodos = new System.Windows.Forms.Button();
+            this.btnLimpiar = new System.Windows.Forms.Button();
             this.tabControlProductos = new System.Windows.Forms.TabControl();
             this.tabResumido = new System.Windows.Forms.TabPage();
-            this.tabDetallado = new System.Windows.Forms.TabPage();
+            this.label4 = new System.Windows.Forms.Label();
+            this.txtCantidadTotal = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.txtTotalValor = new System.Windows.Forms.TextBox();
             this.dgvDatos = new System.Windows.Forms.DataGridView();
             this.id_producto = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.codigo = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cantidad = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.nombre = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.total = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.txtTotalValor = new System.Windows.Forms.TextBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
-            this.txtCantidadTotal = new System.Windows.Forms.TextBox();
-            this.label5 = new System.Windows.Forms.Label();
-            this.cmbLocalidades = new System.Windows.Forms.ComboBox();
-            this.dgvDetalle = new System.Windows.Forms.DataGridView();
+            this.tabDetallado = new System.Windows.Forms.TabPage();
+            this.btnRegresar = new System.Windows.Forms.Button();
             this.label6 = new System.Windows.Forms.Label();
             this.txtTotalDetallado = new System.Windows.Forms.TextBox();
+            this.dgvDetalle = new System.Windows.Forms.DataGridView();
             this.fecha_pedido = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cantidad_1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.producto_1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -71,12 +72,11 @@
             this.origen = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.numero_pedido = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.factura = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.btnRegresar = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.tabControlProductos.SuspendLayout();
             this.tabResumido.SuspendLayout();
-            this.tabDetallado.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvDatos)).BeginInit();
+            this.tabDetallado.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvDetalle)).BeginInit();
             this.SuspendLayout();
             // 
@@ -145,25 +145,31 @@
             this.panel1.Controls.Add(this.dtFechaHasta);
             this.panel1.Controls.Add(this.label3);
             this.panel1.Controls.Add(this.dtFechaDesde);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(734, 102);
+            this.panel1.Size = new System.Drawing.Size(732, 102);
             this.panel1.TabIndex = 202;
             // 
-            // btnLimpiar
+            // cmbLocalidades
             // 
-            this.btnLimpiar.AccessibleDescription = "";
-            this.btnLimpiar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btnLimpiar.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
-            this.btnLimpiar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnLimpiar.Font = new System.Drawing.Font("Maiandra GD", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnLimpiar.Location = new System.Drawing.Point(240, 40);
-            this.btnLimpiar.Name = "btnLimpiar";
-            this.btnLimpiar.Size = new System.Drawing.Size(127, 46);
-            this.btnLimpiar.TabIndex = 5;
-            this.btnLimpiar.Text = "LIMPIAR";
-            this.btnLimpiar.UseVisualStyleBackColor = false;
-            this.btnLimpiar.Click += new System.EventHandler(this.btnLimpiar_Click);
+            this.cmbLocalidades.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbLocalidades.FormattingEnabled = true;
+            this.cmbLocalidades.Location = new System.Drawing.Point(121, 12);
+            this.cmbLocalidades.Name = "cmbLocalidades";
+            this.cmbLocalidades.Size = new System.Drawing.Size(246, 21);
+            this.cmbLocalidades.TabIndex = 1;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F);
+            this.label5.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.label5.Location = new System.Drawing.Point(16, 15);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(71, 16);
+            this.label5.TabIndex = 205;
+            this.label5.Text = "Localidad:";
             // 
             // btnDetallarTodos
             // 
@@ -179,6 +185,21 @@
             this.btnDetallarTodos.Text = "DETALLAR TODOS\r\nLOS ÍTEMS";
             this.btnDetallarTodos.UseVisualStyleBackColor = false;
             this.btnDetallarTodos.Click += new System.EventHandler(this.btnDetallarTodos_Click);
+            // 
+            // btnLimpiar
+            // 
+            this.btnLimpiar.AccessibleDescription = "";
+            this.btnLimpiar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
+            this.btnLimpiar.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
+            this.btnLimpiar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnLimpiar.Font = new System.Drawing.Font("Maiandra GD", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnLimpiar.Location = new System.Drawing.Point(240, 40);
+            this.btnLimpiar.Name = "btnLimpiar";
+            this.btnLimpiar.Size = new System.Drawing.Size(127, 46);
+            this.btnLimpiar.TabIndex = 5;
+            this.btnLimpiar.Text = "LIMPIAR";
+            this.btnLimpiar.UseVisualStyleBackColor = false;
+            this.btnLimpiar.Click += new System.EventHandler(this.btnLimpiar_Click);
             // 
             // tabControlProductos
             // 
@@ -205,19 +226,47 @@
             this.tabResumido.TabIndex = 0;
             this.tabResumido.Text = "Listado resumido de consumo de productos";
             // 
-            // tabDetallado
+            // label4
             // 
-            this.tabDetallado.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
-            this.tabDetallado.Controls.Add(this.btnRegresar);
-            this.tabDetallado.Controls.Add(this.label6);
-            this.tabDetallado.Controls.Add(this.txtTotalDetallado);
-            this.tabDetallado.Controls.Add(this.dgvDetalle);
-            this.tabDetallado.Location = new System.Drawing.Point(4, 22);
-            this.tabDetallado.Name = "tabDetallado";
-            this.tabDetallado.Padding = new System.Windows.Forms.Padding(3);
-            this.tabDetallado.Size = new System.Drawing.Size(726, 407);
-            this.tabDetallado.TabIndex = 1;
-            this.tabDetallado.Text = "Listado detallado de consumo de productos";
+            this.label4.AutoSize = true;
+            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label4.Location = new System.Drawing.Point(18, 375);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(164, 20);
+            this.label4.TabIndex = 4;
+            this.label4.Text = "CANTIDAD TOTAL:";
+            // 
+            // txtCantidadTotal
+            // 
+            this.txtCantidadTotal.Enabled = false;
+            this.txtCantidadTotal.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtCantidadTotal.Location = new System.Drawing.Point(188, 372);
+            this.txtCantidadTotal.Name = "txtCantidadTotal";
+            this.txtCantidadTotal.Size = new System.Drawing.Size(94, 26);
+            this.txtCantidadTotal.TabIndex = 3;
+            this.txtCantidadTotal.Text = "0";
+            this.txtCantidadTotal.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(497, 375);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(69, 20);
+            this.label1.TabIndex = 2;
+            this.label1.Text = "TOTAL:";
+            // 
+            // txtTotalValor
+            // 
+            this.txtTotalValor.Enabled = false;
+            this.txtTotalValor.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtTotalValor.Location = new System.Drawing.Point(570, 372);
+            this.txtTotalValor.Name = "txtTotalValor";
+            this.txtTotalValor.Size = new System.Drawing.Size(142, 26);
+            this.txtTotalValor.TabIndex = 1;
+            this.txtTotalValor.Text = "0.00";
+            this.txtTotalValor.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // dgvDatos
             // 
@@ -280,67 +329,56 @@
             this.total.Name = "total";
             this.total.ReadOnly = true;
             // 
-            // txtTotalValor
+            // tabDetallado
             // 
-            this.txtTotalValor.Enabled = false;
-            this.txtTotalValor.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtTotalValor.Location = new System.Drawing.Point(570, 372);
-            this.txtTotalValor.Name = "txtTotalValor";
-            this.txtTotalValor.Size = new System.Drawing.Size(142, 26);
-            this.txtTotalValor.TabIndex = 1;
-            this.txtTotalValor.Text = "0.00";
-            this.txtTotalValor.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.tabDetallado.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
+            this.tabDetallado.Controls.Add(this.btnRegresar);
+            this.tabDetallado.Controls.Add(this.label6);
+            this.tabDetallado.Controls.Add(this.txtTotalDetallado);
+            this.tabDetallado.Controls.Add(this.dgvDetalle);
+            this.tabDetallado.Location = new System.Drawing.Point(4, 22);
+            this.tabDetallado.Name = "tabDetallado";
+            this.tabDetallado.Padding = new System.Windows.Forms.Padding(3);
+            this.tabDetallado.Size = new System.Drawing.Size(726, 407);
+            this.tabDetallado.TabIndex = 1;
+            this.tabDetallado.Text = "Listado detallado de consumo de productos";
             // 
-            // label1
+            // btnRegresar
             // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(497, 375);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(69, 20);
-            this.label1.TabIndex = 2;
-            this.label1.Text = "TOTAL:";
+            this.btnRegresar.AccessibleDescription = "";
+            this.btnRegresar.BackColor = System.Drawing.Color.Red;
+            this.btnRegresar.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
+            this.btnRegresar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnRegresar.Font = new System.Drawing.Font("Maiandra GD", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnRegresar.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.btnRegresar.Location = new System.Drawing.Point(15, 367);
+            this.btnRegresar.Name = "btnRegresar";
+            this.btnRegresar.Size = new System.Drawing.Size(106, 28);
+            this.btnRegresar.TabIndex = 6;
+            this.btnRegresar.Text = "REGRESAR";
+            this.btnRegresar.UseVisualStyleBackColor = false;
+            this.btnRegresar.Click += new System.EventHandler(this.btnRegresar_Click);
             // 
-            // label4
+            // label6
             // 
-            this.label4.AutoSize = true;
-            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(18, 375);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(164, 20);
-            this.label4.TabIndex = 4;
-            this.label4.Text = "CANTIDAD TOTAL:";
+            this.label6.AutoSize = true;
+            this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label6.Location = new System.Drawing.Point(497, 372);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(69, 20);
+            this.label6.TabIndex = 4;
+            this.label6.Text = "TOTAL:";
             // 
-            // txtCantidadTotal
+            // txtTotalDetallado
             // 
-            this.txtCantidadTotal.Enabled = false;
-            this.txtCantidadTotal.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtCantidadTotal.Location = new System.Drawing.Point(188, 372);
-            this.txtCantidadTotal.Name = "txtCantidadTotal";
-            this.txtCantidadTotal.Size = new System.Drawing.Size(94, 26);
-            this.txtCantidadTotal.TabIndex = 3;
-            this.txtCantidadTotal.Text = "0";
-            this.txtCantidadTotal.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F);
-            this.label5.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.label5.Location = new System.Drawing.Point(16, 15);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(71, 16);
-            this.label5.TabIndex = 205;
-            this.label5.Text = "Localidad:";
-            // 
-            // cmbLocalidades
-            // 
-            this.cmbLocalidades.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbLocalidades.FormattingEnabled = true;
-            this.cmbLocalidades.Location = new System.Drawing.Point(121, 12);
-            this.cmbLocalidades.Name = "cmbLocalidades";
-            this.cmbLocalidades.Size = new System.Drawing.Size(246, 21);
-            this.cmbLocalidades.TabIndex = 1;
+            this.txtTotalDetallado.Enabled = false;
+            this.txtTotalDetallado.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtTotalDetallado.Location = new System.Drawing.Point(570, 369);
+            this.txtTotalDetallado.Name = "txtTotalDetallado";
+            this.txtTotalDetallado.Size = new System.Drawing.Size(142, 26);
+            this.txtTotalDetallado.TabIndex = 3;
+            this.txtTotalDetallado.Text = "0.00";
+            this.txtTotalDetallado.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // dgvDetalle
             // 
@@ -366,27 +404,6 @@
             this.dgvDetalle.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvDetalle.Size = new System.Drawing.Size(697, 345);
             this.dgvDetalle.TabIndex = 1;
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label6.Location = new System.Drawing.Point(497, 372);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(69, 20);
-            this.label6.TabIndex = 4;
-            this.label6.Text = "TOTAL:";
-            // 
-            // txtTotalDetallado
-            // 
-            this.txtTotalDetallado.Enabled = false;
-            this.txtTotalDetallado.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtTotalDetallado.Location = new System.Drawing.Point(570, 369);
-            this.txtTotalDetallado.Name = "txtTotalDetallado";
-            this.txtTotalDetallado.Size = new System.Drawing.Size(142, 26);
-            this.txtTotalDetallado.TabIndex = 3;
-            this.txtTotalDetallado.Text = "0.00";
-            this.txtTotalDetallado.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // fecha_pedido
             // 
@@ -450,22 +467,6 @@
             this.factura.Name = "factura";
             this.factura.ReadOnly = true;
             // 
-            // btnRegresar
-            // 
-            this.btnRegresar.AccessibleDescription = "";
-            this.btnRegresar.BackColor = System.Drawing.Color.Red;
-            this.btnRegresar.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
-            this.btnRegresar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnRegresar.Font = new System.Drawing.Font("Maiandra GD", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnRegresar.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.btnRegresar.Location = new System.Drawing.Point(15, 367);
-            this.btnRegresar.Name = "btnRegresar";
-            this.btnRegresar.Size = new System.Drawing.Size(106, 28);
-            this.btnRegresar.TabIndex = 6;
-            this.btnRegresar.Text = "REGRESAR";
-            this.btnRegresar.UseVisualStyleBackColor = false;
-            this.btnRegresar.Click += new System.EventHandler(this.btnRegresar_Click);
-            // 
             // frmListadoResumidoConsumo
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -489,9 +490,9 @@
             this.tabControlProductos.ResumeLayout(false);
             this.tabResumido.ResumeLayout(false);
             this.tabResumido.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvDatos)).EndInit();
             this.tabDetallado.ResumeLayout(false);
             this.tabDetallado.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvDatos)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvDetalle)).EndInit();
             this.ResumeLayout(false);
 

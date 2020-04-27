@@ -360,6 +360,8 @@ namespace Palatium
         public static int iUsarLectorHuellas;
         public static int iUsarLectorPantallaEspere;
         public static int iIdProductoAlmuerzoDefault;
+        public static int iUsarHuellasCajeros;
+        public static int iUsarHuellasMeseros;
         //-----------------------------------------------------------------------------------------------------------------------
 
 

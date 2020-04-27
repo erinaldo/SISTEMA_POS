@@ -616,6 +616,24 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Clases_Crear_Comandas\ClaseCrearComanda.cs" />
+    <Compile Include="Personal\frmInactivarHuellasCajeros.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Personal\frmInactivarHuellasCajeros.Designer.cs">
+      <DependentUpon>frmInactivarHuellasCajeros.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Personal\frmIngresoHuellasCajero.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Personal\frmIngresoHuellasCajero.Designer.cs">
+      <DependentUpon>frmIngresoHuellasCajero.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Personal\frmRegistrosPersonal.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Personal\frmRegistrosPersonal.Designer.cs">
+      <DependentUpon>frmRegistrosPersonal.cs</DependentUpon>
+    </Compile>
     <Compile Include="Registros_Dactilares\frmClienteEmpresarial.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -1451,6 +1469,12 @@
     </Compile>
     <Compile Include="Reportes_Formas\frmReporteVentasPorItems.Designer.cs">
       <DependentUpon>frmReporteVentasPorItems.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Reportes_Formas\frmResumenGanancias.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Reportes_Formas\frmResumenGanancias.Designer.cs">
+      <DependentUpon>frmResumenGanancias.cs</DependentUpon>
     </Compile>
     <Compile Include="Reportes_Formas\frmVistaHistoriales.cs">
       <SubType>Form</SubType>
@@ -2962,6 +2986,15 @@
     <EmbeddedResource Include="Domicilios\frmSeleccionarRepartidor.resx">
       <DependentUpon>frmSeleccionarRepartidor.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Personal\frmInactivarHuellasCajeros.resx">
+      <DependentUpon>frmInactivarHuellasCajeros.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Personal\frmIngresoHuellasCajero.resx">
+      <DependentUpon>frmIngresoHuellasCajero.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Personal\frmRegistrosPersonal.resx">
+      <DependentUpon>frmRegistrosPersonal.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Registros_Dactilares\frmClienteEmpresarial.resx">
       <DependentUpon>frmClienteEmpresarial.cs</DependentUpon>
     </EmbeddedResource>
@@ -3789,6 +3822,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Reportes_Formas\frmReporteVentasPorItems.resx">
       <DependentUpon>frmReporteVentasPorItems.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reportes_Formas\frmResumenGanancias.resx">
+      <DependentUpon>frmResumenGanancias.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Reportes_Formas\frmVistaHistoriales.resx">
       <DependentUpon>frmVistaHistoriales.cs</DependentUpon>

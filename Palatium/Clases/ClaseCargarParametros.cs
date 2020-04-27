@@ -62,6 +62,9 @@ namespace Palatium.Clases
                     Program.iComprobanteNotaEntrega = Convert.ToInt32(dtConsulta.Rows[0]["idtipocomprobante"].ToString());
                     Program.iUsarIconosCategorias = Convert.ToInt32(dtConsulta.Rows[0]["usar_iconos_categorias"].ToString());
 
+                    Program.iUsarHuellasCajeros = Convert.ToInt32(dtConsulta.Rows[0]["usar_huella_cajeros"].ToString());
+                    Program.iUsarHuellasMeseros = Convert.ToInt32(dtConsulta.Rows[0]["usar_huella_meseros"].ToString());
+
                     fechaSistema();
                     return "";
                 }

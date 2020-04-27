@@ -63,11 +63,13 @@ namespace Palatium.Reportes_Formas
             btnHistorialProducto.BackColor = Color.Blue;
             btnDetallarProductos.BackColor = Color.Blue;
             btnDetallePedidoPorItem.BackColor = Color.Blue;
+            btnResumenGanancias.BackColor = Color.Blue;
 
             btnHistorialComanda.AccessibleDescription = "1";
             btnHistorialProducto.AccessibleDescription = "0";
             btnDetallarProductos.AccessibleDescription = "0";
             btnDetallePedidoPorItem.AccessibleDescription = "0";
+            btnResumenGanancias.AccessibleDescription = "0";
         }
 
         private void btnHistorialComanda_Click(object sender, EventArgs e)
@@ -79,11 +81,13 @@ namespace Palatium.Reportes_Formas
                 btnHistorialProducto.BackColor = Color.Blue;
                 btnDetallarProductos.BackColor = Color.Blue;
                 btnDetallePedidoPorItem.BackColor = Color.Blue;
+                btnResumenGanancias.BackColor = Color.Blue;
 
                 btnHistorialComanda.AccessibleDescription = "1";
                 btnHistorialProducto.AccessibleDescription = "0";
                 btnDetallarProductos.AccessibleDescription = "0";
                 btnDetallePedidoPorItem.AccessibleDescription = "0";
+                btnResumenGanancias.AccessibleDescription = "0";
             }
         }
 
@@ -96,11 +100,13 @@ namespace Palatium.Reportes_Formas
                 btnHistorialComanda.BackColor = Color.Blue;
                 btnDetallarProductos.BackColor = Color.Blue;
                 btnDetallePedidoPorItem.BackColor = Color.Blue;
+                btnResumenGanancias.BackColor = Color.Blue;
 
                 btnHistorialProducto.AccessibleDescription = "1";
                 btnHistorialComanda.AccessibleDescription = "0";
                 btnDetallarProductos.AccessibleDescription = "0";
                 btnDetallePedidoPorItem.AccessibleDescription = "0";
+                btnResumenGanancias.AccessibleDescription = "0";
             }
         }
 
@@ -121,11 +127,13 @@ namespace Palatium.Reportes_Formas
                 btnHistorialComanda.BackColor = Color.Blue;
                 btnHistorialProducto.BackColor = Color.Blue;
                 btnDetallePedidoPorItem.BackColor = Color.Blue;
+                btnResumenGanancias.BackColor = Color.Blue;
 
                 btnHistorialProducto.AccessibleDescription = "0";
                 btnHistorialComanda.AccessibleDescription = "0";
                 btnDetallarProductos.AccessibleDescription = "1";
                 btnDetallePedidoPorItem.AccessibleDescription = "0";
+                btnResumenGanancias.AccessibleDescription = "0";
             }
         }
 
@@ -138,11 +146,32 @@ namespace Palatium.Reportes_Formas
                 btnHistorialComanda.BackColor = Color.Blue;
                 btnHistorialProducto.BackColor = Color.Blue;
                 btnDetallarProductos.BackColor = Color.Blue;
+                btnResumenGanancias.BackColor = Color.Blue;
 
                 btnHistorialProducto.AccessibleDescription = "0";
                 btnHistorialComanda.AccessibleDescription = "0";
                 btnDetallarProductos.AccessibleDescription = "0";
                 btnDetallePedidoPorItem.AccessibleDescription = "1";
+                btnResumenGanancias.AccessibleDescription = "0";
+            }
+        }
+
+        private void btnResumenGanancias_Click(object sender, EventArgs e)
+        {
+            if (btnResumenGanancias.AccessibleDescription == "0")
+            {
+                abrirFormularioHijo(new Reportes_Formas.frmResumenGanancias(1), 0);
+                btnResumenGanancias.BackColor = Color.FromArgb(0, 192, 0);
+                btnHistorialComanda.BackColor = Color.Blue;
+                btnHistorialProducto.BackColor = Color.Blue;
+                btnDetallarProductos.BackColor = Color.Blue;
+                btnDetallePedidoPorItem.BackColor = Color.Blue;
+
+                btnHistorialProducto.AccessibleDescription = "0";
+                btnHistorialComanda.AccessibleDescription = "0";
+                btnDetallarProductos.AccessibleDescription = "0";
+                btnDetallePedidoPorItem.AccessibleDescription = "0";
+                btnResumenGanancias.AccessibleDescription = "1";
             }
         }
     }
