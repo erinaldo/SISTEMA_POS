@@ -396,18 +396,6 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="es\Microsoft.SqlServer.Types.resources.dll" size="48752">
-      <assemblyIdentity name="Microsoft.SqlServer.Types.resources" version="11.0.0.0" publicKeyToken="89845DCD8080CC91" language="es" processorArchitecture="msil" />
-      <hash>
-        <dsig:Transforms>
-          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
-        </dsig:Transforms>
-        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>ZyQXIAIhW62/lY5xIonvlhfc6jCoBx8LjuTEWtXsBLU=</dsig:DigestValue>
-      </hash>
-    </dependentAssembly>
-  </dependency>
-  <dependency>
     <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="MisControles.dll" size="21504">
       <assemblyIdentity name="MisControles" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
@@ -427,7 +415,7 @@
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>yPP5qVUFT8gkcGNmHoa1HMRxpek9g+BKLSR+CtlZBpk=</dsig:DigestValue>
+        <dsig:DigestValue>k9AAx0DkZF/wKRjsdaCAkAEqxjPFKOrz46YexU01RJ8=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>

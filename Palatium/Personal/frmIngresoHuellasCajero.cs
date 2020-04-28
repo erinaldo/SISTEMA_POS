@@ -28,6 +28,7 @@ namespace Palatium.Personal
         bool Check;
 
         int iIdRegistro;
+        int iDeshabilitarDispositivo = 0;
 
         DataTable dtConsulta;
 
@@ -206,6 +207,7 @@ namespace Palatium.Personal
             grupoDatos.Enabled = false;
             btnVerificar.Enabled = false;
             btnGuardar.Enabled = false;
+            iDeshabilitarDispositivo = 0;
 
             llenarGrid();
         }
@@ -322,8 +324,11 @@ namespace Palatium.Personal
         {
             lectorHuellas.CancelEnroll();
             txtBase64_1.Clear();
+            btnVerificar.Enabled = false;
             imgHuellaCapturada.Image = null;
             lectorHuellas.OnCapture -= lectorHuellas_OnCapture;
+            lectorHuellas.EnrollCount = 3;
+            lectorHuellas.BeginEnroll();
         }
 
         //FUNCION PARA DETENER EL DISPOSITIVO
@@ -368,6 +373,7 @@ namespace Palatium.Personal
                 lectorHuellas.EnrollCount = 3;
                 lectorHuellas.BeginEnroll();
                 mostrarNotificacion("Por favor dar muestra de huella digital.");
+                iDeshabilitarDispositivo = 1;
             }
 
             catch (Exception ex)
@@ -427,7 +433,8 @@ namespace Palatium.Personal
 
         private void frmIngresoHuellasCajero_FormClosing(object sender, FormClosingEventArgs e)
         {
-            finalizarDispositivo();
+            if (iDeshabilitarDispositivo == 1)
+                finalizarDispositivo();
         }
     }
 }
