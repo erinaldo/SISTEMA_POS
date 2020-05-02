@@ -616,6 +616,12 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Clases_Crear_Comandas\ClaseCrearComanda.cs" />
+    <Compile Include="Inicio\frmReportesGerenciales.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Inicio\frmReportesGerenciales.Designer.cs">
+      <DependentUpon>frmReportesGerenciales.cs</DependentUpon>
+    </Compile>
     <Compile Include="Personal\frmInactivarHuellasCajeros.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -1445,6 +1451,12 @@
     </Compile>
     <Compile Include="ReportesTextBox\frmVistaFactura.Designer.cs">
       <DependentUpon>frmVistaFactura.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Reportes_Formas\frmEstadoCuentaRepExterno.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Reportes_Formas\frmEstadoCuentaRepExterno.Designer.cs">
+      <DependentUpon>frmEstadoCuentaRepExterno.cs</DependentUpon>
     </Compile>
     <Compile Include="Reportes_Formas\frmHistorialClientePorProducto.cs">
       <SubType>Form</SubType>
@@ -2986,6 +2998,9 @@
     <EmbeddedResource Include="Domicilios\frmSeleccionarRepartidor.resx">
       <DependentUpon>frmSeleccionarRepartidor.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Inicio\frmReportesGerenciales.resx">
+      <DependentUpon>frmReportesGerenciales.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Personal\frmInactivarHuellasCajeros.resx">
       <DependentUpon>frmInactivarHuellasCajeros.cs</DependentUpon>
     </EmbeddedResource>
@@ -3810,6 +3825,9 @@
     <EmbeddedResource Include="Reportes\rptPrueba_Impresion.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>rptPrueba_Impresion.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reportes_Formas\frmEstadoCuentaRepExterno.resx">
+      <DependentUpon>frmEstadoCuentaRepExterno.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Reportes_Formas\frmHistorialClientePorProducto.resx">
       <DependentUpon>frmHistorialClientePorProducto.cs</DependentUpon>

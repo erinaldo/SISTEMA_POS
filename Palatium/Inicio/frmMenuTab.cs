@@ -106,7 +106,6 @@ namespace Palatium.Inicio
                 btnTarjetasAlmuerzo.BackColor = Color.Blue;
                 btnUtilitarios.BackColor = Color.Blue;
                 btnSincronizarSRI.BackColor = Color.Blue;
-                btnReportes.BackColor = Color.Blue;
 
                 btnInicio.AccessibleDescription = "0";
                 btnRestaurante.AccessibleDescription = "1";
@@ -114,7 +113,6 @@ namespace Palatium.Inicio
                 btnTarjetasAlmuerzo.AccessibleDescription = "0";
                 btnUtilitarios.AccessibleDescription = "0";
                 btnSincronizarSRI.AccessibleDescription = "0";
-                btnReportes.AccessibleDescription = "0";
             }
         }
 
@@ -128,7 +126,6 @@ namespace Palatium.Inicio
                 btnTarjetasAlmuerzo.BackColor = Color.Blue;
                 btnUtilitarios.BackColor = Color.FromArgb(0, 192, 0);
                 btnSincronizarSRI.BackColor = Color.Blue;
-                btnReportes.BackColor = Color.Blue;
 
                 btnInicio.AccessibleDescription = "0";
                 btnRestaurante.AccessibleDescription = "0";
@@ -136,7 +133,6 @@ namespace Palatium.Inicio
                 btnTarjetasAlmuerzo.AccessibleDescription = "0";
                 btnUtilitarios.AccessibleDescription = "1";
                 btnSincronizarSRI.AccessibleDescription = "0";
-                btnReportes.AccessibleDescription = "0";
             }
         }
 
@@ -152,7 +148,6 @@ namespace Palatium.Inicio
                     btnTarjetasAlmuerzo.BackColor = Color.Blue;
                     btnUtilitarios.BackColor = Color.Blue;
                     btnSincronizarSRI.BackColor = Color.Blue;
-                    btnReportes.BackColor = Color.Blue;
 
                     btnInicio.AccessibleDescription = "1";
                     btnRestaurante.AccessibleDescription = "0";
@@ -160,7 +155,6 @@ namespace Palatium.Inicio
                     btnTarjetasAlmuerzo.AccessibleDescription = "0";
                     btnUtilitarios.AccessibleDescription = "0";
                     btnSincronizarSRI.AccessibleDescription = "0";
-                    btnReportes.AccessibleDescription = "0";
                 }
             }
 
@@ -180,14 +174,12 @@ namespace Palatium.Inicio
                     btnComedor.BackColor = Color.Blue;
                     btnUtilitarios.BackColor = Color.Blue;
                     btnSincronizarSRI.BackColor = Color.Blue;
-                    btnReportes.BackColor = Color.Blue;
 
                     btnInicio.AccessibleDescription = "1";
                     btnRestaurante.AccessibleDescription = "0";
                     btnComedor.AccessibleDescription = "0";
                     btnUtilitarios.AccessibleDescription = "0";
                     btnSincronizarSRI.AccessibleDescription = "0";
-                    btnReportes.AccessibleDescription = "0";
                     cambioEstado(true);
                 }
             }
@@ -216,7 +208,6 @@ namespace Palatium.Inicio
                 btnTarjetasAlmuerzo.BackColor = Color.Blue;
                 btnUtilitarios.BackColor = Color.Blue;
                 btnSincronizarSRI.BackColor = Color.Blue;
-                btnReportes.BackColor = Color.Blue;
 
                 btnInicio.AccessibleDescription = "0";
                 btnRestaurante.AccessibleDescription = "0";
@@ -224,7 +215,6 @@ namespace Palatium.Inicio
                 btnTarjetasAlmuerzo.AccessibleDescription = "0";
                 btnUtilitarios.AccessibleDescription = "0";
                 btnSincronizarSRI.AccessibleDescription = "0";
-                btnReportes.AccessibleDescription = "0";
             }
         }
 
@@ -238,7 +228,6 @@ namespace Palatium.Inicio
                 btnTarjetasAlmuerzo.BackColor = Color.Blue;
                 btnUtilitarios.BackColor = Color.Blue;
                 btnSincronizarSRI.BackColor = Color.FromArgb(0, 192, 0);
-                btnReportes.BackColor = Color.Blue;
 
                 btnInicio.AccessibleDescription = "0";
                 btnRestaurante.AccessibleDescription = "0";
@@ -246,28 +235,6 @@ namespace Palatium.Inicio
                 btnTarjetasAlmuerzo.AccessibleDescription = "0";
                 btnUtilitarios.AccessibleDescription = "0";
                 btnSincronizarSRI.AccessibleDescription = "1";
-                btnReportes.AccessibleDescription = "0";
-            }
-        }
-
-        private void btnReportes_Click(object sender, EventArgs e)
-        {
-            if (btnReportes.AccessibleDescription == "0")
-            {
-                btnRestaurante.BackColor = Color.Blue;
-                btnComedor.BackColor = Color.Blue;
-                btnTarjetasAlmuerzo.BackColor = Color.Blue;
-                btnUtilitarios.BackColor = Color.Blue;
-                btnSincronizarSRI.BackColor = Color.Blue;
-                btnReportes.BackColor = Color.FromArgb(0, 192, 0);
-
-                btnInicio.AccessibleDescription = "0";
-                btnRestaurante.AccessibleDescription = "0";
-                btnComedor.AccessibleDescription = "0";
-                btnTarjetasAlmuerzo.AccessibleDescription = "0";
-                btnUtilitarios.AccessibleDescription = "0";
-                btnSincronizarSRI.AccessibleDescription = "0";
-                btnReportes.AccessibleDescription = "1";
             }
         }
 
@@ -298,7 +265,6 @@ namespace Palatium.Inicio
                 btnComedor.BackColor = Color.Blue;
                 btnUtilitarios.BackColor = Color.Blue;
                 btnSincronizarSRI.BackColor = Color.Blue;
-                btnReportes.BackColor = Color.Blue;
                 lblEtiqueta.Text = "DESCONECTADO";                
                 cambioEstado(false);
                 btnSincronizarSRI.Visible = false;
@@ -344,7 +310,6 @@ namespace Palatium.Inicio
                 btnTarjetasAlmuerzo.BackColor = Color.FromArgb(0, 192, 0);
                 btnUtilitarios.BackColor = Color.Blue;
                 btnSincronizarSRI.BackColor = Color.Blue;
-                btnReportes.BackColor = Color.Blue;
 
                 btnInicio.AccessibleDescription = "0";
                 btnRestaurante.AccessibleDescription = "0";
@@ -352,7 +317,6 @@ namespace Palatium.Inicio
                 btnTarjetasAlmuerzo.AccessibleDescription = "1";
                 btnUtilitarios.AccessibleDescription = "0";
                 btnSincronizarSRI.AccessibleDescription = "0";
-                btnReportes.AccessibleDescription = "0";
             }
         }
 
@@ -367,6 +331,18 @@ namespace Palatium.Inicio
                 Application.Restart();
                 return;
             }
+        }
+
+        private void btnReportesGerenciales_Click(object sender, EventArgs e)
+        {
+            btnInicio.AccessibleDescription = "0";
+            btnRestaurante.AccessibleDescription = "0";
+            btnComedor.AccessibleDescription = "0";
+            btnTarjetasAlmuerzo.AccessibleDescription = "0";
+            btnUtilitarios.AccessibleDescription = "0";
+            btnSincronizarSRI.AccessibleDescription = "0";
+
+            abrirFormularioHijo(new Inicio.frmReportesGerenciales(), 0);
         }
     }
 }

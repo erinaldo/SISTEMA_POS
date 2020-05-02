@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMenuTab));
             this.pnlContenedor = new System.Windows.Forms.Panel();
             this.stEstado = new System.Windows.Forms.StatusStrip();
             this.lblEtiqueta = new System.Windows.Forms.ToolStripStatusLabel();
@@ -38,13 +39,13 @@
             this.btnConfiguracion = new System.Windows.Forms.Button();
             this.btnSincronizarSRI = new System.Windows.Forms.Button();
             this.btnUtilitarios = new System.Windows.Forms.Button();
-            this.btnReportes = new System.Windows.Forms.Button();
             this.btnCerrarSesion = new System.Windows.Forms.Button();
             this.btnCerrar = new System.Windows.Forms.Button();
             this.btnComedor = new System.Windows.Forms.Button();
             this.btnRestaurante = new System.Windows.Forms.Button();
             this.btnInicio = new System.Windows.Forms.Button();
             this.ttMensaje = new System.Windows.Forms.ToolTip(this.components);
+            this.btnReportesGerenciales = new System.Windows.Forms.Button();
             this.pnlContenedor.SuspendLayout();
             this.stEstado.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -80,12 +81,12 @@
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.Color.Navy;
+            this.panel1.Controls.Add(this.btnReportesGerenciales);
             this.panel1.Controls.Add(this.btnActivarProducto);
             this.panel1.Controls.Add(this.btnTarjetasAlmuerzo);
             this.panel1.Controls.Add(this.btnConfiguracion);
             this.panel1.Controls.Add(this.btnSincronizarSRI);
             this.panel1.Controls.Add(this.btnUtilitarios);
-            this.panel1.Controls.Add(this.btnReportes);
             this.panel1.Controls.Add(this.btnCerrarSesion);
             this.panel1.Controls.Add(this.btnCerrar);
             this.panel1.Controls.Add(this.btnComedor);
@@ -187,24 +188,6 @@
             this.btnUtilitarios.Visible = false;
             this.btnUtilitarios.Click += new System.EventHandler(this.btnUtilitarios_Click);
             // 
-            // btnReportes
-            // 
-            this.btnReportes.AccessibleDescription = "0";
-            this.btnReportes.BackColor = System.Drawing.Color.Blue;
-            this.btnReportes.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
-            this.btnReportes.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
-            this.btnReportes.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnReportes.Font = new System.Drawing.Font("Maiandra GD", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnReportes.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.btnReportes.Location = new System.Drawing.Point(860, 0);
-            this.btnReportes.Name = "btnReportes";
-            this.btnReportes.Size = new System.Drawing.Size(200, 55);
-            this.btnReportes.TabIndex = 9;
-            this.btnReportes.Text = "Reportes Gerenciales";
-            this.btnReportes.UseVisualStyleBackColor = false;
-            this.btnReportes.Visible = false;
-            this.btnReportes.Click += new System.EventHandler(this.btnReportes_Click);
-            // 
             // btnCerrarSesion
             // 
             this.btnCerrarSesion.BackColor = System.Drawing.Color.Blue;
@@ -295,6 +278,24 @@
             this.btnInicio.UseVisualStyleBackColor = false;
             this.btnInicio.Click += new System.EventHandler(this.btnInicio_Click);
             // 
+            // btnReportesGerenciales
+            // 
+            this.btnReportesGerenciales.BackColor = System.Drawing.Color.Yellow;
+            this.btnReportesGerenciales.Dock = System.Windows.Forms.DockStyle.Right;
+            this.btnReportesGerenciales.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+            this.btnReportesGerenciales.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+            this.btnReportesGerenciales.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnReportesGerenciales.Font = new System.Drawing.Font("Maiandra GD", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnReportesGerenciales.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.btnReportesGerenciales.Image = ((System.Drawing.Image)(resources.GetObject("btnReportesGerenciales.Image")));
+            this.btnReportesGerenciales.Location = new System.Drawing.Point(1015, 0);
+            this.btnReportesGerenciales.Name = "btnReportesGerenciales";
+            this.btnReportesGerenciales.Size = new System.Drawing.Size(69, 55);
+            this.btnReportesGerenciales.TabIndex = 15;
+            this.ttMensaje.SetToolTip(this.btnReportesGerenciales, "Clic aquí para visualizar reportes");
+            this.btnReportesGerenciales.UseVisualStyleBackColor = false;
+            this.btnReportesGerenciales.Click += new System.EventHandler(this.btnReportesGerenciales_Click);
+            // 
             // frmMenuTab
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -333,10 +334,10 @@
         private System.Windows.Forms.ToolTip ttMensaje;
         private System.Windows.Forms.StatusStrip stEstado;
         private System.Windows.Forms.ToolStripStatusLabel lblEtiqueta;
-        private System.Windows.Forms.Button btnReportes;
         private System.Windows.Forms.Button btnConfiguracion;
         private System.Windows.Forms.Button btnTarjetasAlmuerzo;
         private System.Windows.Forms.Button btnActivarProducto;
+        private System.Windows.Forms.Button btnReportesGerenciales;
 
 
     }
